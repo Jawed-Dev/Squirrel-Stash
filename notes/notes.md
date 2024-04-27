@@ -1,3 +1,15 @@
+# Au sujet du SPA / SSR
+
+Avec loic il m'a explliqué que le SPA va très bien avec mon projet vu que c'est une application et non pas un site vitrine, 
+du coup un SSR irait mieux avec un site vitrine par exemple
+
+Certes le SPA a un impact sur le SEO, mais dans mon cas ça me suffit largement, peaufiner les recherches sur ça
+pour argumenter avec le jury
+
+
+# sur le sujet du dom qui charge pour que ce soit instanné le chargement ensuite
+
+
 # FAIT
 
 - composant SectionLogin
@@ -9,6 +21,9 @@
 # À FAIRE
 
 # il va falloir régler le soucis sur les autocomplétions de path
+
+
+- pattern Strategy
 
 - le tableau doit être envoyé en props
 - créer un composant carrousel d'img sur lequel je mettrai un tableau

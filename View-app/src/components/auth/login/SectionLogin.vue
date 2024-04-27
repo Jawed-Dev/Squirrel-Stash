@@ -35,6 +35,8 @@
     import InputBasic from '../../input/InputText.vue';
     import ButtonComponent from '../../button/ButtonBasic.vue';
     import inputCheckbox from '../../input/InputCheckbox.vue';
+    import { useRouter } from 'vue-router';
+    const router = useRouter();
 
     const inputEmailRef = ref(null);
     const inputPassRef = ref(null);
@@ -42,16 +44,20 @@
     const inputCheckBox = ref(null);
 
     function handleSubmit() {
-        alert(inputCheckBox.value.handleInput('getState'));
+        //alert(inputCheckBox.value.handleInput('getState'));
 
         const refEmail = inputEmailRef.value;
         const refPass = inputPassRef.value;
 
-        alert(refEmail.handleInput('getInputVal'));
+        //alert(refEmail.handleInput('getInputVal'));
         refEmail.handleInput('resetInput');
 
-        alert(refPass.handleInput('getInputVal'));
+        //alert(refPass.handleInput('getInputVal'));
         refPass.handleInput('resetInput');
+
+        router.push('/resume');
+
+
     }
 
     

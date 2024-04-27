@@ -1,0 +1,3 @@
+- Réfléchir aux input dont l'utilisateur pourra changer la nature, je pense notemment aux inputbox, si l'utilisateur le change et donc je n'aurai pas forcément un booléen
+- réfléchir aux pool de connection mysql, si je dois bien les reset ou non
+- injection sql
