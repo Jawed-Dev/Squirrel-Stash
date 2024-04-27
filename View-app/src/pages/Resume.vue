@@ -1,82 +1,38 @@
 <template>
 
-    <div class="flexh-[100vh] font-main-font bg-slate-200">
+    <div class="font-main-font flex flex-col bg-black w-[100%]">
         <header-component/>
-        <main class="ml-[170px] flex flex-col w-[100%]">
-            <section class="rounded-lg pl-5 bg-white shadow-xl w-[100%] ">
-                <h1 class="py-3 text-[25px] font-medium border-b">Economie du mois</h1>
+        <main class="ml-[calc(170px+10px)] mr-[10px] flex flex-col">
+            <section class="text-white rounded-lg pl-5 bg-black shadow-xl ">
+                <h1 class="py-3 text-[25px] font-light border-b">Economie du mois</h1>
 
-                <p class="font-medium py-3 mr-[190px]">Bonjour Jawed, voici votre résumé du mois.</p>
+                <p class="font-light py-3 mr-[190px]">Bonjour Jawed, voici votre résumé du mois.</p>
 
-                <div class="flex items-center gap-[50px] ">
-                    <select class="w-[250px]" name="month" id="month-select">
-                        <option value="">Année</option>
-                        <option value="1">Janvier</option>
-                        <option value="2">Février</option>
-                        <option value="3">Mars</option>
-                        <option value="4">Avril</option>
-                        <option value="5">Mai</option>
-                        <option value="6">Juin</option>
-                        <option value="7">Juillet</option>
-                        <option value="8">Août</option>
-                        <option value="9">Septembre</option>
-                        <option value="10">Octobre</option>
-                        <option value="11">Novembre</option>
-                        <option value="12">Décembre</option>
-                    </select>
+                <div class="flex items-center gap-[50px]">
+                    <select-component :listSelect="listMonth" />
 
-                    <select class="w-[250px]" name="year" id="year-select">
-                        <option value="">Année</option>
-
-                        <!-- Générez les années dynamiquement avec JavaScript si nécessaire -->
-                        <option value="2020">2020</option>
-                        <option value="2021">2021</option>
-                        <option value="2022">2022</option>
-                        <!-- etc. -->
-                    </select>
-
-                    <div class="flex flex-col text-[17px] w-[250px] border-[FFFFF] border rounded-md shadow-md my-5">
-                        <p class="pt-3 pl-[13px] text-gray-600 font-medium">Goal d'économie</p>
-                        <p class="pl-[13px] text-blue-700 font-semibold  text-[25px]">2000€</p>
-
-                        <p class="pl-[13px] text-[15px] mt-5 py-1 border-t font-medium text-gray-600">Dernier Mois: <span class="font-medium text-blue-700 text-[18px]">2200€</span></p>
-                    </div>
-
-                    
+                    <select-component :listSelect="listYear" />
+                
+                    <div-text-stat :nameEconomy="'Goal du mois'" />
                 </div>
                 
-
                 <div class="flex gap-[50px]">
-        
-                    <div class="flex flex-col text-[17px] w-[250px] border-[FFFFF] border rounded-md shadow-md my-5">
-                        <p class="pt-3 pl-[13px] text-gray-600 font-medium">Total achat</p>
-                        <p class="pl-[13px] text-blue-700 font-semibold  text-[25px] ">2000€</p>
-
-                        <p class="pl-[13px] text-[15px] mt-5 py-1 border-t font-medium text-gray-600">Dernier Mois: <span class="font-medium text-blue-700 text-[18px]">2200€</span></p>
+                    <div class="flex gap-[50px]">
+                        <div-text-stat :nameEconomy="'Total achat'" />
+    
+                        <div-text-stat :nameEconomy="'Statut d\'économie'" />
                     </div>
-
-                    <div class="flex flex-col text-[17px] w-[250px] border-[FFFFF] border rounded-md shadow-md my-5">
-                        <p class="pt-3 pl-[13px] text-gray-600 font-medium">Statut d'économie</p>
-                        <p class="pl-[13px]  font-semibold text-blue-700  text-[25px] ">2000€</p>
-
-                        <p class="pl-[13px] text-[15px] mt-5 py-1 border-t font-medium text-gray-600">Dernier Mois: <span class="font-medium text-blue-700 text-[18px]">2200€</span></p>
+    
+                    <div class="flex gap-[50px]">
+                        <div-text-stat :nameEconomy="'Top achat mensuel'" />
+    
+                        <div-text-stat :nameEconomy="'Top paiement réccurent'" />
+    
                     </div>
-
-                    <div class="flex flex-col text-[17px] w-[250px] border-[FFFFF] border rounded-md shadow-md my-5">
-                        <p class="pt-3 pl-[13px] text-gray-600 font-medium">Top achat mensuel</p>
-                        <p class="pl-[13px]  font-semibold text-blue-700  text-[25px] ">Nourriture</p>
-
-                        <p class="pl-[13px] text-[15px] mt-5 py-1 border-t font-medium text-gray-600">Dernier Mois: <span class="font-medium text-blue-700 text-[18px]">Nourriture</span></p>
-                    </div>
-
-                    <div class="flex flex-col text-[17px] w-[250px] border-[FFFFF] border rounded-md shadow-md my-5">
-                        <p class="pt-3 pl-[13px] text-gray-600 font-medium">Top paiement réccurent</p>
-                        <p class="pl-[13px] text-blue-700 font-semibold  text-[25px]">2000€</p>
-
-                        <p class="pl-[13px] text-[15px] mt-5 py-1 border-t font-medium text-gray-600">Dernier Mois: <span class="font-medium text-blue-700 text-[18px]">2200€</span></p>
-                    </div>
-
                 </div>
+
+                    
+                
             </section>
 
 
@@ -97,7 +53,7 @@
             </section>
 
             <section class="flex">
-                
+
                 <div class=" rounded-lg pl-5 mt-[28px] bg-white shadow-md border-2 border-[FFFFF] w-[50%]">                
                     <div class="flex items-center justify-between pr-5">
                         <h2 class="py-3 text-[25px] font-medium">Historique de transaction</h2>
@@ -189,8 +145,20 @@
 
 <script setup>
     import { Fragment } from 'vue';
-import headerComponent from '../components/header/Header.vue';
+    import headerComponent from '../components/header/Header.vue';
+    import divTextStat from '../components/statistic/divTextStat.vue';
+    import selectComponent from '../components/select/Select.vue';
 
+    const listMonth = [
+        'Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin',
+        'Juillet', 'Aout', 'Septembre', 'Octobre', 'Novembre', 'Décembre'
+    ];
+
+    const listYear = [
+        '2023',
+        '2024',
+        '2025'
+    ];
 
 
 </script>

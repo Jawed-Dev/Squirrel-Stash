@@ -1,0 +1,4 @@
+- regrouper par groupe de 2 les div quand nécessaire
+- essayer de créer une fonc global pour la largeur du header pour le prendre en compte
+- redéfinir les groupes pour le responsive pour prévenir à l'avance
+- voir ce qui revient souvent en terme de padding / margin pour en faire des variables
