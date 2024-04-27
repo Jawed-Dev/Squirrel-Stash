@@ -12,6 +12,9 @@ export default {
       colors: {
         'custom-gray': '#B4B4B4',
         'main-blue' : '#15336C'
+      },
+      spacing: {
+        'headerWidth' : '50px'
       }
     },
   },
