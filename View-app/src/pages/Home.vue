@@ -1,12 +1,164 @@
 <template>
-    <main class="flex h-[100vh]">
-        <sectionCarousel />
-        <section-login />
-    </main>
+
+    <div class="font-main-font flex flex-col bg-black w-[100%]">
+        <header-component @statePage="handleStatePage"/>
+
+        <main class="ml-[calc(20px+60px+20px)] mr-custom-margin-main flex flex-col">
+
+
+            <section class="text-white pl-5 mt-top-Header 
+                bg-gradient
+                border border-custom-gray-dark rounded-md 
+                shadow-custom-gray-dark shadow-custom-main">
+                <h1 class="py-3 text-[25px] font-light border-b border-[#38393b]">Economie du mois</h1>
+
+                <p class="font-light py-3 mr-[190px]">Bonjour Jawed, voici votre résumé du mois.</p>
+
+                
+                <div class="flex items-center gap-[20px]">
+                    <select-component :listSelect="listMonth" />
+
+                    <select-component :listSelect="listYear" />
+                </div>
+                
+                <div class="flex flex-col">
+                    <div class="flex gap-[20px] flex-wrap">
+                        <div-text-stat :nameEconomy="'Objectif du mois'" />
+
+                        <div-text-stat :nameEconomy="'Total achat'" />
+    
+                        <div-text-stat :nameEconomy="'Balance d\'économie'" />
+
+                        <div-text-stat :nameEconomy="'Top achat mensuel'" />
+    
+                        <div-text-stat :nameEconomy="'Top paiement réccurent'" />
+    
+                    </div>
+                </div>
+            </section>
+
+
+            <section class="w-[100%] pl-5 mt-custom-margin-main bg-gradient text-white
+                border border-custom-gray-dark rounded-md
+                shadow-[#38393b] shadow-custom-main">
+                <h2 class="py-3 text-[25px] font-light">Achats du mois</h2>
+                
+
+                <div class="flex gap-[50px] py-3 border-b border-custom-gray-dark">
+                    <p class="border-b-2 border-main-blue cursor-pointer">Achats</p>
+                    <p class="border-b-2 border-main-blue cursor-pointer">Paiement réccurent</p>
+                </div>
+
+
+                <div class="h-[500px]">
+                        
+                </div>
+
+            </section>
+
+            <section class="flex justify-between">
+
+                <div class="pl-2 mt-custom-margin-main w-[49%] text-white 
+                    border border-custom-gray-dark bg-gradient rounded-md my-5 
+                    shadow-custom-gray-dark shadow-custom-main">     
+
+                    <div class="flex items-center justify-between pr-10">
+                        <h2 class="py-3 text-[20px] font-light pr-8">Historique de transaction</h2>
+                        <p>Voir plus ></p>
+                    </div>
+
+                    <div class="flex border-[#38393b] border-b pl-3 pt-5">
+                        <p class="w-[150px]">Nom</p>
+                        <p class="w-[150px]">Prix</p>
+                        <p class="w-[200px]">Date</p>
+                        <p class="w-[150px]">Itération</p>
+                    </div>
+    
+                    <div class="pl-3">
+                        <purchase :infoPurchase="infoPurchase"/>
+        
+                        <purchase :infoPurchase="infoPurchase"/>
+    
+                        <purchase :infoPurchase="infoPurchase"/>
+    
+                        <purchase :infoPurchase="infoPurchase"/>
+    
+                        <purchase :infoPurchase="infoPurchase"/>
+                    </div>
+    
+                </div>
+
+
+                <div class="pl-2 mt-custom-margin-main w-[49%] text-white 
+                    border border-custom-gray-dark bg-gradient rounded-md my-5 
+                    shadow-custom-gray-dark shadow-custom-main">    
+
+                    <div class="flex items-center justify-between pr-10">
+                        <h2 class="py-3 text-[20px] font-light pr-8">Paiments réccurents</h2>
+                        <p>Voir plus ></p>
+                    </div>
+
+
+                    <div class="flex border-[#38393b] border-b pl-3 pt-5">
+                        <p class="w-[150px]">Nom</p>
+                        <p class="w-[150px]">Prix</p>
+                    </div>
+
+                    <div class="pl-3">
+                        <reccuring-pay :infoReccuringPay="infoRecPay"/>
+
+                        <reccuring-pay :infoReccuringPay="infoRecPay"/>
+
+                        <reccuring-pay :infoReccuringPay="infoRecPay"/>
+                    </div>
+                </div>
+
+            </section>
+            
+        </main>
+    </div>
+
+    
+
 </template>
 
+
 <script setup>
-    import HeaderComponent from '@/components/header/Header.vue';
-    import SectionLogin from '@/components/auth/login/SectionLogin.vue';
-    import SectionCarousel from '@/components/auth/login/SectionCarousel.vue';
+
+    import headerComponent from '../components/header/Header.vue';
+    import divTextStat from '../components/statistic/TextStat.vue';
+    import selectComponent from '../components/select/Select.vue';
+    import Purchase from '../components/statistic/Purchase.vue';
+    import ReccuringPay from '../components/statistic/RecurringPay.vue';
+    import SectionParchase from '@/components/home/Section-Parchase.vue';
+
+
+    import { ref } from 'vue';
+
+
+    const listMonth = [
+        'Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin',
+        'Juillet', 'Aout', 'Septembre', 'Octobre', 'Novembre', 'Décembre'
+    ];
+
+    const listYear = [
+        '2023',
+        '2024',
+        '2025'
+    ];
+
+    const infoPurchase = {
+        name: 'Spotify',
+        price: 100,
+        date: '26 Mars 2023 15:50',
+        iteration: 10
+    }
+
+    const infoRecPay = {
+        name: 'Electricité',
+        price: 100,
+    }
+
+    
+
 </script>
