@@ -2,7 +2,7 @@
     <svg 
         class="text-white w-[50px] cursor-pointer rounded-md py-2  px-3
         transition-transform hover:translate-y-[-5px] duration-[0.5s]" 
-        :class="[pageState() ? 'bg-custom-gray-dark' : '']"
+        :class="[pageState() ? 'bg-custom-gray-2' : '']"
 
         fill="currentColor" filter="url(#dropshadow)"  xmlns="http://www.w3.org/2000/svg" :viewBox="pathSvgIcon(svgIcon).viewBox">
         <!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc. -->

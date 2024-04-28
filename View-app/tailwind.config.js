@@ -12,7 +12,8 @@ export default {
       colors: {
         'custom-gray': '#B4B4B4',
         'main-blue' : '#15336C',
-        'custom-gray-dark' : '#38393b'
+        'custom-gray-dark' : '#38393b',
+        'custom-gray-2' : '#484B55'
       },
       spacing: {
         'headerWidth' : '60px',

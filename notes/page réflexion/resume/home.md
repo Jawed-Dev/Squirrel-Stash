@@ -1,4 +1,8 @@
 
+
+
+- il va falloir revoir les composants svg
+
 - ne pas oublier pour les svg de revoir l'effet d'ombre
 
 - mettre le graph et mettre des néon pas trop frappant

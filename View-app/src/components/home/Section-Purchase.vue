@@ -1,32 +1,44 @@
 <template>
     <section 
-        class="w-[100%] pl-5 mt-custom-margin-main bg-gradient text-white
+        class="w-[100%] pl-5 mt-custom-margin-main bg-gradient text-white 
         border border-custom-gray-dark rounded-md
-        shadow-[#38393b] shadow-custom-main"
-
-        :class="[stateTabPurchase ? 'bg-slate-500' : '']">
+        shadow-[#38393b] shadow-custom-main">
         
         <h2 class="py-3 text-[25px] font-light">Achats du mois</h2>
         
-        <div class="flex gap-[50px] py-3 border-b border-custom-gray-dark">
-            <p @click="handleStateTab" class="border-b-2 border-main-blue cursor-pointer">Achats</p>
-            <p @click="handleStateTab" class="border-b-2 border-main-blue cursor-pointer">Paiement réccurent</p>
+        <div class="flex gap-[50px] py-3  border-b border-custom-gray-dark">
+            <p class="px-3 py-1 rounded-md cursor-pointer" :class="[stateTabPurchase ? 'bg-custom-gray-2' : '']" @click="handleStateTab(true)" >Achats</p>
+            <p class="px-3 py-1 rounded-md cursor-pointer" :class="[stateTabPurchase ? '' : 'bg-custom-gray-2']" @click="handleStateTab(false)" >Paiement réccurent</p>
         </div>
 
         <div class="h-[500px]">
-                
+            <canvas id="myChart"></canvas>
         </div>
 
     </section>
 </template>
 
 <script setup>
-    import { ref } from 'vue';
-    const stateTabPurchase = ref(0);
+    import { ref, onMounted } from 'vue';
 
+    import Chart from 'chart.js/auto';
 
-    function handleStateTab() {
-        stateTabPurchase.value = !stateTabPurchase.value;
+    const stateTabPurchase = ref(true);
+
+    function handleStateTab(state) {
+        stateTabPurchase.value = state;
     }   
+
+
+    const chartOptions = ref({
+    responsive: true,
+    maintainAspectRatio: true,
+    plugins: {
+        legend: {
+        display: false,
+        },
+    },
+});
+    
 
 </script>

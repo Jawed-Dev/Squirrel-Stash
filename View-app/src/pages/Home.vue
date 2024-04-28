@@ -1,7 +1,7 @@
 <template>
 
     <div class="font-main-font flex flex-col bg-black w-[100%]">
-        <header-component @statePage="handleStatePage"/>
+        <header-component/>
 
         <main class="ml-[calc(20px+60px+20px)] mr-custom-margin-main flex flex-col">
 
@@ -38,23 +38,7 @@
             </section>
 
 
-            <section class="w-[100%] pl-5 mt-custom-margin-main bg-gradient text-white
-                border border-custom-gray-dark rounded-md
-                shadow-[#38393b] shadow-custom-main">
-                <h2 class="py-3 text-[25px] font-light">Achats du mois</h2>
-                
-
-                <div class="flex gap-[50px] py-3 border-b border-custom-gray-dark">
-                    <p class="border-b-2 border-main-blue cursor-pointer">Achats</p>
-                    <p class="border-b-2 border-main-blue cursor-pointer">Paiement réccurent</p>
-                </div>
-
-
-                <div class="h-[500px]">
-                        
-                </div>
-
-            </section>
+            <section-purchase />
 
             <section class="flex justify-between">
 
@@ -70,7 +54,7 @@
                     <div class="flex border-[#38393b] border-b pl-3 pt-5">
                         <p class="w-[150px]">Nom</p>
                         <p class="w-[150px]">Prix</p>
-                        <p class="w-[200px]">Date</p>
+                        <p class="w-[150px]">Date</p>
                         <p class="w-[150px]">Itération</p>
                     </div>
     
@@ -102,6 +86,7 @@
                     <div class="flex border-[#38393b] border-b pl-3 pt-5">
                         <p class="w-[150px]">Nom</p>
                         <p class="w-[150px]">Prix</p>
+                        <p class="w-[150px]">Date</p>
                     </div>
 
                     <div class="pl-3">
@@ -130,7 +115,7 @@
     import selectComponent from '../components/select/Select.vue';
     import Purchase from '../components/statistic/Purchase.vue';
     import ReccuringPay from '../components/statistic/RecurringPay.vue';
-    import SectionParchase from '@/components/home/Section-Parchase.vue';
+    import SectionPurchase from '../components/home/Section-Purchase.vue';
 
 
     import { ref } from 'vue';
@@ -157,6 +142,7 @@
     const infoRecPay = {
         name: 'Electricité',
         price: 100,
+        date: '26 Mars 2023 15:50',
     }
 
     
