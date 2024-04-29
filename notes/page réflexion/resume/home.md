@@ -1,5 +1,9 @@
 
-
+- retirer les on click ?
+- voir si je mets autre chose dans achat du mois (un autre graph ?)
+- voir si je garde l'effet quand on survole un produit, ça a l'air chiant à changer le texte
+- changer les couleurs 
+- changer la taille des % aussi
 
 - il va falloir revoir les composants svg
 

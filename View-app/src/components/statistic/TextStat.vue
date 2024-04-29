@@ -1,6 +1,6 @@
 <template>
     <div class="flex flex-col text-[17px] w-[250px] 
-        border border-[#38393b] bg-custom-gradient rounded-md my-5 
+        border border-[rgb(56,57,59)] bg-custom-gradient rounded-md my-5 
         shadow-[#38393b] shadow-custom-lower">
         <p class="pt-3 pl-[13px] font-normal text-gray-300 text-[15px]"> {{ props.nameEconomy }}</p>
         <p class="pl-[13px] text-white  font-medium  text-[18px]">2000€</p>

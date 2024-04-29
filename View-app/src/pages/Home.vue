@@ -1,6 +1,6 @@
 <template>
 
-    <div class="font-main-font flex flex-col bg-black w-[100%]">
+    <div class="font-main-font flex flex-col bg-[#040D12] w-[100%]">
         <header-component/>
 
         <main class="ml-[calc(20px+60px+20px)] mr-custom-margin-main flex flex-col">
