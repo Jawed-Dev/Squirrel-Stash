@@ -2,13 +2,13 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import Login from './pages/Login.vue'; 
 import createAcc from './pages/CreateAcc.vue'; 
-import Home from './pages/Home.vue'; 
+import Dashboard from './pages/Dashboard.vue'; 
 
 const routes = [
   { path: '/', component: Login },
-  { path: '/login', component: Login },
-  { path: '/create-acc', component: createAcc },
-  { path: '/home', component: Home }
+  { path: '/connexion', component: Login },
+  { path: '/inscription', component: createAcc },
+  { path: '/home', component: Dashboard }
 ];
 
 const router = createRouter({

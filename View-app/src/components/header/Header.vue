@@ -1,8 +1,7 @@
 <template>
-    <div class="w-headerWidth flex flex-col justify-center items-center top-top-Header left-top-Header fixed gap-5 h-[calc(100vh-40px)] 
-            bg-custom-gradient border border-custom-gray-dark rounded-md
+    <div class="w-header-width flex flex-col justify-center items-center top-top-Header left-top-Header fixed gap-5 h-[calc(100vh-40px)] 
+            bg-header-gradient rounded-md
              shadow-custom-gray-dark shadow-custom-main">
-
  
             <icon-nav :svgIcon="'home'" @click="handleClickIcon('home')" />
             

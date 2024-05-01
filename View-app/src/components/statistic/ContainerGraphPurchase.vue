@@ -1,14 +1,14 @@
 <template>
     <section 
-        class="w-[100%] pl-5 mt-custom-margin-main bg-gradient-test text-white 
+        class="w-[100%] pl-5 mt-custom-margin-main bg-main-gradient text-white 
         rounded-md
-        shadow-[#3d3d3e] shadow-custom-test">
+        shadow-custom-gray-dark shadow-custom-main">
         
         <h2 class="py-3 text-[25px] font-extralight">Achats du mois</h2>
         
-        <div class="flex gap-[50px] py-3  border-b border-custom-gray-dark">
-            <p class="px-3 py-1 rounded-md cursor-pointer" :class="[stateTabPurchase ? 'bg-custom-gray-2' : '']" @click="handleStateTab(true)" >Achats</p>
-            <p class="px-3 py-1 rounded-md cursor-pointer" :class="[stateTabPurchase ? '' : 'bg-custom-gray-2']" @click="handleStateTab(false)" >Paiement réccurent</p>
+        <div class="flex border-b border-main-color border w-fit rounded-md">
+            <p class="px-3 py-1 rounded-md cursor-pointer" :class="[stateTabPurchase ? 'bg-main-color' : '']" @click="handleStateTab(true)" >Achats</p>
+            <p class="px-3 py-1 rounded-md cursor-pointer" :class="[stateTabPurchase ? '' : 'bg-main-color']" @click="handleStateTab(false)" >Paiement réccurent</p>
         </div>
 
 
@@ -34,9 +34,6 @@
     
 
     onMounted(() => {
-
-        
-
          // Fonction pour générer les étiquettes des jours du mois en cours
             function generateDaysOfMonthLabels() {
                 const currentDate = new Date();

@@ -5,7 +5,7 @@
         shadow-custom-gray-dark shadow-custom-main">     
 
         <div class="flex items-center justify-between pr-10">
-            <h2 class="py-3 text-[20px] font-light pr-8">Historique de transaction</h2>
+            <h2 class="py-3 text-[20px] font-extralight pr-8">Historique de transaction</h2>
             <p>Voir plus ></p>
         </div>
 

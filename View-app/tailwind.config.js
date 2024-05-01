@@ -17,15 +17,18 @@ export default {
         'color-shadow' : '#27293d',
         
         'second-bg' : '#1b1e33',
-        'main-bg': "#121422"
+        'main-bg': "#121422",
+
+        'main-color': "#121422"
       },
       spacing: {
-        'headerWidth' : '60px',
+        'header-width' : '70px',
         'top-Header' : '20px',
         'custom-margin-main' : '20px'
       },
       backgroundImage: {
-        'main-gradient': "linear-gradient(to top left, #1b1e33 70%, #ffffff 450%)",
+        'main-gradient': "linear-gradient(to top left, #1b1e33 50%, #536976 250%)",
+        'header-gradient': "linear-gradient(0deg, #ec250d, #fd5d93)",
 
         'gradient': "linear-gradient(to top left, #101010 70%, #ffffff 450%)",
         'gradient-test': "linear-gradient(to top left, #1b1e33 70%, #ffffff 450%)",

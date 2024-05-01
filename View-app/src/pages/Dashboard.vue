@@ -4,10 +4,10 @@
 
         <header-component/>
 
-        <main class="ml-[calc(20px+60px+20px)] mr-custom-margin-main flex flex-col text-white">
+        <main class="ml-[calc(20px+70px+20px)] mr-custom-margin-main flex flex-col text-white">
 
 
-            <h1 class="py-3 text-[25px] font-extralight ">Economie du mois</h1>
+            <h1 class="py-3 text-[25px] font-extralight ">Économie du mois</h1>
 
             <p class="font-normal py-3 mr-[190px]">Bonjour Jawed, voici votre résumé du mois.</p> 
 
@@ -51,7 +51,7 @@
     import divTextStat from '../components/statistic/TextStat.vue';
     
     import selectComponent from '../components/select/Select.vue';
-    import SectionPurchase from '../components/home/Section-Purchase.vue';
+    import SectionPurchase from '../components/statistic/ContainerGraphPurchase.vue';
     import ContainerPurchase from '@/components/statistic/ContainerPurchase.vue';
     import ContainerReccuringPay from '@/components/statistic/ContainerReccuringPay.vue'
 
