@@ -2,14 +2,27 @@
     --headerWidth: 60px; 
 }
 
-#chart .apexcharts-slices {
-    filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.4)); 
+.apexcharts-yaxis-label {
+    transform: translateX(-10px); /* Déplace tous les labels de l'axe Y vers la gauche */
 }
 
-.apexcharts-legend-series {
+.apexcharts-menu {
+    color: #ff4560; /* Couleur du texte */
+}
+
+/* #chart .apexcharts-slices {
+    filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.4)); 
+} */
+
+/* .apexcharts-legend-series {
     display: flex;
     align-items: center;
-}
+} */
+
+/* .apexcharts-yaxis-texts-g {
+    margin-right: 20px;
+    background-color: red;
+} */
 
 /* #chart {
     filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.4)); 

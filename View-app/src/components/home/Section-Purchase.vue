@@ -1,10 +1,10 @@
 <template>
     <section 
-        class="w-[100%] pl-5 mt-custom-margin-main bg-gradient text-white 
-        border border-custom-gray-dark rounded-md
-        shadow-[#38393b] shadow-custom-main">
+        class="w-[100%] pl-5 mt-custom-margin-main bg-gradient-test text-white 
+        rounded-md
+        shadow-[#3d3d3e] shadow-custom-test">
         
-        <h2 class="py-3 text-[25px] font-light">Achats du mois</h2>
+        <h2 class="py-3 text-[25px] font-extralight">Achats du mois</h2>
         
         <div class="flex gap-[50px] py-3  border-b border-custom-gray-dark">
             <p class="px-3 py-1 rounded-md cursor-pointer" :class="[stateTabPurchase ? 'bg-custom-gray-2' : '']" @click="handleStateTab(true)" >Achats</p>
@@ -12,7 +12,7 @@
         </div>
 
 
-        <div class="text-[20px] py-[50px]" id="chart">
+        <div class="flex justify-center py-[20px]" id="chart">
 
         </div>
       
@@ -31,103 +31,155 @@
         stateTabPurchase.value = state;
     }   
     const stateTabPurchase = ref(true);
-        
-
     
 
-    // responsive: [{
-    //       breakpoint: 480,
-    //       options: {
-    //         chart: {
-    //           width: 200
-    //         },
-    //         legend: {
-    //           position: 'right',
-    //         }
-    //       }
-    //     }]
-
     onMounted(() => {
+
+        
+
+         // Fonction pour générer les étiquettes des jours du mois en cours
+            function generateDaysOfMonthLabels() {
+                const currentDate = new Date();
+                const daysInMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0).getDate();
+                const labels = [];
+                
+                for (let day = 1; day <= daysInMonth; day++) {
+                    labels.push(`${day}`);
+                }
+                
+                return labels;
+            }
+
+            function generateRandomData() {
+        const data = [];
+
+        for (let i = 0; i < 10+1; i++) {
+            
+            const randomValue = Math.floor(Math.random() * 201); // Génère une valeur aléatoire entre 0 et 200
+            (i === 0) ? data.push(0) : data.push(randomValue);
+        }
+
+        return data;
+    }
+
+   
+
+        const daysOfMonthLabels = generateDaysOfMonthLabels();
+        const data = generateRandomData();
+
         const options = {
-            series: [44, 55, 41, 17, 15],
-            chart: {
-                type: 'donut',
-                width: '100%',
-                height: '450px',
-                fontFamily: '',
+            series: [{
+          name: 'series1',
+          data: data
+        }],
+          chart: {
+            toolbar: {
+            show: true, // Afficher la barre d'outils
+            tools: {
+                download: true, // Activer le bouton de téléchargement
+                selection: false, // Désactiver le bouton de sélection
+                zoom: false, // Désactiver le bouton de zoom
+                zoomin: false, // Désactiver le bouton de zoom avant
+                zoomout: false, // Désactiver le bouton de zoom arrière
+                pan: false, // Désactiver le bouton de panoramique
+                reset: false, // Désactiver le bouton de réinitialisation
+                customIcons: [] // Vous pouvez également fournir vos propres icônes personnalisées si nécessaire
             },
-            states: {
-                hover: {
-                    filter: {
-                        type: 'lighten',
-                        value: 0.1, // Modifiez cette valeur pour contrôler l'effet de luminosité
-                    }
-                }
-            },
-            plotOptions: {
-                pie: {
-                    donut: {
-                        size: '80%',
-                        labels: {
-                            show: true,
-                            total: {
-                            show: true,
-                            showAlways: false,
-                            label: 'Total',
-                            fontSize: '22px',
-                            fontFamily: 'Helvetica, Arial, sans-serif',
-                            fontWeight: 600,
-                            color: '#ffffff',
-                            formatter: function (w) {
-                                // Calcule le total des séries
-                                return w.globals.seriesTotals.reduce((a, b) => a + b, 0);
-                            }
-                        },
-                            name: {
-                                color: 'white', // Définissez la couleur des labels des noms
-                            },
-                            value: {
-                                color: 'white' // Définissez la couleur des labels des valeurs
-                            },
-                            
-                        }
-                        
-                    }
-                }
-            },
-            stroke: {
-                show: true,
-                width: 0, // Épaisseur de la bordure
-                colors: ['#49243E'], // Couleur de la bordure, ici semi-transparente
-            },
-            legend: {
-                show: true, // Activer ou désactiver la légende
-                fontSize: '20px', // Ajustez la taille de la police
-                position: 'left', // Placer la légende à droite
-                floating: true,
-                offsetY: 0, // Ajuster légèrement la position verticale
-                offsetX: 200,
-                labels: {
-                    colors: 'white', // Ou utilisez un tableau de couleurs si vous avez plusieurs labels.
-                    useSeriesColors: false,
-                    width: 30
-                },
-                markers: {
-                    width: 20, // Augmentez si vous voulez des marqueurs plus grands
-                    height: 20,
-                },
-                itemMargin: {
-                    horizontal: 20,
-                    vertical: 10,  // Augmentez pour plus d'espacement vertical
-                },
-                onItemHover: {
-                    highlightDataSeries: false,
-                
+            autoSelected: 'download', // Sélectionne automatiquement le bouton de téléchargement
+            colors: '#00000',
+        },
+          height: 300,
+          width: '100%',
+          type: 'area'
+        },
+        grid: {
+            show: false,      // you can either change hear to disable all grids
+            xaxis: {
+                lines: {
+                    show: true  //or just here to disable only x axis grids
                 },
                 
+            },  
+            yaxis: {
+                lines: { 
+                    show: false  //or just here to disable only y axis
+                }
+            },   
+        },
+        zoom: {
+            enabled: false
+        },
+        colors: ['#c7222f'], // Couleur de la courbe
+        dataLabels: {
+          enabled: true
+        },
+        stroke: {
+          curve: 'smooth'
+        },
+
+        fill: {  // Ajout de la configuration de remplissage en dégradé
+            type: 'gradient',
+            gradient: {
+                shadeIntensity: 1,
+                opacityFrom: 0,
+                opacityTo: 0.1,
+                stops: [0, 100],
+                colorStops: [
+                    {
+                        offset: 0,
+                        color: '#c7222f',  // Couleur de départ du dégradé
+                        opacity: 0.5
+                    },
+                    {
+                        offset: 100,
+                        color: "#c7222f",  // Couleur de fin du dégradé
+                        opacity: 0
+                    }
+                ]
+            }
+        },
+        yaxis: {
+            labels: {
+                style: {
+                    colors: '#ff4560',  // Couleur des labels de l'axe Y
+                    fontSize: '14px',  // Taille de la police des labels de l'axe Y
+                    fontFamily: '',  // Famille de la police (optionnel)
+              
+                    
+                }
+            }
+        },
+        xaxis: {
+            categories: daysOfMonthLabels,
+            labels: {
+                style: {
+                    colors: '#ff4560',  // Couleur des labels de l'axe Y
+                    fontSize: '16px',  // Taille de la police des labels de l'axe Y
+                    fontFamily: ''  // Famille de la police (optionnel)
+                }
             },
-            colors: ['#007F73', '#A0153E', '#27005D', '#F94C10', '#FF8333'],
-            labels: ['Produit A', 'Produit B', 'Produit C', 'Produit D', 'Produit E'],
+            axisBorder: {
+                show: false, // Cela désactive la barre de l'axe X
+            },
+        },
+        tooltip: {
+            enabled: false,
+            fillSeriesColor: false,
+            x: {
+                format: 'dd/MM'
+            },
+            fixed: {
+                enabled: false,
+                position: 'topRight',
+                offsetX: 0,
+                offsetY: 0,
+            },
+            style: {
+                fontSize: '10px', // Taille de la police du texte du tooltip
+                fontFamily: 'Arial, sans-serif', // Famille de police du texte du tooltip
+                colors: '#ffffff'
+            },
+        },
         };
         const chart = new ApexCharts(document.querySelector("#chart"), options);
         chart.render();

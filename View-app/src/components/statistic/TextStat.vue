@@ -1,10 +1,12 @@
 <template>
-    <div class="flex flex-col text-[17px] w-[250px] 
-        border border-[rgb(56,57,59)] bg-custom-gradient rounded-md my-5 
+    <div class="flex flex-col text-[17px] w-[25%] 
+        bg-main-gradient rounded-sm mt-5 py-4
         shadow-[#38393b] shadow-custom-lower">
-        <p class="pt-3 pl-[13px] font-normal text-gray-300 text-[15px]"> {{ props.nameEconomy }}</p>
-        <p class="pl-[13px] text-white  font-medium  text-[18px]">2000€</p>
-        <p class="pl-[13px] text-[15px] mt-5 py-1 border-t border-[#38393b] font-medium text-gray-300">Dernier Mois: <span class="font-medium text-white  text-[18px]">2200€</span></p>
+        <div>
+            <p class="pl-[12px] text-white font-normal text-[18px]">2000€</p>
+        </div>
+        
+        <p class="pt-3 pl-[13px] font-extralight text-gray-300 text-[14px] border-t border-[#38393b]"> {{ props.nameEconomy }}</p>
     </div>
 </template>
 
