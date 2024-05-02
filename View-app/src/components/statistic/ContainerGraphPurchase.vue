@@ -7,8 +7,8 @@
         <h2 class="py-3 text-[25px] font-extralight">Achats du mois</h2>
         
         <div class="flex border-b border-main-color border w-fit rounded-md">
-            <p class="px-3 py-1 rounded-md cursor-pointer" :class="[stateTabPurchase ? 'bg-main-color' : '']" @click="handleStateTab(true)" >Achats</p>
-            <p class="px-3 py-1 rounded-md cursor-pointer" :class="[stateTabPurchase ? '' : 'bg-main-color']" @click="handleStateTab(false)" >Paiement réccurent</p>
+            <p class="px-3 py-1 rounded-md cursor-pointer" :class="[stateTabPurchase ? 'bg-[#3358f4]' : '']" @click="handleStateTab(true)" >Achats</p>
+            <p class="px-3 py-1 rounded-md cursor-pointer" :class="[stateTabPurchase ? '' : 'bg-[#3358f4]']" @click="handleStateTab(false)" >Paiement réccurent</p>
         </div>
 
 
@@ -83,7 +83,7 @@
                 customIcons: [] // Vous pouvez également fournir vos propres icônes personnalisées si nécessaire
             },
             autoSelected: 'download', // Sélectionne automatiquement le bouton de téléchargement
-            colors: '#00000',
+            colors: '#3358f4',
         },
           height: 300,
           width: '100%',
@@ -106,7 +106,7 @@
         zoom: {
             enabled: false
         },
-        colors: ['#c7222f'], // Couleur de la courbe
+        colors: ['#3358f4'], // Couleur de la courbe
         dataLabels: {
           enabled: true
         },
@@ -124,12 +124,12 @@
                 colorStops: [
                     {
                         offset: 0,
-                        color: '#c7222f',  // Couleur de départ du dégradé
+                        color: '#3358f4',  // Couleur de départ du dégradé
                         opacity: 0.5
                     },
                     {
                         offset: 100,
-                        color: "#c7222f",  // Couleur de fin du dégradé
+                        color: "##3358f4",  // Couleur de fin du dégradé
                         opacity: 0
                     }
                 ]
@@ -138,7 +138,7 @@
         yaxis: {
             labels: {
                 style: {
-                    colors: '#ff4560',  // Couleur des labels de l'axe Y
+                    colors: 'white',  // Couleur des labels de l'axe Y
                     fontSize: '14px',  // Taille de la police des labels de l'axe Y
                     fontFamily: '',  // Famille de la police (optionnel)
               
@@ -150,7 +150,7 @@
             categories: daysOfMonthLabels,
             labels: {
                 style: {
-                    colors: '#ff4560',  // Couleur des labels de l'axe Y
+                    colors: 'white',  // Couleur des labels de l'axe Y
                     fontSize: '16px',  // Taille de la police des labels de l'axe Y
                     fontFamily: ''  // Famille de la police (optionnel)
                 }

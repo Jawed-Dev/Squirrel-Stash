@@ -1,5 +1,4 @@
 <template>
-    <iconTotalPurch :svg="svg" />
     <svg 
         class="text-white w-[50px] cursor-pointer rounded-md py-2  px-3
         transition-transform hover:translate-y-[-5px] duration-[0.5s]" 
@@ -16,14 +15,10 @@
 <script setup>
 
     import pathSvgIcon from '../../../svgs/pathIcons';
-    import iconTotalPurch from '../../svgs/iconTotalPurchase.vue';
+    
 
 
-    const svg = {
-        fill: '#1b1e33',
-        width: '20px',
-        height: '20px'
-    }
+    
 
     const props = defineProps(['svgIcon']);
 

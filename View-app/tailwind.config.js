@@ -27,8 +27,9 @@ export default {
         'custom-margin-main' : '20px'
       },
       backgroundImage: {
-        'main-gradient': "linear-gradient(to top left, #1b1e33 50%, #536976 250%)",
-        'header-gradient': "linear-gradient(0deg, #ec250d, #fd5d93)",
+        'main-gradient': "linear-gradient(to top left, #1b1e33 40%, #536976 300%)",
+        'header-gradient2': "linear-gradient(0deg,#3358f4,#1d8cf8)",
+        'header-gradient': "linear-gradient(0deg,#3358f4,#1d8cf8)",
 
         'gradient': "linear-gradient(to top left, #101010 70%, #ffffff 450%)",
         'gradient-test': "linear-gradient(to top left, #1b1e33 70%, #ffffff 450%)",
@@ -37,7 +38,7 @@ export default {
         
       },
       boxShadow: {
-        'custom-main': '0 0 10px #38393b',
+        'custom-main': '0 0 5px #38393b',
         'custom-lower': '0 0 3px #38393b',
         'custom-test': '0 1px 10px #38393b',    
       }

@@ -19,13 +19,13 @@
             <section-purchase />
 
             <div class="flex gap-[20px] justify-aroundflex-wrap">
-                <div-text-stat :nameEconomy="'Total achat'" />
+                <div-text-stat :strValue="'350€'" :nameEconomy="'Total achat'" />
 
-                <div-text-stat :nameEconomy="'Plus grand achat'" />
+                <div-text-stat :strValue="'Restaurant'" :nameEconomy="'Plus grand achat'" />
 
-                <div-text-stat :nameEconomy="'Plus grand paiement réccurent'" />
+                <div-text-stat :strValue="'Loyer'" :nameEconomy="'Plus grand paiement réccurent'" />
 
-                <div-text-stat :nameEconomy="'Balance économie'" />
+                <div-text-stat :strValue="'+500€'" :nameEconomy="'Balance économie'" />
 
             </div>
 

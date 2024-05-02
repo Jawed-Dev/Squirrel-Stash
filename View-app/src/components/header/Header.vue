@@ -23,7 +23,7 @@
     import { useRouter } from 'vue-router';
     import iconNav from '../icons/nav/IconNav.vue';
     import {ref} from 'vue';
-
+    
     const router = useRouter();
 
     function handleClickIcon(request) {

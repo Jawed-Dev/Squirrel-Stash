@@ -9,7 +9,7 @@
             <p>Voir plus ></p>
         </div>
 
-        <div class="flex border-[#38393b] border-b pl-3 pt-5">
+        <div class="flex border-[#38393b] border-b pl-[calc(50px+20px+15px)] pt-5">
             <p class="w-[150px]">Nom</p>
             <p class="w-[150px]">Prix</p>
             <p class="w-[150px]">Date</p>
@@ -35,6 +35,8 @@
 
 <script setup>
     import Purchase from './Purchase.vue';
+    
+
     const infoPurchase = {
         name: 'Spotify',
         price: 100,

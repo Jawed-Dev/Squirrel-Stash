@@ -10,7 +10,7 @@
         </div>
 
 
-        <div class="flex border-[#38393b] border-b pl-3 pt-5">
+        <div class="flex border-[#38393b] border-b pl-[calc(50px+20px+15px)]  pt-5">
             <p class="w-[150px]">Nom</p>
             <p class="w-[150px]">Prix</p>
             <p class="w-[150px]">Date</p>
@@ -29,11 +29,10 @@
 <script setup>
         import RecurringPay from './RecurringPay.vue';
 
-
         const infoRecPay = {
-        name: 'Electricité',
-        price: 100,
-        date: '26 Mars 2023 15:50',
-    }
+            name: 'Electricité',
+            price: 100,
+            date: '26 Mars 2023 15:50',
+        };
 
 </script>
