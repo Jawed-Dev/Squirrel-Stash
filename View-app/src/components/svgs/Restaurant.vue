@@ -4,7 +4,7 @@
 <!-- Uploaded to: SVG Repo, www.svgrepo.com, Transformed by: SVG Repo Mixer Tools -->
     <svg 
     
-    :fill="svg.fill" 
+    fill="white" 
     :height="svg.width" 
     :width="svg.height" 
     version="1.1" 
@@ -13,7 +13,7 @@
     xmlns:xlink="http://www.w3.org/1999/xlink" 
     viewBox="0 0 24 24" 
     xml:space="preserve" 
-    :stroke="svg.fill"
+    stroke="white"
     stroke-width="0.5">
 
     <g id="SVGRepo_bgCarrier" stroke-width="0"/>

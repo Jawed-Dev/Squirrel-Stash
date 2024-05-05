@@ -106,7 +106,7 @@
         zoom: {
             enabled: false
         },
-        colors: ['#3358f4'], // Couleur de la courbe
+        colors: ['#00f2c3'], // Couleur de la courbe
         dataLabels: {
           enabled: true
         },
@@ -129,7 +129,7 @@
                     },
                     {
                         offset: 100,
-                        color: "##3358f4",  // Couleur de fin du dégradé
+                        color: "#3358f4",  // Couleur de fin du dégradé
                         opacity: 0
                     }
                 ]

@@ -15,6 +15,13 @@ export default {
         'custom-gray-dark' : '#38393b',
         'custom-gray-2' : '#484B55',
         'color-shadow' : '#27293d',
+
+        'custom-blue' : '#1d8cf8',
+        'custom-green' : '#42b883',
+        'custom-red' : '#fd5d93',
+        'custom-orange' : '#ff8d72',
+        'custom-purple' : '#e14eca',
+        'custom-turquoise' : '#00f2c3',
         
         'second-bg' : '#1b1e33',
         'main-bg': "#121422",
@@ -34,6 +41,13 @@ export default {
         'gradient': "linear-gradient(to top left, #101010 70%, #ffffff 450%)",
         'gradient-test': "linear-gradient(to top left, #1b1e33 70%, #ffffff 450%)",
         'custom-gradient': "linear-gradient(to top left, #101010 70%, #ffffff 450%)",
+
+        'gradient-blue' : "linear-gradient(0deg,#3358f4,#1d8cf8)",
+        'gradient-green' : "linear-gradient(0deg,#389466,#42b883)",
+        'gradient-red' : "linear-gradient(0deg, #ec250d, #fd5d93)",
+        'gradient-orange' : "linear-gradient(0deg,#ff6491,#ff8d72)",
+        'gradient-purple' : "linear-gradient(0deg,#ba54f5,#e14eca)",
+        'gradient-turquoise' : "linear-gradient(0deg,#0098f0,#00f2c3)"
 
         
       },

@@ -17,15 +17,15 @@
         </div>
 
         <div class="pl-3">
-            <purchase :infoPurchase="infoPurchase"/>
+            <purchase :svg="svg" :infoPurchase="infoPurchase"/>
 
-            <purchase :infoPurchase="infoPurchase"/>
+            <purchase :svg="svg" :infoPurchase="infoPurchase"/>
 
-            <purchase :infoPurchase="infoPurchase"/>
+            <purchase :svg="svg" :infoPurchase="infoPurchase"/>
 
-            <purchase :infoPurchase="infoPurchase"/>
+            <purchase :svg="svg" :infoPurchase="infoPurchase"/>
 
-            <purchase :infoPurchase="infoPurchase"/>
+            <purchase :svg="svg" :infoPurchase="infoPurchase"/>
         </div>
 
     </div>
@@ -35,6 +35,10 @@
 
 <script setup>
     import Purchase from './Purchase.vue';
+
+    const props = defineProps({
+        svg: { default: {} }
+    })
     
 
     const infoPurchase = {

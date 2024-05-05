@@ -1,6 +1,6 @@
 <template>
     <div class="flex items-center border-b py-7 border-[#38393b] text-white">
-        <IconRestaurant :svg="svg"  class="bg-header-gradient2 rounded-full p-3 shadow-custom-main mr-[20px]"/>
+        <component :is="iconComponent" :svg="svg" :class="`${props.svg.color} rounded-full p-3 shadow-custom-main mr-[20px]`"/>
         <p class="w-[150px] text-[15px] pr-4">{{infoReccuringPay.name}}</p>
         <p class="w-[150px] text-[15px] pr-4">{{infoReccuringPay.price}}€</p>
         <p class="w-[150px] text-[15px] pr-4">{{infoReccuringPay.date}}</p>
@@ -8,8 +8,21 @@
 </template>
 
 <script setup>
-    import IconRestaurant from '../svgs/iconRestaurant.vue';
-    const props = defineProps(['infoReccuringPay']);
+    import { getIconByName } from '@/functions/icons/getIcon';
+    import {ref, onMounted} from 'vue';
+
+    const iconComponent = ref(null)
+
+    onMounted(async () => {
+        const module = await getIconByName(props.svg.name);
+        iconComponent.value = module.default;
+    });
+
+
+    const props = defineProps({
+        infoReccuringPay: { default: {}},
+        svg: {default: {}}
+    });
 
     const svg = {
         fill: 'white',

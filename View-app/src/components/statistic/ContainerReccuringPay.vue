@@ -17,17 +17,21 @@
         </div>
 
         <div class="pl-3">
-            <recurring-pay :infoReccuringPay="infoRecPay"/>
+            <recurring-pay :svg="svg" :infoReccuringPay="infoRecPay"/>
 
-            <recurring-pay :infoReccuringPay="infoRecPay"/>
+            <recurring-pay :svg="svg" :infoReccuringPay="infoRecPay"/>
 
-            <recurring-pay :infoReccuringPay="infoRecPay"/>
+            <recurring-pay :svg="svg" :infoReccuringPay="infoRecPay"/>
         </div>
     </div>
 </template>
 
 <script setup>
         import RecurringPay from './RecurringPay.vue';
+
+        const props = defineProps({
+            svg: { default: { }}
+        });
 
         const infoRecPay = {
             name: 'Electricité',

@@ -1,9 +1,12 @@
 <template>
-    <div class="w-header-width flex flex-col justify-center items-center top-top-Header left-top-Header fixed gap-5 h-[calc(100vh-40px)] 
+    <div class="w-header-width flex flex-col items-center top-top-Header left-top-Header fixed pt-10 gap-5 h-[calc(100vh-40px)] 
             bg-header-gradient rounded-md
              shadow-custom-gray-dark shadow-custom-main">
  
-            <icon-nav :svgIcon="'home'" @click="handleClickIcon('home')" />
+            <NavIconDashboard :svg="svg" @click="handleClickIcon('home')" />
+            <NavIconPurchases :svg="svg" />
+
+            <IconListPurchase :svg="svg" />
             
             <icon-nav :svgIcon="'detail'" @click="handleClickIcon('detail')"  />
             
@@ -22,7 +25,22 @@
 <script setup>
     import { useRouter } from 'vue-router';
     import iconNav from '../icons/nav/IconNav.vue';
+    import IconListPurchase from '../svgs/iconListPurchase.vue';
+
+    import NavIconDashboard from '../svgs/NavIconDashboard.vue';
+    import NavIconPurchases from '../svgs/NavIconPurchases.vue';
+
     import {ref} from 'vue';
+
+
+
+    const svg = {
+        fill: 'white',
+        width: '40px',
+        height: '40px',
+        stroke: 'white'
+    }
+
     
     const router = useRouter();
 
