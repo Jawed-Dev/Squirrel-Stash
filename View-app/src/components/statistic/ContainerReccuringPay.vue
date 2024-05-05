@@ -1,6 +1,6 @@
 <template>
 
-    <div class="pl-2 mt-custom-margin-main w-[49%] text-white 
+    <div class="pl-2 mt-custom-margin-main w-[calc(50%-10px)] text-white 
         bg-main-gradient rounded-sm my-5 
         shadow-custom-gray-dark shadow-custom-main">    
 
@@ -10,7 +10,7 @@
         </div>
 
 
-        <div class="flex border-[#38393b] border-b pl-[calc(50px+20px+15px)]  pt-5">
+        <div class="flex border-[#38393b] border-b pl-[calc(50px+20px+15px)]  py-2">
             <p class="w-[150px]">Nom</p>
             <p class="w-[150px]">Prix</p>
             <p class="w-[150px]">Date</p>

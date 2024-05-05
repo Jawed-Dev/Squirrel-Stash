@@ -1,5 +1,5 @@
 <template>
-    <div class="flex items-center border-b py-7 border-[#38393b] text-white">
+    <div class="flex items-center border-b py-6 border-[#38393b] text-white">
         <component :is="iconComponent" :svg="svg" :class="`${props.svg.color} rounded-full p-3 shadow-custom-main mr-[20px]`"/>
         <p class="w-[150px] text-[15px] pr-4">{{infoReccuringPay.name}}</p>
         <p class="w-[150px] text-[15px] pr-4">{{infoReccuringPay.price}}€</p>

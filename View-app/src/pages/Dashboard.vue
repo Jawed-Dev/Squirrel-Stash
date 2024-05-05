@@ -4,14 +4,12 @@
 
         <header-component/>
 
-        <main class="ml-[calc(20px+70px+20px)] mr-custom-margin-main flex flex-col">
-
-
-            <h1 class="py-3 text-[25px] font-extralight text-white">Économie du mois</h1>
+        <main class="ml-[calc(20px+70px+20px)] mr-custom-margin-main flex flex-col mt-[20px]">
+            <h1 class="text-[25px] font-extralight text-white">Économie du mois</h1>
 
             <p class="font-normal py-3 mr-[190px] text-white">Bonjour Jawed, voici votre résumé du mois.</p> 
 
-            <div-text-stat :svg="svgConfig('target', 'bg-gradient-blue')" :colorValue="'text-custom-red'" :strValue="'350€'" :nameEconomy="'Objectif du mois'" />
+            <div-text-stat :svg="svgConfig('target', 'bg-gradient-blue')" :colorValue="'text-custom-red'" :strValue="'350€'" :nameEconomy="'Objectif du mois'" :width="'w-[520px]'"/>
 
             <div class="flex gap-[20px] pt-[20px]">
                 <select-component :listSelect="listMonth" />
@@ -22,13 +20,13 @@
 
             <div class="flex gap-[20px] justify-around ">
 
-                <div-text-stat :svg="svgConfig('balance', 'bg-gradient-green')" :colorValue="'text-custom-purple'" :strValue="'+500€'" :nameEconomy="'Balance économie'" />
+                <div-text-stat :svg="svgConfig('balance', 'bg-gradient-green')" :colorValue="'text-custom-purple'" :strValue="'+500€'" :nameEconomy="'Balance économie'" :width="'w-[25%]'" />
 
-                <div-text-stat :svg="svgConfig('purchaseFoods', 'bg-gradient-blue')" :colorValue="'text-custom-blue'" :strValue="'350€'" :nameEconomy="'Total achat'" />
+                <div-text-stat :svg="svgConfig('purchaseFoods', 'bg-gradient-blue')" :colorValue="'text-custom-blue'" :strValue="'350€'" :nameEconomy="'Total achat'" :width="'w-[25%]'" />
 
-                <div-text-stat :svg="svgConfig('restaurant', 'bg-gradient-orange')" :colorValue="'text-custom-orange'" :strValue="'Restaurant'" :nameEconomy="'Plus gros achat / Type'" />
+                <div-text-stat :svg="svgConfig('restaurant', 'bg-gradient-orange')" :colorValue="'text-custom-orange'" :strValue="'Restaurant'" :nameEconomy="'Plus gros achat / Type'" :width="'w-[25%]'" />
 
-                <div-text-stat :svg="svgConfig('restaurant', 'bg-gradient-green')" :colorValue="'text-custom-green'"  :strValue="'Loyer'" :nameEconomy="'Plus gros débitement / Type'" />
+                <div-text-stat :svg="svgConfig('restaurant', 'bg-gradient-green')" :colorValue="'text-custom-green'"  :strValue="'Loyer'" :nameEconomy="'Plus gros débitement / Type'" :width="'w-[25%]'" />
 
             </div>
 

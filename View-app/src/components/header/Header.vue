@@ -1,21 +1,48 @@
 <template>
-    <div class="w-header-width flex flex-col items-center top-top-Header left-top-Header fixed pt-10 gap-5 h-[calc(100vh-40px)] 
+    <div class="
+            flex flex-col items-center 
+            w-header-width top-top-Header left-top-Header fixed pt-10  h-[calc(100vh-40px)] 
             bg-header-gradient rounded-md
-             shadow-custom-gray-dark shadow-custom-main">
+          shadow-custom-gray-dark shadow-custom-main
+            hover:w-[200px] transition-all duration-500 z-10"
+                @mouseenter="isHovered = true, test()"
+                @mouseleave="isHovered = false"
+            >
+            
+            
+
+            <div class="pl-5 w-[70%] border-[1px] border-white mt-[40px] "></div>
  
-            <NavIconDashboard :svg="svg" @click="handleClickIcon('home')" />
-            <NavIconPurchases :svg="svg" />
+            <div class="w-[100%] flex pl-5 flex-col gap-5 mt-[20px]">
 
-            <IconListPurchase :svg="svg" />
+                <div class="flex relative">
+                    <NavIconDashboard :svg="svgConfig('home')" @click="handleClickIcon('home')" :class="classIcons" />
+                    <TransitionText :text="'Tableau de bord'" :condition="isHovered" />
+                </div>
+
+                <div class="flex relative">
+                    <NavIconPurchases :svg="svgConfig('', 'white')" :class="classIcons"  />
+                    <TransitionText :text="'Liste d\'achat'" :condition="isHovered" />
+                </div>
+                
+                <div class="flex relative">
+                    <NavIconGraph :svg="svgConfig('')" :class="classIcons"/>
+                    <TransitionText :text="'Graphiques'" :condition="isHovered" />
+                </div>
+                
+                <div class="flex relative">
+                    <NavIconBell :svg="svgConfig('')" :class="classIcons"/>
+                    <TransitionText :text="'Alarme'" :condition="isHovered" />
+                </div>
+
+                <div class="flex relative">
+                    <NavIconUser :svg="svgConfig('', 'white')" :class="classIcons"/>
+                    <TransitionText :text="'Utilisateur'" :condition="isHovered" />
+                </div>
+                
+                
+            </div>
             
-            <icon-nav :svgIcon="'detail'" @click="handleClickIcon('detail')"  />
-            
-            <icon-nav :svgIcon="'purchase'" @click="handleClickIcon('purchase')"  />
-
-            <icon-nav :svgIcon="'alarm'" @click="handleClickIcon('alarm')"  />
-
-            <icon-nav :svgIcon="'user'" @click="handleClickIcon('user')"  />
-
     </div>
 
     <!-- style="text-shadow: 4px 4px 3px rgba(0,0,0,1); -->
@@ -29,37 +56,57 @@
 
     import NavIconDashboard from '../svgs/NavIconDashboard.vue';
     import NavIconPurchases from '../svgs/NavIconPurchases.vue';
+    import NavIconGraph from '../svgs/NavIconGraph.vue';
+    import NavIconBell from '../svgs/NavIconBell.vue';
+    import NavIconUser from '../svgs/NavIconUser.vue';
 
-    import {ref} from 'vue';
+    import TransitionText from './TransitionText.vue';
 
-
-
-    const svg = {
-        fill: 'white',
-        width: '40px',
-        height: '40px',
-        stroke: 'white'
-    }
-
+    import {ref, computed} from 'vue';
     
+    const statePage = ref(null);
+    const classIcons = 'cursor-pointer transition-transform hover:translate-y-[-5px] duration-[0.5s]';
     const router = useRouter();
 
-    function handleClickIcon(request) {
+    const isHovered = ref(false);
+    const isTextVisible = ref(false);
 
+    function test() {
+   
+    }
+
+
+    function handleClickIcon(request) {
         switch (request) {
             case 'home': {
                 statePage.value = request;
-                router.push('/login');
+                router.push('/connexion');
                 break;
             }
-                
-        
             default:
                 statePage.value = request;
                 alert(statePage.value );
                 break;
         }
     }
+
+
+    function svgConfig(nameSvg) {
+        const width = '30px';
+        const pathname = window.location.pathname;
+        const partOfUrl = pathname.substring(1);
+
+        const isActive = computed(() => partOfUrl === nameSvg);
+        return {
+            name: nameSvg,
+            width: width,
+            height: width,
+            fill: isActive.value ? '#1b1e33' : 'white',
+            stroke: 'none'
+        }
+    }
+
+    
 
 </script>
 
