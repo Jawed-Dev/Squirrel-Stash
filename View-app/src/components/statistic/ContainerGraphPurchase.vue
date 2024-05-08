@@ -6,9 +6,9 @@
         
         <h2 class="py-3 text-[25px] font-extralight">Achats du mois</h2>
         
-        <div class="flex border-b border-main-color border w-fit rounded-md">
-            <p class="px-3 py-1 rounded-md cursor-pointer" :class="[stateTabPurchase ? 'bg-[#3358f4]' : '']" @click="handleStateTab(true)" >Achats</p>
-            <p class="px-3 py-1 rounded-md cursor-pointer" :class="[stateTabPurchase ? '' : 'bg-[#3358f4]']" @click="handleStateTab(false)" >Paiement réccurent</p>
+        <div class="flex border-b border-main-color border w-fit shadow-black shadow-custom-test rounded-r-md rounded-l-md">
+            <p class="px-3 py-1 cursor-pointer rounded-l-md" :class="[stateTabPurchase ? 'bg-gradient-blue' : '']" @click="handleStateTab(true)" >Achats</p>
+            <p class="px-3 py-1 cursor-pointer rounded-r-md" :class="[stateTabPurchase ? '' : 'bg-gradient-blue']" @click="handleStateTab(false)" >Paiement réccurent</p>
         </div>
 
 

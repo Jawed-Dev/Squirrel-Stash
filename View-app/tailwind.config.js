@@ -54,7 +54,8 @@ export default {
       boxShadow: {
         'custom-main': '0 0 5px #38393b',
         'custom-lower': '0 0 3px #38393b',
-        'custom-test': '0 1px 10px #38393b',    
+        'custom-test': '2px 1px 6px rgba(0,0,0,.4)',
+
       }
     },
   },

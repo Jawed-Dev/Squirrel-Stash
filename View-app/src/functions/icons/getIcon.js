@@ -14,7 +14,7 @@ export async function getIconByName(name) {
             return await import('../../components/svgs/IconBalance.vue');
         }
         default : {
-            return 'restaurant';
+            return await import('../../components/svgs/Restaurant.vue');
         }
 
     }

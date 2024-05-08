@@ -5,12 +5,10 @@
             bg-header-gradient rounded-md
           shadow-custom-gray-dark shadow-custom-main
             hover:w-[200px] transition-all duration-500 z-10"
-                @mouseenter="isHovered = true, test()"
+                @mouseenter="isHovered = true"
                 @mouseleave="isHovered = false"
             >
             
-            
-
             <div class="pl-5 w-[70%] border-[1px] border-white mt-[40px] "></div>
  
             <div class="w-[100%] flex pl-5 flex-col gap-5 mt-[20px]">
