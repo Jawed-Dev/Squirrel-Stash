@@ -14,9 +14,9 @@
 
 <script setup>
     import { getIconByName } from '@/functions/icons/getIcon';
-    import { ref, onMounted } from 'vue';
+    import { ref, onMounted, shallowRef } from 'vue';
 
-    const iconComponent = ref(null);
+    const iconComponent = shallowRef(null);
 
     onMounted(async () => {
         const module = await getIconByName(props.svg.name);

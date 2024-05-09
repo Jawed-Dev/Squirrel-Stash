@@ -3,8 +3,8 @@
             flex flex-col items-center 
             w-header-width top-top-Header left-top-Header fixed pt-10  h-[calc(100vh-40px)] 
             bg-header-gradient rounded-md
-          shadow-custom-gray-dark shadow-custom-main
-            hover:w-[200px] transition-all duration-500 z-10"
+          shadow--dark shadow-custom-test
+            hover:w-[200px] transition-all duration-700 z-10"
                 @mouseenter="isHovered = true"
                 @mouseleave="isHovered = false"
             >
@@ -50,7 +50,7 @@
 <script setup>
     import { useRouter } from 'vue-router';
     import iconNav from '../icons/nav/IconNav.vue';
-    import IconListPurchase from '../svgs/iconListPurchase.vue';
+    import IconListPurchase from '../svgs/IconListPurchase.vue';
 
     import NavIconDashboard from '../svgs/NavIconDashboard.vue';
     import NavIconPurchases from '../svgs/NavIconPurchases.vue';

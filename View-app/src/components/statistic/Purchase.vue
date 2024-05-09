@@ -7,8 +7,17 @@
         <p class="w-[150px] text-[15px] pr-4">{{infoPurchase.iteration}}x</p>
         
         <div class="pl-[120px] relative">
-            <Options @click="idMenuSelected" class="cursor-pointer" :svg="iconOptions"/>
-            <Transition
+            <Options @click="idMenuSelected" class="cursor-pointer icon-trigger-class" :svg="iconOptions"/>
+            <TransitionOpacity :duration="'duration-500'">
+                <div v-show="props.modelValue === props.idMenu" 
+                    class="flex flex-col items-center absolute top-[-20px] left-[10px] z-10  
+                    bg-main-gradient w-[100px] rounded-md overflow-hidden
+                    shadow-black shadow-custom-test">
+                    <p @click="handlePurchase('edit')" ref="iconOptionsEl" class="hover:bg-custom-blue w-[100%] text-center cursor-pointer p-1">Modifier</p>
+                    <p @click="handlePurchase('delete')" class="hover:bg-custom-blue w-[100%] text-center cursor-pointer p-1">Supprimer</p>
+                </div>
+            </TransitionOpacity>
+            <!-- <Transition
                 enter-active-class="transition-opacity duration-500"
                 enter-from-class="opacity-0"
                 enter-to-class="opacity-1"
@@ -23,7 +32,7 @@
                     <p @click="handlePurchase('edit')" ref="iconOptionsEl" class="hover:bg-custom-blue w-[100%] text-center cursor-pointer p-1">Modifier</p>
                     <p @click="handlePurchase('delete')" class="hover:bg-custom-blue w-[100%] text-center cursor-pointer p-1">Supprimer</p>
                 </div>
-            </Transition>
+            </Transition> -->
             
         </div>
         
@@ -35,7 +44,8 @@
     // import
     import { getIconByName } from '@/functions/icons/getIcon';
     import Options from '../svgs/Options.vue';
-    import {ref, onMounted, onBeforeUnmount} from 'vue';
+    import {ref, onMounted, onBeforeUnmount, shallowRef } from 'vue';
+    import TransitionOpacity from '../transition/TransitionOpacity.vue';
 
     // variables, props, emit
     const props = defineProps({
@@ -46,20 +56,17 @@
         purchaseType: {default: 'standard'}
     });
 
-    const iconComponent = ref(null);
+    const iconComponent = shallowRef(null);
 
     const iconOptionsEl = ref(null);
-
     const emit = defineEmits(['update:modelValue']);
     
-
     const iconOptions = {
         fill: 'white',
         width: '30px',
         height: '30px',
     }
     
-
     // cycle de vie
     onMounted(async () => {
         const module = await getIconByName(props.svg.name);
@@ -77,12 +84,10 @@
     function handlePurchase(request) {
         switch(request) {
             case 'edit': {
-
                 emit('update:modelValue', -1)
                 break;
             }
             case 'delete' : {
-
                 emit('update:modelValue', -1)
                 break;
             }
@@ -90,12 +95,13 @@
     }
 
     function handleClickOutside(event) {
-        if (iconOptionsEl.value && !iconOptionsEl.value.contains(event.target)) {
-            emit('update:modelValue', -1);
-        }
+        if (!iconOptionsEl.value?.contains(event.target) && !event.target.closest('.icon-trigger-class')) {
+        emit('update:modelValue', -1);
+    }
     }
 
     function idMenuSelected () {
+        //alert('alert');
         (props.modelValue === props.idMenu) ? emit('update:modelValue', -1) : emit('update:modelValue', props.idMenu); 
     }
 

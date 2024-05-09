@@ -23,16 +23,14 @@
 
 <script setup>
     
-
+    // import
     import { ref , onMounted } from 'vue';
     import ApexCharts from 'apexcharts'
 
-    function handleStateTab(state) {
-        stateTabPurchase.value = state;
-    }   
+    // functions, props ...
     const stateTabPurchase = ref(true);
     
-
+    // cycle de vie
     onMounted(() => {
          // Fonction pour générer les étiquettes des jours du mois en cours
             function generateDaysOfMonthLabels() {
@@ -48,16 +46,16 @@
             }
 
             function generateRandomData() {
-        const data = [];
+                const data = [];
 
-        for (let i = 0; i < 10+1; i++) {
-            
-            const randomValue = Math.floor(Math.random() * 201); // Génère une valeur aléatoire entre 0 et 200
-            (i === 0) ? data.push(0) : data.push(randomValue);
-        }
+                for (let i = 0; i < 10+1; i++) {
+                    
+                    const randomValue = Math.floor(Math.random() * 201); // Génère une valeur aléatoire entre 0 et 200
+                    (i === 0) ? data.push(0) : data.push(randomValue);
+                }
 
-        return data;
-    }
+                return data;
+            }
 
    
 
@@ -180,7 +178,14 @@
         };
         const chart = new ApexCharts(document.querySelector("#chart"), options);
         chart.render();
-    })
+    });
+
+
+    // functions
+
+    function handleStateTab(state) {
+        stateTabPurchase.value = state;
+    }   
 
 
 </script>

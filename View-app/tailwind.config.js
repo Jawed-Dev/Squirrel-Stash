@@ -48,14 +48,12 @@ export default {
         'gradient-orange' : "linear-gradient(0deg,#ff6491,#ff8d72)",
         'gradient-purple' : "linear-gradient(0deg,#ba54f5,#e14eca)",
         'gradient-turquoise' : "linear-gradient(0deg,#0098f0,#00f2c3)"
-
         
       },
       boxShadow: {
         'custom-main': '0 0 5px #38393b',
         'custom-lower': '0 0 3px #38393b',
         'custom-test': '2px 1px 6px rgba(0,0,0,.4)',
-
       }
     },
   },
