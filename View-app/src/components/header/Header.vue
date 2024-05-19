@@ -14,27 +14,27 @@
             <div class="w-[100%] flex pl-5 flex-col gap-5 mt-[20px]">
 
                 <div class="flex relative">
-                    <NavIconDashboard :svg="svgConfig('home')" @click="handleClickIcon('home')" :class="classIcons" />
+                    <NavIconDashboard :svg="svgConfig('home')" @click="handleClickIcon('home')" :class="classTranslateY" />
                     <TransitionText :text="'Tableau de bord'" :condition="isHovered" />
                 </div>
 
                 <div class="flex relative">
-                    <NavIconPurchases :svg="svgConfig('', 'white')" :class="classIcons"  />
+                    <NavIconPurchases :svg="svgConfig('', 'white')" :class="classTranslateY"  />
                     <TransitionText :text="'Liste d\'achat'" :condition="isHovered" />
                 </div>
                 
                 <div class="flex relative">
-                    <NavIconGraph :svg="svgConfig('')" :class="classIcons"/>
+                    <NavIconGraph :svg="svgConfig('')" :class="classTranslateY"/>
                     <TransitionText :text="'Graphiques'" :condition="isHovered" />
                 </div>
                 
                 <div class="flex relative">
-                    <NavIconBell :svg="svgConfig('')" :class="classIcons"/>
+                    <NavIconBell :svg="svgConfig('')" :class="classTranslateY"/>
                     <TransitionText :text="'Alarme'" :condition="isHovered" />
                 </div>
 
                 <div class="flex relative">
-                    <NavIconUser :svg="svgConfig('', 'white')" :class="classIcons"/>
+                    <NavIconUser :svg="svgConfig('', 'white')" :class="classTranslateY"/>
                     <TransitionText :text="'Utilisateur'" :condition="isHovered" />
                 </div>
                 
@@ -57,22 +57,17 @@
     import NavIconGraph from '../svgs/NavIconGraph.vue';
     import NavIconBell from '../svgs/NavIconBell.vue';
     import NavIconUser from '../svgs/NavIconUser.vue';
-
     import TransitionText from './TransitionText.vue';
+    import { classTransitionHover } from '../transition/classTransitionHover';
 
     import {ref, computed} from 'vue';
     
     const statePage = ref(null);
-    const classIcons = 'cursor-pointer transition-transform hover:translate-y-[-5px] duration-[0.5s]';
+    // translateY
+    const classTranslateY = classTransitionHover('translateY');
+    // router
     const router = useRouter();
-
     const isHovered = ref(false);
-    const isTextVisible = ref(false);
-
-    function test() {
-   
-    }
-
 
     function handleClickIcon(request) {
         switch (request) {

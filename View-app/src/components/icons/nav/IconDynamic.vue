@@ -1,24 +1,33 @@
 <template>
-    <component :is="iconComponent" :svg="props.svg" :class="`${props.svg.color} rounded-lg p-3 shadow-custom-main`"/>
+    <component :is="iconComponent" :svg="props.svg" :class="`${props.svg.color} p-1 shadow-custom-main`"/>
 </template>
 
 
 <script setup>
     // import
-    import { ref, onMounted, shallowRef } from 'vue';
+    import { ref, onMounted, shallowRef, watch } from 'vue';
+    import { getIconByName } from '@/functions/icons/getIcon';
 
     // variables, props...
     const iconComponent = shallowRef(null);
     const props = defineProps({
-        svg:  {default: {} }
+        svg:  {default: {} },
+        nameIcon: {default: ''}
     })
 
-    // cycle de vie
-    onMounted(async () => {
-        const module = await getIconByName('restaurant');
+    async function loadIcon(name) {
+        const module = await getIconByName(name);
         iconComponent.value = module.default;
+    }
+  
+    onMounted(() => {
+        loadIcon(props.nameIcon);
     });
 
+
+    watch(() => props.nameIcon, (newName) => {
+        loadIcon(newName);
+    });
 
 
     // functions

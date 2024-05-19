@@ -16,8 +16,10 @@
                 <select-component :listSelect="listYear" />
             </section>
 
+         
             <AddPurchase />
 
+            
             <section-purchase />
 
             <section class="flex gap-[20px] justify-around ">
@@ -29,10 +31,9 @@
 
             <section class="flex justify-between">
                 <container-purchase :title="'Historique de transactions'" :purchaseType="'standard'"  :svg="svgConfig('restaurant', 'bg-gradient-red', '50px')" />
-                <container-purchase :title="'Paiements réccurents'" :purchaseType="'reccuring'" :svg="svgConfig('balance', 'bg-gradient-orange', '50px')" />
-                
+                <container-purchase :title="'Paiements récurents'" :purchaseType="'recuring'" :svg="svgConfig('balance', 'bg-gradient-orange', '50px')" />
             </section>
-            <!-- <container-reccuring-pay :title="'Historique de transactions'" :svg="svgConfig('balance', 'bg-gradient-orange', '50px')" /> -->
+    
         </main>
     </div>
 
@@ -51,6 +52,7 @@
     import ContainerPurchase from '@/components/statistic/ContainerPurchase.vue';
     import AddPurchase from '@/components/overlay/AddPurchase.vue';
     import { ref } from 'vue';
+    import TransitionOpacity from '@/components/transition/TransitionOpacity.vue';
 
     // variables, props, ...
 

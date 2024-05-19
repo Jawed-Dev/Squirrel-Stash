@@ -6,12 +6,12 @@
         
         <h2 class="py-3 text-[25px] font-extralight">Achats du mois</h2>
         
-        <div class="flex border-b border-main-color border w-fit shadow-black shadow-custom-test rounded-r-md rounded-l-md">
+        <!-- <div class="flex border-b border-main-color border w-fit shadow-black shadow-custom-test rounded-r-md rounded-l-md">
             <p class="px-3 py-1 cursor-pointer rounded-l-md" :class="[stateTabPurchase ? 'bg-gradient-blue' : '']" @click="handleStateTab(true)" >Achats</p>
-            <p class="px-3 py-1 cursor-pointer rounded-r-md" :class="[stateTabPurchase ? '' : 'bg-gradient-blue']" @click="handleStateTab(false)" >Paiement réccurent</p>
-        </div>
+            <p class="px-3 py-1 cursor-pointer rounded-r-md" :class="[stateTabPurchase ? '' : 'bg-gradient-blue']" @click="handleStateTab(false)" >Paiement récurent</p>
+        </div> -->
 
-
+        <ToggleButton v-model="stateTabPurchase" :text1="'Achat'" :text2="'Paiement récurent'" />
         <div class="flex justify-center py-[20px]" id="chart">
 
         </div>
@@ -25,37 +25,39 @@
     
     // import
     import { ref , onMounted } from 'vue';
-    import ApexCharts from 'apexcharts'
+    import ApexCharts from 'apexcharts';   
+    import ToggleButton from '../button/ToggleButton.vue';
 
     // functions, props ...
     const stateTabPurchase = ref(true);
     
     // cycle de vie
     onMounted(() => {
+
          // Fonction pour générer les étiquettes des jours du mois en cours
-            function generateDaysOfMonthLabels() {
-                const currentDate = new Date();
-                const daysInMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0).getDate();
-                const labels = [];
+        function generateDaysOfMonthLabels() {
+            const currentDate = new Date();
+            const daysInMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0).getDate();
+            const labels = [];
+            
+            for (let day = 1; day <= daysInMonth; day++) {
+                labels.push(`${day}`);
+            }
+            
+            return labels;
+        }
+
+        function generateRandomData() {
+            const data = [];
+
+            for (let i = 0; i < 10+1; i++) {
                 
-                for (let day = 1; day <= daysInMonth; day++) {
-                    labels.push(`${day}`);
-                }
-                
-                return labels;
+                const randomValue = Math.floor(Math.random() * 201); // Génère une valeur aléatoire entre 0 et 200
+                (i === 0) ? data.push(0) : data.push(randomValue);
             }
 
-            function generateRandomData() {
-                const data = [];
-
-                for (let i = 0; i < 10+1; i++) {
-                    
-                    const randomValue = Math.floor(Math.random() * 201); // Génère une valeur aléatoire entre 0 et 200
-                    (i === 0) ? data.push(0) : data.push(randomValue);
-                }
-
-                return data;
-            }
+            return data;
+        }
 
    
 

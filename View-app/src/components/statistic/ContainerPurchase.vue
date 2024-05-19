@@ -18,7 +18,9 @@
         </div>
 
         <div class="pl-3">
-            <purchase v-for="(purchase, index) of listPurchases" :purchaseType="props.purchaseType" :key="purchase.infoPurchase.date" v-model="activeMenuId" :idMenu="index" :svg="svg" :infoPurchase="purchase.infoPurchase"/>
+            <purchase v-for="(purchase, index) of listPurchases" 
+            :nameIcon="`restaurant`" :purchaseType="props.purchaseType" 
+            :key="purchase.infoPurchase.date" v-model="activeMenuId" :idMenu="index" :svg="svg" :infoPurchase="purchase.infoPurchase"/>
         </div>
 
     </div>
