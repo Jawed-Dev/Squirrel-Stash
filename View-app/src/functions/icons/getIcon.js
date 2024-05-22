@@ -7,7 +7,7 @@ export async function getIconByName(name) {
             return await import('../../components/svgs/PurchaseFoods.vue');
         }
         case 'target' : {
-            return await import('../../components/svgs/Target.vue');
+            return await import('../../components/svgs/IconTarget.vue');
         }
 
         case 'balance' : {

@@ -8,7 +8,7 @@
         
         <div class="pl-[120px] relative">
             <Options @click="idMenuSelected" class="cursor-pointer trigger-class" :svg="iconOptions"/>
-            <TransitionOpacity :duration="'duration-500'">
+            <TransitionOpacity :durationIn="'duration-500'" :durationOut="'duration-500'">
                 <div v-show="props.modelValue === props.idMenu" 
                     class="flex flex-col items-center absolute top-[-20px] left-[10px] z-10  
                     bg-main-gradient w-[100px] rounded-md overflow-hidden

@@ -6,11 +6,11 @@
             :svg="svgConfig2" 
         />
 
-        <TransitionOpacity :duration="'duration-500'">
+        <TransitionOpacity :durationIn="'duration-500'" :durationOut="'duration-500'">
             <div v-show="ismenuAddActive" class="fixed inset-0 bg-black bg-opacity-80 z-10"></div>
         </TransitionOpacity>
         
-        <TransitionOpacity :duration="'duration-500'">
+        <TransitionOpacity :durationIn="'duration-500'" :durationOut="'duration-500'">
             <!-- top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 -->
             <div v-show="ismenuAddActive" 
                 class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 text-white rounded-md overflow-hidden 

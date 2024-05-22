@@ -1,49 +1,27 @@
 <template>
-    <div class="
+    <div ref="mainRefHeader" :class="`
             flex flex-col items-center 
             w-header-width top-top-Header left-top-Header fixed pt-10  h-[calc(100vh-40px)] 
             bg-header-gradient rounded-md
-          shadow--dark shadow-custom-test
-            hover:w-[200px] transition-all duration-700 z-10"
+            shadow--dark shadow-custom-test
+           ${classTranslateWidth} z-10`"
                 @mouseenter="isHovered = true"
                 @mouseleave="isHovered = false"
             >
             
             <div class="pl-5 w-[70%] border-[1px] border-white mt-[40px] "></div>
  
-            <div class="w-[100%] flex pl-5 flex-col gap-5 mt-[20px]">
-
-                <div class="flex relative">
-                    <NavIconDashboard :svg="svgConfig('home')" @click="handleClickIcon('home')" :class="classTranslateY" />
-                    <TransitionText :text="'Tableau de bord'" :condition="isHovered" />
-                </div>
-
-                <div class="flex relative">
-                    <NavIconPurchases :svg="svgConfig('', 'white')" :class="classTranslateY"  />
-                    <TransitionText :text="'Liste d\'achat'" :condition="isHovered" />
-                </div>
+            <div class="w-[100%] flex flex-col gap-5 mt-[20px]" v-for="(icon, index) of listIcons">
                 
-                <div class="flex relative">
-                    <NavIconGraph :svg="svgConfig('')" :class="classTranslateY"/>
-                    <TransitionText :text="'Graphiques'" :condition="isHovered" />
+                <div @click="handleClickIcon(icon.page)" :class="`flex relative  ${classTranslateY} cursor-pointer ${borderCurrentPage(icon.page)} pl-3 ml-1`">
+                    <component :is="icon.Component" :svg="svgConfig(icon.page)"/>
+                    <TransitionOpacity :durationIn="'duration-500'" :durationOut="'duration-0'">
+                        <p v-if="isHovered && isTextIconsVisible" class="w-[150px] absolute right-[0px] top-1 pl-3 flex items-center text-[14px] text-white">{{ icon.text }}</p>
+                    </TransitionOpacity>
                 </div>
-                
-                <div class="flex relative">
-                    <NavIconBell :svg="svgConfig('')" :class="classTranslateY"/>
-                    <TransitionText :text="'Alarme'" :condition="isHovered" />
-                </div>
-
-                <div class="flex relative">
-                    <NavIconUser :svg="svgConfig('', 'white')" :class="classTranslateY"/>
-                    <TransitionText :text="'Utilisateur'" :condition="isHovered" />
-                </div>
-                
                 
             </div>
-            
     </div>
-
-    <!-- style="text-shadow: 4px 4px 3px rgba(0,0,0,1); -->
 </template>
 
 
@@ -52,22 +30,106 @@
     import iconNav from '../icons/nav/IconNav.vue';
     import IconListPurchase from '../svgs/IconListPurchase.vue';
 
+    // icones 
     import NavIconDashboard from '../svgs/NavIconDashboard.vue';
     import NavIconPurchases from '../svgs/NavIconPurchases.vue';
     import NavIconGraph from '../svgs/NavIconGraph.vue';
     import NavIconBell from '../svgs/NavIconBell.vue';
     import NavIconUser from '../svgs/NavIconUser.vue';
-    import TransitionText from './TransitionText.vue';
     import { classTransitionHover } from '../transition/classTransitionHover';
+    import IconTarget from '../svgs/IconTarget.vue';
+    import IconLogOut from '../svgs/IconLogOut.vue';
 
-    import {ref, computed} from 'vue';
+    import {ref, computed, onMounted, onUnmounted} from 'vue';
+
+    import TransitionOpacity from '../transition/TransitionOpacity.vue';
     
-    const statePage = ref(null);
-    // translateY
-    const classTranslateY = classTransitionHover('translateY');
-    // router
-    const router = useRouter();
-    const isHovered = ref(false);
+
+    // --- Variables, props, ...
+
+        // class 
+        const classTranslateY = classTransitionHover('translateY');
+        const classTranslateWidth = classTransitionHover('extendHeader');
+
+        // conditions / bool
+        const isHovered = ref(false);
+        const isTextIconsVisible = ref(false);
+        const isCurrentPage = ref(false);
+
+        // 
+        const statePage = ref(null);
+        const router = useRouter();
+        const mainRefHeader = ref(null);
+
+        // icons
+        const listIcons = [ 
+            {
+                Component: NavIconDashboard,
+                page: 'home',
+                text: 'Tableau de bord'
+            },
+            {
+                Component: IconTarget,
+                page: '',
+                text: 'Objectifs'
+            },
+            {
+                Component: NavIconPurchases,
+                page: '',
+                text: 'Liste des achats'
+            },
+            {
+                Component: NavIconGraph,
+                page: '',
+                text: 'Graphiques'
+            },
+            {
+                Component: NavIconBell,
+                page: '',
+                text: 'Alarmes'
+            },
+            {
+                Component: NavIconUser,
+                page: '',
+                text: 'Utilisateur'
+            },
+            {
+                Component: IconLogOut,
+                page: '',
+                text: 'Déconnexion'
+            }
+        ];
+
+    const updateTextVisibility = () => {
+        isTextIconsVisible.value = mainRefHeader.value.clientWidth > 190;
+    };
+
+    // --- Cycle de vie 
+    onMounted( () => {
+        const observer = new ResizeObserver(() => {
+            updateTextVisibility();
+        });
+
+        if (mainRefHeader.value) {
+            observer.observe(mainRefHeader.value);
+        }
+        onUnmounted(() => {
+            observer.disconnect();
+        });
+    });
+
+
+    // --- Fonctions
+
+    
+    function svgConfig(nameSvg) {
+        const sizeSvg = '30px';
+        return {
+            width: sizeSvg,
+            height: sizeSvg,
+            fill: currentPage(nameSvg) ? '#1b1e33' : 'white',
+        }
+    }
 
     function handleClickIcon(request) {
         switch (request) {
@@ -83,24 +145,15 @@
         }
     }
 
-
-    function svgConfig(nameSvg) {
-        const width = '30px';
-        const pathname = window.location.pathname;
-        const partOfUrl = pathname.substring(1);
-
-        const isActive = computed(() => partOfUrl === nameSvg);
-        return {
-            name: nameSvg,
-            width: width,
-            height: width,
-            fill: isActive.value ? '#1b1e33' : 'white',
-            stroke: 'none'
-        }
+    function borderCurrentPage(page) {
+        return currentPage(page) ? 'border-l-2' : '';
     }
 
-    
-
+    function currentPage(page) {
+        const pathname = window.location.pathname;
+        const argUrl = pathname.substring(1);
+        return isCurrentPage.value = page === argUrl;
+    }
 </script>
 
 
