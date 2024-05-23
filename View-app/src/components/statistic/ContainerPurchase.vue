@@ -1,8 +1,8 @@
 <template>
 
     <div class="pl-2 mt-custom-margin-main w-[calc(50%-10px)] text-white 
-        bg-main-gradient rounded-sm my-5 
-        shadow-custom-gray-dark shadow-custom-main">     
+        bg-main-gradient rounded-md my-5 
+        shadow-black shadow-custom-main gradient-border">     
 
         <div class="flex items-center justify-between">
             <h2 class="py-3 text-[20px] font-extralight pr-8">{{ props.title}}</h2>
@@ -14,13 +14,12 @@
             <p class="w-[150px]">Prix</p>
             <p class="w-[150px]">Date</p>
             <p class="w-[150px]">Itération</p>
-            
         </div>
 
         <div class="pl-3">
             <purchase v-for="(purchase, index) of listPurchases" 
             :nameIcon="`restaurant`" :purchaseType="props.purchaseType" 
-            :key="purchase.infoPurchase.date" v-model="activeMenuId" :idMenu="index" :svg="svg" :infoPurchase="purchase.infoPurchase"/>
+            :key="purchase.infoPurchase.date" v-model="currentMenuOpen" :idMenu="index" :svg="svg" :infoPurchase="purchase.infoPurchase"/>
         </div>
 
     </div>
@@ -31,14 +30,19 @@
 <script setup>
     // import
     import Purchase from './Purchase.vue';
-    import { ref } from 'vue';
+    import { ref, watch } from 'vue';
 
     // variables, props...
-    const activeMenuId = ref(-1);
+    const currentMenuOpen = ref(-1);
+
     const props = defineProps({
         svg: { default: {} }, 
         title: { default: '' },
         purchaseType: {default: 'standard'}
+    });
+
+    watch(currentMenuOpen, (newVal, oldVal) => {
+        //alert(newVal);
     });
 
     const infoPurchase = {
@@ -49,6 +53,7 @@
     };
 
     const listPurchases = [
+        { infoPurchase },
         { infoPurchase },
         { infoPurchase },
         { infoPurchase },

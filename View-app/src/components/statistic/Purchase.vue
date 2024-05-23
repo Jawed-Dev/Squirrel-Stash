@@ -7,18 +7,22 @@
         <p class="w-[150px] text-[15px] pr-4">{{infoPurchase.iteration}}x</p>
         
         <div class="pl-[120px] relative">
-            <Options @click="idMenuSelected" class="cursor-pointer trigger-class" :svg="iconOptions"/>
+            <Options @click="idMenuSelected" class="cursor-pointer trigger-class-menu-purchase" :svg="iconOptions"/>
+
             <TransitionOpacity :durationIn="'duration-500'" :durationOut="'duration-500'">
                 <div v-show="props.modelValue === props.idMenu" 
-                    class="flex flex-col items-center absolute top-[-20px] left-[10px] z-10  
+                    class="flex flex-col items-center absolute top-[-20px] left-[10px] z-10 trigger-class-menu-purchase
                     bg-main-gradient w-[100px] rounded-md overflow-hidden
                     shadow-black shadow-custom-test">
-                    <p @click="handlePurchase('edit')" class="hover:bg-custom-blue w-[100%] text-center cursor-pointer p-1">Modifier</p>
-                    <p @click="handlePurchase('delete')" class="hover:bg-custom-blue w-[100%] text-center cursor-pointer p-1 mb-2 border-b">Supprimer</p>
-                    <p @click="handlePurchase('cancel')" class="hover:bg-custom-blue w-[100%] text-center cursor-pointer p-1">Annuler</p>
+                    <p @click="handleMenuPurchase('edit')" class="hover:bg-custom-blue w-[100%] text-center cursor-pointer p-1">Modifier</p>
+                    <p @click="handleMenuPurchase('delete')" class="hover:bg-custom-blue w-[100%] text-center cursor-pointer p-1 mb-2 border-b">Supprimer</p>
+                    <p @click="handleMenuPurchase('cancel')" class="hover:bg-custom-blue w-[100%] text-center cursor-pointer p-1">Annuler</p>
                 </div>
             </TransitionOpacity>
         </div>
+
+
+        <MenuPurchase :menuActive="isMenuPurchActive" />
         
     </div>
 </template>
@@ -26,10 +30,14 @@
 <script setup>
 
     // import
-    import Options from '../svgs/Options.vue';
+    import Options from '../svgs/IconOptions.vue';
     import {ref, onMounted, onBeforeUnmount, shallowRef } from 'vue';
     import TransitionOpacity from '../transition/TransitionOpacity.vue';
     import IconDynamic from '../icons/nav/IconDynamic.vue';
+    import useClickOutside from '@/composables/useClickOutSide';
+
+    import MenuPurchase from '../overlay/MenuPurchase.vue';
+    
 
     // variables, props, emit
     const props = defineProps({
@@ -41,6 +49,8 @@
         nameIcon: {default: ''}
     });
 
+    const isMenuPurchActive = ref(false);
+
     const emit = defineEmits(['update:modelValue']);
     
     const iconOptions = {
@@ -50,20 +60,17 @@
     }
     
     // cycle de vie
-    onMounted(async () => {
-        console.log(props.svg);
-        document.addEventListener('click', handleClickOutside, true);
-    });
 
-    onBeforeUnmount(() => {
-        document.removeEventListener('click', handleClickOutside, true);
-    });
+    useClickOutside( () => {
+        emit('update:modelValue', -1);
+    }, '.trigger-class-menu-purchase');
 
 
-    // fonctions
-    function handlePurchase(request) {
+    // functions
+    function handleMenuPurchase(request) {
         switch(request) {
             case 'edit': {
+                isMenuPurchActive.value = !isMenuPurchActive.value;
                 emit('update:modelValue', -1)
                 break;
             }
@@ -78,9 +85,12 @@
         }
     }
 
-    function handleClickOutside(event) {
-        if (!event.target.closest('.trigger-class')) emit('update:modelValue', -1);
-    }
+    
+    
+
+    // function handleClickOutside(event) {
+    //     if (!event.target.closest('.trigger-class-menu')) emit('update:modelValue', -1);
+    // }
 
     function idMenuSelected () {
         //alert('alert');

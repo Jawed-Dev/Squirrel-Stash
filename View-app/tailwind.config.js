@@ -47,7 +47,12 @@ export default {
         'gradient-red' : "linear-gradient(0deg, #ec250d, #fd5d93)",
         'gradient-orange' : "linear-gradient(0deg,#ff6491,#ff8d72)",
         'gradient-purple' : "linear-gradient(0deg,#ba54f5,#e14eca)",
-        'gradient-turquoise' : "linear-gradient(0deg,#0098f0,#00f2c3)"
+        'gradient-turquoise' : "linear-gradient(0deg,#0098f0,#00f2c3)",
+        
+        'gradient-grey' : "linear-gradient(0deg,#bdc3c7,#2c3e50)",
+        'gradient-velvet-sun' : "linear-gradient(0deg,#e1eec3,#f05053)",
+        'gradient-orca' : "linear-gradient(0deg,#44A08D,#093637)",
+        'gradient-pinot' : "linear-gradient(0deg,#4b6cb7,#182848)"
         
       },
       boxShadow: {

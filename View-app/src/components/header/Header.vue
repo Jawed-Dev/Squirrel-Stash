@@ -31,10 +31,10 @@
     import IconListPurchase from '../svgs/IconListPurchase.vue';
 
     // icones 
-    import NavIconDashboard from '../svgs/NavIconDashboard.vue';
-    import NavIconPurchases from '../svgs/NavIconPurchases.vue';
-    import NavIconGraph from '../svgs/NavIconGraph.vue';
-    import NavIconBell from '../svgs/NavIconBell.vue';
+    import NavIconDashboard from '../svgs/IconDashboard.vue';
+    import NavIconPurchases from '../svgs/IconPurchases.vue';
+    import NavIconGraph from '../svgs/IconGraph.vue';
+    import NavIconBell from '../svgs/IconBell.vue';
     import NavIconUser from '../svgs/NavIconUser.vue';
     import { classTransitionHover } from '../transition/classTransitionHover';
     import IconTarget from '../svgs/IconTarget.vue';

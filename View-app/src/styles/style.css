@@ -28,3 +28,13 @@
     filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.4)); 
 } */
 
+.gradient-border {
+    border: inset 0.15em transparent;  /* Épaisseur de la bordure */
+    border-image: linear-gradient(
+      to bottom right,
+      transparent 0%,
+      #536392 0%,
+      #11141E 80%
+    ) 1;
+  }
+  

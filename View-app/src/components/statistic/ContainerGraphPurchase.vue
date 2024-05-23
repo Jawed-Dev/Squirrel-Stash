@@ -1,8 +1,8 @@
 <template>
     <section 
         class="w-[100%] pl-5 mt-custom-margin-main bg-main-gradient text-white 
-        rounded-md
-        shadow-custom-gray-dark shadow-custom-main">
+        rounded-md gradient-border
+        shadow-black shadow-custom-main"> 
         
         <h2 class="py-3 text-[25px] font-extralight">Achats du mois</h2>
         
@@ -16,7 +16,7 @@
 
         </div>
       
-
+        <!-- shadow-custom-gray-dark -->
     </section>
     
 </template>
