@@ -1,24 +1,9 @@
 <template>
-    <section 
-        class="w-[100%] pl-5 mt-custom-margin-main bg-main-gradient text-white 
-        rounded-md gradient-border
-        shadow-black shadow-custom-main"> 
-        
+    <div class="pl-5 bg-main-gradient text-white rounded-md gradient-border ">
         <h2 class="py-3 text-[25px] font-extralight">Achats du mois</h2>
-        
-        <!-- <div class="flex border-b border-main-color border w-fit shadow-black shadow-custom-test rounded-r-md rounded-l-md">
-            <p class="px-3 py-1 cursor-pointer rounded-l-md" :class="[stateTabPurchase ? 'bg-gradient-blue' : '']" @click="handleStateTab(true)" >Achats</p>
-            <p class="px-3 py-1 cursor-pointer rounded-r-md" :class="[stateTabPurchase ? '' : 'bg-gradient-blue']" @click="handleStateTab(false)" >Paiement récurent</p>
-        </div> -->
-
         <ToggleButton v-model="stateTabPurchase" :text1="'Achat'" :text2="'Paiement récurent'" />
-        <div class="flex justify-center py-[20px]" id="chart">
-
-        </div>
-      
-        <!-- shadow-custom-gray-dark -->
-    </section>
-    
+        <div class="flex justify-center py-[20px]" id="chart"></div>
+    </div>
 </template>
 
 <script setup>

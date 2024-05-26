@@ -1,3 +1,9 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
 :root {
     --headerWidth: 60px; 
 }
@@ -29,12 +35,14 @@
 } */
 
 .gradient-border {
-    border: inset 0.15em transparent;  /* Épaisseur de la bordure */
-    border-image: linear-gradient(
-      to bottom right,
-      transparent 0%,
-      #536392 0%,
-      #11141E 80%
-    ) 1;
-  }
+    border: 2px solid; 
+    border-image: linear-gradient(to bottom right,#494D62 0%,#131620 80%) 1;
+}
+
+
+
+/* J'ai utilisé cela pour le bug lors de transitionY avec les textes qui bougeaient horizontalements */
+.will-change-transform {
+    will-change: transform;
+}
   

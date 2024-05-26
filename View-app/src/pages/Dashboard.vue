@@ -9,28 +9,29 @@
 
             <p class="font-normal py-3 mr-[190px] text-white">Bonjour Jawed, voici votre résumé du mois.</p> 
 
-            <DivTextStat :svg="svgConfig('target', 'bg-gradient-blue')" :colorValue="'text-custom-red'" :strValue="'350€'" :nameEconomy="'Objectif du mois'" :width="'w-[520px]'"/>
+            <ContainerStatMonth :showIconConfig="true" :svg="svgConfig('target', 'bg-gradient-blue')" :colorValue="'text-white'" :strValue="'2000€'" :nameEconomy="'Seuil Mensuelle'" :width="'w-[520px]'"/>
 
             <section class="flex gap-[20px] pt-[20px]">
-                <selectComponent :listSelect="listMonth" />
-                <selectComponent :listSelect="listYear" />
+                <SelectInput :listSelect="listMonth" />
+                <SelectInput :listSelect="listYear" />
             </section>
 
-         
             <AddPurchase />
 
-            <SectionPurchase />
-
-            <section class="flex gap-[20px] justify-around ">
-                <DivTextStat :svg="svgConfig('balance', 'bg-gradient-green')" :colorValue="'text-custom-purple'" :strValue="'+500€'" :nameEconomy="'Balance économie'" :width="'w-[25%]'" />
-                <DivTextStat :svg="svgConfig('purchaseFoods', 'bg-gradient-blue')" :colorValue="'text-custom-blue'" :strValue="'350€'" :nameEconomy="'Total achat'" :width="'w-[25%]'" />
-                <DivTextStat :svg="svgConfig('restaurant', 'bg-gradient-orange')" :colorValue="'text-custom-orange'" :strValue="'Restaurant'" :nameEconomy="'Plus gros achat / Type'" :width="'w-[25%]'" />
-                <DivTextStat :svg="svgConfig('restaurant', 'bg-gradient-green')" :colorValue="'text-custom-green'"  :strValue="'Loyer'" :nameEconomy="'Plus gros débitement / Type'" :width="'w-[25%]'" />
+            <section class="w-[100%] mt-custom-margin-main rounded-[3px] overflow-hidden shadow-black shadow-custom-main"> 
+                <ContainerTopMonthPc />
             </section>
 
-            <section class="flex justify-between">
-                <ContainerPurchase :title="'Historique de transactions'" :purchaseType="'standard'"  :svg="svgConfig('restaurant', 'bg-gradient-red', '50px')" />
-                <ContainerPurchase :title="'Paiements récurents'" :purchaseType="'recuring'" :svg="svgConfig('balance', 'bg-gradient-orange', '50px')" />
+            <section class="flex gap-[20px] justify-around ">
+                <ContainerStatMonth :svg="svgConfig('balance', 'bg-gradient-green')" :colorValue="'text-custom-green'" :strValue="'+500€'" :nameEconomy="'Balance d\'économie'" :width="'w-[25%]'" />
+                <ContainerStatMonth :svg="svgConfig('purchaseFood', 'bg-gradient-orange')" :colorValue="'text-custom-orange'" :strValue="'1500€'" :nameEconomy="'Total d\'achats'" :width="'w-[25%]'" />
+                <ContainerStatMonth :svg="svgConfig('restaurant', 'bg-gradient-blue')" :colorValue="'text-white'" :strValue="'Restaurant'" :nameEconomy="'Plus gros achat / Catégorie'" :width="'w-[25%]'" />
+                <ContainerStatMonth :svg="svgConfig('restaurant', 'bg-gradient-vanusa')" :colorValue="'text-white'"  :strValue="'Loyer'" :nameEconomy="'Plus grosse réccurence / Catégorie'" :width="'w-[25%]'" />
+            </section>
+
+            <section class="flex justify-between ">
+                <ContainerListPurchases class="w-[calc(50%-10px)]" :title="'Historique de transactions'" :purchaseType="'standard'"  :svg="svgConfig('restaurant', 'bg-gradient-blue', '50px')" />
+                <ContainerListPurchases class=" w-[calc(50%-10px)]" :title="'Paiements récurents'" :purchaseType="'recuring'" :svg="svgConfig('balance', 'bg-gradient-vanusa', '50px')" />
             </section>
     
         </main>
@@ -45,17 +46,14 @@
 
     // import
     import HeaderComponent from '../components/header/Header.vue';
-    import DivTextStat from '@/components/statistic/TextStat.vue';
-    import selectComponent from '@/components/select/Select.vue';
-    import SectionPurchase from '../components/statistic/ContainerGraphPurchase.vue';
-    import ContainerPurchase from '@/components/statistic/ContainerPurchase.vue';
+    import ContainerStatMonth from '@/components/container/ContainerStatMonth.vue';
+    import SelectInput from '@/components/select/SelectInput.vue';
+    import ContainerTopMonthPc from '../components/container/ContainerTopMonthPc.vue';
+    import ContainerListPurchases from '@/components/container/ContainerListPurchases.vue';
     import AddPurchase from '@/components/overlay/AddPurchase.vue';
     import { ref } from 'vue';
-    import TransitionOpacity from '@/components/transition/TransitionOpacity.vue';
 
     // variables, props, ...
-
-    const ismenuAddActive = ref(false);
 
     const listMonth = [
         'Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin',
@@ -77,7 +75,4 @@
         }
     }
 
-    function togMenuAddPurchase() {
-        ismenuAddActive.value = !ismenuAddActive.value;
-    }
 </script>

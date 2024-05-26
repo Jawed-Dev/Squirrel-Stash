@@ -4,7 +4,7 @@ export async function getIconByName(name) {
         case 'restaurant' : {
             return await import('../../components/svgs/Restaurant.vue');
         }
-        case 'purchaseFoods' : {
+        case 'purchaseFood' : {
             return await import('../../components/svgs/IconPurchaseFood.vue');
         }
         case 'target' : {
@@ -37,8 +37,8 @@ export async function getIconByName(name) {
         case 'house' : {
             return await import ('../../components/svgs/IconHouse.vue');
         }
-        case 'lightBulb' : {
-            return await import ('../../components/svgs/IconLightBulb.vue');
+        case 'receipt' : {
+            return await import ('../../components/svgs/IconReceipt.vue');
         }
 
         case 'mobile' : {

@@ -3,7 +3,7 @@
             flex flex-col items-center 
             w-header-width top-top-Header left-top-Header fixed pt-10  h-[calc(100vh-40px)] 
             bg-header-gradient rounded-md
-            shadow--dark shadow-custom-test
+            shadow-black shadow-custom-main
            ${classTranslateWidth} z-10`"
                 @mouseenter="isHovered = true"
                 @mouseleave="isHovered = false"
@@ -13,7 +13,7 @@
  
             <div class="w-[100%] flex flex-col gap-5 mt-[20px]" v-for="(icon, index) of listIcons">
                 
-                <div @click="handleClickIcon(icon.page)" :class="`flex relative  ${classTranslateY} cursor-pointer ${borderCurrentPage(icon.page)} pl-3 ml-1`">
+                <div :key="index" @click="handleClickIcon(icon.page)" :class="`flex relative ${classTranslateY} cursor-pointer ${borderCurrentPage(icon.page)} pl-3 ml-1`">
                     <component :is="icon.Component" :svg="svgConfig(icon.page)"/>
                     <TransitionOpacity :durationIn="'duration-500'" :durationOut="'duration-0'">
                         <p v-if="isHovered && isTextIconsVisible" class="w-[150px] absolute right-[0px] top-1 pl-3 flex items-center text-[14px] text-white">{{ icon.text }}</p>
@@ -27,15 +27,13 @@
 
 <script setup>
     import { useRouter } from 'vue-router';
-    import iconNav from '../icons/nav/IconNav.vue';
-    import IconListPurchase from '../svgs/IconListPurchase.vue';
 
     // icones 
-    import NavIconDashboard from '../svgs/IconDashboard.vue';
-    import NavIconPurchases from '../svgs/IconPurchases.vue';
-    import NavIconGraph from '../svgs/IconGraph.vue';
-    import NavIconBell from '../svgs/IconBell.vue';
-    import NavIconUser from '../svgs/NavIconUser.vue';
+    import IconDashboard from '../svgs/IconDashboard.vue';
+    import IconPurchases from '../svgs/IconPurchase.vue';
+    import IconGraph from '../svgs/IconGraph.vue';
+    import IconBell from '../svgs/IconBell.vue';
+    import IconUser from '../svgs/IconUser.vue';
     import { classTransitionHover } from '../transition/classTransitionHover';
     import IconTarget from '../svgs/IconTarget.vue';
     import IconLogOut from '../svgs/IconLogOut.vue';
@@ -64,32 +62,32 @@
         // icons
         const listIcons = [ 
             {
-                Component: NavIconDashboard,
+                Component: IconDashboard,
                 page: 'home',
                 text: 'Tableau de bord'
             },
             {
                 Component: IconTarget,
                 page: '',
-                text: 'Objectifs'
+                text: 'Seuil mensuelle'
             },
             {
-                Component: NavIconPurchases,
+                Component: IconPurchases,
                 page: '',
                 text: 'Liste des achats'
             },
             {
-                Component: NavIconGraph,
+                Component: IconGraph,
                 page: '',
                 text: 'Graphiques'
             },
             {
-                Component: NavIconBell,
+                Component: IconBell,
                 page: '',
                 text: 'Alarmes'
             },
             {
-                Component: NavIconUser,
+                Component: IconUser,
                 page: '',
                 text: 'Utilisateur'
             },
@@ -101,7 +99,7 @@
         ];
 
     const updateTextVisibility = () => {
-        isTextIconsVisible.value = mainRefHeader.value.clientWidth > 190;
+        isTextIconsVisible.value = mainRefHeader.value.clientWidth > 199;
     };
 
     // --- Cycle de vie 

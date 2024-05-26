@@ -1,5 +1,5 @@
 <template>
-    <div class="flex border-b border-main-color border w-fit shadow-black shadow-custom-test rounded-r-md rounded-l-md">
+    <div class="flex border-b border-main-color border w-fit shadow-black shadow-custom-main rounded-r-md rounded-l-md">
         <p class="px-3 py-1 cursor-pointer rounded-l-md" :class="[stateTabPurchase ? 'bg-gradient-blue' : '']" @click="handleStateTab(true)" >{{ text1 }}</p>
         <p class="px-3 py-1 cursor-pointer rounded-r-md" :class="[stateTabPurchase ? '' : 'bg-gradient-blue']" @click="handleStateTab(false)" >{{ text2 }}</p>
     </div>

@@ -22,7 +22,7 @@
 
             <div class="flex pt-[28px] gap-9 justify-center">
                 <p class=" font-medium">Vous n'avez pas de compte ?</p> 
-                <router-link to="/create-acc" class="text-main-blue  font-medium">S'inscrire</router-link>
+                <router-link to="/inscription" class="text-main-blue  font-medium">S'inscrire</router-link>
             </div>
         </form>
     </section>

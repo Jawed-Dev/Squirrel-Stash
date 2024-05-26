@@ -5,7 +5,7 @@
     <TransitionOpacity>
         <div v-show="ismenuAddActive" 
         class="fixed right-[550px] bg-main-gradient rounded-md overflow-hidden
-            shadow-black shadow-custom-test trigger-class-options">
+            shadow-black shadow-custom-main trigger-class-options">
             <p class="hover:bg-custom-blue w-[100%] p-2 cursor-pointer">option 1</p>
             <p class="hover:bg-custom-blue w-[100%] p-2 cursor-pointer">option 2</p>
             <p class="hover:bg-custom-blue w-[100%] p-2 cursor-pointer">option 3</p>

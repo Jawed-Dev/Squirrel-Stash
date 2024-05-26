@@ -6,7 +6,7 @@
 <script setup>
     // import
     import { ref, onMounted, shallowRef, watch } from 'vue';
-    import { getIconByName } from '@/functions/icons/getIcon';
+    import { getIconByName } from '@/functions/svg/getIcon';
 
     // variables, props...
     const iconComponent = shallowRef(null);

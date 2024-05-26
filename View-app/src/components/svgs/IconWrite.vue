@@ -7,7 +7,9 @@
 </template>
 
 <script setup>
-    defineProps(['svg']);
+    const props = defineProps({
+        svg: { default: {} }
+    });
 </script>
 
 
