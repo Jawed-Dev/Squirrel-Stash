@@ -1,5 +1,5 @@
 <template>
-    <div class="">
+    <div>
         <IconAddPurchase @click="toggleMenu('openNClose')"
             class="p-2 bg-gradient-blue rounded-full fixed right-[100px] top-[50vh] cursor-pointer z-20
                 shadow-black shadow-custom-main trigger-class-AddPurchase" 
@@ -42,22 +42,21 @@
                             <!-- dépenses valeur -->
                             <div class="flex flex-col w-[100%] border-b px-1 py-5">
                                 <div class="w-full">
-                                    <p class="flex justify-center text-[25px] font-light ">Dépense</p>
+                                    <p class="flex justify-center text-[22px] font-light ">Montant en €</p>
                                     <div class="flex justify-center mt-2">
-                                        <inputForm v-model="inputPriceVal" extraClass="flex items-center font-extralight text-[17px] bg-transparent text-center w-[100px] placeholder:text-white placeholder:pl-7 focus:outline-none" :placeholder="'...'"/>
-                                            <p class="font-extralight text-[17px]">€</p>
+                                        <inputForm v-model="inputPriceVal" extraClass="shadow-black shadow-custom-main w-[150px] flex items-center font-extralight text-[17px] bg-transparent border-white border rounded-[3px] text-center w-[100px] focus:outline-none" placeholder="Montant"/>
+                                            
                                         </input>
                                     </div>
                                 </div>
-                                <div class="flex gap-3 items-center pt-2">
+                                <div class="flex gap-3 items-center justify-center pt-10">
                                     <div class="flex gap-2 items-center">
-                                        <p class="font-extralight">Notes:</p>
                                         <IconWrite :svg="svgConfig4"/>
                                     </div>
                                     
                                     <!-- placeholder notes -->
                                     <div class="font-extralight text-[17px]">
-                                        <inputForm v-model="inputNoteVal" extraClass="flex items-center text-[15px] bg-transparent w-[500px] placeholder:text-white pl-1 focus:outline-none" placeholder="..."/>
+                                        <inputForm v-model="inputNoteVal" extraClass="shadow-black shadow-custom-main flex items-center text-[15px] bg-transparent border-white border rounded-[3px] w-[500px] pl-1 focus:outline-none" placeholder="Note"/>
                                         <!-- <input class="bg-transparent w-[500px] placeholder:text-white pl-1" placeholder="..." type="text">       -->
                                     </div>
                                 </div>
@@ -216,11 +215,11 @@
             }
             case 'accept' : {
                 //alert('valider');
-                alert(`${inputNoteVal.value}`);
+                //alert(`${inputNoteVal.value}`);
                 break;
             }
             case 'options' : {
-                alert('valider');
+                //alert('valider');
                 break;
             }
             case 'cancel' : {

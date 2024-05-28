@@ -16,6 +16,30 @@
     color: #ff4560; /* Couleur du texte */
 }
 
+/* Pour gérer les autocomplétion de texte qui changent de couleurs */
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus {
+  border: 1px solid white;
+  -webkit-text-fill-color: white;
+  color: white;
+  transition: background-color 5000s ease-in-out 0s;
+  
+}
+
+/* Pour gérer la couleur de l'icone de l'agendra des input date */
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(1) grayscale(100%) brightness(200%);
+}
+
 /* #chart .apexcharts-slices {
     filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.4)); 
 } */

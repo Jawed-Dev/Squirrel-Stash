@@ -6,7 +6,8 @@
                 <component :is="iconComponent" :svg="props.svg" :class="`${props.svg.color} p-3 rounded-lg shadow-black shadow-custom-main`"/>
     
                 <div class="flex flex-col items-end gap-3">
-                    <IconPreferences class='cursor-pointer'  v-show="props.showIconConfig" :svg="svg.verySmallIcon" />
+                    <!-- <IconPreferences class='cursor-pointer'  v-show="props.showIconConfig" :svg="svg.verySmallIcon" /> -->
+                    <setThreshold :showIconConfig="showIconConfig" />
                     <p :class="`pl-[12px] ${props.colorValue} font-[400] text-[18px]`">{{ props.strValue }}</p>
                 </div>
             </div>
@@ -24,6 +25,7 @@
     import { ref, onMounted, shallowRef } from 'vue';
     import IconPreferences from '../svgs/IconPreferences.vue';
     import { svgConfig } from '@/functions/svg/svgConfig';
+    import setThreshold from '../overlay/setThreshold.vue';
 
 
     const svg = svgConfig;
