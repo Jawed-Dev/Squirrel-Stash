@@ -1,7 +1,7 @@
 <template>
     <div class="pl-5 bg-main-gradient text-white rounded-md gradient-border ">
         <h2 class="py-3 text-[25px] font-extralight">Achats du mois</h2>
-        <ToggleButton v-model="stateTabPurchase" :text1="'Achat'" :text2="'Paiement récurent'" />
+        <ToggleButton v-model="stateTabPurchase" :text1="'Achat'" :text2="'Prélèvements'" />
         <div class="flex justify-center py-[20px]" id="chart"></div>
     </div>
 </template>

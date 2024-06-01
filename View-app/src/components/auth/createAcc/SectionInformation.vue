@@ -1,9 +1,3 @@
-<script setup>
-
-</script>
-
-
-
 <template>
     <section class="w-[50%] flex flex-col items-center justify-center bg-main-blue text-white">
 
@@ -17,3 +11,8 @@
         </div>
     </section>
 </template>
+
+
+<script setup>
+
+</script>

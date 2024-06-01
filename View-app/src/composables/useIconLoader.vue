@@ -1,5 +1,5 @@
 <template>
-    <component :is="iconComponent" :svg="props.svg" :class="`${props.svg.color} p-1 shadow-custom-main`"/>
+    <component :is="iconComponent" :svg="svg" :class="`${svg.color} p-1 ${extraClass}`"/>
 </template>
 
 
@@ -12,7 +12,8 @@
     const iconComponent = shallowRef(null);
     const props = defineProps({
         svg:  {default: {} },
-        nameIcon: {default: ''}
+        nameIcon: {default: ''},
+        extraClass: {default: ''}
     })
 
     async function loadIcon(name) {

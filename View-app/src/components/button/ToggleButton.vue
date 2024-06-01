@@ -1,7 +1,7 @@
 <template>
     <div class="flex border-b border-main-color border w-fit shadow-black shadow-custom-main rounded-r-md rounded-l-md">
-        <p class="px-3 py-1 cursor-pointer rounded-l-md" :class="[stateTabPurchase ? 'bg-gradient-blue' : '']" @click="handleStateTab(true)" >{{ text1 }}</p>
-        <p class="px-3 py-1 cursor-pointer rounded-r-md" :class="[stateTabPurchase ? '' : 'bg-gradient-blue']" @click="handleStateTab(false)" >{{ text2 }}</p>
+        <p class="px-3 py-1 cursor-pointer rounded-l-md" :class="[!typeTransaction ? 'bg-gradient-blue' : '']" @click="handleStateTab(false)" >{{ text1 }}</p>
+        <p class="px-3 py-1 cursor-pointer rounded-r-md" :class="[!typeTransaction ? '' : 'bg-gradient-blue']" @click="handleStateTab(true)" >{{ text2 }}</p>
     </div>
 </template>
 
@@ -11,9 +11,9 @@
     import { ref } from 'vue';
 
     // functions, props ...
-    const stateTabPurchase = ref(true);
+    //const typeTransaction = ref(false);
 
-    const emit = defineEmits(['update:modelValue']);
+    const typeTransaction = defineModel('typeTransaction');
 
     const props = defineProps({
         text1: {default: 'text 1'},
@@ -23,7 +23,7 @@
 
     // functions
     function handleStateTab(state) {
-        stateTabPurchase.value = state;
-        emit('update:modelValue', state);
+        typeTransaction.value = state;
+        //emit('update:modelValue', state);
     }   
 </script>

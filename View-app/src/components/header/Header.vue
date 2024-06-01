@@ -34,7 +34,7 @@
     import IconGraph from '../svgs/IconGraph.vue';
     import IconBell from '../svgs/IconBell.vue';
     import IconUser from '../svgs/IconUser.vue';
-    import { classTransitionHover } from '../transition/classTransitionHover';
+    import { classTransitionHover } from '../../functions/classTransitionHover';
     import IconTarget from '../svgs/IconTarget.vue';
     import IconLogOut from '../svgs/IconLogOut.vue';
 

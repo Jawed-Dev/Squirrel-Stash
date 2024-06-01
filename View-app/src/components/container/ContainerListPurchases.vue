@@ -30,7 +30,7 @@
     // import
     import PurchaseInfo from '@/components/statistic/PurchaseInfo.vue';
     import { ref, watch } from 'vue';
-    import { classTransitionHover } from '../transition/classTransitionHover';
+    import { classTransitionHover } from '../../functions/classTransitionHover';
 
     const translateY = classTransitionHover('translateY');
 

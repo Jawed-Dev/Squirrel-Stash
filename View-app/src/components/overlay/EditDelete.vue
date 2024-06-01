@@ -1,35 +1,41 @@
 <template>
     <div class="pl-[120px] relative">
-            <IconOptions @click="toggleMenu()" class="cursor-pointer trigger-class-menu-editdelete" :svg="iconOptions"/>
+            <IconOptions @click="toggleMenu()" class="cursor-pointer trigger-menu-editdelete" :svg="iconOptions"/>
 
-            <TransitionOpacity :durationIn="'duration-500'" :durationOut="'duration-500'">
-                <div v-show="modelCurrentMenu === props.indexMenu" 
-                    class="flex flex-col items-center absolute top-[-20px] left-[10px] z-10 trigger-class-menu-editdelete
+            <TransitionOpacity ref="elementTransition" :durationIn="'duration-500'" :durationOut="'duration-500'">
+                <div v-show="isMenuActive" 
+                    class="flex flex-col items-center absolute top-[-20px] left-[10px] z-10 trigger-menu-editdelete
                     bg-main-gradient w-[100px] rounded-md overflow-hidden
                     shadow-black shadow-custom-main">
                     <p @click="handleMenu('edit')" class="hover:bg-custom-blue w-[100%] text-center cursor-pointer p-1 ">Modifier</p>
                     <p @click="handleMenu('delete')" class="hover:bg-custom-blue w-[100%] text-center cursor-pointer p-1">Supprimer</p>
                 </div>
             </TransitionOpacity>
-        </div>
+    </div>
 
-        <EditPurchase v-model:menuActive="isMenuEditActive" />
+    <EditPurchase v-model:menuActive="isMenuEditActive" />
+    <DeletePurchase v-model:menuActive="isMenuDeleteActive" /> 
 </template>
 
 
 <script setup>
 
     // import
-    import { ref } from 'vue';
+    import { ref, watch } from 'vue';
 
     import IconOptions from '../svgs/IconOptions.vue';
     import TransitionOpacity from '../transition/TransitionOpacity.vue';
     import useClickOutside from '@/composables/useClickOutSide';
     import EditPurchase from './EditPurchase.vue';
+    import DeletePurchase from './DeletePurchase.vue';
+
 
     // variables, props ...
 
+    const elementTransition = ref(null);
+
     const isMenuEditActive = ref(false);
+    const isMenuDeleteActive = ref(false);
 
     const iconOptions = {
         fill: 'white',
@@ -40,17 +46,22 @@
     const props = defineProps({
         indexMenu: { default: 0 },
     });
+
+    const currentMenu = defineModel('currentMenu');
+    const isMenuActive = ref(false);
+
+    watch(currentMenu, (newVal, oldVald) => {
+        isMenuActive.value = newVal === props.indexMenu;
+    });
     
-
-    const modelCurrentMenu = defineModel('currentMenu');
-
     // cycle de vie
-
-    useClickOutside( () => {
-        modelCurrentMenu.value = -1;
-        //alert('test');
-    }, '.trigger-class-menu-editdelete');
-
+    useClickOutside('.trigger-menu-editdelete', isMenuActive, () => {
+        if(isMenuActive.value) {
+            //alert('close');
+            currentMenu.value = -1;
+        }
+        
+    });
 
     // functions
 
@@ -58,15 +69,18 @@
         switch(request) {
             case 'edit': {
                 isMenuEditActive.value = !isMenuEditActive.value;
-                modelCurrentMenu.value = -1;
+                currentMenu.value = -1;
                 break;
             }
             case 'delete' : {
-                modelCurrentMenu.value = -1;
+                isMenuDeleteActive.value = !isMenuDeleteActive.value;
+                currentMenu.value = -1;
                 break;
             }
             case 'cancel' : {
-                modelCurrentMenu.value = -1;
+                //alert(isMenuDeleteActive.value);
+                //isMenuDeleteActive.value = !isMenuDeleteActive.value;
+                currentMenu.value = -1;
                 break;
             }
         }
@@ -74,7 +88,7 @@
 
     function toggleMenu () {
         //alert('alert');
-        (modelCurrentMenu.value === props.indexMenu) ? modelCurrentMenu.value = -1 : modelCurrentMenu.value = props.indexMenu;
+        (currentMenu.value === props.indexMenu) ? currentMenu.value = -1 : currentMenu.value = props.indexMenu;
         //alert(props.idMenu);
     }
 </script>

@@ -27,7 +27,7 @@
     //const emit = defineEmits('update:modelValue');
     function onInput(event) {
         model.value = event.target.value;
-        alert(event.target.value);
+        //alert(event.target.value);
         //emit(model.value);
         //emit('update:modelValue', event.target.value);
     }

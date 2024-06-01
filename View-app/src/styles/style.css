@@ -64,6 +64,13 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 }
 
 
+.gradient-border-x {
+    border: 2px solid; 
+    border-image: linear-gradient(to bottom right,#494D62 100%,#131620 100%) 1;
+    border-top: hidden;
+    border-bottom: hidden;
+}
+
 
 /* J'ai utilisé cela pour le bug lors de transitionY avec les textes qui bougeaient horizontalements */
 .will-change-transform {
