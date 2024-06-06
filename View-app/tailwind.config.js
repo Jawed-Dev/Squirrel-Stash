@@ -67,7 +67,7 @@ export default {
       },
       boxShadow: {
         'custom-main': '1px 1px 5px #38393b',
-        'custom-lower': '0 1px 3px #38393b',
+        'custom-lower': '1px 1px 3px #38393b',
       }
     },
   },

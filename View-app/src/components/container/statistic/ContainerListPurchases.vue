@@ -8,11 +8,11 @@
                 <p :class="`cursor-pointer pr-3 ${translateY}`">Voir plus ></p>
             </div>
     
-            <div class="flex border-[#38393b] pl-[calc(50px+20px+15px)] py-2 ">
-                <p class="w-[150px]">Nom</p>
-                <p class="w-[150px]">Prix</p>
-                <p class="w-[150px]">Date</p>
-                <p class="w-[150px]">Itération</p>
+            <div class="flex border-gray-700 pl-[calc(50px+60px+15px)] py-2">
+                <p class="w-[15%]">Nom</p>
+                <p class="w-[20%]">Montant</p>
+                <p class="w-[17%]">Date</p>
+                <p class="w-[20%]">Itération</p>
             </div>
     
             <div class="pl-3">
@@ -30,7 +30,7 @@
     // import
     import PurchaseInfo from '@/components/statistic/PurchaseInfo.vue';
     import { ref, watch } from 'vue';
-    import { classTransitionHover } from '../../functions/classTransitionHover';
+    import { classTransitionHover } from '../../../functions/classTransitionHover';
 
     const translateY = classTransitionHover('translateY');
 
@@ -50,7 +50,7 @@
     const infoPurchase = {
         name: 'Spotify',
         price: "100.00",
-        date: '26 Mars 2023 15:50',
+        date: '26/03/2024',
         iteration: 10
     };
 

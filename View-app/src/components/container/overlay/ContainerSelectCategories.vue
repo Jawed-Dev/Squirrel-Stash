@@ -1,18 +1,18 @@
 <template>
-    <div class="w-full py-5 px-2">
+    <div class="w-full py-4 px-2">
         <div class="flex justify-between">
-            <ToggleButton v-model:typeTransaction="typeTransaction" :text1="'Achat'" :text2="'Prélèvement'" />
+            <ToggleButton class="text-[14px]" v-model:typeTransaction="typeTransaction" :text1="'Achats'" :text2="'Prélèvements'" />
         </div>
 
         <!-- liste des catégories -->
 
-        <h2 class="text-center pt-10 text-[20px]">Sélectionnez la catégorie</h2>
-        <div class="w-[600px] flex flex-wrap py-5">
-            <div v-for="(icon, index) in (!typeTransaction ? listCategories : listRecurings)" :key="index" :class="`flex flex-col items-center w-[150px] ${translateY} will-change-transform`" >
-                <div @click="handleSelectCategory(index)" :class="`mb-3 cursor-pointer py-3`">
+        <h2 class="text-center pt-[25px] text-[20px] font-extralight">Sélectionnez la catégorie</h2>
+        <div class="w-[600px] flex flex-wrap pt-[20px] ">
+            <div v-for="(icon, index) in (!typeTransaction ? listCategories : listRecurings)" :key="index" :class="`${translateY}`" >
+                <div @click="handleSelectCategory(index)" :class="`w-[120px] mb-[20px] cursor-pointer flex flex-col items-center`">
                     <IconLoader :nameIcon="icon.nameIcon" 
-                    :class="`${icon.color} rounded-full p-[17px] m-4 mr-[20px] shadow-black shadow-custom-main`" :svg="svgLargeBlue"/>
-                    <p class=" text-[14px] flex justify-center">{{ icon.text }}</p>
+                    :class="`${icon.color} rounded-full p-[10%] m-4 mr-[20px] shadow-black shadow-custom-main`" :svg="svgLargeBlue"/>
+                    <p class="text-[15px] font-light text-center text-gray-300">{{ icon.text }}</p>
                 </div>
             </div>
         </div>
@@ -40,7 +40,7 @@ const props = defineProps({
 });
 
 const translateY = classTransitionHover('translateY');
-const svgLargeBlue = svgConfig.setColorDynamic(svgConfig.largeIcon, 'bg-gradient-blue');
+const svgLargeBlue = svgConfig.setColorDynamic(svgConfig.mediumHigher, 'bg-gradient-blue');
 
 
 // functions

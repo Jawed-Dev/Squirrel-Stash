@@ -1,5 +1,5 @@
 <template>
-    <div class="pl-[120px] relative">
+    <div class="flex justify-end relative">
             <IconOptions @click="toggleMenu()" class="cursor-pointer trigger-menu-editdelete" :svg="iconOptions"/>
 
             <TransitionOpacity ref="elementTransition" :durationIn="'duration-500'" :durationOut="'duration-500'">
@@ -13,8 +13,8 @@
             </TransitionOpacity>
     </div>
 
-    <EditPurchase v-model:menuActive="isMenuEditActive" />
-    <DeletePurchase v-model:menuActive="isMenuDeleteActive" /> 
+    <EditPurchase width="w-[30%]" v-model:menuActive="isMenuEditActive" />
+    <DeletePurchase width="w-[30%]" v-model:menuActive="isMenuDeleteActive" /> 
 </template>
 
 
@@ -28,7 +28,7 @@
     import useClickOutside from '@/composables/useClickOutSide';
     import EditPurchase from './EditPurchase.vue';
     import DeletePurchase from './DeletePurchase.vue';
-
+    import useEscapeKey from '@/composables/useEscapeKey';
 
     // variables, props ...
 
@@ -43,6 +43,7 @@
         height: '30px',
     };
 
+    // functions
     const props = defineProps({
         indexMenu: { default: 0 },
     });
@@ -53,8 +54,11 @@
     watch(currentMenu, (newVal, oldVald) => {
         isMenuActive.value = newVal === props.indexMenu;
     });
+
+    useEscapeKey(isMenuActive, () => {
+        currentMenu.value = -1;
+    });
     
-    // cycle de vie
     useClickOutside('.trigger-menu-editdelete', isMenuActive, () => {
         if(isMenuActive.value) {
             //alert('close');
@@ -62,8 +66,6 @@
         }
         
     });
-
-    // functions
 
     function handleMenu(request) {
         switch(request) {

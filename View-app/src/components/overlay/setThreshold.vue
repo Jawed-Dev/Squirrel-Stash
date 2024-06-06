@@ -1,30 +1,30 @@
 <template>
-    <IconPreferences @click="toggleMenu('openNClose')" class='cursor-pointer' v-show="props.showIconConfig" :svg="svg.verySmallIcon" /> 
+    <IconPreferences @click="toggleMenu('openNClose')" class='cursor-pointer' v-show="isIconActive" :svg="svg.verySmallIcon" /> 
 
     <TransitionOpacity :durationIn="'duration-500'" :durationOut="'duration-500'">
-        <div v-show="modelMenuActive" class="fixed inset-0 bg-black bg-opacity-80 z-30"></div>
+        <div v-show="isMenuActive" class="fixed inset-0 bg-black bg-opacity-80 z-30"></div>
     </TransitionOpacity>
 
     <TransitionOpacity :durationIn="'duration-500'" :durationOut="'duration-500'">
-        
-        <div v-show="modelMenuActive" 
-        class="bg-main-gradient flex flex-col gap-[75px] fixed 
-        shadow-black shadow-custom-main rounded-md top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 trigger-class-set-treshold
-        z-30 text-white ">
-            <MainContainerSlot :textBtn1="'Annuler'" :textBtn2="'Modifier'" :titleContainer="'Choisir un nouveau seuil mensuel'" @toggleMenu="toggleMenu">
+        <div v-show="isMenuActive" 
+        :class="`bg-main-gradient flex flex-col gap-[75px] fixed 
+        shadow-black shadow-custom-main rounded-md top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 trigger-set-treshold
+        z-30 text-white ${width}`">
+            <MainContainerSlot paddingX="px-[90px]" paddingY="py-[35px]" :textBtn1="'Annuler'" :textBtn2="'Modifier'" :titleContainer="'Choisir un nouveau seuil mensuel'" @toggleMenu="toggleMenu">
                 <div class="flex flex-col rounded-[3px] items-center">
-                    <label for="id-input-price">Montant du seuil en €</label>
-                    <div class="rounded-[3px] overflow-hidden w-fit shadow-black shadow-custom-main mt-2">
-                        <input id="id-input-price" class="pl-3 font-light text-[15px] text-center py-[3px] w-[250px] bg-transparent border-white border-[1px] rounded-[3px] overflow-hidden focus:outline-none" placeholder="seuil" type="text">
+                    <label class="font-extralight" for="input-amount-treshold">Montant du seuil en €</label>
+                    <div class="mt-2">
+                        <InputBase v-model="inputAmountThreshold"
+                        width="w-[250px]"
+                        extraClass="text-center font-light "
+                        placeholder="seuil"
+                        id="input-amount-treshold"/>
                     </div>
                 </div>
-
-                <div class="pl-3">
-                    <p class="text-[15px]">Ce seuil sera effectif pour les prochains mois.</p>
-                    <p class="text-[15px]">Il suffira de définir un nouveau seuil pour en définir un nouveau.</p>
+                <div class="flex justify-center">
+                    <p class="w-[300px] text-[15px] font-light text-gray-200">Ce seuil sera effectif pour ce mois <span class="block">et les suivants jusqu'à son changement.</span></p>
                 </div>
             </MainContainerSlot>
-    
         </div>
     </TransitionOpacity>
 </template>
@@ -34,28 +34,36 @@
     import TransitionOpacity from '@/components/transition/TransitionOpacity.vue';  
     import MainContainerSlot from '../containerSlot/MainContainerSlot.vue';
     import IconPreferences from '../svgs/IconPreferences.vue';
-    import { ref } from 'vue';
     import { svgConfig } from '@/functions/svg/svgConfig';
     import useClickOutside from '@/composables/useClickOutSide';
+    import useEscapeKey from '@/composables/useEscapeKey';
+    import InputBase from '../input/InputBase.vue';
+
+    import { ref } from 'vue';
     
     // variables, props ...
     const svg = svgConfig;
     const props = defineProps({
-        showIconConfig: { default: false}
+        isIconActive: { default: false},
+        width: {default:''}
     });
-    const modelMenuActive = ref(false);
+    const isMenuActive = ref(false);
+    const inputAmountThreshold = ref('');
 
     // functions 
+    useEscapeKey(isMenuActive, () => {
+        isMenuActive.value = false;
+    });
 
-    useClickOutside( '.trigger-class-set-treshold',  modelMenuActive, () => {
-        //alert('est');
-        modelMenuActive.value = false;
+    useClickOutside('.trigger-set-treshold',  isMenuActive, () => {
+        isMenuActive.value = false;
     },);
 
     function toggleMenu(request) {
         switch(request) {
             case 'openNClose' : {
-                modelMenuActive.value = !modelMenuActive.value;
+                inputAmountThreshold.value = '';
+                isMenuActive.value = !isMenuActive.value;
                 break
             }
             case 'valid': {
@@ -63,7 +71,8 @@
             }
             case 'cancel': {
                 //alert('test');
-                modelMenuActive.value = false;
+                inputAmountThreshold.value = '';
+                isMenuActive.value = false;
                 break;
             }
         }

@@ -1,34 +1,48 @@
 <template>
         <TransitionOpacity :durationIn="'duration-500'" :durationOut="'duration-500'">
-            <div v-show="modelMenuActive" class="fixed inset-0 bg-black bg-opacity-80 z-30"></div>
+            <div v-show="isMenuActive" class="fixed inset-0 bg-black bg-opacity-80 z-30"></div>
         </TransitionOpacity>
 
         <TransitionOpacity :durationIn="'duration-500'" :durationOut="'duration-500'">
-            <div v-show="modelMenuActive" 
-            class="bg-main-gradient flex flex-col gap-[75px] fixed 
-            shadow-black shadow-custom-main rounded-md top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 trigger-class-menu-edit
-            z-30 text-white ">
+            <div v-show="isMenuActive" 
+            :class="`bg-main-gradient flex flex-col gap-[75px] fixed 
+            shadow-black shadow-custom-main rounded-md top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 trigger-menu-edit
+            z-30 text-white ${props.width}`">
 
-                <MainContainerSlot :textBtn1="'Annuler'" :textBtn2="'Modifier'" :titleContainer="'Modifier la transaction'" @toggleMenu="toggleMenu">
+                <MainContainerSlot :textBtn1="'Annuler'" :textBtn2="'Modifier'" :titleContainer="'Modifier l\achat'" @toggleMenu="toggleMenu">
 
                     <div class="flex flex-col rounded-[3px] items-center">
-                        <label for="id-input-name"> Nom de transaction</label>
-                        <div class="rounded-[3px] overflow-hidden w-fit shadow-black shadow-custom-main mt-2">
-                            <input id="id-input-name" class="search-webkit pl-3 font-light text-[15px] text-center py-[3px] w-[250px] bg-transparent border-white border rounded-[3px] overflow-hidden focus:outline-none" placeholder="Transaction" type="text">
+                        <label class="font-extralight" for="id-input-name"> Nom de l'achat</label>
+                        <div class="mt-1">
+                            <InputBase v-model="inputNameTransaction"
+                            width="w-[250px]"
+                            extraClass="font-light text-center"
+                            placeholder="Nom d'achat"
+                            id="id-input-name"/>
                         </div>
                     </div>
 
                     <div class="flex flex-col rounded-[3px] items-center">
-                        <label for="id-input-price">Montant en €</label>
-                        <div class="rounded-[3px] overflow-hidden w-fit shadow-black shadow-custom-main mt-2">
-                            <input id="id-input-price" class="pl-3 font-light text-[15px] text-center py-[3px] w-[250px] bg-transparent border-white border rounded-[3px] overflow-hidden focus:outline-none" placeholder="Prix" type="text">
+                        
+                        <label class="font-extralight"  for="id-input-price">Montant en €</label>
+                        <div class="mt-1">
+                            <InputBase v-model="inputPrice"
+                            width="w-[250px]"
+                            extraClass="font-light text-center"
+                            placeholder="Montant"
+                            id="id-input-price"/>
                         </div>
                     </div>
 
                     <div class="flex flex-col rounded-[3px] items-center">
-                        <label for="id-input-date">Date</label>
-                        <div class="rounded-[3px] overflow-hidden w-fit shadow-black shadow-custom-main mt-2">
-                            <input id="id-input-date" class="pl-3 font-light text-[15px] text-center py-[3px] w-[250px] bg-transparent border-white border rounded-[3px] overflow-hidden focus:outline-none " placeholder="Date" type="date">
+                        <label class="font-extralight"  for="id-input-date">Date</label>
+                        <div class="mt-1">
+                            <InputBase v-model="inputDate"
+                            width="w-[250px]"
+                            extraClass="font-light flex justify-center"
+                            placeholder="Date"
+                            id="id-input-date"
+                            type="date"/>
                         </div>
                     </div>
 
@@ -40,30 +54,47 @@
 
 <script setup>
 
+
+    // imports 
     import MainContainerSlot from '../containerSlot/MainContainerSlot.vue';
+    import InputBase from '../input/InputBase.vue';
     import {ref} from 'vue';
-
-    // const props = defineProps({
-    //     menuActive: {default: null}
-    // });
-    const modelMenuActive = defineModel('menuActive');
-
     import TransitionOpacity from '../transition/TransitionOpacity.vue';
     import useClickOutside from '@/composables/useClickOutSide';
+    import useEscapeKey from '@/composables/useEscapeKey';
 
-    useClickOutside('.trigger-class-menu-edit', modelMenuActive, () => {
+
+    // variables, props, ...
+
+
+    const props = defineProps({
+        width: { default:'' }
+    });
+
+    const inputNameTransaction = ref('');
+    const inputPrice = ref('');
+    const inputDate = ref('');
+    const isMenuActive = defineModel('menuActive');
+
+
+    // functions ...
+    useEscapeKey(isMenuActive, () => {
+        isMenuActive.value = false;
+    });
+
+    useClickOutside('.trigger-menu-edit', isMenuActive, () => {
             //alert('est');
-            modelMenuActive.value = false;
+            isMenuActive.value = false;
             //console.log('edit');
         }
     );
-
-    
-
     function toggleMenu($request) {
         switch($request) {
             case 'cancel' : {
-                modelMenuActive.value = false;
+                inputDate.value = '';
+                inputNameTransaction.value = '';
+                inputPrice.value = '';
+                isMenuActive.value = false;
             }
             case 'valid' : {
 

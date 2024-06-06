@@ -1,27 +1,33 @@
 <template>
     <div>
-        <IconAddPurchase @click="toggleMenu('openNClose')"
-            class="p-2 bg-gradient-blue rounded-md right-[100px] top-[50vh] cursor-pointer z-20
-                shadow-black shadow-custom-main trigger-class-AddPurchase" 
-        :svg="svgSmallWhite" 
-        />
+        <div class="rounded-[3px] overflow-hidden shadow-black shadow-custom-main ">
+            <div class="bg-main-gradient w-[230px] flex justify-around items-center p-1 gradient-border">
+                <p class="text-white px-3 flex ">Ajouter un achat</p>
+                <IconAddPurchase @click="toggleMenu('openNClose')"
+                class="p-1 bg-gradient-blue rounded-md right-[100px] top-[50vh] cursor-pointer z-10 shadow-black shadow-custom-main trigger-add-purchase" 
+                :svg="svgSmallWhite"/>
+            </div>
+        </div>
 
         <TransitionOpacity :durationIn="'duration-500'" :durationOut="'duration-500'">
-            <div v-show="ismenuAddActive" class="fixed inset-0 bg-black bg-opacity-80 z-10"></div>
+            <div v-show="isMenuActive" class="fixed inset-0 bg-black bg-opacity-80 z-10"></div>
         </TransitionOpacity>
-        
+
         <TransitionOpacity :durationIn="'duration-500'" :durationOut="'duration-500'">
-            <div v-show="ismenuAddActive" 
-                class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 text-white rounded-[3px] overflow-hidden 
-                shadow-black shadow-custom-main trigger-class-AddPurchase bg-gradient-joomla">
-                <MainContainerSlot :width="'300px'" :paddingY="'py-[5px]'" :textBtn1="'Annuler'" :textBtn2="'Ajouter'" :titleContainer="(!typeTransaction) ? 'Catégorie d\'achat' : 'Catégories de prélèvement'" 
+            <div v-show="isMenuActive" 
+                :class="`fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 text-white rounded-[3px] overflow-hidden 
+                shadow-black shadow-custom-main trigger-add-purchase bg-main-gradient ${props.width}`">
+
+                <MainContainerSlot :paddingY="'py-[5px]'" :paddingX="'px-[5px]'" 
+                    :textBtn1="'Annuler'" :textBtn2="'Ajouter'" :titleContainer="(!typeTransaction) ? 'Catégorie d\'achat' : 'Catégories de prélèvement'" 
                     @toggleMenu="toggleMenu" :isIconActive="true" :currentList="(!typeTransaction) ? listCategories[currentCategory] : listRecurings[currentCategory]"
                 >
-                    <div class="bg-main-gradient gradient-border-x">
+                    <div>
                         <!-- inputs  -->
                         <ContainerInputs v-model:inputPriceVal="inputPriceVal" v-model:inputNoteVal="inputNoteVal" />
                         <!-- liste des catégories -->
-                        <ContainerSelectCategories v-model:currentCategory="currentCategory" v-model:typeTransaction="typeTransaction" :listCategories="listCategories" :listRecurings="listRecurings" />              
+                        <ContainerSelectCategories v-model:currentCategory="currentCategory" 
+                        v-model:typeTransaction="typeTransaction" :listCategories="listCategories" :listRecurings="listRecurings" />              
                     </div>
                 </MainContainerSlot>
             </div>
@@ -31,22 +37,25 @@
 
 
 <script setup>
-
     // import
     import { ref, watch } from 'vue';
     import IconAddPurchase from '@/components/svgs/IconAddPurchase.vue';
     import TransitionOpacity from '../transition/TransitionOpacity.vue';
     import { svgConfig } from '@/functions/svg/svgConfig';
     import useClickOutside from '@/composables/useClickOutSide';
+    import useEscapeKey from '@/composables/useEscapeKey';
 
-    import ContainerSelectCategories from '../container/overlayAddPurchase/ContainerSelectCategories.vue';
-    import ContainerInputs from '../container/overlayAddPurchase/ContainerInputs.vue';
+    import ContainerSelectCategories from '../container/overlay/ContainerSelectCategories.vue';
+    import ContainerInputs from '../container/overlay/ContainerInputs.vue';
     import MainContainerSlot from '../containerSlot/MainContainerSlot.vue';
 
     // variables, props...
+    const props = defineProps({
+        width: { default:'' }
+    });
 
     // menu
-    const ismenuAddActive = ref(false); 
+    const isMenuActive = ref(false); 
     const typeTransaction = ref (false); // menu state if purchase or reccuring
     const currentCategory = ref(0);
 
@@ -55,7 +64,7 @@
     const inputPriceVal = ref('');
 
     // icons
-    const svgSmallWhite = svgConfig.setColorDynamic(svgConfig.medium, 'white');
+    const svgSmallWhite = svgConfig.mediumSmaller;
 
     const listCategories = [
         // {nameIcon:'',color:'bg-gradient-orange', text:'Choissiez une catégorie'},
@@ -67,6 +76,7 @@
         {nameIcon:'food',color:'bg-gradient-blue', text:'Alimentation'},
         {nameIcon:'transport',color:'bg-gradient-blue', text:'Transport'},
         {nameIcon:'gift',color:'bg-gradient-blue', text:'Cadeau'},
+        {nameIcon:'questionMark',color:'bg-gradient-blue', text:'Autre'},
     ];
 
     const listRecurings = [
@@ -76,13 +86,18 @@
         {nameIcon:'car', color:'bg-gradient-vanusa', text:'Assurance'},
         {nameIcon:'house', color:'bg-gradient-vanusa', text:'Loyer'},
         {nameIcon:'billet', color:'bg-gradient-vanusa', text:'Crédit'},
+        {nameIcon:'questionMark', color:'bg-gradient-vanusa', text:'Autre'},
     ]
 
      
     // functions
-    useClickOutside('.trigger-class-AddPurchase', ismenuAddActive, () => {
+    useEscapeKey(isMenuActive, () => {
+        isMenuActive.value = false;
+    });
+
+    useClickOutside('.trigger-add-purchase', isMenuActive, () => {
         //alert('test');
-        ismenuAddActive.value = false;
+        isMenuActive.value = false;
         console.log('Add Purchase');
     });
 
@@ -95,7 +110,7 @@
             case 'openNClose' : {
                 inputNoteVal.value = '';
                 inputPriceVal.value = '';
-                ismenuAddActive.value = !ismenuAddActive.value;
+                isMenuActive.value = !isMenuActive.value;
                 break;
             }
             case 'accept' : {
@@ -108,7 +123,7 @@
                 break;
             }
             case 'cancel' : {
-                ismenuAddActive.value = false;
+                isMenuActive.value = false;
                 break;
             }
         }

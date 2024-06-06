@@ -16,7 +16,7 @@
                 <div :key="index" @click="handleClickIcon(icon.page)" :class="`flex relative ${classTranslateY} cursor-pointer ${borderCurrentPage(icon.page)} pl-3 ml-1`">
                     <component :is="icon.Component" :svg="svgConfig(icon.page)"/>
                     <TransitionOpacity :durationIn="'duration-500'" :durationOut="'duration-0'">
-                        <p v-if="isHovered && isTextIconsVisible" class="w-[150px] absolute right-[0px] top-1 pl-3 flex items-center text-[14px] text-white">{{ icon.text }}</p>
+                        <p v-if="isHovered && isTextIconsVisible" class="will-change-transform w-[150px] absolute right-[0px] top-1 pl-3 flex items-center text-[14px] text-white">{{ icon.text }}</p>
                     </TransitionOpacity>
                 </div>
                 
@@ -99,7 +99,7 @@
         ];
 
     const updateTextVisibility = () => {
-        isTextIconsVisible.value = mainRefHeader.value.clientWidth > 199;
+        isTextIconsVisible.value = mainRefHeader.value.clientWidth > 150;
     };
 
     // --- Cycle de vie 

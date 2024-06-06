@@ -1,17 +1,8 @@
-<template>
-    <div class="pl-5 bg-main-gradient text-white rounded-md gradient-border ">
-        <h2 class="py-3 text-[25px] font-extralight">Achats du mois</h2>
-        <ToggleButton v-model="stateTabPurchase" :text1="'Achat'" :text2="'Prélèvements'" />
-        <div class="flex justify-center py-[20px]" id="chart"></div>
-    </div>
-</template>
-
 <script setup>
-    
-    // import
+ // import
     import { ref , onMounted } from 'vue';
     import ApexCharts from 'apexcharts';   
-    import ToggleButton from '../button/ToggleButton.vue';
+    import ToggleButton from '../../button/ToggleButton.vue';
 
     // functions, props ...
     const stateTabPurchase = ref(true);
@@ -173,6 +164,4 @@
     function handleStateTab(state) {
         stateTabPurchase.value = state;
     }   
-
-
 </script>

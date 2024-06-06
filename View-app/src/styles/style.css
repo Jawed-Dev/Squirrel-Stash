@@ -31,7 +31,11 @@ select:-webkit-autofill:focus {
   -webkit-text-fill-color: white;
   color: white;
   transition: background-color 5000s ease-in-out 0s;
-  
+  caret-color: white;
+}
+
+input {
+    caret-color: white;
 }
 
 /* Pour gérer la couleur de l'icone de l'agendra des input date */

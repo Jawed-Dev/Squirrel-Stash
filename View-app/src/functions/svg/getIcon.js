@@ -53,6 +53,14 @@ export async function getIconByName(name) {
             return await import ('../../components/svgs/IconCar.vue');
         }
 
+        case 'questionMark' : {
+            return await import ('../../components/svgs/IconQuestionMark.vue');
+        }
+
+        case 'calculator' : {
+            return await import ('../../components/svgs/IconCalculator.vue');
+        }
+
 
         default : {
             return "";
