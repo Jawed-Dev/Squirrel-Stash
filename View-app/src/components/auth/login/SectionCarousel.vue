@@ -70,7 +70,7 @@
 
     let timerId = createTimerCarrousel(5000);
 
-    console.log(timerId);
+    //console.log(timerId);
     
     // life cycle
     onUnmounted(() => {

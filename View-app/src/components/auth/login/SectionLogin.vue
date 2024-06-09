@@ -55,7 +55,7 @@
         //alert(refPass.handleInput('getInputVal'));
         refPass.handleInput('resetInput');
 
-        router.push('/home');
+        router.push('/tableau-de-bord');
 
 
     }

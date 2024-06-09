@@ -1,35 +1,20 @@
-import { ref } from "vue";
 
-export function useFetch() {
-    const isFetching = ref(false);
-    const isSuccess = ref(false);
-    // error à ajouter
+const folderMain = "Projet_final_DWWM";
 
-    async function fetchData(data) {
-        isFetching.value = true;
-        isSuccess.value = false;
+export default async function useFetch(apiPath) {
+  try {
+    const fullPath = `/api/${folderMain}/backend/?page=${apiPath}`;  // Ajout du préfixe /api pour correspondre à la configuration du proxy
+    //console.log('Fetching from:', fullPath);
+    const response = await fetch(fullPath);
 
-        const response = await fetch(apiEndpoint, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
-        });
-
-        if(!response.ok) return null;
-
-        const responseData = await response.json();
-        isSuccess.value = true;
-
-        return responseData;
-    }
-
-
-    return {
-        isFetching, 
-        isSuccess,
-        fetchData
-    }
-
+    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+    
+    const data = await response.json();
+    //console.log('Data:', data);
+    return data;
+  } 
+  catch (error) {
+    console.error('Erreur lors de la récupération des données:', error);
+    return null;
+  }
 }
