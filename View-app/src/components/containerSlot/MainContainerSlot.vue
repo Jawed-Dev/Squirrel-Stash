@@ -1,6 +1,6 @@
 <template>
-    <div :class="`rounded-t-[3px] shadow-red bg-gradient-joomla shadow-black shadow-custom-main ${paddingY} ${paddingX}`">
-        <div>
+    <div :class="`flex flex-col items-center rounded-t-[3px] shadow-red bg-gradient-joomla shadow-black shadow-custom-main ${paddingY} ${paddingX}`">
+   
             <h2 :class="`${width} flex justify-center text-[22px] pt-3 py-2 font-extralight`">{{titleContainer}}</h2>
             <div v-if="props.isIconActive">
                 <div class="flex gap-[8px] items-center justify-center"> 
@@ -11,7 +11,7 @@
                     :nameIcon="currentList.nameIcon"/>
                 </div>
             </div>
-        </div>
+      
     </div>
     
     <!-- contenu du slot  -->
