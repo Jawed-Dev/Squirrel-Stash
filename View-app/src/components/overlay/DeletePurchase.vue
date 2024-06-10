@@ -8,7 +8,7 @@
         shadow-black shadow-custom-main rounded-md top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 trigger-menu-delete
         z-30 text-white ${width}`">
     
-            <MainContainerSlot :width="'w-[250px]'" :textBtn1="'refuser'" :textBtn2="'Accepter'" :titleContainer="'Suppression d\'achat'" @toggleMenu="toggleMenu">
+            <MainContainerSlot :bgMainBtn="'bg-gradient-vanusa'"  :width="'w-[250px]'" :textBtn1="'Annuler'" :textBtn2="'Supprimer'" :titleContainer="'Suppression d\'achat'" @toggleMenu="toggleMenu">
                 <div class="flex flex-col rounded-[3px] items-center">
                     <p class="text-[18px] font-light">Voulez vous supprimer cet achat ?</p>
                 </div>

@@ -1,7 +1,7 @@
 <template>
         <input
             @input="onInput" 
-            :class="`shadow-black shadow-custom-lower py-[2px] flex items-center text-[16px] bg-transparent border-gray-400 border-[1px] rounded-[3px] ${width} pl-1 focus:outline-none ${props.extraClass}`"
+            :class="`py-[2px] flex items-center text-[16px] bg-transparent border-white border-b-[1px] ${width} pl-1 focus:outline-none ${props.extraClass}`"
             :value="modelValue"
             :type="type"
             :placeholder="placeholder"

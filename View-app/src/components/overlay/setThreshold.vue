@@ -7,22 +7,22 @@
 
     <TransitionOpacity :durationIn="'duration-500'" :durationOut="'duration-500'">
         <div v-show="isMenuActive" 
-        :class="`bg-main-gradient flex flex-col gap-[75px] fixed 
+        :class="`bg-main-gradient flex flex-col gap-[70px] fixed 
         shadow-black shadow-custom-main rounded-md top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 trigger-set-treshold
         z-30 text-white ${width}`">
-            <MainContainerSlot paddingX="px-[90px]" paddingY="py-[35px]" :textBtn1="'Annuler'" :textBtn2="'Modifier'" :titleContainer="'Choisir un nouveau seuil mensuel'" @toggleMenu="toggleMenu">
+            <MainContainerSlot :textBtn1="'Annuler'" :textBtn2="'Modifier'" :titleContainer="'Choisir un nouveau seuil mensuel'" @toggleMenu="toggleMenu">
                 <div class="flex flex-col rounded-[3px] items-center">
                     <label class="font-extralight" for="input-amount-treshold">Montant du seuil en €</label>
-                    <div class="mt-2">
+                    <div class="mt-[20px]">
                         <InputBase v-model="inputAmountThreshold"
-                        width="w-[250px]"
+                        width="w-full"
                         extraClass="text-center font-light "
                         placeholder="seuil"
                         id="input-amount-treshold"/>
                     </div>
                 </div>
                 <div class="flex justify-center">
-                    <p class="w-[300px] text-[15px] font-light text-gray-200">Ce seuil sera effectif pour ce mois <span class="block">et les suivants jusqu'à son changement.</span></p>
+                    <p class="w-[full] text-[15px] font-light text-gray-200">Ce seuil sera effectif pour ce mois <span class="block">et les suivants jusqu'à son changement.</span></p>
                 </div>
             </MainContainerSlot>
         </div>

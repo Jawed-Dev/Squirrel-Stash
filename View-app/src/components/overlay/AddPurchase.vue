@@ -18,9 +18,9 @@
                 :class="`fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 text-white rounded-[3px] overflow-hidden 
                 shadow-black shadow-custom-main trigger-add-purchase bg-main-gradient ${props.width}`">
 
-                <MainContainerSlot :paddingY="'py-[5px]'" :paddingX="'px-[5px]'" 
-                    :textBtn1="'Annuler'" :textBtn2="'Ajouter'" :titleContainer="(!typeTransaction) ? 'Catégorie d\'achat' : 'Catégories de prélèvement'" 
-                    @toggleMenu="toggleMenu" :isIconActive="true" :currentList="(!typeTransaction) ? listCategories[currentCategory] : listRecurings[currentCategory]"
+                <MainContainerSlot 
+                    :textBtn1="'Annuler'" :textBtn2="'Ajouter'" :bgHead="(!typeTransaction) ? 'bg-gradient-blue' : 'bg-gradient-vanusa'" :titleContainer="(!typeTransaction) ? 'Catégorie d\'achat' : 'Catégories de prélèvement'" 
+                    @toggleMenu="toggleMenu" 
                 >
                     <div>
                         <!-- inputs  -->
@@ -111,6 +111,7 @@
                 inputNoteVal.value = '';
                 inputPriceVal.value = '';
                 isMenuActive.value = !isMenuActive.value;
+                currentCategory.value = 0;
                 break;
             }
             case 'accept' : {

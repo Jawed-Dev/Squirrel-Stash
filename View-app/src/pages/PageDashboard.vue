@@ -8,7 +8,7 @@
             <h1 class="text-[25px] font-extralight text-white">Économie du mois</h1>
             <p class="font-normal py-3 mr-[190px] text-white">Bonjour Jawed, voici votre résumé du mois.</p> 
 
-            <ContainerStatMonth :isIconActive="true" :svg="svgConfig('target', 'bg-gradient-blue')" :colorValue="'text-white'" :amountValue="'2000€'" :nameEconomy="'Seuil Mensuelle'" :width="'w-[520px]'"/>
+            <ContainerStatMonth :isIconActive="true" :svg="svgConfig('target', 'bg-gradient-blue')" :colorValue="'text-white'" :amountValue="'2000€'" :nameEconomy="'Seuil mensuel'" :width="'w-[520px]'"/>
 
             <section class="flex justify-between pt-[20px]">
                 <div class="flex gap-[20px] ">
@@ -16,7 +16,7 @@
                     <SelectInput :listSelect="listYear" />
                 </div>
                 <div class="flex justify-end">
-                    <AddPurchase width="w-[32%]"/>
+                    <AddPurchase width="w-[30vw]"/>
                 </div>
             </section>
 

@@ -7,7 +7,7 @@
     
                 <div class="flex flex-col items-end gap-3">
                     <!-- <IconPreferences class='cursor-pointer'  v-show="props.showIconConfig" :svg="svg.verySmallIcon" /> -->
-                    <setThreshold width="w-[30%]" :isIconActive="isIconActive" />
+                    <setThreshold width="w-[30vw]" :isIconActive="isIconActive" />
                     <p :class="`pl-[12px] ${props.colorValue} font-[400] text-[18px]`">{{ props.amountValue }}</p>
                 </div>
             </div>
