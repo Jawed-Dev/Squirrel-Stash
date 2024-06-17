@@ -1,7 +1,7 @@
 <template>
     <div class="flex justify-center items-center w-full gap-[10px] px-[5px]">
         <useIconLoader class="rounded-full p-2 shadow-black shadow-custom-main" :svg="(!typeTransaction) ? svgPurchases : svgReccurings" :nameIcon="listSelect[currentCategory].nameIcon" />
-        <select v-model="currentCategory" @change="handleChange($event, listSelect)" :class="`${width} text-[16px] font-light pl-2 py-1 gradient-border text-white w-[60%] rounded-[3px] bg-main-gradient 
+        <select v-model="currentCategory" @change="handleChange($event, listSelect)" :class="` text-[16px] font-light pl-2 py-1 gradient-border text-white ${width} rounded-[3px] bg-main-gradient 
             shadow-black shadow-custom-main outline-none`"
         >
             <option class="bg-main-bg font-light" v-for="(category, index) in listSelect" :key="index" :value="index">{{ category.text }}</option>
@@ -15,7 +15,7 @@
     import { svgConfig } from '@/functions/svg/svgConfig';
 
     const props = defineProps({
-        width: { default: 'w-full' },
+        width: { default: 'w-[70%]' },
         listSelect: { default: [] },
         typeTransaction: { default: false }
     });

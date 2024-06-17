@@ -1,13 +1,13 @@
 
 <template>
-    <section class="flex flex-col items-center font-main-font w-[50%] justify-center">
+    <section class="bg-main-gradient flex flex-col items-center font-main-font w-[50%] justify-center">
         <h1 class="text-black text-[25px]">Bienvenue !</h1>
         <p class="text-custom-gray  text-[14px]">dazaazdadaazaz</p>
 
         <form @submit.prevent="handleSubmit">
 
-            <input-basic ref="inputEmailRef" :extraClass="'w-[389px] py-[6.5px]'" :titleInput="'Email'" />
-            <input-basic ref="inputPassRef" :extraClass="'w-[389px] py-[6.5px]'" :titleInput="'Mot de passe'" />
+            <InputBase v-model="inputEmail" extraClass="w-full py-[20px] text-white font-light" />
+            <InputBase v-model="inputPass" extraClass="w-full py-[20px] text-white font-light"/>
      
             <div class="flex pt-[6px] px-[10px] justify-between">
                 <div class="flex">
@@ -22,7 +22,7 @@
 
             <div class="flex pt-[28px] gap-9 justify-center">
                 <p class=" font-medium">Vous n'avez pas de compte ?</p> 
-                <router-link to="/inscription" class="text-main-blue  font-medium">S'inscrire</router-link>
+                <router-link to="/inscription" class="text-main-blue font-medium">S'inscrire</router-link>
             </div>
         </form>
     </section>
@@ -32,32 +32,37 @@
 <script setup>
     import { ref, reactive } from 'vue';
 
-    import InputBasic from '../../input/InputText.vue';
+    import InputBase from '@/components/input/InputBase.vue';
     import ButtonComponent from '../../button/ButtonBasic.vue';
     import inputCheckbox from '../../input/InputCheckbox.vue';
     import { useRouter } from 'vue-router';
+    import useFetchForm from '@/composables/useFetchForm';
     const router = useRouter();
 
-    const inputEmailRef = ref(null);
-    const inputPassRef = ref(null);
-
+    const inputEmail = ref(null);
+    const inputPass = ref(null);
     const inputCheckBox = ref(null);
 
-    function handleSubmit() {
-        //alert(inputCheckBox.value.handleInput('getState'));
+    async function handleSubmit() {
+        //alert(inputEmail.value);
 
-        const refEmail = inputEmailRef.value;
-        const refPass = inputPassRef.value;
+        const localToken = localStorage.getItem('jwt');
+        const dataLogin = {
+            'email': inputEmail.value,
+            'password': inputPass.value
+        }
+        const dataHandleLogin = await useFetchForm('formLogin', 'POST', dataLogin, localToken);
+        const isSucessLogin = dataHandleLogin.tokenJwt;
 
-        //alert(refEmail.handleInput('getInputVal'));
-        refEmail.handleInput('resetInput');
+        console.log(dataHandleLogin);
 
-        //alert(refPass.handleInput('getInputVal'));
-        refPass.handleInput('resetInput');
+        inputEmail.value = '';
+        inputPass.value = '';
 
-        router.push('/tableau-de-bord');
-
-
+        if(isSucessLogin) {
+            localStorage.setItem('authToken', dataHandleLogin.tokenJwt);
+            router.push('/tableau-de-bord');
+        }
     }
 
     

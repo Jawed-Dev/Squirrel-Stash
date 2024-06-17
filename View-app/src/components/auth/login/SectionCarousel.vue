@@ -1,5 +1,5 @@
 <template>
-    <section class="w-[50%] flex flex-col items-center justify-center bg-main-blue text-white">
+    <section class="w-[50%] flex flex-col items-center justify-center bg-main-bg text-white">
 
         <figure class="w-[300px] overflow-hidden">
             <transition

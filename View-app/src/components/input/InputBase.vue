@@ -15,7 +15,7 @@
     const model = defineModel()
 
     const props = defineProps({
-        extraClass: { default:''},
+        extraClass: { default:'' },
         modelValue: { default:''},
         type: {default: 'text'},
         placeholder: {default: ''},

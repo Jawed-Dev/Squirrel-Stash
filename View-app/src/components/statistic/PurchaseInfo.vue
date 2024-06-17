@@ -1,9 +1,9 @@
 <template>
     <div class="flex items-center border-t py-6 border-gray-700 text-white">
         <IconLoader :nameIcon="props.nameIcon"  :svg="svg" :class="`${props.svg.color} rounded-full p-[1.5%] shadow-black shadow-custom-main mr-[60px]`"/>
-        <p class="w-[15%] text-[15px]">{{infoPurchase.name}}</p>
-        <p class="w-[17%] text-[15px]">{{infoPurchase.price}}€</p>
-        <p class="w-[10%] mr-[6%] text-[15px]">{{infoPurchase.date}}</p>
+        <p class="w-[20%] text-[15px]">{{infoPurchase.name}}</p>
+        <p class="w-[20%] text-[15px]">{{infoPurchase.price}}€</p>
+        <p class="w-[20%] text-[15px]">{{infoPurchase.date}}</p>
         <p class="w-[20%] text-[15px]">{{infoPurchase.iteration}}x</p>
         <EditDelete :indexMenu="props.indexMenu" v-model:currentMenu="currentMenu" />
     </div>

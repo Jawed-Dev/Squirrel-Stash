@@ -19,7 +19,7 @@
                 shadow-black shadow-custom-main trigger-add-purchase bg-main-gradient ${props.width}`">
 
                 <MainContainerSlot 
-                    :textBtn1="'Annuler'" :textBtn2="'Ajouter'" :bgHead="(!typeTransaction) ? 'bg-gradient-blue' : 'bg-gradient-vanusa'" :titleContainer="(!typeTransaction) ? 'Catégorie d\'achat' : 'Catégories de prélèvement'" 
+                    :textBtn1="'Annuler'" :textBtn2="'Ajouter'" :titleContainer="(!typeTransaction) ? 'Catégorie d\'achat' : 'Catégories de prélèvement'" 
                     @toggleMenu="toggleMenu" 
                 >
                     <div>
@@ -115,7 +115,7 @@
                 break;
             }
             case 'accept' : {
-                //alert('valider');
+                alert('valider');
                 //alert(`${inputPriceVal.value}`);
                 break;
             }

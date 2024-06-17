@@ -10,10 +10,10 @@
     <div>
         <div class="flex shadow-black shadow-custom-main">
             <div class="w-[50%]">
-                <button @click="$emit('toggleMenu','cancel')" class="w-full bg-gray-900 h-full py-[3%] rounded-bl-[3px] ">{{textBtn1}}</button>
+                <button @click="$emit('toggleMenu','cancel')" class="w-full bg-[#1e3c72] h-full py-[3%] rounded-bl-[3px] ">{{textBtn1}}</button>
             </div>
             <div class="w-[50%]">
-                <button @click="$emit('toggleMenu','valid')" :class="`w-full ${bgMainBtn}  h-full py-[3%] rounded-br-[3px] second-bg`">{{textBtn2}}</button>
+                <button @click="$emit('toggleMenu','valid')" :class="`w-full ${bgMainBtn}  h-full py-[3%] rounded-br-[3px] `">{{textBtn2}}</button>
             </div>
         </div>
     </div>
@@ -30,7 +30,7 @@
         titleContainer: { default: ''},
         textBtn1: { default: ''},
         textBtn2: { default: ''},
-        bgHead: { default: 'bg-gradient-blue'},
+        bgHead: { default: 'bg-main-blue'},
         typeTransaction: {default: false},
         bgMainBtn: {default: 'bg-gradient-blue'},
         width: {default: '250px'},

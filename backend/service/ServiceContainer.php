@@ -3,7 +3,7 @@
         private $services = [];
         private $instances = [];
 
-        public function register($services, callable $callable) {
+        public function registerService($services, callable $callable) {
             $this->services[$services] = $callable;
         }
 

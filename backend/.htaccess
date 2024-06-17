@@ -1,7 +1,12 @@
 RewriteEngine On
 
-#évite d'aller sur dossier ou ficher
-RewriteCond %{REQUEST_FILENAME} !-f 
-RewriteCond %{REQUEST_FILENAME} !-d 
+# Capture de l'en-tête Authorization et passage à une variable d'environnement
+RewriteCond %{HTTP:Authorization} ^(.*)
+RewriteRule ^ - [E=HTTP_AUTHORIZATION:%1]
 
-RewriteRule ^(.*)$ index.php?page=$1
+# Éviter de réécrire les requêtes pour les fichiers ou dossiers existants
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# Réécrire toutes les autres URL vers index.php avec le paramètre 'page'
+RewriteRule ^(.*)$ index.php?page=$1 [QSA,L]

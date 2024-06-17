@@ -1,17 +1,17 @@
 <template>
     <div class="rounded-[3px] overflow-hidden my-custom-margin-main shadow-black shadow-custom-main ">
         <div class="gradient-border pl-2 text-white overflow-hidden
-            bg-main-gradient $ ">     
+            bg-main-gradient w-full">     
     
             <div class="flex items-center justify-between">
                 <h2 class="py-3 text-[20px] font-extralight pr-8">{{ props.title}}</h2>
                 <p :class="`cursor-pointer pr-3 ${translateY}`">Voir plus ></p>
             </div>
     
-            <div class="flex border-gray-700 pl-[calc(50px+60px+15px)] py-2">
-                <p class="w-[15%]">Nom</p>
+            <div class="flex border-gray-700 p-[calc(50px+60px+15px)] py-2">
+                <p class="w-[20%]">Nom</p>
                 <p class="w-[20%]">Montant</p>
-                <p class="w-[17%]">Date</p>
+                <p class="w-[20%]">Date</p>
                 <p class="w-[20%]">Itération</p>
             </div>
     

@@ -1,11 +1,12 @@
 
 const folderMain = "Projet_final_DWWM";
 
-export default async function useFetch(apiPath, token = "") {
+export default async function useFetch(form, method, dataForm, token = "") {
 
   try {
+
     // path
-    const fullPath = `/api/${folderMain}/backend/?page=${apiPath}`;  
+    const fullPath = `/api/${folderMain}/backend/?form=${form}`;  
 
     // header data
     const headers = new Headers();
@@ -16,18 +17,28 @@ export default async function useFetch(apiPath, token = "") {
 
     // options
     const fetchOptions = {
-      method: 'GET',
+      method: method,
       headers: headers
     };
 
+    
+
+    // data form
+    if(method !== 'GET' && method !== 'HEAD') {
+      fetchOptions.body = JSON.stringify(dataForm);
+    }
+
+    
+
     // fetch
     const response = await fetch(fullPath, fetchOptions);
-
+    console.log(response);
     if (!response.ok) throw new Error(`HTTP error status: ${response.status}`);
     const data = await response.json();
+    
     return data;
   } 
-
+  
   catch (error) {
     console.error('Erreur lors de la récupération des données:', error);
     return null;
