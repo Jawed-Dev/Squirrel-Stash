@@ -1,59 +1,42 @@
 <?php
 
+    require_once "./Controller/ControllerUser.php";
+    require_once "./View/ViewStatistic.php";
 
 
     interface I_ControllerStatistic {
-        function renderPageDashboard($bearerJwt);
+        function getControllerMain();
+        function preparePageDashboard($tokenJwt);
     }
 
-    require_once "./Controller/ControllerUser.php";
-
+    
     class ControllerStatistic implements I_ControllerStatistic {
 
         private $ContainerServices;
-        private $ControllerUser;
-        private $ControllerBase;
-        private $db;
-        
+        private $ControllerMain;
+        private $ViewStatistic;
+
         public function __construct($ContainerServices) {
             $this->ContainerServices = $ContainerServices;
-
-            //$this->ControllerUser = new ControllerUser;
-            //$this->container = $container;
+            $this->ViewStatistic = new ViewStatistic;
         }
 
-        // ====== Controllers lazy loadings 
+        // Main Controller lazy loading
         /**
-        * @return ControllerUser
+        * @return ControllerMain
         */
-        private function getControllerUser() {
-            if ($this->ControllerUser === null) $this->ControllerUser = $this->ContainerServices->get('ServiceUser');
-            return $this->ControllerUser;
-        }
-        /**
-        * @return ControllerBase
-        */
-        private function getControllerBase() {
-            if ($this->ControllerBase === null) $this->ControllerBase = $this->ContainerServices->get('ControllerBase');
-            return $this->ControllerBase;
-        }
-        
-         // ====== DB connect 
-        /**
-        * @return Database
-        */
-        public function getDatabase() {
-            if (!$this->db) $this->db = $this->ContainerServices->get('Database');
-            return $this->db;
+        public function getControllerMain() {
+            if ($this->ControllerMain === null) $this->ControllerMain = $this->ContainerServices->get('ControllerMain');
+            return $this->ControllerMain;
         }
 
-
-        public function renderPageDashboard($tokenJwt) {
-            $isUserConnected = $this->getControllerUser()->isUserConnected($tokenJwt);
-            echo json_encode([
+        // Prepare Pages
+        public function preparePageDashboard($tokenJwt) {
+            $isUserConnected = $this->getControllerMain()->getControllerUser()->isUserConnected($tokenJwt);
+            $dataPage = [
                 'isUserConnected' => $isUserConnected,
-                'TestVal' => 2,
-            ]);
+            ];  
+            $this->ViewStatistic->renderPageDashboard($dataPage);
         }
 
 
