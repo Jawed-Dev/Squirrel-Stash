@@ -42,7 +42,7 @@
                             extraClass="font-light flex justify-center"
                             placeholder="Date"
                             id="id-input-date"
-                            type="date"/>
+                            type="datetime-local"/>
                         </div>
                     </div>
 

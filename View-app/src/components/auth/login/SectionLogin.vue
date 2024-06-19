@@ -1,11 +1,9 @@
-
 <template>
     <section class="bg-main-gradient flex flex-col items-center font-main-font w-[50%] justify-center">
         <h1 class="text-black text-[25px]">Bienvenue !</h1>
         <p class="text-custom-gray  text-[14px]">dazaazdadaazaz</p>
 
         <form @submit.prevent="handleSubmit">
-
             <InputBase v-model="inputEmail" extraClass="w-full py-[20px] text-white font-light" />
             <InputBase v-model="inputPass" extraClass="w-full py-[20px] text-white font-light"/>
      
@@ -30,7 +28,7 @@
 
 
 <script setup>
-    import { ref, reactive } from 'vue';
+    import { ref } from 'vue';
 
     import InputBase from '@/components/input/InputBase.vue';
     import ButtonComponent from '../../button/ButtonBasic.vue';
@@ -44,28 +42,36 @@
     const inputCheckBox = ref(null);
 
     async function handleSubmit() {
-        //alert(inputEmail.value);
 
-        const localToken = localStorage.getItem('jwt');
+        // check if user is connected ?
+        //const localToken = localStorage.getItem('authToken');
         const dataLogin = {
             'email': inputEmail.value,
             'password': inputPass.value
         }
-        const dataHandleLogin = await useFetchForm('formLogin', 'POST', dataLogin, localToken);
-        const isSucessLogin = dataHandleLogin.tokenJwt;
+        const dataHandleLogin = await useFetchForm({
+            form: 'formLogin', 
+            method: 'POST', 
+            dataForm: dataLogin, 
+            //token: localToken
+        });
 
-        console.log(dataHandleLogin);
+        //const isAlreadyConnected = (dataHandleLogin.connected) ? true : false;
+        const isSucessLogin = dataHandleLogin?.tokenJwt;
+
+        console.log(isSucessLogin);
 
         inputEmail.value = '';
         inputPass.value = '';
 
+        // if(isAlreadyConnected) {
+        //     router.push('/tableau-de-bord');
+        //     return;
+        // }
         if(isSucessLogin) {
             localStorage.setItem('authToken', dataHandleLogin.tokenJwt);
             router.push('/tableau-de-bord');
         }
     }
-
-    
-
 </script>
 

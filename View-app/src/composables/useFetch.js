@@ -12,7 +12,7 @@ export default async function useFetch(apiPath, token = "") {
     if(token) {
       headers.append("Authorization", `Bearer ${token}`);
     }
-    headers.append("Content-Type", "application/json");
+    headers.append("X-Custom-Origin", window.location.origin);
 
     // options
     const fetchOptions = {

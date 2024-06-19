@@ -1,12 +1,15 @@
 <?php 
 
-    require_once './Model/ModelUser.php';
-    require_once './View/ViewUser.php';
+    require_once './model/modelUser.php';
+    require_once './view/viewUser.php';
 
     interface I_ControllerUser {
+        // Main Controller lazy loading
+        function getControllerMain();
         // Auth
         function isUserConnected($tokenJwt);
         function handleSuccessLogin($data);
+        function getUserIdIntoJwt($decodedJwt);
         // Prepare pages
         function preparePageLogin($tokenJwt);
     }
@@ -16,26 +19,37 @@
         private $ContainerServices;
         private $ControllerMain;
         private $ModelUser;
-        private $db;
         private $ViewUser;
         
         public function __construct($ContainerServices) {
             $this->ContainerServices = $ContainerServices;
-            $this->ModelUser = new ModelUser;
-            $this->db = $this->getControllerMain()->getDatabase();
-            $this->ViewUser = new ViewUser;
         }
 
         // Controller Main lazy loading
         /**
         * @return ControllerMain
         */
+        // Model ControllerMain lazyloading
         public function getControllerMain() {
-            if (!$this->ControllerMain) $this->ControllerMain = $this->ContainerServices->get('ControllerMain');
+            if (!$this->ControllerMain) $this->ControllerMain = $this->ContainerServices->getService('ControllerMain');
             return $this->ControllerMain;
+        }
+        // Model lazy loading
+        public function getModelUser() {
+            if (!$this->ModelUser) $this->ModelUser = new ModelUser;
+            return $this->ModelUser;
+        }
+        // View lazy loading
+        public function getViewMain() {
+            if (!$this->ViewUser) $this->ViewUser = new ViewUser();
+            return $this->ViewUser;
         }
 
         // Auth
+        public function getUserIdIntoJwt($decodedJwt) {
+            return $decodedJwt->userId;
+        }
+
         public function isUserConnected($tokenJwt) {
             if($tokenJwt === null) return false;
             $decodedJwt = $this->getControllerMain()->decodeJwt($tokenJwt);
@@ -44,18 +58,27 @@
             $isValidTokenJwt = $this->getControllerMain()->isValidTokenJwt($decodedJwt);
             if(!$isValidTokenJwt) return false;
 
-            $userId = $this->getControllerMain()->getUserIdIntoJwt($decodedJwt);
-            $isUserExistById = $this->ModelUser->isUserExistById($this->db, $userId);
+            $userId = $this->getUserIdIntoJwt($decodedJwt);
+            $db = $this->getControllerMain()->getDatabase();
+            
+            $isUserExistById = $this->getModelUser()->isUserExistById($db, $userId);
             return $isUserExistById ;
         }
         public function handleSuccessLogin($data) {
-            $userId = $this->ModelUser->getUserIdByLogin($this->db, $data);
-            $tokenJwt = null;
+            if(empty($data)) return $this->getControllerMain()->sendJsonResponse(['tokenJwt' => null]);
 
-            if($userId) $tokenJwt = $this->getControllerMain()->createTokenJwt($userId);
-            echo json_encode([
-                'tokenJwt' => $tokenJwt
-            ]);
+            //var_dump($data);
+
+            //$userConnected = $this->isUserConnected($data->token);
+            //if($userConnected) return $this->getControllerMain()->sendJsonResponse(['connected' => true]);
+            
+            $db = $this->getControllerMain()->getDatabase();
+            $userId = $this->getModelUser()->getUserIdByLogin($db, $data);
+            if(!$userId) return $this->getControllerMain()->sendJsonResponse(['tokenJwt' => null]);
+
+            $tokenJwt = null;
+            $tokenJwt = $this->getControllerMain()->createTokenJwt($userId);
+            $this->getControllerMain()->sendJsonResponse(['tokenJwt' => $tokenJwt]);
         }
 
         // Prepare pages
@@ -64,7 +87,9 @@
             $dataPage = [
                 'isUserConnected' => $isUserConnected,
             ]; 
-            $this->ViewUser->renderPageLogin($dataPage);
+            $this->getViewMain()->renderPageLogin($dataPage);
         }
+
+        
     }
 ?>

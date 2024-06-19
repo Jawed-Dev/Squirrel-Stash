@@ -12,8 +12,8 @@
 
             <section class="flex justify-between pt-[20px]">
                 <div class="flex gap-[20px] ">
-                    <SelectInput :listSelect="listMonth" />
-                    <SelectInput :listSelect="listYear" />
+                    <SelectInput v-model="monthSelected" :listSelect="monthNames" />
+                    <SelectInput v-model="yearSelected" :listSelect="yearNames" />
                 </div>
                 <div class="flex justify-end">
                     <AddPurchase width="w-[30vw]"/>
@@ -21,7 +21,7 @@
             </section>
 
             <section class="w-[100%] mt-custom-margin-main rounded-[3px] overflow-hidden shadow-black shadow-custom-main"> 
-                <ContainerPurchasesDays />
+                <ContainerTransactionsMonth :monthSelected="monthSelected" :yearSelected="yearSelected"/>
             </section>
 
             <section class="flex gap-[20px] justify-around ">
@@ -44,24 +44,22 @@
 <script setup>
 
     // import
-    import HeaderComponent from '../components/header/Header.vue';
-    import ContainerStatMonth from '../components/container/statistic/ContainerStatMonth.vue';
+    import { ref } from 'vue'; 
+    import HeaderComponent from '@/components/header/Header.vue';
+    import ContainerStatMonth from '@/components/container/statistic/ContainerStatMonth.vue';
     import SelectInput from '@/components/select/SelectInput.vue';
-    import ContainerPurchasesDays from '../components/container/statistic/ContainerPurchasesDays.vue';
-    import ContainerListPurchases from '../components/container/statistic/ContainerListPurchases.vue';
+    import ContainerTransactionsMonth from '@/components/container/statistic/ContainerTransactionsMonth.vue';
+    import ContainerListPurchases from '@/components/container/statistic/ContainerListPurchases.vue';
     import AddPurchase from '@/components/overlay/AddPurchase.vue';
+    import {monthNames, getCurrentMonthName, getCurrentYear, yearNames} from '@/composables/useGetDate';
+
 
     // variables, props, ...
+    const currentMonth = getCurrentMonthName();
+    const currentYear = getCurrentYear();
 
-    const listMonth = [
-        'Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin',
-        'Juillet', 'Aout', 'Septembre', 'Octobre', 'Novembre', 'Décembre'
-    ];
-    const listYear = [
-        '2023',
-        '2024',
-        '2025'
-    ];
+    const monthSelected = ref(`${currentMonth}`);
+    const yearSelected = ref(`${currentYear}`);
 
     // functions
     function svgConfig(nameSvg, color, width = '60px') {

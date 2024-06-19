@@ -24,7 +24,7 @@ class ComposerStaticInit20fad51902f91e7fd3039e016a6556b5
     public static $prefixDirsPsr4 = array (
         'View\\' => 
         array (
-            0 => __DIR__ . '/../..' . '/backend/View',
+            0 => __DIR__ . '/../..' . '/backend/view',
         ),
         'Firebase\\JWT\\' => 
         array (
@@ -32,7 +32,7 @@ class ComposerStaticInit20fad51902f91e7fd3039e016a6556b5
         ),
         'Controller\\' => 
         array (
-            0 => __DIR__ . '/../..' . '/backend/Controller',
+            0 => __DIR__ . '/../..' . '/backend/controller',
         ),
     );
 

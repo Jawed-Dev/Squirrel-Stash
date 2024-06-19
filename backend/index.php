@@ -1,13 +1,24 @@
 <?php
-    use Model\Database;
-    
+    //use model\Database;
     try {
-        require_once './Controller/ControllerMain.php';
-        require_once './Controller/ControllerStatistic.php';
-        require_once './Controller/ControllerUser.php';
-        require_once './Service/ServiceContainer.php';
-        require_once './Model/Database.php';
+        require_once './config.php';
+        
 
+        $allowedOrigin = FRONT_BASE_URL;
+        $origin = isset($_SERVER['HTTP_X_CUSTOM_ORIGIN']) ? $_SERVER['HTTP_X_CUSTOM_ORIGIN'] : '';
+        //var_dump($_SERVER['HTTP_X_CUSTOM_ORIGIN']);
+        if ($origin !== $allowedOrigin) throw new Exception('Erreur de CORS');
+
+        header("Access-Control-Allow-Origin: ".FRONT_BASE_URL);
+        header("Access-Control-Allow-Methods: GET, POST");
+        header("Content-Type: application/json");
+
+        require_once './controller/controllerMain.php';
+        require_once './controller/controllerStatistic.php';
+        require_once './controller/controllerUser.php';
+        require_once './service/serviceContainer.php';
+        require_once './model/Database.php';
+        
         // Container Services
         $ContainerServices = new ContainerServices;
 
@@ -22,30 +33,24 @@
             return new ControllerStatistic($ContainerServices);
         });
         $ContainerServices->registerService('Database', function() {
-            return \Model\Database::getConnection();
+            return \model\Database::getConnection();
         });
 
         // Instances 
         /** 
         * @var ControllerMain 
         */
-        $ControllerMain = $ContainerServices->get('ControllerMain');
+        $ControllerMain = $ContainerServices->getService('ControllerMain');
         /** 
         * @var ControllerUser 
         */
-        $ControllerUser = $ContainerServices->get('ControllerUser');
+        $ControllerUser = $ContainerServices->getService('ControllerUser');
         /** 
         * @var ControllerStatistic 
         */
-        $ControllerStatistic = $ContainerServices->get('ControllerStatistic');
+        $ControllerStatistic = $ContainerServices->getService('ControllerStatistic');
 
-
-    
         $tokenJwt = $ControllerMain->getBearerTokenJwt();
-    
-        header("Access-Control-Allow-Origin: *");
-        header("Access-Control-Allow-Methods: GET, POST");
-        header("Content-Type: application/json");
 
         // GET
         if ($_SERVER['REQUEST_METHOD'] === 'GET') {
@@ -64,7 +69,7 @@
                         break;
                     }
                     default: {
-                        echo json_encode(['message' => 'Page not found', 'status' => 404]);
+                        $ControllerMain->sendJsonResponse(['message' => 'Page not found', 'status' => 404]);
                         break;
                     }
                 }
@@ -74,9 +79,23 @@
         if ($_SERVER['REQUEST_METHOD'] === 'POST') { 
             if(!empty($_GET['form'])) {
                 switch($_GET['form']) {
+                    // auth
                     case 'formLogin': {
                         $dataPost = file_get_contents('php://input');
                         $ControllerUser->handleSuccessLogin($dataPost);
+                        break;
+                    }
+                    // statistic
+                    case 'listTransactionsMonth': {
+                        $postJson = file_get_contents('php://input');
+                        $dataPost = $dataArray = json_decode($postJson, true);
+
+                        
+                        $data = [
+                            'tokenJwt' => $ControllerMain->decodeJwt($tokenJwt),
+                            'dataPost' => $dataPost
+                        ];
+                        $ControllerStatistic->fetchTransactionsMonth($data);
                         break;
                     }
                 }
@@ -84,9 +103,14 @@
         }
     }
     catch(Exception $error) {
-        echo json_encode([
-            'debug' => $error
-        ]);
+        echo json_encode(['debug' => $error]);
+        die;
+    }
+
+    finally {
+        if (empty($ControllerMain)) return null;
+        $db = $ControllerMain->getDatabase();
+        if($db !== null) $db = null;
     }
 
 ?>

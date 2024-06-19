@@ -38,7 +38,7 @@
     import IconTarget from '../svgs/IconTarget.vue';
     import IconLogOut from '../svgs/IconLogOut.vue';
 
-    import {ref, computed, onMounted, onUnmounted} from 'vue';
+    import {ref, onMounted, onUnmounted} from 'vue';
 
     import TransitionOpacity from '../transition/TransitionOpacity.vue';
     
@@ -93,7 +93,7 @@
             },
             {
                 Component: IconLogOut,
-                page: '',
+                page: 'disconnect',
                 text: 'Déconnexion'
             }
         ];
@@ -133,6 +133,11 @@
         switch (request) {
             case 'home': {
                 statePage.value = request;
+                router.push('/connexion');
+                break;
+            }
+            case 'disconnect' : {
+                localStorage.removeItem('authToken');
                 router.push('/connexion');
                 break;
             }

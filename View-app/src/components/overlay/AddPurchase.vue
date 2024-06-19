@@ -48,6 +48,7 @@
     import ContainerSelectCategories from '../container/overlay/ContainerSelectCategories.vue';
     import ContainerInputs from '../container/overlay/ContainerInputs.vue';
     import MainContainerSlot from '../containerSlot/MainContainerSlot.vue';
+    import useFetchForm from '@/composables/useFetchForm';
 
     // variables, props...
     const props = defineProps({
@@ -116,6 +117,12 @@
             }
             case 'accept' : {
                 alert('valider');
+                useFetchForm({
+                    form: 'addPurchase',
+                    method: 'POST',
+                    token: localStorage.getItem('authToken'),
+                });
+
                 //alert(`${inputPriceVal.value}`);
                 break;
             }

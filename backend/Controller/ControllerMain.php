@@ -1,7 +1,7 @@
 <?php
 
     require_once './vendor/autoload.php';
-    require_once './View/ViewMain.php';
+    require_once './view/viewMain.php';
     require_once './config.php';
     
     use Firebase\JWT\JWT;
@@ -11,13 +11,14 @@
         // Controllers
         function getControllerUser();
         function getControllerStatistic();
+        // view
+        function getViewMain();
         // Database
         function getDatabase();
         // Jeton / Session
         function createTokenJwt($userId);
         function isValidTokenJwt($tokenJwt);
         function decodeJwt($tokenJwt);
-        function getUserIdIntoJwt($decodedJwt);
         function getBearerTokenJwt();
         // Prepare pages
         function preparePageIndex($tokenJwt);
@@ -32,7 +33,6 @@
 
         public function __construct($ContainerServices) {
             $this->ContainerServices = $ContainerServices;
-            $this->ViewMain = new ViewMain();
         }
 
         // Controllers lazy loading
@@ -40,15 +40,23 @@
         * @return ControllerUser
         */
         public function getControllerUser() {
-            if (!$this->ControllerUser) $this->ControllerUser = $this->ContainerServices->get('ControllerUser');
+            if (!$this->ControllerUser) $this->ControllerUser = $this->ContainerServices->getService('ControllerUser');
             return $this->ControllerUser;
         }
         /**
         * @return ControllerUser
         */
         public function getControllerStatistic() {
-            if (!$this->ControllerStatistic) $this->ControllerStatistic = $this->ContainerServices->get('ControllerStatistic');
+            if (!$this->ControllerStatistic) $this->ControllerStatistic = $this->ContainerServices->getService('ControllerStatistic');
             return $this->ControllerStatistic;
+        }
+
+        // View lazy loading
+        public function getViewMain() {
+            if (!$this->ViewMain) {
+                $this->ViewMain = new ViewMain();
+            }
+            return $this->ViewMain;
         }
 
         // Database
@@ -56,7 +64,7 @@
         * @return Database
         */
         public function getDatabase() {
-            if (!$this->db) $this->db = $this->ContainerServices->get('Database');
+            if (!$this->db) $this->db = $this->ContainerServices->getService('Database');
             return $this->db;
         }
 
@@ -64,13 +72,16 @@
         public function createTokenJwt($userId) {
             $key = JWT_SECRET_KEY; 
             $issuedAt = time();
-            $expirationTime = $issuedAt + 3600;  
+            $expirationTime = $issuedAt + TIME_EXPIRE_TIME_JWT;  
+            $issuer = BASE_URL;
+            //$jti = bin2hex(random_bytes(16)); 
             $payload = array(
                 'userId' => $userId,
                 'issuedAt' => $issuedAt,
-                'expireTime' => $expirationTime
+                'expireTime' => $expirationTime,
+                'issuer' => $issuer,
+                //'jti' => $jti
             );
-
             $jwt = JWT::encode($payload, $key, 'HS256');
             return $jwt;
         }
@@ -80,25 +91,40 @@
             return $decodedJwt;
         }
         public function isValidTokenJwt($decodedJwt) {
+            $timeNow = time();
+
             if(!empty($decodedJwt)) {
+                // value empty
                 if(empty($decodedJwt->userId)) return false;
                 if(empty($decodedJwt->issuedAt)) return false;
                 if(empty($decodedJwt->expireTime)) return false;
 
+                // verif url back
+                if($decodedJwt->issuer !== BASE_URL) return false;
+
+                // time
                 if(time() >= $decodedJwt->expireTime) return false;
+                if($decodedJwt->issuedAt > $timeNow) return false;
+                if($decodedJwt->expireTime < $timeNow) return false;
+
+                // is int
                 if(!is_int(($decodedJwt->userId))) return false;
+                if(!is_int(($decodedJwt->expireTime))) return false;
+                if(!is_int(($decodedJwt->issuedAt))) return false;
                 
                 return true;
             }
             return false;
         }
-        public function getUserIdIntoJwt($decodedJwt) {
-            return $decodedJwt->userId;
-        }
         function getBearerTokenJwt() {
             if (!isset($_SERVER['HTTP_AUTHORIZATION'])) return null;
             if (preg_match('/Bearer\s(\S+)/', $_SERVER['HTTP_AUTHORIZATION'], $matches)) return $matches[1];
             return null;
+        }
+
+        // json 
+        function sendJsonResponse($data) {
+            echo json_encode($data);
         }
 
         // Prepare Pages
@@ -107,7 +133,7 @@
             $dataPage = [
                 'isUserConnected' => $isUserConnected,
             ];  
-            $this->ViewMain->renderPageIndexJson($dataPage);
+            $this->getViewMain()->renderPageIndexJson($dataPage);
         }
     }
 

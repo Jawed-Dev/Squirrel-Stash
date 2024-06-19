@@ -27,26 +27,23 @@ router.beforeEach(async (to, from, next) => {
     const localToken = localStorage.getItem('authToken');
 
     console.log(localToken);
-
+    const dataPage = await useFetch(`pageIndex`, localToken);
+    const isUserConnected = dataPage?.isUserConnected;
     switch(page) {
-
       case 'pageIndex' : {
-        const dataPage = await useFetch(`pageIndex`, localToken);
-
-        (dataPage.isUserConnected) ? next('/tableau-de-bord') : next('/connexion');
+        (isUserConnected) ? next('/tableau-de-bord') : next('/connexion');
         break;
       }
       case 'pageLogin' : {
-        const dataPage = await useFetch(`pageLogin`, localToken);
-        (dataPage.isUserConnected) ? next('/tableau-de-bord') : next();
+        (isUserConnected) ? next('/tableau-de-bord') : next();
         break;
       }
       case 'pageDashboard' : {
-        const dataPage = await useFetch(`pageDashboard`, localToken);
-        (dataPage.isUserConnected) ? next() : next('/connexion');
+        (isUserConnected) ? next() : next('/connexion');
         break;
       }
       default : {
+          // page 404 ?
           next();
           break;
       }

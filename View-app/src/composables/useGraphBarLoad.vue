@@ -8,8 +8,9 @@
 import { ref, onMounted, watch } from 'vue';
 import Chart from 'chart.js/auto';
 
+
 const props = defineProps({
-    dataTransaction: { default: () => [] },
+    dataTransaction: { default: []},
     colorsGraph: { default: () => {}}
 });
 
@@ -18,25 +19,23 @@ let chartInstance = null;
 
 
 onMounted(() => {
- 
     const gradient = canvas.value.getContext('2d').createLinearGradient(0, 0, 0, 400);
     gradient.addColorStop(0, props.colorsGraph.color1);
     gradient.addColorStop(1, props.colorsGraph.color2);
 
     chartInstance = new Chart(canvas.value, {
         type: 'bar',
-       
         data: {
-            labels: props.dataTransaction.map(row => 'Jour ' + row.day),
+            labels: [],
             datasets: [{
                 backgroundColor: gradient,
                 borderColor: props.colorsGraph.borderColor,
                 borderWidth: 2,
                 fill: true,
-                label: 'Achats du mois',
-                data: props.dataTransaction.map(row => row.count),
+                label: 'Transactions du mois',
+                data: [],
                 tension: 0.3
-            }]
+            }],
         },
         options: getChartOptions()
     });
@@ -48,8 +47,7 @@ watch(() => props.dataTransaction, (newData) => {
 
 
 function updateChartData(chart, newData) {
-    if (!chartInstance) return;  // S'assurer que le graphique est initialisé
-    // Accès au contexte du canvas pour recréer le gradient
+    if (!chartInstance) return;  
 
     const ctx = canvas.value.getContext('2d');
     const gradient = ctx.createLinearGradient(0, 0, 0, 400);
@@ -61,10 +59,12 @@ function updateChartData(chart, newData) {
         dataset.borderColor = props.colorsGraph.borderColor;
         dataset.backgroundColor = gradient;
     });
+
+    console.log(newData);
     
     chart.data.labels = newData.map(row => 'Jour ' + row.day);
     chart.data.datasets.forEach((dataset) => {
-        dataset.data = newData.map(row => row.count);
+        dataset.data = newData.map(row => row.total_amount);
     });
     chart.update();
 }
@@ -74,13 +74,22 @@ function getChartOptions() {
     return {
         responsive: true,
         maintainAspectRatio: false,
+        // animations: {
+        //     tension: {
+        //         duration: 1000,
+        //         easing: 'linear',
+        //         from: 1,
+        //         to: 0,
+        //         loop: true
+        //     }
+        // },
         plugins: {
             legend: { display: false },
             tooltip: {
                 displayColors: false,
                 callbacks: {
                     label: function(tooltipItem) {
-                        return "Montant d'achat: " + tooltipItem.raw + ' €';
+                        return "Total montant d'achat: " + tooltipItem.raw + ' €';
                     }
                 }
             }
