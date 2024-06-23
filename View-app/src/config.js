@@ -1,0 +1,1 @@
+export const NAME_FOLDER_MAIN = 'Projet_final_DWWM';

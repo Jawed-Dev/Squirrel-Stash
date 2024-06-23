@@ -1,11 +1,10 @@
+import { NAME_FOLDER_MAIN } from '@/config.js';
 
-const folderMain = "Projet_final_DWWM";
-
-export default async function useFetch(apiPath, token = "") {
-
+export default async function useConfigFetchGetPagePage(apiPath, token = "") {  
   try {
+    
     // path
-    const fullPath = `/api/${folderMain}/backend/?page=${apiPath}`;  
+    const fullPath = `/api/${NAME_FOLDER_MAIN}/backend/?page=${apiPath}`;  
 
     // header data
     const headers = new Headers();

@@ -1,94 +1,153 @@
 <?php
-
+    require_once './controller/ControllerMain.php';
     require_once "./controller/controllerUser.php";
     require_once "./view/viewStatistic.php";
     require_once './model/ModelStatistic.php';
 
     interface I_ControllerStatistic {
-        // Main Controller lazy loading
+        // Main Controller 
         function getControllerMain();
-        // Model lazy loading
+        // Model 
         function getModelStatistic();
-        // View lazy loading
+        // View 
         function getViewStatistic();
         // Statistic
-        function fetchTransactionsMonth($data);
+        function fetchTrsMonthByDay();
         function fetchTransactionsDay($userId);
-        function fetchNRecentTrsMonth($userId);
+        function fetchNLastTrsByMonth();
+        function fetchThresholdByMonth();
+        function fetchTotalTrsByMonth();
+        function fetchBiggestTrsByMonth();
         // Prepare page
-        function preparePageDashboard($tokenJwt);
+        function preparePageDashboard();
     }
 
     
     class ControllerStatistic implements I_ControllerStatistic {
-
-        private $ContainerServices;
         private $ControllerMain;
         private $ViewStatistic;
         private $ModelStatistic;
 
-        public function __construct($ContainerServices) {
-            $this->ContainerServices = $ContainerServices;
-        }
-
-        // Main Controller lazy loading
+        // Main Controller 
         /**
         * @return ControllerMain
         */
         public function getControllerMain() {
-            if ($this->ControllerMain === null) $this->ControllerMain = $this->ContainerServices->getService('ControllerMain');
+            if ($this->ControllerMain === null) $this->ControllerMain = new ControllerMain();
             return $this->ControllerMain;
         }
 
-        // Model lazy loading
+        // Model 
         public function getModelStatistic() {
             if (!$this->ModelStatistic) $this->ModelStatistic = new ModelStatistic();
             return $this->ModelStatistic;
         }
 
-        // View lazy loading
+        // View 
         public function getViewStatistic() {
             if (!$this->ViewStatistic) $this->ViewStatistic = new ViewStatistic();
             return $this->ViewStatistic;
         }
 
         // Statistic
-        public function fetchTransactionsMonth($data) {
-            $tokenJwt = $data['tokenJwt'];
-            $dataForm = $data['dataPost'];
+        public function fetchTrsMonthByDay() {
+            $codedTokenJwt = $this->getControllerMain()->getHandlerJwt()->getBearerTokenJwt();
+            $tokenJwt = $this->getControllerMain()->getHandlerJwt()->decodeJwt($codedTokenJwt);
 
+            $dataJson = $this->getControllerMain()->getRequestBodyJson();
+            $data = json_decode($dataJson, true);
+            
             $db = $this->getControllerMain()->getDatabase();
-            $userId = $this->getControllerMain()->getControllerUser()->getUserIdIntoJwt($tokenJwt);
+            $userId = $this->getControllerMain()->getControllerUser()->getUserIdByDecodedJwt($tokenJwt);
 
             $dataModel = [
-                'dataPost' => $dataForm,
+                'bodyData' => $data,
+                'userId' => $userId
+            ];
+            $listTrsMonthByDay = $this->getModelStatistic()->getTrsMonthByDay($db, $dataModel);
+            $this->getControllerMain()->sendJsonResponse(['data' => $listTrsMonthByDay]);
+        }
+
+        public function fetchThresholdByMonth() {
+            $codedTokenJwt = $this->getControllerMain()->getHandlerJwt()->getBearerTokenJwt();
+            $tokenJwt = $this->getControllerMain()->getHandlerJwt()->decodeJwt($codedTokenJwt);
+            $dataJson = $this->getControllerMain()->getRequestBodyJson();
+            $data = json_decode($dataJson, true);
+            $db = $this->getControllerMain()->getDatabase();
+            $userId = $this->getControllerMain()->getControllerUser()->getUserIdByDecodedJwt($tokenJwt);
+            $dataModel = [
+                'bodyData' => $data,
+                'userId' => $userId
+            ];
+            
+            $amountThresholdByMonth = $this->getModelStatistic()->getThresholdByMonth($db, $dataModel);
+            //var_dump($db);
+            $this->getControllerMain()->sendJsonResponse(['data' => $amountThresholdByMonth]);
+        }
+
+        public function fetchNLastTrsByMonth() {
+            $codedTokenJwt = $this->getControllerMain()->getHandlerJwt()->getBearerTokenJwt();
+            $tokenJwt = $this->getControllerMain()->getHandlerJwt()->decodeJwt($codedTokenJwt);
+
+            $dataJson = $this->getControllerMain()->getRequestBodyJson();
+            $data = json_decode($dataJson, true);
+
+            $db = $this->getControllerMain()->getDatabase();
+            $userId = $this->getControllerMain()->getControllerUser()->getUserIdByDecodedJwt($tokenJwt);
+            $dataModel = [
+                'bodyData' => $data,
                 'userId' => $userId
             ];
 
-            // var_dump($db);
-            // var_dump($dataModel);
+            $listLastTrsByMonth = $this->getModelStatistic()->getNLastTrsByMonth($db, $dataModel);
+            $this->getControllerMain()->sendJsonResponse(['data' => $listLastTrsByMonth]);
+        }
 
-            $listTransactionsMonth = $this->getModelStatistic()->getTransactionsMonth($db, $dataModel);
-            //var_dump($listTransactionsMonth);
-            //return $listTransactionsMonth;
+        public function fetchTotalTrsByMonth() {
+            $codedTokenJwt = $this->getControllerMain()->getHandlerJwt()->getBearerTokenJwt();
+            $tokenJwt = $this->getControllerMain()->getHandlerJwt()->decodeJwt($codedTokenJwt);
 
-            echo json_encode(['data' => $listTransactionsMonth]);
+            $dataJson = $this->getControllerMain()->getRequestBodyJson();
+            $data = json_decode($dataJson, true);
+
+            $db = $this->getControllerMain()->getDatabase();
+            $userId = $this->getControllerMain()->getControllerUser()->getUserIdByDecodedJwt($tokenJwt);
+            $dataModel = [
+                'bodyData' => $data,
+                'userId' => $userId
+            ];
+
+            $totalTransactions = $this->getModelStatistic()->getTotalTrsByMonth($db, $dataModel);
+            $this->getControllerMain()->sendJsonResponse(['data' => $totalTransactions]);
+        }
+
+        public function fetchBiggestTrsByMonth() {
+            $codedTokenJwt = $this->getControllerMain()->getHandlerJwt()->getBearerTokenJwt();
+            $tokenJwt = $this->getControllerMain()->getHandlerJwt()->decodeJwt($codedTokenJwt);
+
+            $dataJson = $this->getControllerMain()->getRequestBodyJson();
+            $data = json_decode($dataJson, true);
+
+            $db = $this->getControllerMain()->getDatabase();
+            $userId = $this->getControllerMain()->getControllerUser()->getUserIdByDecodedJwt($tokenJwt);
+            $dataModel = [
+                'bodyData' => $data,
+                'userId' => $userId
+            ];
+
+            $totalTransactions = $this->getModelStatistic()->getBiggestTrsByMonth($db, $dataModel);
+            $this->getControllerMain()->sendJsonResponse(['data' => $totalTransactions]);
         }
 
         public function fetchTransactionsDay($userId) {
             $db = $this->getControllerMain()->getDatabase();
-            $listTransactionsDay = $this->ModelStatistic->getTransactionsMonth($db, $userId);
-            return $listTransactionsDay;
         }
 
-        public function fetchNRecentTrsMonth($userId) {
-            $db = $this->getControllerMain()->getDatabase();
-            $listTransactionsDay = $this->ModelStatistic->getTransactionsMonth($db, $userId);
-            return $listTransactionsDay;
-        }
+        
 
         // Prepare Pages
-        public function preparePageDashboard($tokenJwt) {
+        public function preparePageDashboard() {
+            $tokenJwt = $this->getControllerMain()->getHandlerJwt()->getBearerTokenJwt();
             $isUserConnected = $this->getControllerMain()->getControllerUser()->isUserConnected($tokenJwt);
             $dataPage = [
                 'isUserConnected' => $isUserConnected,

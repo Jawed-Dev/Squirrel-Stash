@@ -1,74 +1,75 @@
 <?php 
 
+    require_once './controller/ControllerMain.php';
     require_once './model/modelUser.php';
     require_once './view/viewUser.php';
 
     interface I_ControllerUser {
-        // Main Controller lazy loading
+        // Main Controller
         function getControllerMain();
+        // Model User
+        function getModelUser();
+        // View 
+        function getViewUser();
         // Auth
         function isUserConnected($tokenJwt);
-        function handleSuccessLogin($data);
-        function getUserIdIntoJwt($decodedJwt);
+        function handleSuccessLogin();
+        function getUserIdByDecodedJwt($decodedJwt);
         // Prepare pages
-        function preparePageLogin($tokenJwt);
+        function preparePageLogin();
     }
 
     class ControllerUser implements I_ControllerUser {
-
-        private $ContainerServices;
         private $ControllerMain;
         private $ModelUser;
         private $ViewUser;
         
-        public function __construct($ContainerServices) {
-            $this->ContainerServices = $ContainerServices;
-        }
-
-        // Controller Main lazy loading
+        // Controller Main
         /**
         * @return ControllerMain
         */
-        // Model ControllerMain lazyloading
+        // Model ControllerMain 
         public function getControllerMain() {
-            if (!$this->ControllerMain) $this->ControllerMain = $this->ContainerServices->getService('ControllerMain');
+            if (!$this->ControllerMain) $this->ControllerMain = new ControllerMain();
             return $this->ControllerMain;
         }
-        // Model lazy loading
+
+        // Model User
         public function getModelUser() {
-            if (!$this->ModelUser) $this->ModelUser = new ModelUser;
+            if (!$this->ModelUser) $this->ModelUser = new ModelUser();
             return $this->ModelUser;
         }
-        // View lazy loading
-        public function getViewMain() {
+
+        // View 
+        public function getViewUser() {
             if (!$this->ViewUser) $this->ViewUser = new ViewUser();
             return $this->ViewUser;
         }
 
         // Auth
-        public function getUserIdIntoJwt($decodedJwt) {
+        public function getUserIdByDecodedJwt($decodedJwt) {
             return $decodedJwt->userId;
         }
-
         public function isUserConnected($tokenJwt) {
             if($tokenJwt === null) return false;
-            $decodedJwt = $this->getControllerMain()->decodeJwt($tokenJwt);
+            $decodedJwt = $this->getControllerMain()->getHandlerJwt()->decodeJwt($tokenJwt);
             if(!$decodedJwt) return false;
 
-            $isValidTokenJwt = $this->getControllerMain()->isValidTokenJwt($decodedJwt);
-            if(!$isValidTokenJwt) return false;
+            $isValidDecodedJwt = $this->getControllerMain()->getHandlerJwt()->isValidDecodedJwt($decodedJwt);
+            if(!$isValidDecodedJwt) return false;
 
-            $userId = $this->getUserIdIntoJwt($decodedJwt);
+            $userId = $this->getUserIdByDecodedJwt($decodedJwt);
             $db = $this->getControllerMain()->getDatabase();
             
             $isUserExistById = $this->getModelUser()->isUserExistById($db, $userId);
             return $isUserExistById ;
         }
-        public function handleSuccessLogin($data) {
+        public function handleSuccessLogin() {
+
+            $dataJson = $this->getControllerMain()->getRequestBodyJson();
+            $data = json_decode($dataJson, true);
             if(empty($data)) return $this->getControllerMain()->sendJsonResponse(['tokenJwt' => null]);
-
             //var_dump($data);
-
             //$userConnected = $this->isUserConnected($data->token);
             //if($userConnected) return $this->getControllerMain()->sendJsonResponse(['connected' => true]);
             
@@ -77,17 +78,18 @@
             if(!$userId) return $this->getControllerMain()->sendJsonResponse(['tokenJwt' => null]);
 
             $tokenJwt = null;
-            $tokenJwt = $this->getControllerMain()->createTokenJwt($userId);
+            $tokenJwt = $this->getControllerMain()->getHandlerJwt()->createTokenJwt($userId);
             $this->getControllerMain()->sendJsonResponse(['tokenJwt' => $tokenJwt]);
         }
 
         // Prepare pages
-        public function preparePageLogin($tokenJwt) {
+        public function preparePageLogin() {
+            $tokenJwt = $this->getControllerMain()->getHandlerJwt()->getBearerTokenJwt();
             $isUserConnected = $this->isUserConnected($tokenJwt);
             $dataPage = [
                 'isUserConnected' => $isUserConnected,
             ]; 
-            $this->getViewMain()->renderPageLogin($dataPage);
+            $this->getViewUser()->renderPageLogin($dataPage);
         }
 
         

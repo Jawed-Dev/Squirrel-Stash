@@ -17,12 +17,10 @@
         }
 
         public function getUserIdByLogin($db, $data) {
-            $dataPost = json_decode($data, true);
-
             $reqSql = "SELECT id FROM user WHERE email = :email AND password = :password";
             $query = $db->prepare($reqSql);
-            $query->bindValue(':email', $dataPost['email'], PDO::PARAM_STR);
-            $query->bindValue(':password', $dataPost['password'], PDO::PARAM_STR);
+            $query->bindValue(':email', $data['email'], PDO::PARAM_STR);
+            $query->bindValue(':password', $data['password'], PDO::PARAM_STR);
             $query->execute();
             $userInfo = $query->fetch(PDO::FETCH_ASSOC);
 

@@ -42,13 +42,13 @@
     import IconAddPurchase from '@/components/svgs/IconAddPurchase.vue';
     import TransitionOpacity from '../transition/TransitionOpacity.vue';
     import { svgConfig } from '@/functions/svg/svgConfig';
-    import useClickOutside from '@/composables/useClickOutSide';
-    import useEscapeKey from '@/composables/useEscapeKey';
+    import useClickOutside from '@/composable/useClickOutSide';
+    import useEscapeKey from '@/composable/useEscapeKey';
 
     import ContainerSelectCategories from '../container/overlay/ContainerSelectCategories.vue';
     import ContainerInputs from '../container/overlay/ContainerInputs.vue';
     import MainContainerSlot from '../containerSlot/MainContainerSlot.vue';
-    import useFetchForm from '@/composables/useFetchForm';
+    import useConfigFetchGetData  from '@/composable/useConfigFetchGetData';
 
     // variables, props...
     const props = defineProps({
@@ -117,7 +117,7 @@
             }
             case 'accept' : {
                 alert('valider');
-                useFetchForm({
+                useConfigFetchGetData ({
                     form: 'addPurchase',
                     method: 'POST',
                     token: localStorage.getItem('authToken'),

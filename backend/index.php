@@ -2,70 +2,33 @@
     //use model\Database;
     try {
         require_once './config.php';
-        
+        require_once './controller/controllerMain.php';
 
         $allowedOrigin = FRONT_BASE_URL;
         $origin = isset($_SERVER['HTTP_X_CUSTOM_ORIGIN']) ? $_SERVER['HTTP_X_CUSTOM_ORIGIN'] : '';
-        //var_dump($_SERVER['HTTP_X_CUSTOM_ORIGIN']);
-        if ($origin !== $allowedOrigin) throw new Exception('Erreur de CORS');
+        if ($origin !== $allowedOrigin) throw new Exception('Erreur CORS');
 
         header("Access-Control-Allow-Origin: ".FRONT_BASE_URL);
         header("Access-Control-Allow-Methods: GET, POST");
         header("Content-Type: application/json");
 
-        require_once './controller/controllerMain.php';
-        require_once './controller/controllerStatistic.php';
-        require_once './controller/controllerUser.php';
-        require_once './service/serviceContainer.php';
-        require_once './model/Database.php';
-        
-        // Container Services
-        $ContainerServices = new ContainerServices;
+        // ControllerMain 
+        $ControllerMain = new ControllerMain();
 
-        // Services 
-        $ContainerServices->registerService('ControllerMain', function($ContainerServices) {
-            return new ControllerMain($ContainerServices);
-        });   
-        $ContainerServices->registerService('ControllerUser', function($ContainerServices) {
-            return new ControllerUser($ContainerServices);
-        });  
-        $ContainerServices->registerService('ControllerStatistic', function($ContainerServices) {
-            return new ControllerStatistic($ContainerServices);
-        });
-        $ContainerServices->registerService('Database', function() {
-            return \model\Database::getConnection();
-        });
-
-        // Instances 
-        /** 
-        * @var ControllerMain 
-        */
-        $ControllerMain = $ContainerServices->getService('ControllerMain');
-        /** 
-        * @var ControllerUser 
-        */
-        $ControllerUser = $ContainerServices->getService('ControllerUser');
-        /** 
-        * @var ControllerStatistic 
-        */
-        $ControllerStatistic = $ContainerServices->getService('ControllerStatistic');
-
-        $tokenJwt = $ControllerMain->getBearerTokenJwt();
-
-        // GET
+        // Request get Pages
         if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             if(!empty($_GET['page'])) {
                 switch($_GET['page']) {
                     case 'pageIndex': {
-                        $ControllerMain->preparePageIndex($tokenJwt);
+                        $ControllerMain->preparePageIndex();
                         break;
                     }
                     case 'pageLogin': {
-                        $ControllerUser->preparePageLogin($tokenJwt);
+                        $ControllerMain->getControllerUser()->preparePageLogin();
                         break;
                     }
                     case 'pageDashboard': {
-                        $ControllerStatistic->preparePageDashboard($tokenJwt);
+                        $ControllerMain->getControllerStatistic()->preparePageDashboard();
                         break;
                     }
                     default: {
@@ -75,28 +38,53 @@
                 }
             }
         }
-        // POST
+
+        // Request get Data
         if ($_SERVER['REQUEST_METHOD'] === 'POST') { 
-            if(!empty($_GET['form'])) {
-                switch($_GET['form']) {
+            if(!empty($_GET['getData'])) {
+                switch($_GET['getData']) {
                     // auth
                     case 'formLogin': {
-                        $dataPost = file_get_contents('php://input');
-                        $ControllerUser->handleSuccessLogin($dataPost);
+                        $ControllerMain->getControllerUser()->handleSuccessLogin();
                         break;
                     }
                     // statistic
-                    case 'listTransactionsMonth': {
-                        $postJson = file_get_contents('php://input');
-                        $dataPost = $dataArray = json_decode($postJson, true);
-
-                        
-                        $data = [
-                            'tokenJwt' => $ControllerMain->decodeJwt($tokenJwt),
-                            'dataPost' => $dataPost
-                        ];
-                        $ControllerStatistic->fetchTransactionsMonth($data);
+                    case 'getlistTrsByMonth': {
+                        $ControllerMain->getControllerStatistic()->fetchTrsMonthByDay();
                         break;
+                    }
+                    case 'getThresholdByMonth' : {
+                        $ControllerMain->getControllerStatistic()->fetchThresholdByMonth();
+                        break;
+                    }
+                    case 'getLastNTransactions' : {
+                        $ControllerMain->getControllerStatistic()->fetchNLastTrsByMonth();
+                        break;
+                    }
+                    case 'getTotalTrsByMonth' : {
+                        $ControllerMain->getControllerStatistic()->fetchTotalTrsByMonth();
+                        break;
+                    }
+                    case 'getBiggestTrsByMonth' : {
+                        $ControllerMain->getControllerStatistic()->fetchBiggestTrsByMonth();
+                        break;
+                    }
+                }
+            }
+        }
+
+        // Request setData
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') { 
+            if(!empty($_GET['setData'])) {
+                switch($_GET['setData']) {
+                    // auth
+                    // statistic
+                    case 'getlistTrsByMonth': {
+                        $ControllerMain->getControllerStatistic()->fetchThresholdByMonth();
+                        break;
+                    }
+                    case 'amountThresholdByMonth' : {
+                        
                     }
                 }
             }

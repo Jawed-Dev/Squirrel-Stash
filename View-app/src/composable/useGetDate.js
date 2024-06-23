@@ -1,11 +1,10 @@
-
-export const yearNames = [
-    '2020',
-    '2021',
-    '2022',    
-    '2023',
-    '2024',
-];
+export function getAvailableYearNames() {
+    const yearNames = [];
+    for (let year = 2020; year <= getCurrentYear(); year++) {
+        yearNames.push(year);
+    }
+    return yearNames;
+}
 
 export const monthNames = 
 ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin",

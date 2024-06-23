@@ -1,134 +1,119 @@
 <?php
-
-    require_once './vendor/autoload.php';
-    require_once './view/viewMain.php';
     require_once './config.php';
-    
-    use Firebase\JWT\JWT;
-    use Firebase\JWT\Key;
+    require_once './vendor/autoload.php';
 
+    require_once './controller/ControllerStatistic.php';
+    require_once './controller/ControllerUser.php';
+    require_once './model/ModelMain.php';
+    require_once './view/viewMain.php';
+    
+    require_once './util/HandlerJwt.php';
+    require_once './util/HandlerLog.php';
+    require_once './util/HandlerError.php';
+    
     interface I_ControllerMain {
-        // Controllers
+        // Controllers 
         function getControllerUser();
         function getControllerStatistic();
-        // view
+        // Handler JWT
+        function getHandlerJwt();
+        // view Main
         function getViewMain();
         // Database
         function getDatabase();
-        // Jeton / Session
-        function createTokenJwt($userId);
-        function isValidTokenJwt($tokenJwt);
-        function decodeJwt($tokenJwt);
-        function getBearerTokenJwt();
+        // json
+        function sendJsonResponse($data);
+        function getRequestBodyJson();
+        // Handler Error
+        function getHandlerError();
         // Prepare pages
-        function preparePageIndex($tokenJwt);
+        function preparePageIndex();
     }
 
     class ControllerMain implements I_ControllerMain {
-        private $ContainerServices;
         private $ControllerUser;
         private $ControllerStatistic;
         private $ViewMain;
         private $db;
+        private $HandlerJwt;
+        private $HandlerError;
+        private $HandlerLog;
 
-        public function __construct($ContainerServices) {
-            $this->ContainerServices = $ContainerServices;
-        }
-
-        // Controllers lazy loading
+        // Controllers 
         /**
         * @return ControllerUser
         */
         public function getControllerUser() {
-            if (!$this->ControllerUser) $this->ControllerUser = $this->ContainerServices->getService('ControllerUser');
+            if (!$this->ControllerUser) $this->ControllerUser = new ControllerUser();
             return $this->ControllerUser;
         }
         /**
-        * @return ControllerUser
+        * @return ControllerStatistic
         */
         public function getControllerStatistic() {
-            if (!$this->ControllerStatistic) $this->ControllerStatistic = $this->ContainerServices->getService('ControllerStatistic');
+            if (!$this->ControllerStatistic) $this->ControllerStatistic = new ControllerStatistic();
             return $this->ControllerStatistic;
         }
 
-        // View lazy loading
+        // View 
+        /**
+        * @return ViewMain
+        */
         public function getViewMain() {
-            if (!$this->ViewMain) {
-                $this->ViewMain = new ViewMain();
-            }
+            if (!$this->ViewMain) $this->ViewMain = new ViewMain();
             return $this->ViewMain;
         }
 
-        // Database
+        // Database 
         /**
-        * @return Database
+        * @return ModelMain
         */
         public function getDatabase() {
-            if (!$this->db) $this->db = $this->ContainerServices->getService('Database');
-            return $this->db;
+            if (!$this->db) $this->db = new ModelMain();
+            return $this->db->getConnection();
         }
 
-        // JWT Functions 
-        public function createTokenJwt($userId) {
-            $key = JWT_SECRET_KEY; 
-            $issuedAt = time();
-            $expirationTime = $issuedAt + TIME_EXPIRE_TIME_JWT;  
-            $issuer = BASE_URL;
-            //$jti = bin2hex(random_bytes(16)); 
-            $payload = array(
-                'userId' => $userId,
-                'issuedAt' => $issuedAt,
-                'expireTime' => $expirationTime,
-                'issuer' => $issuer,
-                //'jti' => $jti
-            );
-            $jwt = JWT::encode($payload, $key, 'HS256');
-            return $jwt;
+        
+        // Handler Jwt
+        /**
+        * @return HandlerJwt
+        */
+        public function getHandlerJwt() {
+            if (!$this->HandlerJwt) $this->HandlerJwt = new HandlerJwt();
+            return $this->HandlerJwt;
         }
-        public function decodeJwt($tokenJwt) {
-            $key = JWT_SECRET_KEY; 
-            $decodedJwt = JWT::decode($tokenJwt, new Key($key, 'HS256'));
-            return $decodedJwt;
+
+        // Handler Error
+        /**
+        * @return HandlerError
+        */
+        public function getHandlerError() {
+            if (!$this->HandlerError) $this->HandlerError = new HandlerError();
+            return $this->HandlerError;
         }
-        public function isValidTokenJwt($decodedJwt) {
-            $timeNow = time();
 
-            if(!empty($decodedJwt)) {
-                // value empty
-                if(empty($decodedJwt->userId)) return false;
-                if(empty($decodedJwt->issuedAt)) return false;
-                if(empty($decodedJwt->expireTime)) return false;
-
-                // verif url back
-                if($decodedJwt->issuer !== BASE_URL) return false;
-
-                // time
-                if(time() >= $decodedJwt->expireTime) return false;
-                if($decodedJwt->issuedAt > $timeNow) return false;
-                if($decodedJwt->expireTime < $timeNow) return false;
-
-                // is int
-                if(!is_int(($decodedJwt->userId))) return false;
-                if(!is_int(($decodedJwt->expireTime))) return false;
-                if(!is_int(($decodedJwt->issuedAt))) return false;
-                
-                return true;
-            }
-            return false;
+        // HandlerLog
+        /**
+        * @return HandlerLog
+        */
+        public function HandlerLog() {
+            if (!$this->HandlerLog) $this->HandlerLog = new HandlerLog();
+            return $this->HandlerLog;
         }
-        function getBearerTokenJwt() {
-            if (!isset($_SERVER['HTTP_AUTHORIZATION'])) return null;
-            if (preg_match('/Bearer\s(\S+)/', $_SERVER['HTTP_AUTHORIZATION'], $matches)) return $matches[1];
-            return null;
-        }
+
 
         // json 
-        function sendJsonResponse($data) {
+        public function sendJsonResponse($data) {
             echo json_encode($data);
         }
 
+        public function getRequestBodyJson() {
+            return file_get_contents('php://input');
+        }
+
         // Prepare Pages
-        public function preparePageIndex($tokenJwt) {
+        public function preparePageIndex() {
+            $tokenJwt = $this->getHandlerJwt()->getBearerTokenJwt();
             $isUserConnected = $this->getControllerUser()->isUserConnected($tokenJwt);
             $dataPage = [
                 'isUserConnected' => $isUserConnected,

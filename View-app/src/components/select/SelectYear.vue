@@ -5,7 +5,7 @@
     name="month" id="month-select"
     >
     <option class="bg-main-bg font-light" v-for="(textSelect, index) of listSelect" 
-    :selected="textSelect === indexSelected" :key="index" :value="textSelect">{{textSelect}}</option>
+    :selected="textSelect === indexSelected" :key="index" :value="textSelect">{{ textSelect }}</option>
     </select>
 
 </template>

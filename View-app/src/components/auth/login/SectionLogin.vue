@@ -17,7 +17,6 @@
                 
             <button-component :extraClass="'w-[389px] py-[6.5px]'" :titleButton="'Se connecter'" />
             
-
             <div class="flex pt-[28px] gap-9 justify-center">
                 <p class=" font-medium">Vous n'avez pas de compte ?</p> 
                 <router-link to="/inscription" class="text-main-blue font-medium">S'inscrire</router-link>
@@ -29,38 +28,36 @@
 
 <script setup>
     import { ref } from 'vue';
+    import { useRouter } from 'vue-router';
 
     import InputBase from '@/components/input/InputBase.vue';
-    import ButtonComponent from '../../button/ButtonBasic.vue';
-    import inputCheckbox from '../../input/InputCheckbox.vue';
-    import { useRouter } from 'vue-router';
-    import useFetchForm from '@/composables/useFetchForm';
-    const router = useRouter();
+    import ButtonComponent from '@/components/button/ButtonBasic.vue';
+    import inputCheckbox from '@/components/input/InputCheckbox.vue';
+    import useConfigFetchGetData  from '@/composable/useConfigFetchGetData';
+    import { setLStorageAuthToken } from "@/composable/useLocalStorage";
 
+    const router = useRouter();
     const inputEmail = ref(null);
     const inputPass = ref(null);
     const inputCheckBox = ref(null);
 
     async function handleSubmit() {
-
         // check if user is connected ?
         //const localToken = localStorage.getItem('authToken');
         const dataLogin = {
             'email': inputEmail.value,
             'password': inputPass.value
         }
-        const dataHandleLogin = await useFetchForm({
-            form: 'formLogin', 
+        const dataHandleLogin = await useConfigFetchGetData ({
+            request: 'formLogin', 
             method: 'POST', 
-            dataForm: dataLogin, 
-            //token: localToken
+            dataBody: dataLogin, 
         });
 
         //const isAlreadyConnected = (dataHandleLogin.connected) ? true : false;
-        const isSucessLogin = dataHandleLogin?.tokenJwt;
+        const isSuccessLogin = dataHandleLogin?.tokenJwt;
 
-        console.log(isSucessLogin);
-
+        //console.log(isSuccessLogin);
         inputEmail.value = '';
         inputPass.value = '';
 
@@ -68,8 +65,8 @@
         //     router.push('/tableau-de-bord');
         //     return;
         // }
-        if(isSucessLogin) {
-            localStorage.setItem('authToken', dataHandleLogin.tokenJwt);
+        if(isSuccessLogin) {
+            setLStorageAuthToken(dataHandleLogin.tokenJwt);
             router.push('/tableau-de-bord');
         }
     }

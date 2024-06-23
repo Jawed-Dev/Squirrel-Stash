@@ -13,7 +13,7 @@
 
 
 <script setup>
-    import { useText } from '@/composables/useText';
+    import { useText } from '@/composable/useText';
 
     const props = defineProps(['titleInput', 'extraClass']);
 

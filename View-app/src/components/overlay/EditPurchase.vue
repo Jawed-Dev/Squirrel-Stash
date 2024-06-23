@@ -60,8 +60,8 @@
     import InputBase from '../input/InputBase.vue';
     import {ref} from 'vue';
     import TransitionOpacity from '../transition/TransitionOpacity.vue';
-    import useClickOutside from '@/composables/useClickOutSide';
-    import useEscapeKey from '@/composables/useEscapeKey';
+    import useClickOutside from '@/composable/useClickOutSide';
+    import useEscapeKey from '@/composable/useEscapeKey';
 
 
     // variables, props, ...

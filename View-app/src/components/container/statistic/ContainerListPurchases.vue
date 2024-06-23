@@ -16,9 +16,9 @@
             </div>
     
             <div class="pl-3">
-                <PurchaseInfo v-for="(purchase, index) of listPurchases" 
-                    :key="purchase.infoPurchase.date" :nameIcon="`restaurant`" :purchaseType="props.purchaseType" 
-                    v-model:currentMenu="currentIdMenuOpen" :indexMenu="index" :svg="svg" :infoPurchase="purchase.infoPurchase"
+                <PurchaseInfo v-for="(purchase, index) of filteredTransactions" 
+                    :key="index" :nameIcon="`restaurant`" :purchaseType="props.purchaseType" 
+                    v-model:currentMenu="currentIdMenuOpen" :indexMenu="index" :svg="svg" :infoPurchase="purchase"
                 />
             </div>
         </div>
@@ -28,19 +28,45 @@
 
 <script setup>
     // import
+    import { onMounted, computed } from 'vue';
     import PurchaseInfo from '@/components/statistic/PurchaseInfo.vue';
     import { ref, watch } from 'vue';
-    import { classTransitionHover } from '../../../functions/classTransitionHover';
+    import { classTransitionHover } from '@/composable/useClassTransitionHover';
+    import { storelastNTransactions, storeDateSelected } from '@/store/useStoreDashboard';
+    import { getLastNPurchases, getLastNRecurrings } from '@/composable/useBackendStatisticFunction';
 
-    const translateY = classTransitionHover('translateY');
+    // stores
+    const lastNTransactions = storelastNTransactions();
+    const dateSelected = storeDateSelected();
+    const monthSelected = dateSelected.month;
 
     // variables, props...
     const currentIdMenuOpen = ref(-1);
-
+    const translateY = classTransitionHover('translateY');
     const props = defineProps({
         svg: { default: {} }, 
         title: { default: '' },
         purchaseType: {default: 'standard'}
+    });
+
+    // life cycle
+    watch( () => [dateSelected.year, dateSelected.month], async ([newYear, newMonth]) => {
+        console.log('pinia', monthSelected);
+
+        const lastPurchasesFetched = await getLastNPurchases(newMonth, newYear);
+        const listLastPurchases = lastPurchasesFetched?.data;
+        
+        if(listLastPurchases) lastNTransactions.listPurchases = listLastPurchases;
+
+        console.log('pinia', dateSelected.month);
+        const lastRecurringsFetched = await getLastNRecurrings(newMonth, newYear);
+        const listLastRecurrings = lastRecurringsFetched?.data;
+        //console.log(listLastRecurrings);
+        if(listLastRecurrings) lastNTransactions.listRecurrings = listLastRecurrings;
+    }, {  immediate:true, deep:true });
+
+    const filteredTransactions = computed(() => {
+        return props.purchaseType === 'purchase' ? lastNTransactions.listPurchases : lastNTransactions.listRecurrings;
     });
 
     watch(currentIdMenuOpen, (newVal, oldVal) => {

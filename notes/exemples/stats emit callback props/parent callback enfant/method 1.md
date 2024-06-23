@@ -14,7 +14,7 @@
 
 <script setup>
     import { defineProps, defineEmits, defineExpose   } from 'vue';
-    import { useText } from '@/composables/useText';
+    import { useText } from '@/composable/useText';
 
     const props = defineProps(['titleInput', 'modelValue']);
     const emit = defineEmits(['update:modelValue']);

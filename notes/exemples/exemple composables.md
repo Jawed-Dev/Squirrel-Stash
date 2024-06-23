@@ -35,7 +35,7 @@ Ce composant utilisera `useText` pour gérer l'état de l'input et émettra des 
 </template>
 
 <script setup>
-import { useText } from './composables/useText';
+import { useText } from './composable/useText';
 import { defineEmits } from 'vue';
 
 const emit = defineEmits(['update:modelValue']);
@@ -60,7 +60,7 @@ Si vous préférez une approche de callback:
 </template>
 
 <script setup>
-import { useText } from './composables/useText';
+import { useText } from './composable/useText';
 import { defineProps } from 'vue';
 
 const props = defineProps({

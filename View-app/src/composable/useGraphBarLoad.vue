@@ -60,7 +60,7 @@ function updateChartData(chart, newData) {
         dataset.backgroundColor = gradient;
     });
 
-    console.log(newData);
+    //console.log(newData);
     
     chart.data.labels = newData.map(row => 'Jour ' + row.day);
     chart.data.datasets.forEach((dataset) => {

@@ -26,8 +26,8 @@
 
     import TransitionOpacity from '@/components/transition/TransitionOpacity.vue';  
     import MainContainerSlot from '../containerSlot/MainContainerSlot.vue';
-    import useClickOutside from '@/composables/useClickOutSide';
-    import useEscapeKey from '@/composables/useEscapeKey';
+    import useClickOutside from '@/composable/useClickOutSide';
+    import useEscapeKey from '@/composable/useEscapeKey';
 
 
     const props = defineProps({

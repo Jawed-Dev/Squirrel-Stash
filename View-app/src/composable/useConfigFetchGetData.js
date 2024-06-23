@@ -1,15 +1,16 @@
 
-const folderMain = "Projet_final_DWWM";
+import { NAME_FOLDER_MAIN } from '@/config.js';
 
-export default async function useFetchForm(params) {
+export default async function useConfigFetchGetData(params) {
   try {
-    if(!params.form) return null;
+    //if(!params.form) return null;
     if(!params.method) return null;
-    if(!params.dataForm) return null;
+    if(!params.dataBody) return null;
     if(!params.token) params.token = '';
+    if(!params.request) return null;
 
     // path
-    const fullPath = `/api/${folderMain}/backend/?form=${params.form}`;  
+    const fullPath = `/api/${NAME_FOLDER_MAIN}/backend/?getData=${params.request}`;  
 
     // header data
     const headers = new Headers();
@@ -27,7 +28,7 @@ export default async function useFetchForm(params) {
 
     // data form accepted
     if(params.method !== 'GET' && params.method !== 'HEAD') {
-      fetchOptions.body = JSON.stringify(params.dataForm);
+      fetchOptions.body = JSON.stringify(params.dataBody);
     }
 
     // fetch

@@ -25,10 +25,10 @@
 
     import IconOptions from '../svgs/IconOptions.vue';
     import TransitionOpacity from '../transition/TransitionOpacity.vue';
-    import useClickOutside from '@/composables/useClickOutSide';
+    import useClickOutside from '@/composable/useClickOutSide';
     import EditPurchase from './EditPurchase.vue';
     import DeletePurchase from './DeletePurchase.vue';
-    import useEscapeKey from '@/composables/useEscapeKey';
+    import useEscapeKey from '@/composable/useEscapeKey';
 
     // variables, props ...
 

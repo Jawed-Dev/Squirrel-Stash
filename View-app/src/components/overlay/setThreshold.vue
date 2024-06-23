@@ -35,8 +35,8 @@
     import MainContainerSlot from '../containerSlot/MainContainerSlot.vue';
     import IconPreferences from '../svgs/IconPreferences.vue';
     import { svgConfig } from '@/functions/svg/svgConfig';
-    import useClickOutside from '@/composables/useClickOutSide';
-    import useEscapeKey from '@/composables/useEscapeKey';
+    import useClickOutside from '@/composable/useClickOutSide';
+    import useEscapeKey from '@/composable/useEscapeKey';
     import InputBase from '../input/InputBase.vue';
 
     import { ref } from 'vue';

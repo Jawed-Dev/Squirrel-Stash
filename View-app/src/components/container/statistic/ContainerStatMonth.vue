@@ -13,7 +13,7 @@
             </div>
     
             <div class="pl-[13px] border-t py-1 pr-2 flex items-center justify-end font-extralight text-[15px] border-gray-700 ">
-                <p class=" text-white"> {{ nameEconomy }}</p>
+                <p class=" text-white"> {{ nameStat }}</p>
             </div>
         </div>
     </div>
@@ -31,12 +31,10 @@
         const module = await getIconByName(props.svg.name);
         iconComponent.value = module.default;
     });
-
-
     const props = defineProps({
         svg : { default: {} },
-        nameEconomy : { default: '' },
-        amountValue : { default: ''  },
+        nameStat : { default: '' },
+        amountValue : { default: 0 },
         colorValue : { default: '' },
         width: {default: ''},
         isIconActive: {default: false}

@@ -4,7 +4,7 @@
 
 <script setup>
     import { ref } from 'vue';
-    import { useBoolean } from '../../composables/useBoolean';
+    import { useBoolean } from '@/composable/useBoolean';
 
     const props = defineProps(['extraClass']);
     
