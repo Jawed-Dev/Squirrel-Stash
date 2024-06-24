@@ -1,7 +1,7 @@
 <template>
         <input
             @input="onInput" 
-            :class="`py-[2px] flex items-center text-[16px] bg-transparent border-white border-b-[1px] ${width} pl-1 focus:outline-none ${props.extraClass}`"
+            :class="`py-[2px] flex items-center text-[16px] bg-transparent border-white ${width} pl-1 focus:outline-none ${props.extraClass}`"
             :value="modelValue"
             :type="type"
             :placeholder="placeholder"
@@ -20,7 +20,7 @@
         type: {default: 'text'},
         placeholder: {default: ''},
         width: {default:''},
-        id: {default:''}
+        id: {default:''},
     });
    
     // functions

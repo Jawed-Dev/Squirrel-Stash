@@ -1,5 +1,5 @@
 <template>
-    <div style="position: relative; height:312px; width:100%">
+    <div style="position: relative; height:32.4vh; width:100%">
         <canvas class="mt-5" ref="canvas"></canvas>
     </div>
 </template>

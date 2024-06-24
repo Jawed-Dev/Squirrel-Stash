@@ -8,7 +8,7 @@
             <h1 class="text-[25px] font-extralight text-white">Économie du mois</h1>
             <p class="font-normal py-3 mr-[190px] text-white">Bonjour Jawed, voici votre résumé du mois.</p> 
 
-            <ContainerStatMonth :isIconActive="true" :svg="svgConfig('target', 'bg-gradient-blue')" :colorValue="'text-white'" :amountValue="currentThreshold.amount +' €'" :nameStat="'Seuil mensuel'" :width="'w-[520px]'"/>
+            <ContainerStatMonth :isIconActive="true" :svg="svgConfig('target', 'bg-gradient-blue')" :colorValue="'text-white'" :amountValue="threshold.amount +' €'" :nameStat="'Seuil mensuel'" :width="'w-[520px]'"/>
 
             <section class="flex justify-between pt-[20px]">
                 <div class="flex gap-[20px] ">
@@ -33,6 +33,7 @@
                 
                 <ContainerStatMonth :svg="svgConfig('restaurant', 'bg-gradient-blue')" :colorValue="'text-white'" 
                 :amountValue="statisticDetails.biggestPurchase" :nameStat="'Plus gros achat / Catégorie'" :width="'w-[25%]'" />
+                
                 <ContainerStatMonth :svg="svgConfig('house', 'bg-gradient-vanusa')" :colorValue="'text-white'"  
                 :amountValue="statisticDetails.biggestRecurring" :nameStat="'Plus gros prélèvement / Catégorie'" :width="'w-[25%]'" />
             </section>
@@ -59,52 +60,34 @@
     import ContainerListPurchases from '@/components/container/statistic/ContainerListPurchases.vue';
     import AddPurchase from '@/components/overlay/AddPurchase.vue';
     import { monthNames, getAvailableYearNames } from '@/composable/useGetDate';
-    import { getBiggestTrsByMonth, getThresholdByMonth, getTotalTrsByMonth } from '@/composable/useBackendStatisticFunction';
-    import { storeThreshold, storeDateSelected, storeStatisticDetails } from '@/store/useStoreDashboard';
+    import { storeThreshold, storeDateSelected, storeStatisticDetails } from '@/storePinia/useStoreDashboard';
+    import { updateThresholdByMonth, updateTotalTrsByMonth, updateBalanceEcoByMonth, updateBiggestTrsByMonth } from '@/storePinia/useUpdateStoreByBackend';
 
-    // stores
-    const currentThreshold = storeThreshold();
+    // stores Pinia
+    const threshold = storeThreshold();
     const dateSelected = storeDateSelected();
     const statisticDetails = storeStatisticDetails();
 
     // variables, props, ...
     
     // life cycle / functions
-    watch( () => [dateSelected.year, dateSelected.month], async ([newYear, newMonth]) => {
-
-        const thresholdFetched = await getThresholdByMonth(newMonth, newYear);
-        const thresholdAmount = thresholdFetched?.data?.threshold_amount;
-        console.log(thresholdAmount);
-        currentThreshold.amount  = (thresholdAmount) ? thresholdAmount : 0;
-
-        const totalTransactionsFetched = await getTotalTrsByMonth(newMonth, newYear);
-        const totalTransactions = totalTransactionsFetched?.data?.total_transactions;
-        console.log(totalTransactions);
-        statisticDetails.totalTransactions = (totalTransactions) ? totalTransactions : 0;
-
-        const economyBalanceValue = currentThreshold.amount - statisticDetails.totalTransactions;
-        statisticDetails.economicBalance = (economyBalanceValue) ? economyBalanceValue : 0;
-
-        const biggestPurchaseFetched = await getBiggestTrsByMonth(newMonth, newYear, 'purchase');
-        const biggestPurchase = biggestPurchaseFetched?.data?.transaction_name;
-        statisticDetails.biggestPurchase = (biggestPurchase) ? biggestPurchase : 'Aucune donnée';
-      
-        const biggestRecurringFetched = await getBiggestTrsByMonth(newMonth, newYear, 'recurring');
-        const biggestRecurring = biggestRecurringFetched?.data?.transaction_name;
-        statisticDetails.biggestRecurring = (biggestRecurring) ? biggestRecurring : 'Aucune donnée';
-
+    watch( () => [dateSelected.month, dateSelected.year], async ([newMonth, newYear]) => {
+        updateThresholdByMonth(newMonth, newYear);
+        updateTotalTrsByMonth(newMonth, newYear);
+        updateBalanceEcoByMonth(newMonth, newYear);
+        updateBiggestTrsByMonth(newMonth, newYear, 'purchase');
+        updateBiggestTrsByMonth(newMonth, newYear, 'recurring');
     }, {  immediate:true, deep:true });
 
     // computed
     const filterTextBalanceEconomy = computed(() => {
-        if((statisticDetails.economicBalance === 0)) return '0 €';
-        else if((statisticDetails.economicBalance > 0)) return '+ '+ statisticDetails.economicBalance + ' €';
-        else return '- '+statisticDetails.economicBalance +' €';
+        if((statisticDetails.economyBalance === 0)) return '0 €';
+        else if((statisticDetails.economyBalance > 0)) return '+'+ statisticDetails.economyBalance + ' €';
+        else return statisticDetails.economyBalance +' €';
     });
 
-
     // functions
-    function svgConfig(nameSvg, color, width = '60px') {
+    function svgConfig(nameSvg, color, width = '3.5vw') {
         return {
             name: nameSvg,
             color: color,

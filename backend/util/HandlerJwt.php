@@ -11,9 +11,10 @@
         function getControllerMain();
         // Jeton / Session
         function createTokenJwt($userId);
-        function isValidDecodedJwt($decodedJwt);
+        function isValidTokenJwt($decodedJwt);
         function decodeJwt($tokenJwt);
-        function getBearerTokenJwt();
+        function getJwtFromHeader();
+        function prepareDataForModel();
     }
 
     class HandlerJwt implements I_HandlerJwt {
@@ -49,7 +50,24 @@
             $decodedJwt = JWT::decode($tokenJwt, new Key($key, 'HS256'));
             return $decodedJwt;
         }
-        public function isValidDecodedJwt($decodedJwt) {
+        public function prepareDataForModel() {
+            $TokenJwtFromHeader = $this->getJwtFromHeader();
+            $decodedJwt = $this->decodeJwt($TokenJwtFromHeader);
+
+            $isSessionActive = $this->getControllerMain()->getControllerUser()->isSessionActiveJwt($decodedJwt);
+            if(!$isSessionActive) return null;
+
+            $userId = $this->getControllerMain()->getControllerUser()->getUserIdFromJwt($decodedJwt);
+            
+            $dataJson = $this->getControllerMain()->getRequestBodyJson();
+            $data = json_decode($dataJson, true);
+            
+            return [
+                'bodyData' => $data,
+                'userId' => $userId
+            ];
+        }
+        public function isValidTokenJwt($decodedJwt) {
             $timeNow = time();
 
             if(!empty($decodedJwt)) {
@@ -75,7 +93,7 @@
             }
             return false;
         }
-        function getBearerTokenJwt() {
+        function getJwtFromHeader() {
             if (!isset($_SERVER['HTTP_AUTHORIZATION'])) return null;
             if (preg_match('/Bearer\s(\S+)/', $_SERVER['HTTP_AUTHORIZATION'], $matches)) return $matches[1];
             return null;

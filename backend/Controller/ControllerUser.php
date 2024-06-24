@@ -12,11 +12,11 @@
         // View 
         function getViewUser();
         // Auth
-        function isUserConnected($tokenJwt);
+        function isSessionActiveJwt($decodedJwt);
         function handleSuccessLogin();
-        function getUserIdByDecodedJwt($decodedJwt);
+        function getUserIdFromJwt($decodedJwt);
         // Prepare pages
-        function preparePageLogin();
+        function authorizePageLogin();
     }
 
     class ControllerUser implements I_ControllerUser {
@@ -47,31 +47,24 @@
         }
 
         // Auth
-        public function getUserIdByDecodedJwt($decodedJwt) {
+        public function getUserIdFromJwt($decodedJwt) {
             return $decodedJwt->userId;
         }
-        public function isUserConnected($tokenJwt) {
-            if($tokenJwt === null) return false;
-            $decodedJwt = $this->getControllerMain()->getHandlerJwt()->decodeJwt($tokenJwt);
+        public function isSessionActiveJwt($decodedJwt) {
             if(!$decodedJwt) return false;
-
-            $isValidDecodedJwt = $this->getControllerMain()->getHandlerJwt()->isValidDecodedJwt($decodedJwt);
+            $isValidDecodedJwt = $this->getControllerMain()->getHandlerJwt()->isValidTokenJwt($decodedJwt);
             if(!$isValidDecodedJwt) return false;
-
-            $userId = $this->getUserIdByDecodedJwt($decodedJwt);
+            $userId = $this->getUserIdFromJwt($decodedJwt);
             $db = $this->getControllerMain()->getDatabase();
-            
             $isUserExistById = $this->getModelUser()->isUserExistById($db, $userId);
             return $isUserExistById ;
         }
+
         public function handleSuccessLogin() {
 
             $dataJson = $this->getControllerMain()->getRequestBodyJson();
             $data = json_decode($dataJson, true);
             if(empty($data)) return $this->getControllerMain()->sendJsonResponse(['tokenJwt' => null]);
-            //var_dump($data);
-            //$userConnected = $this->isUserConnected($data->token);
-            //if($userConnected) return $this->getControllerMain()->sendJsonResponse(['connected' => true]);
             
             $db = $this->getControllerMain()->getDatabase();
             $userId = $this->getModelUser()->getUserIdByLogin($db, $data);
@@ -83,11 +76,12 @@
         }
 
         // Prepare pages
-        public function preparePageLogin() {
-            $tokenJwt = $this->getControllerMain()->getHandlerJwt()->getBearerTokenJwt();
-            $isUserConnected = $this->isUserConnected($tokenJwt);
+        public function authorizePageLogin() {
+            $tokenJwt = $this->getControllerMain()->getHandlerJwt()->getJwtFromHeader();
+            $decodedJwt = $this->getControllerMain()->getHandlerJwt()->decodeJwt($tokenJwt);
+            $isSessionActive = $this->isSessionActiveJwt($decodedJwt);
             $dataPage = [
-                'isUserConnected' => $isUserConnected,
+                'isSessionActive' => $isSessionActive,
             ]; 
             $this->getViewUser()->renderPageLogin($dataPage);
         }

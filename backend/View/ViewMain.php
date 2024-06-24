@@ -9,7 +9,7 @@
         
         function renderPageIndexJson($dataPage) {
             echo json_encode([
-                'isUserConnected' => $dataPage['isUserConnected'],
+                'isSessionActive' => $dataPage['isSessionActive'],
             ]);
         }
     }

@@ -12,14 +12,17 @@
         // View 
         function getViewStatistic();
         // Statistic
-        function fetchTrsMonthByDay();
-        function fetchTransactionsDay($userId);
-        function fetchNLastTrsByMonth();
-        function fetchThresholdByMonth();
-        function fetchTotalTrsByMonth();
-        function fetchBiggestTrsByMonth();
+            // get
+            function fetchTrsMonthByDay();
+            function fetchNLastTrsByMonth();
+            function fetchThresholdByMonth();
+            function fetchTotalTrsByMonth();
+            function fetchBiggestTrsByMonth();
+            // set
+            function fetchSaveThreshold();
+            function fetchInsertTransaction();
         // Prepare page
-        function preparePageDashboard();
+        function authorizePageDashboard();
     }
 
     
@@ -38,6 +41,9 @@
         }
 
         // Model 
+        /**
+        * @return ModelStatistic
+        */
         public function getModelStatistic() {
             if (!$this->ModelStatistic) $this->ModelStatistic = new ModelStatistic();
             return $this->ModelStatistic;
@@ -50,107 +56,76 @@
         }
 
         // Statistic
-        public function fetchTrsMonthByDay() {
-            $codedTokenJwt = $this->getControllerMain()->getHandlerJwt()->getBearerTokenJwt();
-            $tokenJwt = $this->getControllerMain()->getHandlerJwt()->decodeJwt($codedTokenJwt);
 
-            $dataJson = $this->getControllerMain()->getRequestBodyJson();
-            $data = json_decode($dataJson, true);
-            
+        // Set
+        public function fetchSaveThreshold() {
             $db = $this->getControllerMain()->getDatabase();
-            $userId = $this->getControllerMain()->getControllerUser()->getUserIdByDecodedJwt($tokenJwt);
+            $dataRequest = $this->getControllerMain()->getHandlerJwt()->prepareDataForModel();
+            $isTresholdExist = $this->getModelStatistic()->isThresholdExistByMonth($db, $dataRequest);
 
-            $dataModel = [
-                'bodyData' => $data,
-                'userId' => $userId
-            ];
-            $listTrsMonthByDay = $this->getModelStatistic()->getTrsMonthByDay($db, $dataModel);
+            $successReq = false;
+            if($isTresholdExist) {
+                $successReq = $this->getModelStatistic()->updateThresholdByMonth($db, $dataRequest);
+            }
+            else {
+                $successReq = $this->getModelStatistic()->insertThresholdByMonth($db, $dataRequest);
+            }
+            //var_dump('tresholdExist',$isTresholdExist);
+            $this->getControllerMain()->sendJsonResponse(['isSuccessRequest' => $successReq]);
+        }
+
+        public function fetchInsertTransaction() {
+            $db = $this->getControllerMain()->getDatabase();
+            $dataRequest = $this->getControllerMain()->getHandlerJwt()->prepareDataForModel();
+
+            $successReq = $this->getModelStatistic()->insertTransaction($db, $dataRequest);
+            $this->getControllerMain()->sendJsonResponse(['isSuccessRequest' => $successReq]);
+        }
+
+        // get
+        public function fetchTrsMonthByDay() {
+            $db = $this->getControllerMain()->getDatabase();
+            $dataRequest = $this->getControllerMain()->getHandlerJwt()->prepareDataForModel();
+            $listTrsMonthByDay = $this->getModelStatistic()->getTrsMonthByDay($db, $dataRequest);
             $this->getControllerMain()->sendJsonResponse(['data' => $listTrsMonthByDay]);
         }
 
         public function fetchThresholdByMonth() {
-            $codedTokenJwt = $this->getControllerMain()->getHandlerJwt()->getBearerTokenJwt();
-            $tokenJwt = $this->getControllerMain()->getHandlerJwt()->decodeJwt($codedTokenJwt);
-            $dataJson = $this->getControllerMain()->getRequestBodyJson();
-            $data = json_decode($dataJson, true);
             $db = $this->getControllerMain()->getDatabase();
-            $userId = $this->getControllerMain()->getControllerUser()->getUserIdByDecodedJwt($tokenJwt);
-            $dataModel = [
-                'bodyData' => $data,
-                'userId' => $userId
-            ];
-            
-            $amountThresholdByMonth = $this->getModelStatistic()->getThresholdByMonth($db, $dataModel);
+            $dataRequest = $this->getControllerMain()->getHandlerJwt()->prepareDataForModel();
+            $amountThresholdByMonth = $this->getModelStatistic()->getThresholdByMonth($db, $dataRequest);
             //var_dump($db);
             $this->getControllerMain()->sendJsonResponse(['data' => $amountThresholdByMonth]);
         }
 
         public function fetchNLastTrsByMonth() {
-            $codedTokenJwt = $this->getControllerMain()->getHandlerJwt()->getBearerTokenJwt();
-            $tokenJwt = $this->getControllerMain()->getHandlerJwt()->decodeJwt($codedTokenJwt);
-
-            $dataJson = $this->getControllerMain()->getRequestBodyJson();
-            $data = json_decode($dataJson, true);
-
             $db = $this->getControllerMain()->getDatabase();
-            $userId = $this->getControllerMain()->getControllerUser()->getUserIdByDecodedJwt($tokenJwt);
-            $dataModel = [
-                'bodyData' => $data,
-                'userId' => $userId
-            ];
-
-            $listLastTrsByMonth = $this->getModelStatistic()->getNLastTrsByMonth($db, $dataModel);
+            $dataRequest = $this->getControllerMain()->getHandlerJwt()->prepareDataForModel();
+            $listLastTrsByMonth = $this->getModelStatistic()->getNLastTrsByMonth($db, $dataRequest);
             $this->getControllerMain()->sendJsonResponse(['data' => $listLastTrsByMonth]);
         }
 
         public function fetchTotalTrsByMonth() {
-            $codedTokenJwt = $this->getControllerMain()->getHandlerJwt()->getBearerTokenJwt();
-            $tokenJwt = $this->getControllerMain()->getHandlerJwt()->decodeJwt($codedTokenJwt);
-
-            $dataJson = $this->getControllerMain()->getRequestBodyJson();
-            $data = json_decode($dataJson, true);
-
             $db = $this->getControllerMain()->getDatabase();
-            $userId = $this->getControllerMain()->getControllerUser()->getUserIdByDecodedJwt($tokenJwt);
-            $dataModel = [
-                'bodyData' => $data,
-                'userId' => $userId
-            ];
-
-            $totalTransactions = $this->getModelStatistic()->getTotalTrsByMonth($db, $dataModel);
+            $dataRequest = $this->getControllerMain()->getHandlerJwt()->prepareDataForModel();
+            $totalTransactions = $this->getModelStatistic()->getTotalTrsByMonth($db, $dataRequest);
             $this->getControllerMain()->sendJsonResponse(['data' => $totalTransactions]);
         }
 
         public function fetchBiggestTrsByMonth() {
-            $codedTokenJwt = $this->getControllerMain()->getHandlerJwt()->getBearerTokenJwt();
-            $tokenJwt = $this->getControllerMain()->getHandlerJwt()->decodeJwt($codedTokenJwt);
-
-            $dataJson = $this->getControllerMain()->getRequestBodyJson();
-            $data = json_decode($dataJson, true);
-
             $db = $this->getControllerMain()->getDatabase();
-            $userId = $this->getControllerMain()->getControllerUser()->getUserIdByDecodedJwt($tokenJwt);
-            $dataModel = [
-                'bodyData' => $data,
-                'userId' => $userId
-            ];
-
-            $totalTransactions = $this->getModelStatistic()->getBiggestTrsByMonth($db, $dataModel);
+            $dataRequest = $this->getControllerMain()->getHandlerJwt()->prepareDataForModel();
+            $totalTransactions = $this->getModelStatistic()->getBiggestTrsByMonth($db, $dataRequest);
             $this->getControllerMain()->sendJsonResponse(['data' => $totalTransactions]);
         }
 
-        public function fetchTransactionsDay($userId) {
-            $db = $this->getControllerMain()->getDatabase();
-        }
-
-        
-
         // Prepare Pages
-        public function preparePageDashboard() {
-            $tokenJwt = $this->getControllerMain()->getHandlerJwt()->getBearerTokenJwt();
-            $isUserConnected = $this->getControllerMain()->getControllerUser()->isUserConnected($tokenJwt);
+        public function authorizePageDashboard() {
+            $tokenJwt = $this->getControllerMain()->getHandlerJwt()->getJwtFromHeader();
+            $decodedJwt = $this->getControllerMain()->getHandlerJwt()->decodeJwt($tokenJwt);
+            $isSessionActive = $this->getControllerMain()->getControllerUser()->isSessionActiveJwt($decodedJwt);
             $dataPage = [
-                'isUserConnected' => $isUserConnected,
+                'isSessionActive' => $isSessionActive,
             ];  
             $this->getViewStatistic()->renderPageDashboard($dataPage);
         }

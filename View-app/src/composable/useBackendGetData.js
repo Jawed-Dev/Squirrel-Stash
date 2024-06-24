@@ -1,5 +1,21 @@
 import useConfigFetchGetData  from "@/composable/useConfigFetchGetData";
-import { getLStorageAuthToken } from "@/composable/useLocalStorage";
+import { getLStorageAuthToken, setLStorageAuthToken } from "@/composable/useLocalStorage";
+
+export async function getListTrsMonthByDay(month, year, category) {
+    const localToken = getLStorageAuthToken();
+    const body = {
+        selectedMonth: month,
+        selectedYear: year,
+        category: category
+    };
+    const listTransactionsFetched = await useConfigFetchGetData ({
+        request: 'getlistTrsMonthByDay',
+        method: 'POST',
+        dataBody: body,
+        token: localToken
+    });
+    return listTransactionsFetched;
+}
 
 export async function getThresholdByMonth(month, year) {
     const localToken = getLStorageAuthToken();
@@ -16,16 +32,31 @@ export async function getThresholdByMonth(month, year) {
     return thresholdAmount;
 }
 
-export async function getLastNPurchases(month, year) {
+export async function getHandleLogin(email, pass) {
+    const dataLogin = {
+        'email': email,
+        'password': pass
+    }
+    const dataHandleLogin = await useConfigFetchGetData ({
+        request: 'getHandleLogin', 
+        method: 'POST', 
+        dataBody: dataLogin, 
+    });
+    const isSuccessLogin = dataHandleLogin?.tokenJwt;
+    if(isSuccessLogin) {
+        setLStorageAuthToken(dataHandleLogin.tokenJwt);
+    }
+    return isSuccessLogin;
+}
+
+export async function getBalanceEcoByMonth(month, year) {
     const localToken = getLStorageAuthToken();
     const data = {
         'selectedMonth': month,
         'selectedYear': year,
-        'category': 'purchase',
-        'limitValue': 5
     }
     const lastPurchases = await useConfigFetchGetData ({
-        request: 'getLastNTransactions', 
+        request: 'getBalanceEcoByMonth', 
         method: 'POST', 
         dataBody: data, 
         token: localToken
@@ -34,22 +65,21 @@ export async function getLastNPurchases(month, year) {
     return lastPurchases;
 }
 
-export async function getLastNRecurrings(month, year) {
+export async function getLastNTransactions(month, year, category) {
     const localToken = getLStorageAuthToken();
     const data = {
         'selectedMonth': month,
         'selectedYear': year,
-        'category': 'recurring',
+        'category': category,
         'limitValue': 5
     }
-    const lastRecurrings = await useConfigFetchGetData ({
+    const lastTransactions = await useConfigFetchGetData ({
         request: 'getLastNTransactions', 
         method: 'POST', 
         dataBody: data, 
         token: localToken
     });
-
-    return lastRecurrings;
+    return lastTransactions;
 }
 
 export async function getTotalTrsByMonth(month, year) {

@@ -24,7 +24,7 @@
                 >
                     <div>
                         <!-- inputs  -->
-                        <ContainerInputs v-model:inputPriceVal="inputPriceVal" v-model:inputNoteVal="inputNoteVal" />
+                        <ContainerInputs v-model:inputPriceVal="inputPriceVal" v-model:inputNoteVal="inputNoteVal" v-model:inputDateVal="inputDateVal" />
                         <!-- liste des catégories -->
                         <ContainerSelectCategories v-model:currentCategory="currentCategory" 
                         v-model:typeTransaction="typeTransaction" :listCategories="listCategories" :listRecurings="listRecurings" />              
@@ -40,15 +40,21 @@
     // import
     import { ref, watch } from 'vue';
     import IconAddPurchase from '@/components/svgs/IconAddPurchase.vue';
-    import TransitionOpacity from '../transition/TransitionOpacity.vue';
+    import TransitionOpacity from '@/components/transition/TransitionOpacity.vue';
     import { svgConfig } from '@/functions/svg/svgConfig';
     import useClickOutside from '@/composable/useClickOutSide';
     import useEscapeKey from '@/composable/useEscapeKey';
 
     import ContainerSelectCategories from '../container/overlay/ContainerSelectCategories.vue';
-    import ContainerInputs from '../container/overlay/ContainerInputs.vue';
-    import MainContainerSlot from '../containerSlot/MainContainerSlot.vue';
-    import useConfigFetchGetData  from '@/composable/useConfigFetchGetData';
+    import ContainerInputs from '@/components/container/overlay/ContainerInputs.vue';
+    import MainContainerSlot from '@/components/containerSlot/MainContainerSlot.vue';
+    import { storeDateSelected } from '@/storePinia/useStoreDashboard';
+    import { addTransaction } from '@/composable/useBackendSetData';
+import { updateBalanceEcoByMonth, updateBiggestTrsByMonth, updateLastNTrsByMonth, updateListTrsMonthByDay, updateTotalTrsByMonth } from '@/storePinia/useUpdateStoreByBackend';
+
+
+    // stores Pinia
+    const dateSelected = storeDateSelected();
 
     // variables, props...
     const props = defineProps({
@@ -63,6 +69,7 @@
     // input ref
     const inputNoteVal = ref('');
     const inputPriceVal = ref('');
+    const inputDateVal = ref('');
 
     // icons
     const svgSmallWhite = svgConfig.mediumSmaller;
@@ -91,7 +98,14 @@
     ]
 
      
-    // functions
+    // life cycle / functions
+
+    watch( () => [dateSelected.month, dateSelected.year], async ([newMonth, newYear]) => {
+        // reset Date for format input
+        inputDateVal.value = `${newYear}-${newMonth.toString().padStart(2, '0')}-01`;
+    }, {  immediate:true, deep:true });
+
+
     useEscapeKey(isMenuActive, () => {
         isMenuActive.value = false;
     });
@@ -106,24 +120,58 @@
         currentCategory.value = 0;
     });
 
-    function toggleMenu(request) {
+    function getCurrentTypeTrsName() {
+        return (!typeTransaction.value) ? 'purchase' : 'recurring';
+    }
+
+    function resetInputs() {
+        inputNoteVal.value = '';
+        inputPriceVal.value = '';
+        currentCategory.value = 0;
+        currentCategory.value = 0;
+        inputDateVal.value = `${dateSelected.year}-${dateSelected.month.toString().padStart(2, '0')}-01`;
+    }
+
+
+    function getCurrentCategorySelect() {
+        const listTransaction = (!typeTransaction.value) ? listCategories : listRecurings;
+        const currentIndex = currentCategory.value;
+        console.log(listTransaction);
+        const nameCategory = listTransaction[currentIndex].text;
+        return nameCategory;
+    }
+
+    async function toggleMenu(request) {
         switch(request) {
             case 'openNClose' : {
-                inputNoteVal.value = '';
-                inputPriceVal.value = '';
+                resetInputs();
                 isMenuActive.value = !isMenuActive.value;
-                currentCategory.value = 0;
                 break;
             }
-            case 'accept' : {
-                alert('valider');
-                useConfigFetchGetData ({
-                    form: 'addPurchase',
-                    method: 'POST',
-                    token: localStorage.getItem('authToken'),
+            case 'valid' : {
+                console.log(getCurrentCategorySelect());
+                const dataRequest = await addTransaction({
+                    amount: inputPriceVal.value,
+                    trsName: getCurrentCategorySelect(),
+                    category: getCurrentTypeTrsName(),
+                    date: inputDateVal.value,
+                    note: inputNoteVal.value
                 });
+                console.log(dataRequest);
+                const isSuccessRequest = dataRequest?.isSuccessRequest;
+                if(isSuccessRequest) {
+                    const nameTypeTrs = getCurrentTypeTrsName();
+                    const month = dateSelected.month;
+                    const year = dateSelected.year;
 
-                //alert(`${inputPriceVal.value}`);
+                    updateBiggestTrsByMonth(month, year, nameTypeTrs);
+                    updateListTrsMonthByDay(month, year, nameTypeTrs);
+                    updateBalanceEcoByMonth(month, year);
+                    updateTotalTrsByMonth(month, year);
+                    updateLastNTrsByMonth(month, year, nameTypeTrs);
+                }
+                resetInputs();
+                isMenuActive.value = false;
                 break;
             }
             case 'options' : {
@@ -131,6 +179,7 @@
                 break;
             }
             case 'cancel' : {
+                resetInputs();
                 isMenuActive.value = false;
                 break;
             }

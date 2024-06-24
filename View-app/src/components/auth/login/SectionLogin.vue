@@ -3,19 +3,19 @@
         <h1 class="text-black text-[25px]">Bienvenue !</h1>
         <p class="text-custom-gray  text-[14px]">dazaazdadaazaz</p>
 
-        <form @submit.prevent="handleSubmit">
+        <form @submit.prevent="handleSubmit()">
             <InputBase v-model="inputEmail" extraClass="w-full py-[20px] text-white font-light" />
             <InputBase v-model="inputPass" extraClass="w-full py-[20px] text-white font-light"/>
      
             <div class="flex pt-[6px] px-[10px] justify-between">
                 <div class="flex">
-                    <input-checkbox :extraClass="''" ref="inputCheckBox" />
+                    <inputCheckbox :extraClass="''" ref="inputCheckBox" />
                     <a class="txt-main-blue font-medium text-[12px]" href="">Se rappeler de moi</a>
                 </div>
                 <a  class="text-main-blue font-medium text-[12px]" href="">Mot de passe oublié ?</a>
             </div>
                 
-            <button-component :extraClass="'w-[389px] py-[6.5px]'" :titleButton="'Se connecter'" />
+            <ButtonComponent :extraClass="'w-[389px] py-[6.5px]'" :titleButton="'Se connecter'" />
             
             <div class="flex pt-[28px] gap-9 justify-center">
                 <p class=" font-medium">Vous n'avez pas de compte ?</p> 
@@ -33,8 +33,7 @@
     import InputBase from '@/components/input/InputBase.vue';
     import ButtonComponent from '@/components/button/ButtonBasic.vue';
     import inputCheckbox from '@/components/input/InputCheckbox.vue';
-    import useConfigFetchGetData  from '@/composable/useConfigFetchGetData';
-    import { setLStorageAuthToken } from "@/composable/useLocalStorage";
+    import { getHandleLogin } from '@/composable/useBackendGetData';
 
     const router = useRouter();
     const inputEmail = ref(null);
@@ -42,33 +41,10 @@
     const inputCheckBox = ref(null);
 
     async function handleSubmit() {
-        // check if user is connected ?
-        //const localToken = localStorage.getItem('authToken');
-        const dataLogin = {
-            'email': inputEmail.value,
-            'password': inputPass.value
-        }
-        const dataHandleLogin = await useConfigFetchGetData ({
-            request: 'formLogin', 
-            method: 'POST', 
-            dataBody: dataLogin, 
-        });
-
-        //const isAlreadyConnected = (dataHandleLogin.connected) ? true : false;
-        const isSuccessLogin = dataHandleLogin?.tokenJwt;
-
-        //console.log(isSuccessLogin);
+        const isSuccessLogin = await getHandleLogin(inputEmail.value, inputPass.value);
         inputEmail.value = '';
         inputPass.value = '';
-
-        // if(isAlreadyConnected) {
-        //     router.push('/tableau-de-bord');
-        //     return;
-        // }
-        if(isSuccessLogin) {
-            setLStorageAuthToken(dataHandleLogin.tokenJwt);
-            router.push('/tableau-de-bord');
-        }
+        if(isSuccessLogin) router.push('/tableau-de-bord');
     }
 </script>
 

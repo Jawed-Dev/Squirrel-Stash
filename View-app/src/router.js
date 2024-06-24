@@ -28,18 +28,20 @@ router.beforeEach(async (to, from, next) => {
     const localToken = getLStorageAuthToken();
 
     const dataPage = await useConfigFetchGetPage(`pageIndex`, localToken);
-    const isUserConnected = dataPage?.isUserConnected;
+    console.log(dataPage);
+    const isSessionActive = dataPage?.isSessionActive;
+    
     switch(page) {
       case 'index' : {
-        (isUserConnected) ? next('/tableau-de-bord') : next('/connexion');
+        (isSessionActive) ? next('/tableau-de-bord') : next('/connexion');
         break;
       }
       case 'pageLogin' : {
-        (isUserConnected) ? next('/tableau-de-bord') : next();
+        (isSessionActive) ? next('/tableau-de-bord') : next();
         break;
       }
       case 'pageDashboard' : {
-        (isUserConnected) ? next() : next('/connexion');
+        (isSessionActive) ? next() : next('/connexion');
         break;
       }
       default : {

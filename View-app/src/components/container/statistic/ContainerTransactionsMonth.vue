@@ -13,11 +13,9 @@
     import { ref, watch, onMounted } from 'vue';
     import ToggleButton from '@/components/button/ToggleButton.vue';
     import useGraphBarLoad from '@/composable/useGraphBarLoad.vue';
-    import useConfigFetchGetData from '@/composable/useConfigFetchGetData';
-    import { getLStorageAuthToken } from "@/composable/useLocalStorage";
-    import { storeTrsMonthByDay } from '@/store/useStoreDashboard';
-    import { storeDateSelected } from '@/store/useStoreDashboard';
-
+    import { storeTrsMonthByDay, storeDateSelected } from '@/storePinia/useStoreDashboard';
+    import { updateListTrsMonthByDay } from '@/storePinia/useUpdateStoreByBackend';
+    
     // stores
     const transactionsMonthByDay = storeTrsMonthByDay();
     const dateSelected = storeDateSelected();
@@ -36,48 +34,11 @@
         borderColor: '#ec250d'
     }
     // functions 
-    onMounted( async () => {
-        
-    });
 
     // toggle into select component (year&month)
-    watch( () => [dateSelected.year, dateSelected.month], async ([newYear, newMonth]) => {
-        const localToken = getLStorageAuthToken();
-        //alert(newYear, newMonth);
-        const body = {
-            selectedMonth: newMonth,
-            selectedYear: newYear
-        };
-        console.log(newYear, newMonth);
-        const listTransactionsFetched = await useConfigFetchGetData ({
-            request: 'getlistTrsByMonth',
-            method: 'POST',
-            dataBody: body,
-            token: localToken
-        });
-
-        // was a solution for dont share references of listTransactions, spread operators wasnt solved the problem
-        const listTransactions = JSON.parse(JSON.stringify(listTransactionsFetched?.data));
-
-        const localListPurchases = JSON.parse(JSON.stringify(listTransactions));
-        const localListRecurrings = JSON.parse(JSON.stringify(listTransactions));
-        listTransactions.forEach((transaction,index) => {
-            if(transaction.transaction_category !== 'purchase') {
-                localListPurchases[index].total_amount = 0;
-                localListPurchases[index].amount = 0;
-                localListPurchases[index].transaction_id = null;
-                localListPurchases[index].transaction_user_id= null;
-            }
-            if(transaction.transaction_category !== 'recurring') {
-                localListRecurrings[index].total_amount = 0;
-                localListRecurrings[index].amount = 0;
-                localListRecurrings[index].transaction_id = null;
-                localListRecurrings[index].transaction_user_id= null;
-            }
-        });
-        transactionsMonthByDay.listPurchases = localListPurchases;
-        transactionsMonthByDay.listRecurrings = localListRecurrings;
-
+    watch( () => [dateSelected.month, dateSelected.year], async ([newMonth, newYear]) => {
+        updateListTrsMonthByDay(newMonth, newYear, 'purchase');
+        updateListTrsMonthByDay(newMonth, newYear, 'recurring');
     }, {  immediate:true, deep:true });
 
     // detect toggle button transaction

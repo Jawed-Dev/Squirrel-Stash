@@ -2,6 +2,7 @@ import { defineStore } from 'pinia';
 import { ref } from 'vue';
 import { getCurrentMonthName, getCurrentYear, getMonthNumber } from '@/composable/useGetDate';
 
+
 // Month & Year selected
 export const storeDateSelected = defineStore('dateSelected', () => {
   const currentMonthName = getCurrentMonthName();
@@ -16,12 +17,12 @@ export const storeDateSelected = defineStore('dateSelected', () => {
 // statsitic details
 export const storeStatisticDetails = defineStore('statisticDetails' , () => {
     const totalTransactions = ref(0);
-    const economicBalance = ref(0);
+    const economyBalance = ref(0);
     const biggestPurchase = ref('');
     const biggestRecurring = ref('');
     return {
       totalTransactions,
-      economicBalance,
+      economyBalance,
       biggestPurchase,
       biggestRecurring
     };

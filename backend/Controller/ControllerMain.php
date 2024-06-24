@@ -27,7 +27,7 @@
         // Handler Error
         function getHandlerError();
         // Prepare pages
-        function preparePageIndex();
+        function authorizePageIndex();
     }
 
     class ControllerMain implements I_ControllerMain {
@@ -112,11 +112,13 @@
         }
 
         // Prepare Pages
-        public function preparePageIndex() {
-            $tokenJwt = $this->getHandlerJwt()->getBearerTokenJwt();
-            $isUserConnected = $this->getControllerUser()->isUserConnected($tokenJwt);
+        public function authorizePageIndex() {
+            $tokenJwt = $this->getHandlerJwt()->getJwtFromHeader();
+            if(!$tokenJwt) $tokenJwt = '';
+            $decodedJwt = $this->getHandlerJwt()->decodeJwt($tokenJwt);
+            $isSessionActive = $this->getControllerUser()->isSessionActiveJwt($decodedJwt);
             $dataPage = [
-                'isUserConnected' => $isUserConnected,
+                'isSessionActive' => $isSessionActive,
             ];  
             $this->getViewMain()->renderPageIndexJson($dataPage);
         }

@@ -40,7 +40,7 @@ input {
 
 /* Pour gérer la couleur de l'icone de l'agendra des input date */
 
-input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+input[type="date"]::-webkit-calendar-picker-indicator {
     filter: invert(1) grayscale(100%) brightness(200%);
 }
 

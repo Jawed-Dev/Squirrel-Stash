@@ -20,15 +20,15 @@
             if(!empty($_GET['page'])) {
                 switch($_GET['page']) {
                     case 'pageIndex': {
-                        $ControllerMain->preparePageIndex();
+                        $ControllerMain->authorizePageIndex();
                         break;
                     }
                     case 'pageLogin': {
-                        $ControllerMain->getControllerUser()->preparePageLogin();
+                        $ControllerMain->getControllerUser()->authorizePageLogin();
                         break;
                     }
                     case 'pageDashboard': {
-                        $ControllerMain->getControllerStatistic()->preparePageDashboard();
+                        $ControllerMain->getControllerStatistic()->authorizePageDashboard();
                         break;
                     }
                     default: {
@@ -44,12 +44,12 @@
             if(!empty($_GET['getData'])) {
                 switch($_GET['getData']) {
                     // auth
-                    case 'formLogin': {
+                    case 'getHandleLogin': {
                         $ControllerMain->getControllerUser()->handleSuccessLogin();
                         break;
                     }
                     // statistic
-                    case 'getlistTrsByMonth': {
+                    case 'getlistTrsMonthByDay': {
                         $ControllerMain->getControllerStatistic()->fetchTrsMonthByDay();
                         break;
                     }
@@ -79,12 +79,14 @@
                 switch($_GET['setData']) {
                     // auth
                     // statistic
-                    case 'getlistTrsByMonth': {
-                        $ControllerMain->getControllerStatistic()->fetchThresholdByMonth();
+                    case 'saveThreshold': {
+                        //var_dump('test');
+                        $ControllerMain->getControllerStatistic()->fetchSaveThreshold();
                         break;
                     }
-                    case 'amountThresholdByMonth' : {
-                        
+                    case 'addTransaction' : {
+                        $ControllerMain->getControllerStatistic()->fetchInsertTransaction();
+                        break;
                     }
                 }
             }
