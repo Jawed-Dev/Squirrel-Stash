@@ -1,14 +1,5 @@
 <template>
     <div>
-        <div class="rounded-[3px] overflow-hidden shadow-black shadow-custom-main ">
-            <div class="bg-main-gradient w-[230px] flex justify-around items-center p-1 gradient-border">
-                <p class="text-white px-3 flex ">Ajouter un achat</p>
-                <IconAddPurchase @click="toggleMenu('openNClose')"
-                class="p-1 bg-gradient-blue rounded-md right-[100px] top-[50vh] cursor-pointer z-10 shadow-black shadow-custom-main trigger-add-purchase" 
-                :svg="svgSmallWhite"/>
-            </div>
-        </div>
-
         <TransitionOpacity :durationIn="'duration-500'" :durationOut="'duration-500'">
             <div v-show="isMenuActive" class="fixed inset-0 bg-black bg-opacity-80 z-10"></div>
         </TransitionOpacity>
@@ -38,14 +29,13 @@
 
 <script setup>
     // import
-    import { ref, watch } from 'vue';
-    import IconAddPurchase from '@/components/svgs/IconAddPurchase.vue';
+    import { ref, watch, onMounted } from 'vue';
     import TransitionOpacity from '@/components/transition/TransitionOpacity.vue';
     import { svgConfig } from '@/functions/svg/svgConfig';
     import useClickOutside from '@/composable/useClickOutSide';
     import useEscapeKey from '@/composable/useEscapeKey';
 
-    import ContainerSelectCategories from '../container/overlay/ContainerSelectCategories.vue';
+    import ContainerSelectCategories from '@/components/container/overlay/ContainerSelectCategories.vue';
     import ContainerInputs from '@/components/container/overlay/ContainerInputs.vue';
     import MainContainerSlot from '@/components/containerSlot/MainContainerSlot.vue';
     import { storeDateSelected } from '@/storePinia/useStoreDashboard';
@@ -59,12 +49,13 @@
 
     // variables, props...
     const props = defineProps({
-        width: { default:'' }
+        width: { default:'' },
+        infoTransaction: {default: []}
     });
 
     // menu
-    const isMenuActive = ref(false); 
-    const typeTransaction = ref (false); // menu state if purchase or reccuring
+    const isMenuActive = defineModel('menuActive');
+    const typeTransaction = ref(false); 
     const currentCategory = ref(0);
 
     // input ref
@@ -100,6 +91,16 @@
 
      
     // life cycle / functions
+
+    onMounted(() => {
+        inputPriceVal.value = props.infoTransaction.transaction_amount;
+        inputNoteVal.value = props.infoTransaction.transaction_note;
+        inputDateVal.value = props.infoTransaction.transaction_date;
+        typeTransaction.value = (props.infoTransaction.transaction_category === 'purchase') ? false : true;
+        const index = (typeTransaction.value === false) ? listCategories.findIndex(item => item.nameIcon === props.infoTransaction.transaction_name) : listRecurings.findIndex(item => item.nameIcon === props.infoTransaction.transaction_name);
+        currentCategory.value = index;
+    });
+
     watch( () => [dateSelected.month, dateSelected.year], async ([newMonth, newYear]) => {
         inputDateVal.value = formatDateInput();
     }, {  immediate:true, deep:true });

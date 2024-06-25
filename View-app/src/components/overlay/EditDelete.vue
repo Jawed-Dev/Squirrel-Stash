@@ -13,8 +13,9 @@
             </TransitionOpacity>
     </div>
 
-    <EditPurchase width="w-[30%]" v-model:menuActive="isMenuEditActive" />
-    <DeletePurchase width="w-[30%]" v-model:menuActive="isMenuDeleteActive" /> 
+    <editTransaction width="w-[30%]" :infoTransaction="infoTransaction" v-model:menuActive="isMenuEditActive"/>
+    <!-- <EditPurchase width="w-[30%]" :infoTransaction="infoTransaction" v-model:currentTrsIndexSelect="currentTrsIndexSelect" v-model:menuActive="isMenuEditActive" :transactionType="transactionType"/> -->
+    <DeletePurchase width="w-[30%]" :infoTransaction="infoTransaction" v-model:currentTrsIndexSelect="currentTrsIndexSelect" v-model:menuActive="isMenuDeleteActive" :transactionType="transactionType"/> 
 </template>
 
 
@@ -23,17 +24,16 @@
     // import
     import { ref, watch } from 'vue';
 
-    import IconOptions from '../svgs/IconOptions.vue';
-    import TransitionOpacity from '../transition/TransitionOpacity.vue';
+    import IconOptions from '@/components/svgs/IconOptions.vue';
+    import TransitionOpacity from '@/components/transition/TransitionOpacity.vue';
     import useClickOutside from '@/composable/useClickOutSide';
-    import EditPurchase from './EditPurchase.vue';
-    import DeletePurchase from './DeletePurchase.vue';
+    import EditPurchase from '@/components/overlay/EditPurchase.vue';
+    import DeletePurchase from '@/components/overlay/DeletePurchase.vue';
     import useEscapeKey from '@/composable/useEscapeKey';
+    import editTransaction from '@/components/overlay/EditTransaction.vue';
 
     // variables, props ...
-
     const elementTransition = ref(null);
-
     const isMenuEditActive = ref(false);
     const isMenuDeleteActive = ref(false);
 
@@ -46,43 +46,44 @@
     // functions
     const props = defineProps({
         indexMenu: { default: 0 },
+        transactionType: { default: ''},
+        infoTransaction: { default: [] }
     });
 
-    const currentMenu = defineModel('currentMenu');
+    const currentTrsIndexSelect = defineModel('currentTrsIndexSelect');
     const isMenuActive = ref(false);
 
-    watch(currentMenu, (newVal, oldVald) => {
+    watch(currentTrsIndexSelect, (newVal, oldVald) => {
         isMenuActive.value = newVal === props.indexMenu;
     });
 
     useEscapeKey(isMenuActive, () => {
-        currentMenu.value = -1;
+        currentTrsIndexSelect.value = -1;
     });
     
     useClickOutside('.trigger-menu-editdelete', isMenuActive, () => {
         if(isMenuActive.value) {
             //alert('close');
-            currentMenu.value = -1;
+            currentTrsIndexSelect.value = -1;
         }
-        
     });
 
     function handleMenu(request) {
         switch(request) {
             case 'edit': {
                 isMenuEditActive.value = !isMenuEditActive.value;
-                currentMenu.value = -1;
+                currentTrsIndexSelect.value = -1;
                 break;
             }
             case 'delete' : {
                 isMenuDeleteActive.value = !isMenuDeleteActive.value;
-                currentMenu.value = -1;
+                currentTrsIndexSelect.value = -1;
                 break;
             }
             case 'cancel' : {
                 //alert(isMenuDeleteActive.value);
                 //isMenuDeleteActive.value = !isMenuDeleteActive.value;
-                currentMenu.value = -1;
+                currentTrsIndexSelect.value = -1;
                 break;
             }
         }
@@ -90,7 +91,7 @@
 
     function toggleMenu () {
         //alert('alert');
-        (currentMenu.value === props.indexMenu) ? currentMenu.value = -1 : currentMenu.value = props.indexMenu;
+        (currentTrsIndexSelect.value === props.indexMenu) ? currentTrsIndexSelect.value = -1 : currentTrsIndexSelect.value = props.indexMenu;
         //alert(props.idMenu);
     }
 </script>

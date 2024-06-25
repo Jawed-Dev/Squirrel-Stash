@@ -27,7 +27,7 @@ const currentCategory = defineModel('currentCategory');
 // variables, props, ...
 const props = defineProps({
     listCategories: { default: []},
-    listRecurings: { default: []}
+    listRecurings: { default: []},
 });
 
 // functions
@@ -35,12 +35,3 @@ function handleSelectCategory(idCategory) {
     currentCategory.value = idCategory;
 }
 </script>
-
-
-<!-- <div v-for="(icon, index) in (!typeTransaction ? listCategories : listRecurings)" :key="index" :class="`${translateY}`" >
-    <div @click="handleSelectCategory(index)" :class="`w-[120px] mb-[20px] cursor-pointer flex flex-col items-center`">
-        <IconLoader :nameIcon="icon.nameIcon" 
-        :class="`${icon.color} rounded-full p-[10%] m-4 mr-[20px] shadow-black shadow-custom-main`" :svg="svgLargeBlue"/>
-        <p class="text-[15px] font-light text-center text-gray-300">{{ icon.text }}</p>
-    </div>
-</div> -->

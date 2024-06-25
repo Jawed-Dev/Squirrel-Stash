@@ -31,16 +31,16 @@
                 <ContainerStatMonth :svg="svgConfig('balance', 'bg-gradient-green')" :colorValue="'text-custom-green'" 
                 :amountValue="filterTextBalanceEconomy" :nameStat="'Balance d\'économie'" :width="'w-[25%]'" />
                 
-                <ContainerStatMonth :svg="svgConfig('restaurant', 'bg-gradient-blue')" :colorValue="'text-white'" 
-                :amountValue="statisticDetails.biggestPurchase" :nameStat="'Plus gros achat / Catégorie'" :width="'w-[25%]'" />
+                <ContainerStatMonth :svg="svgConfig(statisticDetails.biggestPurchase.transaction_name, 'bg-gradient-blue')" :colorValue="'text-white'" 
+                :amountValue="statisticDetails.biggestPurchase.transaction_name" :nameStat="'Plus gros achat / Catégorie'" :width="'w-[25%]'" />
                 
-                <ContainerStatMonth :svg="svgConfig('house', 'bg-gradient-vanusa')" :colorValue="'text-white'"  
-                :amountValue="statisticDetails.biggestRecurring" :nameStat="'Plus gros prélèvement / Catégorie'" :width="'w-[25%]'" />
+                <ContainerStatMonth :svg="svgConfig(statisticDetails.biggestRecurring.transaction_name, 'bg-gradient-vanusa')" :colorValue="'text-white'"  
+                :amountValue="statisticDetails.biggestRecurring.transaction_name" :nameStat="'Plus gros prélèvement / Catégorie'" :width="'w-[25%]'" />
             </section>
 
             <section class="flex justify-between ">
-                <ContainerListPurchases class="w-[calc(50%-10px)]" :title="'Historique des achats'" :purchaseType="'purchase'"  :svg="svgConfig('restaurant', 'bg-gradient-blue', '6%')" />
-                <ContainerListPurchases class=" w-[calc(50%-10px)]" :title="'Historique des prélèvements'" :purchaseType="'recurring'" :svg="svgConfig('balance', 'bg-gradient-vanusa', '6%')" />
+                <ContainerListPurchases class="w-[calc(50%-10px)]" :title="'Historique des achats'" :transactionType="'purchase'"  :svg="svgConfig('restaurant', 'bg-gradient-blue', '6%')" />
+                <ContainerListPurchases class=" w-[calc(50%-10px)]" :title="'Historique des prélèvements'" :transactionType="'recurring'" :svg="svgConfig('balance', 'bg-gradient-vanusa', '6%')" />
             </section>
     
         </div>
@@ -60,13 +60,14 @@
     import ContainerListPurchases from '@/components/container/statistic/ContainerListPurchases.vue';
     import AddPurchase from '@/components/overlay/AddPurchase.vue';
     import { monthNames, getAvailableYearNames } from '@/composable/useGetDate';
-    import { storeThreshold, storeDateSelected, storeStatisticDetails } from '@/storePinia/useStoreDashboard';
+    import { storeThreshold, storeDateSelected, storeStatisticDetails, storeLastNTransactions } from '@/storePinia/useStoreDashboard';
     import { updateThresholdByMonth, updateTotalTrsByMonth, updateBalanceEcoByMonth, updateBiggestTrsByMonth } from '@/storePinia/useUpdateStoreByBackend';
 
     // stores Pinia
     const threshold = storeThreshold();
     const dateSelected = storeDateSelected();
     const statisticDetails = storeStatisticDetails();
+
 
     // variables, props, ...
     
@@ -77,6 +78,8 @@
         updateBalanceEcoByMonth(newMonth, newYear);
         updateBiggestTrsByMonth(newMonth, newYear, 'purchase');
         updateBiggestTrsByMonth(newMonth, newYear, 'recurring');
+
+        
     }, {  immediate:true, deep:true });
 
     // computed

@@ -21,6 +21,7 @@
             // set
             function fetchSaveThreshold();
             function fetchInsertTransaction();
+            function fetchDeleteTransaction();
         // Prepare page
         function authorizePageDashboard();
     }
@@ -79,6 +80,14 @@
             $dataRequest = $this->getControllerMain()->getHandlerJwt()->prepareDataForModel();
 
             $successReq = $this->getModelStatistic()->insertTransaction($db, $dataRequest);
+            $this->getControllerMain()->sendJsonResponse(['isSuccessRequest' => $successReq]);
+        }
+
+        public function fetchDeleteTransaction() {
+            $db = $this->getControllerMain()->getDatabase();
+            $dataRequest = $this->getControllerMain()->getHandlerJwt()->prepareDataForModel();
+
+            $successReq = $this->getModelStatistic()->deleteTransaction($db, $dataRequest);
             $this->getControllerMain()->sendJsonResponse(['isSuccessRequest' => $successReq]);
         }
 

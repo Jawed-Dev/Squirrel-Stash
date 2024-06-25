@@ -16,9 +16,9 @@
             </div>
     
             <div class="pl-3">
-                <PurchaseInfo v-for="(purchase, index) of filteredTransactions" 
-                    :key="index" :nameIcon="`restaurant`" :purchaseType="props.purchaseType" 
-                    v-model:currentMenu="currentIdMenuOpen" :indexMenu="index" :svg="svg" :infoPurchase="purchase"
+                <PurchaseInfo v-for="(transaction, index) of filteredTransactions" 
+                    :key="index" :nameIcon="transaction.transaction_name" :transactionType="transactionType" 
+                    v-model:currentTrsIndexSelect="currentTrsIndexSelect" :indexMenu="index" :svg="svg" :infoTransaction="transaction"
                 />
             </div>
         </div>
@@ -32,20 +32,20 @@
     import PurchaseInfo from '@/components/statistic/PurchaseInfo.vue';
     import { ref, watch } from 'vue';
     import { classTransitionHover } from '@/composable/useClassTransitionHover';
-    import { storelastNTransactions, storeDateSelected } from '@/storePinia/useStoreDashboard';
+    import { storeLastNTransactions, storeDateSelected } from '@/storePinia/useStoreDashboard';
     import { updateLastNTrsByMonth } from '@/storePinia/useUpdateStoreByBackend';
 
     // stores Pinia
-    const lastNTransactions = storelastNTransactions();
+    const lastNTransactions = storeLastNTransactions();
     const dateSelected = storeDateSelected();
 
     // variables, props...
-    const currentIdMenuOpen = ref(-1);
+    const currentTrsIndexSelect = ref(-1);
     const translateY = classTransitionHover('translateY');
     const props = defineProps({
         svg: { default: {} }, 
         title: { default: '' },
-        purchaseType: {default: 'standard'}
+        transactionType: {default: ''}
     });
 
     // life cycle
@@ -57,11 +57,11 @@
     }, {  immediate:true, deep:true });
 
     const filteredTransactions = computed(() => {
-        return props.purchaseType === 'purchase' ? lastNTransactions.listPurchases : lastNTransactions.listRecurrings;
+        return props.transactionType === 'purchase' ? lastNTransactions.listPurchases : lastNTransactions.listRecurrings;
     });
 
 
-    watch(currentIdMenuOpen, (newVal, oldVal) => {
+    watch(currentTrsIndexSelect, (newVal, oldVal) => {
         //alert(newVal);
     });
 

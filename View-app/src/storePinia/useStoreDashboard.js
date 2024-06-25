@@ -42,7 +42,7 @@ export const storeTrsMonthByDay = defineStore('listTrsMonthByDay', () => {
 });
 
 // list last N purchases / recurrings
-export const storelastNTransactions = defineStore('lastNTransactions', () => {
+export const storeLastNTransactions = defineStore('lastNTransactions', () => {
   const listPurchases = ref([]);
   const listRecurrings= ref([]);
   return { listPurchases, listRecurrings };

@@ -42,10 +42,8 @@
 </template>
 
 <script setup>
-    import InputBase from '../../input/InputBase.vue';
-
+    import InputBase from '@/components/input/InputBase.vue';
     const inputNoteVal = defineModel('inputNoteVal');
     const inputPriceVal = defineModel('inputPriceVal');
     const inputDateVal = defineModel('inputDateVal');
-
 </script>

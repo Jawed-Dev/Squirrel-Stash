@@ -88,6 +88,10 @@
                         $ControllerMain->getControllerStatistic()->fetchInsertTransaction();
                         break;
                     }
+                    case 'deleteTransaction' : {
+                        $ControllerMain->getControllerStatistic()->fetchDeleteTransaction();
+                        break;
+                    }
                 }
             }
         }

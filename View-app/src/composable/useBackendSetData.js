@@ -23,7 +23,7 @@ export async function addTransaction(params) {
     if(!params.trsName) return null;
     if(!params.category) return null;
     if(!params.date) return null;
-    if(!params.note) return null;
+    if(!params.note) params.note = '';
 
     console.log(params);
 
@@ -43,4 +43,19 @@ export async function addTransaction(params) {
     });
     return dataRequest;
 }
+
+export async function deleteTransaction(transactionId) {
+    const localToken = getLStorageAuthToken();
+    const body = {
+        transactionId: transactionId,
+    };
+    const dataRequest = await useConfigFetchSetData ({
+        request: 'deleteTransaction',
+        method: 'POST',
+        dataBody: body,
+        token: localToken
+    });
+    return dataRequest;
+}
+
 

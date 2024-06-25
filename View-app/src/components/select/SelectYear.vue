@@ -19,6 +19,6 @@
     const indexSelected = defineModel();
     
     function handleSelect(event) {
-        indexSelected.value = event.target.value;
+        indexSelected.value = Number(event.target.value);
     }
 </script>

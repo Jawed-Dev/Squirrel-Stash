@@ -22,19 +22,26 @@
     
 
 <script setup>
-    //import
-
     import TransitionOpacity from '@/components/transition/TransitionOpacity.vue';  
-    import MainContainerSlot from '../containerSlot/MainContainerSlot.vue';
+    import MainContainerSlot from '@/components/containerSlot/MainContainerSlot.vue';
     import useClickOutside from '@/composable/useClickOutSide';
     import useEscapeKey from '@/composable/useEscapeKey';
+    import { deleteTransaction } from '@/composable/useBackendSetData';
+    import { storeDateSelected } from '@/storePinia/useStoreDashboard';
+    import { updateAllDataTransations } from '@/storePinia/useUpdateStoreByBackend';
 
+    // stores Pinia
+    const dateSelected = storeDateSelected();
 
+    // props, variables..
     const props = defineProps({
-        width: {default: ''}
+        width: {default: ''},
+        transactionType: {default: ''},
+        infoTransaction: {default: []}
     });
 
     const isMenuActive = defineModel('menuActive');
+    const currentTrsIndexSelect = defineModel('currentTrsIndexSelect');
 
     useEscapeKey(isMenuActive, () => {
         isMenuActive.value = false;
@@ -45,9 +52,17 @@
         isMenuActive.value = false;
     },);
 
-    function toggleMenu(request) {
+    async function toggleMenu(request) {
         switch(request) {
             case 'valid': {
+                if(!isMenuActive.value) return;
+
+                const transactionId = props.infoTransaction.transaction_id;
+                const isSuccessRequest = await deleteTransaction(transactionId);
+                if(isSuccessRequest) {
+                    updateAllDataTransations(dateSelected.month, dateSelected.year, props.transactionType);
+                }
+                isMenuActive.value = false;
                 break;
             }
             case 'cancel': {

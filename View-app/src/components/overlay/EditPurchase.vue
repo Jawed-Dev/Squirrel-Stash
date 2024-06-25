@@ -9,15 +9,15 @@
             shadow-black shadow-custom-main rounded-md top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 trigger-menu-edit
             z-30 text-white ${props.width}`">
 
-                <MainContainerSlot :textBtn1="'Annuler'" :textBtn2="'Modifier'" :titleContainer="'Modifier l\achat'" @toggleMenu="toggleMenu">
+                <MainContainerSlot :textBtn1="'Annuler'" :textBtn2="'Modifier'" :titleContainer="transactionType === 'purchase' ? 'Modifier l\'achat' : 'Modifier prélèvement'" @toggleMenu="toggleMenu">
 
                     <div class="flex flex-col rounded-[3px] items-center">
-                        <label class="font-extralight" for="id-input-name"> Nom de l'achat</label>
+                        <label class="font-extralight" for="id-input-name"> {{ transactionType === 'purchase' ? "Nom de l'achat" : "Nom du prélèvement" }} </label>
                         <div class="mt-1">
                             <InputBase v-model="inputNameTransaction"
                             width="w-[250px]"
                             extraClass="font-light text-center"
-                            placeholder="Nom d'achat"
+                            placeholder="Nom"
                             id="id-input-name"/>
                         </div>
                     </div>
@@ -56,49 +56,56 @@
 
 
     // imports 
-    import MainContainerSlot from '../containerSlot/MainContainerSlot.vue';
-    import InputBase from '../input/InputBase.vue';
     import {ref} from 'vue';
-    import TransitionOpacity from '../transition/TransitionOpacity.vue';
+    import MainContainerSlot from '@/components/containerSlot/MainContainerSlot.vue';
+    import InputBase from '@/components/input/InputBase.vue';
+    import TransitionOpacity from '@/components/transition/TransitionOpacity.vue';
     import useClickOutside from '@/composable/useClickOutSide';
     import useEscapeKey from '@/composable/useEscapeKey';
+    import { storeLastNTransactions } from '@/storePinia/useStoreDashboard';
 
+    // stores Pinia
+    const lastNTransactions = storeLastNTransactions();
 
     // variables, props, ...
-
-
     const props = defineProps({
-        width: { default:'' }
+        width: { default:'' },
+        transactionType: { default:''},
+        infoTransaction: { default: [] }
     });
 
     const inputNameTransaction = ref('');
     const inputPrice = ref('');
     const inputDate = ref('');
     const isMenuActive = defineModel('menuActive');
+    const currentTrsIndexSelect = defineModel('currentTrsIndexSelect');
 
-
-    // functions ...
+    // life cycle / functions
     useEscapeKey(isMenuActive, () => {
         isMenuActive.value = false;
     });
 
     useClickOutside('.trigger-menu-edit', isMenuActive, () => {
-            //alert('est');
             isMenuActive.value = false;
-            //console.log('edit');
         }
     );
     function toggleMenu($request) {
         switch($request) {
             case 'cancel' : {
-                inputDate.value = '';
-                inputNameTransaction.value = '';
-                inputPrice.value = '';
+                resetInputs();
                 isMenuActive.value = false;
             }
             case 'valid' : {
-
+                if(props.transactionType === 'purchase') {
+                    console.log(props.infoTransaction);
+                }
             }
         }
+    }
+
+    function resetInputs() {
+        inputDate.value = '';
+        inputNameTransaction.value = '';
+        inputPrice.value = '';
     }
 </script>

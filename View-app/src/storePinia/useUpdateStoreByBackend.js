@@ -1,5 +1,5 @@
 import { getBiggestTrsByMonth, getThresholdByMonth, getTotalTrsByMonth, getListTrsMonthByDay, getLastNTransactions } from '@/composable/useBackendGetData';
-import { storeThreshold, storeStatisticDetails, storeTrsMonthByDay, storelastNTransactions } from '@/storePinia/useStoreDashboard';
+import { storeThreshold, storeStatisticDetails, storeTrsMonthByDay, storeLastNTransactions } from '@/storePinia/useStoreDashboard';
 
 
 // list transactions month By Day
@@ -16,7 +16,7 @@ export async function updateListTrsMonthByDay(month, year, category) {
 }
 
 export async function updateLastNTrsByMonth(month, year, category) {
-    const lastNTransactions = storelastNTransactions();
+    const lastNTransactions = storeLastNTransactions();
     const lastTransactionsFetched = await getLastNTransactions(month, year, category);
     const listLastTransactions = lastTransactionsFetched?.data;
 
@@ -57,11 +57,19 @@ export async function updateBalanceEcoByMonth(month, year) {
 export async function updateBiggestTrsByMonth(month, year, category) {
     const statisticDetails = storeStatisticDetails();
     const biggestTrsFetched = await getBiggestTrsByMonth(month, year, category);
-    const biggestTransactions = biggestTrsFetched?.data?.transaction_name;
+    const biggestTransactions = biggestTrsFetched?.data;
     if(category === 'purchase') {
         statisticDetails.biggestPurchase = (biggestTransactions) ? biggestTransactions : 'Aucune donnée';
     }
     else if(category === 'recurring') {
         statisticDetails.biggestRecurring = (biggestTransactions) ? biggestTransactions : 'Aucune donnée';
     }
+}
+
+export async function updateAllDataTransations(month, year, category) {
+    updateBiggestTrsByMonth(month, year, category);
+    updateListTrsMonthByDay(month, year, category);
+    updateBalanceEcoByMonth(month, year);
+    updateTotalTrsByMonth(month, year);
+    updateLastNTrsByMonth(month, year, category);
 }

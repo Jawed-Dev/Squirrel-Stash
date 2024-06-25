@@ -11,20 +11,22 @@
 
 
 <script setup>
+    import { onMounted } from 'vue';
     import useIconLoader from '@/composable/useIconLoader.vue';
     import { svgConfig } from '@/functions/svg/svgConfig';
 
+    // props, variables
     const props = defineProps({
         width: { default: 'w-[70%]' },
         listSelect: { default: [] },
-        typeTransaction: { default: false }
+        typeTransaction: { default: false },
     });
 
     const currentCategory = defineModel('currentCategory');
-
     const svgPurchases = svgConfig.setColorDynamic(svgConfig.mediumSmaller, 'bg-gradient-blue');   
     const svgReccurings = svgConfig.setColorDynamic(svgConfig.mediumSmaller, 'bg-gradient-vanusa');  
 
+    // life cycle, functions ...
     function handleChange(event,listSelect) {
         const index = event.target.value;
         console.log("Index sélectionné : ", index);

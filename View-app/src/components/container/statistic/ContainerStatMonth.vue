@@ -3,8 +3,7 @@
     <div :class="`${props.width} rounded-[3px] overflow-hidden mt-5 shadow-black shadow-custom-main`">
         <div :class="`flex flex-col text-[17px] gradient-border overflow-hidden bg-main-gradient  `">
             <div class="flex items-center justify-between px-2 py-2 ">
-                <component :is="iconComponent" :svg="svg" :class="`${svg.color} p-[0.8vw] rounded-lg shadow-black shadow-custom-main`"/>
-    
+                <UseIconLoader :nameIcon="svg.name" :svg="svg" :class="`${svg.color} p-[0.8vw] rounded-lg shadow-black shadow-custom-main`"/>
                 <div class="flex flex-col items-end gap-3">
                     <!-- <IconPreferences class='cursor-pointer'  v-show="props.showIconConfig" :svg="svg.verySmallIcon" /> -->
                     <setThreshold width="w-[30vw]" :isIconActive="isIconActive" />
@@ -24,6 +23,8 @@
     import { getIconByName } from '@/functions/svg/getIcon';
     import { onMounted, shallowRef } from 'vue';
     import setThreshold from '@/components/overlay/setThreshold.vue';
+    import UseIconLoader from '@/composable/useIconLoader.vue';
+    
 
     const iconComponent = shallowRef(null);
 

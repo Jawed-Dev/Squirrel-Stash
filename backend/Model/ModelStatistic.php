@@ -15,6 +15,7 @@
         function updateThresholdByMonth($db, $data);
         function insertThresholdByMonth($db, $data);
         function insertTransaction($db, $data);
+        function deleteTransaction($db, $data);
     }
 
     class ModelStatistic implements I_ModelStatistic {
@@ -24,20 +25,36 @@
             $userId = $data['userId'];
             $dataQuery = $data['bodyData'];
 
-            $reqSql = "INSERT INTO transaction
-            (transaction_user_id , transaction_amount, transaction_name, transaction_category, transaction_date_time, transaction_note)
+            $reqSql = 
+            "INSERT INTO transaction
+            (transaction_user_id , transaction_amount, transaction_name, transaction_category, transaction_date, transaction_note)
             VALUES (:userId, :amount, :trsName, :category, :trsDate, :note)
             ";
-
-            $note = ($dataQuery['transactionNote']) ? $dataQuery['transactionNote'] : '';
-   
             $query = $db->prepare($reqSql);
             $query->bindValue(':userId',  $userId, PDO::PARAM_INT);
             $query->bindValue(':amount',  $dataQuery['transactionAmount'], PDO::PARAM_INT);
             $query->bindValue(':trsName',  $dataQuery['transactionName'], PDO::PARAM_STR);
             $query->bindValue(':category',  $dataQuery['category'], PDO::PARAM_STR);
             $query->bindValue(':trsDate',  $dataQuery['transactionDate'], PDO::PARAM_STR);
-            $query->bindValue(':note',  $note, PDO::PARAM_STR);
+            $query->bindValue(':note',  $dataQuery['transactionNote'], PDO::PARAM_STR);
+            $query->execute();
+            $isSuccessRequest = $query->rowCount();
+            return ($isSuccessRequest) ? true : false;
+        }
+
+        public function deleteTransaction($db, $data) {
+            $userId = $data['userId'];
+            $dataQuery = $data['bodyData'];
+
+            $reqSql = 
+            "DELETE FROM transaction
+            WHERE 
+                transaction_user_id = :userId
+                AND transaction_id = :transactionId
+            ";
+            $query = $db->prepare($reqSql);
+            $query->bindValue(':userId',  $userId, PDO::PARAM_INT);
+            $query->bindValue(':transactionId',  $dataQuery['transactionId'], PDO::PARAM_INT);
             $query->execute();
             $isSuccessRequest = $query->rowCount();
             return ($isSuccessRequest) ? true : false;
@@ -107,9 +124,9 @@
             LEFT JOIN 
                 transaction t 
             ON 
-                DAY(t.transaction_date_time) = number_day.day 
-                AND MONTH(t.transaction_date_time) = :month 
-                AND YEAR(t.transaction_date_time) = :year 
+                DAY(t.transaction_date) = number_day.day 
+                AND MONTH(t.transaction_date) = :month 
+                AND YEAR(t.transaction_date) = :year 
                 AND t.transaction_user_id = :userId
                 AND t.transaction_category = :category
             WHERE 
@@ -193,24 +210,24 @@
                 transaction_amount,
                 transaction_name,
                 transaction_category,
-                transaction_date_time,
+                transaction_date,
                 transaction_note,
-                DATE_FORMAT(transaction_date_time, '%d/%m/%Y') as formatted_date,
+                DATE_FORMAT(transaction_date, '%d/%m/%Y') as formatted_date,
                 (SELECT COUNT(*)
                     FROM transaction AS sub
                     WHERE sub.transaction_user_id = transaction.transaction_user_id
-                    AND YEAR(sub.transaction_date_time) = YEAR(transaction.transaction_date_time)
-                    AND MONTH(sub.transaction_date_time) = MONTH(transaction.transaction_date_time)
+                    AND YEAR(sub.transaction_date) = YEAR(transaction.transaction_date)
+                    AND MONTH(sub.transaction_date) = MONTH(transaction.transaction_date)
                     AND sub.transaction_name = transaction.transaction_name
                     AND sub.transaction_category = transaction.transaction_category
                 ) AS count_transaction
                 
                 FROM transaction
                 WHERE transaction_user_id = :userId
-                AND YEAR(transaction_date_time) = :year
-                AND MONTH(transaction_date_time) = :month
+                AND YEAR(transaction_date) = :year
+                AND MONTH(transaction_date) = :month
                 AND transaction_category = :category
-                ORDER BY transaction_date_time DESC
+                ORDER BY transaction_date DESC
                 LIMIT :limit
             ";
             $query = $db->prepare($reqSql);
@@ -233,8 +250,8 @@
                 transaction_name
                 FROM transaction
                 WHERE transaction_user_id = :userId
-                AND YEAR(transaction_date_time) = :year
-                AND MONTH(transaction_date_time) = :month
+                AND YEAR(transaction_date) = :year
+                AND MONTH(transaction_date) = :month
                 AND transaction_category = :category
                 ORDER BY transaction_amount DESC
                 LIMIT 1
@@ -257,8 +274,8 @@
                 SUM(transaction_amount) AS total_transactions
                 FROM transaction
                 WHERE transaction_user_id = :userId
-                AND YEAR(transaction_date_time) = :year
-                AND MONTH(transaction_date_time) = :month
+                AND YEAR(transaction_date) = :year
+                AND MONTH(transaction_date) = :month
             ";
             $query = $db->prepare($reqSql);
             $query->bindValue(':userId',  $userId, PDO::PARAM_INT);
