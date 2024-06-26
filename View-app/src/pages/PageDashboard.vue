@@ -1,6 +1,6 @@
 <template>
 
-    <aside class="font-main-font flex flex-col bg-main-bg w-[100%]">
+    <aside class="font-main-font flex flex-col bg-main-bg w-full">
 
         <HeaderComponent/>
 
@@ -13,10 +13,10 @@
             <section class="flex justify-between pt-[20px]">
                 <div class="flex gap-[20px] ">
                     <SelectMonth v-model="dateSelected.month" :listSelect="monthNames" />
-                    <SelectYear v-model="dateSelected.year" :listSelect="getAvailableYearNames()" />
+                    <SelectYear v-model="dateSelected.year" :listSelect="getAvailableYear()" />
                 </div>
                 <div class="flex justify-end">
-                    <AddPurchase width="w-[30vw]"/>
+                    <AddTransaction width="w-[30vw]"/>
                 </div>
             </section>
 
@@ -31,16 +31,16 @@
                 <ContainerStatMonth :svg="svgConfig('balance', 'bg-gradient-green')" :colorValue="'text-custom-green'" 
                 :amountValue="filterTextBalanceEconomy" :nameStat="'Balance d\'économie'" :width="'w-[25%]'" />
                 
-                <ContainerStatMonth :svg="svgConfig(statisticDetails.biggestPurchase.transaction_name, 'bg-gradient-blue')" :colorValue="'text-white'" 
-                :amountValue="statisticDetails.biggestPurchase.transaction_name" :nameStat="'Plus gros achat / Catégorie'" :width="'w-[25%]'" />
+                <ContainerStatMonth :svg="svgConfig(iconNamePurchases, 'bg-gradient-blue')" :colorValue="'text-white'" 
+                :amountValue="nameBiggestPurchase" :nameStat="'Plus gros achat / Catégorie'" :width="'w-[25%]'" />
                 
-                <ContainerStatMonth :svg="svgConfig(statisticDetails.biggestRecurring.transaction_name, 'bg-gradient-vanusa')" :colorValue="'text-white'"  
-                :amountValue="statisticDetails.biggestRecurring.transaction_name" :nameStat="'Plus gros prélèvement / Catégorie'" :width="'w-[25%]'" />
+                <ContainerStatMonth :svg="svgConfig(iconNameRecurrings, 'bg-gradient-vanusa')" :colorValue="'text-white'"  
+                :amountValue="nameBiggestRecurring" :nameStat="'Plus gros prélèvement / Catégorie'" :width="'w-[25%]'" />
             </section>
 
             <section class="flex justify-between ">
-                <ContainerListPurchases class="w-[calc(50%-10px)]" :title="'Historique des achats'" :transactionType="'purchase'"  :svg="svgConfig('restaurant', 'bg-gradient-blue', '6%')" />
-                <ContainerListPurchases class=" w-[calc(50%-10px)]" :title="'Historique des prélèvements'" :transactionType="'recurring'" :svg="svgConfig('balance', 'bg-gradient-vanusa', '6%')" />
+                <ContainerListPurchases class="w-[calc(50%-10px)]" :title="'Derniers achats'" :componentType="'purchase'"  :svg="svgConfig('restaurant', 'bg-gradient-blue', '6%')" />
+                <ContainerListPurchases class=" w-[calc(50%-10px)]" :title="'Derniers prélèvements'" :componentType="'recurring'" :svg="svgConfig('balance', 'bg-gradient-vanusa', '6%')" />
             </section>
     
         </div>
@@ -50,24 +50,23 @@
 
 <script setup>
 
-    // import
-    import { ref, onMounted, watch, computed } from 'vue'; 
-    import HeaderComponent from '@/components/header/Header.vue';
-    import ContainerStatMonth from '@/components/container/statistic/ContainerStatMonth.vue';
-    import SelectYear from '@/components/select/SelectYear.vue';
-    import SelectMonth from '@/components/select/SelectMonth.vue';
-    import ContainerTransactionsMonth from '@/components/container/statistic/ContainerTransactionsMonth.vue';
-    import ContainerListPurchases from '@/components/container/statistic/ContainerListPurchases.vue';
-    import AddPurchase from '@/components/overlay/AddPurchase.vue';
-    import { monthNames, getAvailableYearNames } from '@/composable/useGetDate';
-    import { storeThreshold, storeDateSelected, storeStatisticDetails, storeLastNTransactions } from '@/storePinia/useStoreDashboard';
+    import { watch, computed } from 'vue'; 
+    import HeaderComponent from '@/component/header/Header.vue';
+    import ContainerStatMonth from '@/component/container/ContainerStatMonth.vue';
+    import SelectYear from '@/component/select/SelectYear.vue';
+    import SelectMonth from '@/component/select/SelectMonth.vue';
+    import ContainerTransactionsMonth from '@/component/container/ContainerTransactionsMonth.vue';
+    import ContainerListPurchases from '@/component/container/ContainerListPurchases.vue';
+    
+    import AddTransaction from '@/component/overlay/AddTransaction.vue';
+    import { monthNames, getAvailableYear } from '@/composable/useGetDate';
+    import { storeThreshold, storeDateSelected, storeStatisticDetails } from '@/storePinia/useStoreDashboard';
     import { updateThresholdByMonth, updateTotalTrsByMonth, updateBalanceEcoByMonth, updateBiggestTrsByMonth } from '@/storePinia/useUpdateStoreByBackend';
 
     // stores Pinia
     const threshold = storeThreshold();
     const dateSelected = storeDateSelected();
     const statisticDetails = storeStatisticDetails();
-
 
     // variables, props, ...
     
@@ -78,8 +77,6 @@
         updateBalanceEcoByMonth(newMonth, newYear);
         updateBiggestTrsByMonth(newMonth, newYear, 'purchase');
         updateBiggestTrsByMonth(newMonth, newYear, 'recurring');
-
-        
     }, {  immediate:true, deep:true });
 
     // computed
@@ -89,8 +86,28 @@
         else return statisticDetails.economyBalance +' €';
     });
 
+    const iconNamePurchases = computed(() => {
+        console.log(statisticDetails);
+        const nameIcon = statisticDetails?.biggestPurchase?.transaction_category;
+        return (nameIcon) ? nameIcon : '';
+    });
+    const iconNameRecurrings = computed(() => {
+        const nameIcon = statisticDetails?.biggestRecurring?.transaction_category;
+        //alert(nameIcon);
+        return (nameIcon) ? nameIcon : '';
+    });
+    const nameBiggestPurchase = computed(() => {
+        const nameBiggestPurch = statisticDetails?.biggestPurchase?.transaction_category;
+        return (nameBiggestPurch) ? nameBiggestPurch : '';
+    });
+    const nameBiggestRecurring = computed(() => {
+        const nameBiggestPurch = statisticDetails?.biggestRecurring?.transaction_category;
+        return (nameBiggestPurch) ? nameBiggestPurch : '';
+    });
+
+
     // functions
-    function svgConfig(nameSvg, color, width = '3.5vw') {
+    function svgConfig(nameSvg, color, width = '3vw') {
         return {
             name: nameSvg,
             color: color,

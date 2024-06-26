@@ -16,25 +16,52 @@
         function insertThresholdByMonth($db, $data);
         function insertTransaction($db, $data);
         function deleteTransaction($db, $data);
+        function updateTransaction($db, $data);
     }
 
     class ModelStatistic implements I_ModelStatistic {
-
-        
         public function insertTransaction($db, $data) {
             $userId = $data['userId'];
             $dataQuery = $data['bodyData'];
 
             $reqSql = 
             "INSERT INTO transaction
-            (transaction_user_id , transaction_amount, transaction_name, transaction_category, transaction_date, transaction_note)
-            VALUES (:userId, :amount, :trsName, :category, :trsDate, :note)
+            (transaction_user_id , transaction_amount, transaction_category, transaction_type, transaction_date, transaction_note)
+            VALUES (:userId, :amount, :trsCategory, :trsType, :trsDate, :note)
             ";
             $query = $db->prepare($reqSql);
             $query->bindValue(':userId',  $userId, PDO::PARAM_INT);
             $query->bindValue(':amount',  $dataQuery['transactionAmount'], PDO::PARAM_INT);
-            $query->bindValue(':trsName',  $dataQuery['transactionName'], PDO::PARAM_STR);
-            $query->bindValue(':category',  $dataQuery['category'], PDO::PARAM_STR);
+            $query->bindValue(':trsCategory',  $dataQuery['transactionCategory'], PDO::PARAM_STR);
+            $query->bindValue(':trsType',  $dataQuery['transactionType'], PDO::PARAM_STR);
+            $query->bindValue(':trsDate',  $dataQuery['transactionDate'], PDO::PARAM_STR);
+            $query->bindValue(':note',  $dataQuery['transactionNote'], PDO::PARAM_STR);
+            $query->execute();
+            $isSuccessRequest = $query->rowCount();
+            return ($isSuccessRequest) ? true : false;
+        }
+
+        public function updateTransaction($db, $data) {
+            $userId = $data['userId'];
+            $dataQuery = $data['bodyData'];
+
+            $reqSql = 
+            "UPDATE transaction
+            SET 
+                transaction_amount = :amount,
+                transaction_category = :trsCategory,
+                transaction_type = :trsType,
+                transaction_date = :trsDate, 
+                transaction_note = :note
+            WHERE transaction_user_id = :userId AND transaction_id = :trsId
+            ";
+
+            $query = $db->prepare($reqSql);
+            $query->bindValue(':userId',  $userId, PDO::PARAM_INT);
+            $query->bindValue(':trsId',  $dataQuery['transactionId'], PDO::PARAM_INT);
+            $query->bindValue(':amount',  $dataQuery['transactionAmount'], PDO::PARAM_INT);
+            $query->bindValue(':trsType',  $dataQuery['transactionType'], PDO::PARAM_STR);
+            $query->bindValue(':trsCategory',  $dataQuery['transactionCategory'], PDO::PARAM_STR);
             $query->bindValue(':trsDate',  $dataQuery['transactionDate'], PDO::PARAM_STR);
             $query->bindValue(':note',  $dataQuery['transactionNote'], PDO::PARAM_STR);
             $query->execute();
@@ -115,7 +142,7 @@
                 COALESCE(SUM(t.transaction_amount), 0) AS total_amount,
                 t.transaction_id,
                 t.transaction_user_id, 
-                t.transaction_name, 
+                t.transaction_type, 
                 t.transaction_category, 
                 t.transaction_amount, 
                 t.transaction_note 
@@ -128,7 +155,7 @@
                 AND MONTH(t.transaction_date) = :month 
                 AND YEAR(t.transaction_date) = :year 
                 AND t.transaction_user_id = :userId
-                AND t.transaction_category = :category
+                AND t.transaction_type = :trsType
             WHERE 
                 number_day.day <= :last_day_of_month
             GROUP BY 
@@ -142,7 +169,7 @@
             $query->bindValue(':userId',  $userId, PDO::PARAM_INT);
             $query->bindValue(':month', $dataQuery['selectedMonth'], PDO::PARAM_INT);
             $query->bindValue(':year',  $dataQuery['selectedYear'], PDO::PARAM_INT);
-            $query->bindValue(':category',  $dataQuery['category'], PDO::PARAM_STR);
+            $query->bindValue(':trsType',  $dataQuery['transactionType'], PDO::PARAM_STR);
             $query->bindValue(':last_day_of_month',  $lastDayMonth, PDO::PARAM_INT);
             $query->execute();
             $listTrsMonthByDay = $query->fetchAll(PDO::FETCH_ASSOC);
@@ -175,15 +202,6 @@
             $userId = $data['userId'];
             $dataQuery = $data['bodyData'];
 
-            // $reqSql = "SELECT threshold_amount
-            // FROM threshold
-            // WHERE threshold_user_id = :userId
-            // AND YEAR(threshold_date) = :year
-            // AND MONTH(threshold_date) = :month
-            // ORDER BY threshold_date DESC
-            // LIMIT 1;
-            // ";
-
             $reqSql = "SELECT threshold_amount
             FROM threshold
             WHERE threshold_user_id = :userId
@@ -208,7 +226,7 @@
                 transaction_id,
                 transaction_user_id,
                 transaction_amount,
-                transaction_name,
+                transaction_type,
                 transaction_category,
                 transaction_date,
                 transaction_note,
@@ -218,7 +236,7 @@
                     WHERE sub.transaction_user_id = transaction.transaction_user_id
                     AND YEAR(sub.transaction_date) = YEAR(transaction.transaction_date)
                     AND MONTH(sub.transaction_date) = MONTH(transaction.transaction_date)
-                    AND sub.transaction_name = transaction.transaction_name
+                    AND sub.transaction_type = transaction.transaction_type
                     AND sub.transaction_category = transaction.transaction_category
                 ) AS count_transaction
                 
@@ -226,7 +244,7 @@
                 WHERE transaction_user_id = :userId
                 AND YEAR(transaction_date) = :year
                 AND MONTH(transaction_date) = :month
-                AND transaction_category = :category
+                AND transaction_type = :trsType
                 ORDER BY transaction_date DESC
                 LIMIT :limit
             ";
@@ -234,7 +252,7 @@
             $query->bindValue(':userId',  $userId, PDO::PARAM_INT);
             $query->bindValue(':month', $dataQuery['selectedMonth'], PDO::PARAM_INT);
             $query->bindValue(':year',  $dataQuery['selectedYear'], PDO::PARAM_INT);
-            $query->bindValue(':category',  $dataQuery['category'], PDO::PARAM_STR);
+            $query->bindValue(':trsType',  $dataQuery['transactionType'], PDO::PARAM_STR);
             $query->bindValue(':limit',  $dataQuery['limitValue'], PDO::PARAM_INT);
             $query->execute();
             $listTransactions = $query->fetchAll(PDO::FETCH_ASSOC);
@@ -247,12 +265,12 @@
             $dataQuery = $data['bodyData'];
             $reqSql = "SELECT 
                 transaction_amount,
-                transaction_name
+                transaction_category
                 FROM transaction
                 WHERE transaction_user_id = :userId
                 AND YEAR(transaction_date) = :year
                 AND MONTH(transaction_date) = :month
-                AND transaction_category = :category
+                AND transaction_type = :trsType
                 ORDER BY transaction_amount DESC
                 LIMIT 1
             ";
@@ -260,7 +278,7 @@
             $query->bindValue(':userId',  $userId, PDO::PARAM_INT);
             $query->bindValue(':month', $dataQuery['selectedMonth'], PDO::PARAM_INT);
             $query->bindValue(':year',  $dataQuery['selectedYear'], PDO::PARAM_INT);
-            $query->bindValue(':category',  $dataQuery['category'], PDO::PARAM_STR);
+            $query->bindValue(':trsType',  $dataQuery['transactionType'], PDO::PARAM_STR);
             $query->execute();
 
             $biggestTransaction = $query->fetch(PDO::FETCH_ASSOC);

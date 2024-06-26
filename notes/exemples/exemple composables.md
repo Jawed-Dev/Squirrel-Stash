@@ -87,7 +87,7 @@ Voici comment vous pouvez utiliser le composant `Input` dans le parent, selon l'
 </template>
 
 <script setup>
-import InputComponent from './components/InputComponent.vue';
+import InputComponent from './component/InputComponent.vue';
 import { ref } from 'vue';
 
 const inputValue = ref('');
@@ -102,7 +102,7 @@ const inputValue = ref('');
 </template>
 
 <script setup>
-import InputComponent from './components/InputComponent.vue';
+import InputComponent from './component/InputComponent.vue';
 import { ref } from 'vue';
 
 const inputValue = ref('');

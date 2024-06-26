@@ -92,6 +92,10 @@
                         $ControllerMain->getControllerStatistic()->fetchDeleteTransaction();
                         break;
                     }
+                    case 'updateTransaction' : {
+                        $ControllerMain->getControllerStatistic()->fetchUpdateTransaction();
+                        break;
+                    }
                 }
             }
         }

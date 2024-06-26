@@ -1,7 +1,7 @@
 <script setup>
 
-    import SectionNewAccount from '../components/auth/createAcc/SectionNewAccount.vue';
-    import SectionInformation from '../components/auth/createAcc/SectionInformation.vue';
+    import SectionNewAccount from '../component/auth/createAcc/SectionNewAccount.vue';
+    import SectionInformation from '../component/auth/createAcc/SectionInformation.vue';
 
 </script>
 

@@ -6,6 +6,6 @@
 <script setup>
 
     // imports
-    import ContainerListPurchases from "@/components/container/statistic/ContainerListPurchases.vue";
+    import ContainerListPurchases from "@/component/container/ContainerListPurchases.vue";
 
 </script>

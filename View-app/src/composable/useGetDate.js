@@ -1,9 +1,9 @@
-export function getAvailableYearNames() {
-    const yearNames = [];
+export function getAvailableYear() {
+    const yearArray = [];
     for (let year = 2020; year <= getCurrentYear(); year++) {
-        yearNames.push(year);
+        yearArray.push(year);
     }
-    return yearNames;
+    return yearArray;
 }
 
 export const monthNames = 

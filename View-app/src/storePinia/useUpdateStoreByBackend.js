@@ -3,28 +3,44 @@ import { storeThreshold, storeStatisticDetails, storeTrsMonthByDay, storeLastNTr
 
 
 // list transactions month By Day
-export async function updateListTrsMonthByDay(month, year, category) {
+export async function updateListTrsMonthByDay(month, year, transactionType) {
     const transactionsMonthByDay = storeTrsMonthByDay();
-    const listTransactionsFetched = await getListTrsMonthByDay(month, year, category);
+    const listTransactionsFetched = await getListTrsMonthByDay(month, year, transactionType);
     const localListTransactions = listTransactionsFetched?.data;
-    if(category === 'purchase') {
+    if(transactionType === 'purchase') {
         transactionsMonthByDay.listPurchases = (localListTransactions) ? localListTransactions : [];
     }
-    else if(category === 'recurring') {
+    else if(transactionType === 'recurring') {
         transactionsMonthByDay.listRecurrings = (localListTransactions) ? localListTransactions : [];
     }
 }
 
-export async function updateLastNTrsByMonth(month, year, category) {
+export async function updateLastNTrsByMonth(month, year, transactionType) {
     const lastNTransactions = storeLastNTransactions();
-    const lastTransactionsFetched = await getLastNTransactions(month, year, category);
+    const lastTransactionsFetched = await getLastNTransactions(month, year, transactionType);
     const listLastTransactions = lastTransactionsFetched?.data;
 
-    if(category === 'purchase') {
-        lastNTransactions.listPurchases = (listLastTransactions) ? listLastTransactions : [];
+    const MAX_TRANSACTIONS = 5;
+
+    if(transactionType === 'purchase') {
+        const arrayRender = [];
+        for (let index = 0; index < MAX_TRANSACTIONS; index++) {
+            if(listLastTransactions[index]) arrayRender[index] = listLastTransactions[index];
+            else {
+                arrayRender[index] = {transaction_id: null};
+            }
+        }
+        lastNTransactions.listPurchases = arrayRender;
     }
-    else if(category === 'recurring') {
-        lastNTransactions.listRecurrings = (listLastTransactions) ? listLastTransactions : [];
+    else  {
+        const arrayRender = [];
+        for (let index = 0; index < MAX_TRANSACTIONS; index++) {
+            if(listLastTransactions[index]) arrayRender[index] = listLastTransactions[index];
+            else {
+                arrayRender[index] = {transaction_id: null};
+            }
+        }
+        lastNTransactions.listRecurrings = arrayRender;
     }
 }
 
@@ -54,22 +70,23 @@ export async function updateBalanceEcoByMonth(month, year) {
     statisticDetails.economyBalance = (economyBalanceValue) ? economyBalanceValue : 0;
 }
 
-export async function updateBiggestTrsByMonth(month, year, category) {
+export async function updateBiggestTrsByMonth(month, year, transactionType) {
     const statisticDetails = storeStatisticDetails();
-    const biggestTrsFetched = await getBiggestTrsByMonth(month, year, category);
+    const biggestTrsFetched = await getBiggestTrsByMonth(month, year, transactionType);
     const biggestTransactions = biggestTrsFetched?.data;
-    if(category === 'purchase') {
+    if(transactionType === 'purchase') {
         statisticDetails.biggestPurchase = (biggestTransactions) ? biggestTransactions : 'Aucune donnée';
     }
-    else if(category === 'recurring') {
+    else if(transactionType === 'recurring') {
         statisticDetails.biggestRecurring = (biggestTransactions) ? biggestTransactions : 'Aucune donnée';
     }
 }
 
-export async function updateAllDataTransations(month, year, category) {
-    updateBiggestTrsByMonth(month, year, category);
-    updateListTrsMonthByDay(month, year, category);
+export async function updateAllDataTransations(month, year, transactionType) {
+    updateBiggestTrsByMonth(month, year, transactionType);
+    updateListTrsMonthByDay(month, year, transactionType);
     updateBalanceEcoByMonth(month, year);
     updateTotalTrsByMonth(month, year);
-    updateLastNTrsByMonth(month, year, category);
+    updateLastNTrsByMonth(month, year, 'purchase');
+    updateLastNTrsByMonth(month, year, 'recurring');
 }

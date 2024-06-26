@@ -1,12 +1,12 @@
 <template>
-    <component :is="iconComponent" :svg="svg" :class="`${svg.color} p-1 ${extraClass}`"/>
+    <component :is="iconComponent" :svg="svg" :class="`${svg.color} ${extraClass}`"/>
 </template>
 
 
 <script setup>
     // import
-    import { ref, onMounted, shallowRef, watch } from 'vue';
-    import { getIconByName } from '@/functions/svg/getIcon';
+    import { onMounted, shallowRef, watch } from 'vue';
+    import { getIconByName } from '@/svg/getIcon';
 
     // variables, props...
     const iconComponent = shallowRef(null);
@@ -16,21 +16,16 @@
         extraClass: {default: ''}
     })
 
+    // life cycle, functions
     async function loadIcon(name) {
         const module = await getIconByName(name);
         iconComponent.value = module.default;
     }
-  
     onMounted(() => {
-        loadIcon(props.nameIcon);
+         loadIcon(props.nameIcon);
     });
-
-
-    watch(() => props.nameIcon, (newName) => {
-        loadIcon(newName);
-    });
-
-
-    // functions
     
+    watch(() => props.nameIcon, async (newName) => {
+        if(newName) loadIcon(newName);
+    });
 </script>

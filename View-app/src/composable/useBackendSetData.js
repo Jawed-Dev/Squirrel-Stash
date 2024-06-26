@@ -9,7 +9,7 @@ export async function saveThreshold(month, year, amount) {
         thresholdAmount: amount
     };
     const dataRequest = await useConfigFetchSetData ({
-        request: 'addTransaction',
+        request: 'saveThreshold',
         method: 'POST',
         dataBody: body,
         token: localToken
@@ -20,23 +20,47 @@ export async function saveThreshold(month, year, amount) {
 
 export async function addTransaction(params) {
     if(!params.amount) return null;
-    if(!params.trsName) return null;
-    if(!params.category) return null;
+    if(!params.trsCategory) return null;
+    if(!params.trsType) return null;
     if(!params.date) return null;
     if(!params.note) params.note = '';
-
-    console.log(params);
 
     const localToken = getLStorageAuthToken();
     const body = {
         transactionAmount: params.amount,
-        transactionName: params.trsName,
-        category: params.category,
+        transactionCategory: params.trsCategory,
+        transactionType: params.trsType,
         transactionDate: params.date,
         transactionNote: params.note
     };
     const dataRequest = await useConfigFetchSetData ({
         request: 'addTransaction',
+        method: 'POST',
+        dataBody: body,
+        token: localToken
+    });
+    return dataRequest;
+}
+
+export async function updateTransaction(params) {
+    if(!params.amount) return null;
+    if(!params.trsCategory) return null;
+    if(!params.trsType) return null;
+    if(!params.date) return null;
+    if(!params.id) return null;
+    if(!params.note) params.note = '';
+
+    const localToken = getLStorageAuthToken();
+    const body = {
+        transactionId: params.id,
+        transactionAmount: params.amount,
+        transactionCategory: params.trsCategory,
+        transactionType: params.trsType,
+        transactionDate: params.date,
+        transactionNote: params.note
+    };
+    const dataRequest = await useConfigFetchSetData ({
+        request: 'updateTransaction',
         method: 'POST',
         dataBody: body,
         token: localToken

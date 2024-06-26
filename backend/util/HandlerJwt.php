@@ -59,11 +59,11 @@
 
             $userId = $this->getControllerMain()->getControllerUser()->getUserIdFromJwt($decodedJwt);
             
-            $dataJson = $this->getControllerMain()->getRequestBodyJson();
-            $data = json_decode($dataJson, true);
+            $bodyDataJson = $this->getControllerMain()->getRequestBodyJson();
+            $bodyData = json_decode($bodyDataJson, true);
             
             return [
-                'bodyData' => $data,
+                'bodyData' => $bodyData,
                 'userId' => $userId
             ];
         }

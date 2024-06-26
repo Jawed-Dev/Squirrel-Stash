@@ -6,6 +6,6 @@
 </template>
 
 <script setup>
-    import SectionLogin from '@/components/auth/login/SectionLogin.vue';
-    import SectionCarousel from '@/components/auth/login/SectionCarousel.vue';
+    import SectionLogin from '@/component/auth/login/SectionLogin.vue';
+    import SectionCarousel from '@/component/auth/login/SectionCarousel.vue';
 </script>
