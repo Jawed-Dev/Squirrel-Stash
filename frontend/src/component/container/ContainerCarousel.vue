@@ -1,7 +1,7 @@
 <template>
     <section class="w-[50%] flex flex-col items-center justify-center bg-main-bg text-white">
 
-        <figure class="w-[300px] overflow-hidden">
+        <figure class="w-[300px] overflow-hidden rounded-md">
             <transition
                 name="fade-slide"
                 mode="out-in"
@@ -13,11 +13,11 @@
 
                 leave-active-class="transition-all duration-[1s] ease-out"
                 leave-to-class="opacity-0 translate-x-[-50px]"
-                >
+            >
             <img 
                 :key="listImg[currentSlide].id"
                 :src="currentImgSlide(currentSlide)"
-                class="w-full shadow-xl rounded-xl"
+                class="w-full shadow-black shadow-custom-main"
                 alt="Dynamic Image"
             >
             </transition>
@@ -32,9 +32,9 @@
         </div>
         
 
-        <div class="w-[300px] px-0 flex flex-col text-center mt-[20px]">
+        <div class="w-[300px] max-h-[100px] min-h-[100px] flex flex-col text-center mt-[20px]">
             <h2 class="font-medium text-[25px]"> {{currentTitleSlide(currentSlide)}} </h2>
-            <p class="text-[13px] font-light mt-[15px]"> {{currentTextSlide(currentSlide)}} </p>
+            <p class="text-[15px] font-light mt-[15px]"> {{currentTextSlide(currentSlide)}} </p>
         </div>
 
         
@@ -46,6 +46,7 @@
 
     import { ref, onUnmounted} from 'vue';
 
+    // props, variables
     const currentSlide = ref(0);
 
     const listText = [
@@ -69,8 +70,6 @@
     ];
 
     let timerId = createTimerCarrousel(5000);
-
-    //console.log(timerId);
     
     // life cycle
     onUnmounted(() => {
@@ -100,6 +99,7 @@
     }
 
     function nextSlide() {
+        if(currentSlide.value > 1000) currentSlide.value = 0;
         currentSlide.value = (currentSlide.value + 1) % MAX_SLIDE;
     }
 

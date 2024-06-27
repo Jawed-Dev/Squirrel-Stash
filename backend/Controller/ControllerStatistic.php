@@ -11,18 +11,17 @@
         function getModelStatistic();
         // View 
         function getViewStatistic();
-        // Statistic
-            // get
-            function fetchTrsMonthByDay();
-            function fetchNLastTrsByMonth();
-            function fetchThresholdByMonth();
-            function fetchTotalTrsByMonth();
-            function fetchBiggestTrsByMonth();
-            // set
-            function fetchSaveThreshold();
-            function fetchInsertTransaction();
-            function fetchDeleteTransaction();
-            function fetchUpdateTransaction();
+        // get data
+        function fetchTrsMonthByDay();
+        function fetchNLastTrsByMonth();
+        function fetchThresholdByMonth();
+        function fetchTotalTrsByMonth();
+        function fetchBiggestTrsByMonth();
+        // action data
+        function fetchSaveThreshold();
+        function fetchInsertTransaction();
+        function fetchDeleteTransaction();
+        function fetchUpdateTransaction();
         // Prepare page
         function authorizePageDashboard();
     }
@@ -64,15 +63,17 @@
             $db = $this->getControllerMain()->getDatabase();
             $dataRequest = $this->getControllerMain()->getHandlerJwt()->prepareDataForModel();
             $isTresholdExist = $this->getModelStatistic()->isThresholdExistByMonth($db, $dataRequest);
+            $isAnyError = $this->getControllerMain()->getHandlerError()->verifySaveThreshold($dataRequest['bodyData']);
 
             $successReq = false;
             if($isTresholdExist) {
-                $successReq = $this->getModelStatistic()->updateThresholdByMonth($db, $dataRequest);
+                if(!$isAnyError) $successReq = $this->getModelStatistic()->updateThresholdByMonth($db, $dataRequest);
             }
             else {
-                $successReq = $this->getModelStatistic()->insertThresholdByMonth($db, $dataRequest);
+                if(!$isAnyError) $successReq = $this->getModelStatistic()->insertThresholdByMonth($db, $dataRequest);
             }
-            //var_dump('tresholdExist',$isTresholdExist);
+            
+            // log ici ?
             $this->getControllerMain()->sendJsonResponse(['isSuccessRequest' => $successReq]);
         }
 
@@ -80,7 +81,11 @@
             $db = $this->getControllerMain()->getDatabase();
             $dataRequest = $this->getControllerMain()->getHandlerJwt()->prepareDataForModel();
 
-            $successReq = $this->getModelStatistic()->insertTransaction($db, $dataRequest);
+            $isAnyError = $this->getControllerMain()->getHandlerError()->verifyInsertTransaction($dataRequest['bodyData']);
+            $successReq = false;
+            if(!$isAnyError) $successReq = $this->getModelStatistic()->insertTransaction($db, $dataRequest);
+
+            // log ici ?
             $this->getControllerMain()->sendJsonResponse(['isSuccessRequest' => $successReq]);
         }
 
@@ -88,15 +93,23 @@
             $db = $this->getControllerMain()->getDatabase();
             $dataRequest = $this->getControllerMain()->getHandlerJwt()->prepareDataForModel();
 
-            $successReq = $this->getModelStatistic()->deleteTransaction($db, $dataRequest);
+            $isAnyError = $this->getControllerMain()->getHandlerError()->verifyDeleteTransaction($dataRequest['bodyData']);
+            $successReq = false;
+            if(!$isAnyError) $successReq = $this->getModelStatistic()->deleteTransaction($db, $dataRequest);
+
+            // log ici ?
             $this->getControllerMain()->sendJsonResponse(['isSuccessRequest' => $successReq]);
         }
 
         public function fetchUpdateTransaction() {
             $db = $this->getControllerMain()->getDatabase();
             $dataRequest = $this->getControllerMain()->getHandlerJwt()->prepareDataForModel();
+            //var_dump('test', $dataRequest);
+            $isAnyError = $this->getControllerMain()->getHandlerError()->verifyUpdateTransaction($dataRequest['bodyData']);
+            $successReq = false;
+            if(!$isAnyError) $successReq = $this->getModelStatistic()->updateTransaction($db, $dataRequest);
 
-            $successReq = $this->getModelStatistic()->updateTransaction($db, $dataRequest);
+            // log ici ?
             $this->getControllerMain()->sendJsonResponse(['isSuccessRequest' => $successReq]);
         }
 
@@ -105,7 +118,9 @@
             $db = $this->getControllerMain()->getDatabase();
             $dataRequest = $this->getControllerMain()->getHandlerJwt()->prepareDataForModel();
             $listTrsMonthByDay = $this->getModelStatistic()->getTrsMonthByDay($db, $dataRequest);
+            //var_dump($dataRequest);
             $this->getControllerMain()->sendJsonResponse(['data' => $listTrsMonthByDay]);
+            
         }
 
         public function fetchThresholdByMonth() {
@@ -147,9 +162,5 @@
             ];  
             $this->getViewStatistic()->renderPageDashboard($dataPage);
         }
-
-
     }
-
-
 ?>

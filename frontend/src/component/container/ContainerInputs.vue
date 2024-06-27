@@ -22,15 +22,16 @@
                     <InputBase 
                     v-model="inputPriceVal" 
                     width="w-[8vw]"
-                    extraClass="text-center font-light border-b-[1px]" 
+                    extraClass="text-center font-light " 
                     placeholder="Montant"
+                    type="number"
                     id="input-amount-purchase"/>
                 </div>
             </div>
 
             <div class="flex items-center gap-2 justify-center pt-[40px]">
                 <!-- placeholder notes -->
-                <div class="flex justify-center border-b-[1px]">
+                <div class="flex justify-center">
                     <InputBase v-model="inputNoteVal"
                     width="w-[23vw]"
                     extraClass="font-light"

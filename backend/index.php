@@ -77,10 +77,7 @@
         if ($_SERVER['REQUEST_METHOD'] === 'POST') { 
             if(!empty($_GET['setData'])) {
                 switch($_GET['setData']) {
-                    // auth
-                    // statistic
                     case 'saveThreshold': {
-                        //var_dump('test');
                         $ControllerMain->getControllerStatistic()->fetchSaveThreshold();
                         break;
                     }

@@ -1,5 +1,14 @@
 <template>
     <div>
+        <div class="rounded-[3px] overflow-hidden shadow-black shadow-custom-main ">
+            <div class="bg-main-gradient w-[230px] flex justify-around items-center p-1 gradient-border">
+                <p class="text-white px-3 flex ">Ajouter un achat</p>
+                <IconAddPurchase @click="toggleMenu('openNClose')"
+                class="p-1 bg-gradient-blue rounded-md right-[100px] top-[50vh] cursor-pointer z-10 shadow-black shadow-custom-main trigger-add-purchase" 
+                :svg="svgCfgIconAdd"/>
+            </div>
+        </div>
+
         <TransitionOpacity :durationIn="'duration-500'" :durationOut="'duration-500'">
             <div v-show="isMenuActive" class="fixed inset-0 bg-black bg-opacity-80 z-10"></div>
         </TransitionOpacity>
@@ -7,21 +16,20 @@
         <TransitionOpacity :durationIn="'duration-500'" :durationOut="'duration-500'">
             <div v-show="isMenuActive" 
                 :class="`fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 text-white rounded-[3px] overflow-hidden 
-                shadow-black shadow-custom-main trigger-edit-transaction bg-main-gradient ${props.width}`">
+                shadow-black shadow-custom-main trigger-add-purchase bg-main-gradient ${props.width}`">
 
                 <MainContainerSlot 
-                    :textBtn1="'Annuler'" :textBtn2="'Modifier'" :titleContainer="(!typeTransaction) ? 'Modifier achat' : 'Modifier prélèvement'" 
+                    :textBtn1="'Annuler'" :textBtn2="'Ajouter'" :titleContainer="(!typeTransaction) ? 'Ajouter achat' : 'Ajouter prélèvement'" 
                     @toggleMenu="toggleMenu" 
                 >
                     <!-- Errors  -->
                     <div class="relative">
                         <p class="p-3 absolute text-red-400">{{ computedErrors }}</p>
                     </div>
-
                     <div>
-                        <!-- inputs  -->
+                        <!-- Inputs  -->
                         <ContainerInputs v-model:inputPriceVal="inputPriceVal" v-model:inputNoteVal="inputNoteVal" v-model:inputDateVal="inputDateVal" />
-                        <!-- liste des catégories -->
+                        <!-- Categories -->
                         <ContainerSelectCategories v-model:currentCategory="currentCategory" 
                         v-model:typeTransaction="typeTransaction" />              
                     </div>
@@ -34,20 +42,22 @@
 
 <script setup>
     // import
-    import { ref, watch, onMounted, computed } from 'vue';
+    import { ref, watch, computed } from 'vue';
+    import IconAddPurchase from '@/component/svgs/IconAddPurchase.vue';
     import TransitionOpacity from '@/component/transition/TransitionOpacity.vue';
+    import { svgConfig } from '@/svg/svgConfig';
     import useClickOutside from '@/composable/useClickOutSide';
     import useEscapeKey from '@/composable/useEscapeKey';
 
-    import ContainerSelectCategories from '@/component/container/ContainerSelectCategories.vue';
+    import ContainerSelectCategories from '../container/ContainerSelectCategories.vue';
     import ContainerInputs from '@/component/container/ContainerInputs.vue';
     import MainContainerSlot from '@/component/containerSlot/MainContainerSlot.vue';
     import { storeDateSelected } from '@/storePinia/useStoreDashboard';
-    import { updateTransaction } from '@/composable/useBackendSetData';
+    import { addTransaction } from '@/composable/useBackendSetData';
     import { updateAllDataTransations} from '@/storePinia/useUpdateStoreByBackend';
     import { formatDateForCurrentDay, formatDateForFirstDay, isCurrentMonth } from '@/composable/useGetDate';
     import { listCategories, listRecurings } from '@/svg/listTransactionSvgs';
-    import { verifyEditTransaction } from '@/error/useHandleError';
+    import { verifyAddTransaction } from '@/error/useHandleError';
 
     // stores Pinia
     const dateSelected = storeDateSelected();
@@ -57,46 +67,41 @@
 
     // variables, props...
     const props = defineProps({
-        width: { default:'' },
-        indexMenu: {default: 0},
-        infoTransaction: { default: {} }
+        width: { default:'' }
     });
-    const isDataLoaded = ref(false);
 
     // menu
-    const isMenuActive = defineModel('menuActive');
-    const typeTransaction = ref(false); 
+    const isMenuActive = ref(false); 
+    const typeTransaction = ref (false); // menu state if purchase or reccuring
     const currentCategory = ref(0);
 
     // input ref
     const inputNoteVal = ref('');
     const inputPriceVal = ref('');
     const inputDateVal = ref('');
-     
-    // life cycle / functions
-    onMounted(() => {
-        loadDataTransaction();
-        isDataLoaded.value = true;
-    });
 
+    // icons
+    const svgCfgIconAdd = svgConfig.mediumSmaller;
+
+    // life cycle / functions
     watch( () => [dateSelected.month, dateSelected.year], async ([newMonth, newYear]) => {
         inputDateVal.value = formatDateInput();
     }, {  immediate:true, deep:true });
 
-    watch(isMenuActive, (newVal) => {
-        if(newVal) {
-            isDataLoaded.value = false;
-            loadDataTransaction();
-        }
+    watch(typeTransaction, (newVal, oldVal) => {
+        currentCategory.value = 0;
     });
 
-    watch(typeTransaction, (newVal, oldVal) => {
-        if(isDataLoaded.value) currentCategory.value = 0;
-         //alert('test');
+    useEscapeKey(isMenuActive, () => {
+        closeMenu();
+    });
+
+    useClickOutside('.trigger-add-purchase', isMenuActive, () => {
+        closeMenu();
     });
 
     const computedErrors = computed(() => {
-        const isError = verifyEditTransaction({
+        const isError = verifyAddTransaction({
             trsAmount: inputPriceVal.value,
             note: inputNoteVal.value,
             date: inputDateVal.value,
@@ -110,18 +115,21 @@
         else stateErrors.value = [];
     });
 
-    function isAnyErrorActive() {
-        return stateErrors.value.length > 0;
-    }
-
     async function toggleMenu(request) {
         switch(request) {
+            case 'openNClose' : {
+                typeTransaction.value = false;
+                resetInputs();
+                isMenuActive.value = !isMenuActive.value;
+                break;
+            }
             case 'valid' : {
                 if(!isMenuActive.value) return;
                 if(isAnyErrorActive()) return;
-                prepareUpdateTransaction();
-                isMenuActive.value = false;
+                //if(stateErrors.length > 0) return;
+                prepareAddTransaction();
                 resetInputs();
+                isMenuActive.value = false;
                 break;
             }
             case 'options' : {
@@ -129,69 +137,56 @@
                 break;
             }
             case 'cancel' : {
-                closeMenu();
                 resetInputs();
+                isMenuActive.value = false;
                 break;
             }
         }
     }
-    useEscapeKey(isMenuActive, () => {
-        closeMenu();
-    });
-    useClickOutside('.trigger-edit-transaction', isMenuActive, () => {
-        closeMenu();
-    });
+    
+    function isAnyErrorActive() {
+        return stateErrors.value.length > 0;
+    }
+
     function getCurrentTransactionType() {
         return (!typeTransaction.value) ? 'purchase' : 'recurring';
     }
+
+    function getCurrentCategory() {
+        const listTransaction = (!typeTransaction.value) ? listCategories : listRecurings;
+        const currentIndex = currentCategory.value;
+        console.log(listTransaction);
+        const nameCategory = listTransaction[currentIndex].text;
+        return nameCategory;
+    }
+
     function formatDateInput() {
         const month = dateSelected.month;
         const year = dateSelected.year;
         return (isCurrentMonth(month, year)) ? formatDateForCurrentDay(month, year) : formatDateForFirstDay(month, year);
     }
-    function closeMenu() {
-        isMenuActive.value = false;
-        typeTransaction.value = false;
-    }
+
     function resetInputs() {
-        if(!isDataLoaded) return;
         inputNoteVal.value = '';
         inputPriceVal.value = '';
+        currentCategory.value = 0;
+        currentCategory.value = 0;
         inputDateVal.value = formatDateInput();
     }
-    function getCurrentCategory() {
-        const listTransaction = (!typeTransaction.value) ? listCategories : listRecurings;
-        const currentIndex = currentCategory.value;
-        const nameCategory = listTransaction[currentIndex].nameIcon;
-        return nameCategory;
+
+    function closeMenu() {
+        isMenuActive.value = false;
     }
-    function loadDataTransaction() {
-        if(! props.infoTransaction.transaction_id) return;
-        isDataLoaded.value = false;
-        inputPriceVal.value = props.infoTransaction.transaction_amount;
-        inputNoteVal.value = props.infoTransaction.transaction_note;
-        inputDateVal.value = props.infoTransaction.transaction_date;
-        typeTransaction.value = (props.infoTransaction.transaction_type === 'purchase') ? false : true;
-        
-        let index = 0;
-        if(!typeTransaction.value) {
-            index = listCategories.findIndex(item => item.nameIcon === props.infoTransaction.transaction_category);
-        }
-        else {
-            index = listRecurings.findIndex(item => item.nameIcon === props.infoTransaction.transaction_category);
-        }
-        currentCategory.value = index;
-        isDataLoaded.value = true;
-    }
-    async function prepareUpdateTransaction() {
-        const dataRequest = await updateTransaction({
-            id: props.infoTransaction.transaction_id,
+    
+    async function prepareAddTransaction() {
+        const dataRequest = await addTransaction({
             amount: inputPriceVal.value,
             trsCategory: getCurrentCategory(),
             trsType: getCurrentTransactionType(),
             date: inputDateVal.value,
             note: inputNoteVal.value
         });
+        //console.log(dataRequest);
         const isSuccessRequest = dataRequest?.isSuccessRequest;
         if(isSuccessRequest) {
             const nameTypeTrs = getCurrentTransactionType();

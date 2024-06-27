@@ -1,6 +1,6 @@
 <template>
 
-    <aside class="font-main-font flex flex-col bg-main-bg w-full">
+    <div class="font-main-font flex flex-col bg-main-bg w-full">
 
         <HeaderComponent/>
 
@@ -44,20 +44,19 @@
             </section>
     
         </div>
-    </aside>
+    </div>
 </template>
 
 
 <script setup>
 
-    import { watch, computed } from 'vue'; 
+    import { ref, watch, computed, onMounted } from 'vue'; 
     import HeaderComponent from '@/component/header/Header.vue';
     import ContainerStatMonth from '@/component/container/ContainerStatMonth.vue';
     import SelectYear from '@/component/select/SelectYear.vue';
     import SelectMonth from '@/component/select/SelectMonth.vue';
     import ContainerTransactionsMonth from '@/component/container/ContainerTransactionsMonth.vue';
     import ContainerListPurchases from '@/component/container/ContainerListPurchases.vue';
-    
     import AddTransaction from '@/component/overlay/AddTransaction.vue';
     import { monthNames, getAvailableYear } from '@/composable/useGetDate';
     import { storeThreshold, storeDateSelected, storeStatisticDetails } from '@/storePinia/useStoreDashboard';
@@ -67,10 +66,15 @@
     const threshold = storeThreshold();
     const dateSelected = storeDateSelected();
     const statisticDetails = storeStatisticDetails();
+    const isLoadedPage = ref(false);
 
     // variables, props, ...
     
     // life cycle / functions
+    onMounted(() => {
+        isLoadedPage.value = true;
+    });
+
     watch( () => [dateSelected.month, dateSelected.year], async ([newMonth, newYear]) => {
         updateThresholdByMonth(newMonth, newYear);
         updateTotalTrsByMonth(newMonth, newYear);
@@ -87,22 +91,23 @@
     });
 
     const iconNamePurchases = computed(() => {
+        if(!isLoadedPage.value) return;
         console.log(statisticDetails);
         const nameIcon = statisticDetails?.biggestPurchase?.transaction_category;
-        return (nameIcon) ? nameIcon : '';
+        return (nameIcon) ? nameIcon : 'Invisible';
     });
     const iconNameRecurrings = computed(() => {
         const nameIcon = statisticDetails?.biggestRecurring?.transaction_category;
         //alert(nameIcon);
-        return (nameIcon) ? nameIcon : '';
+        return (nameIcon) ? nameIcon : 'Invisible';
     });
     const nameBiggestPurchase = computed(() => {
         const nameBiggestPurch = statisticDetails?.biggestPurchase?.transaction_category;
-        return (nameBiggestPurch) ? nameBiggestPurch : '';
+        return (nameBiggestPurch) ? nameBiggestPurch : 'Invisible';
     });
     const nameBiggestRecurring = computed(() => {
         const nameBiggestPurch = statisticDetails?.biggestRecurring?.transaction_category;
-        return (nameBiggestPurch) ? nameBiggestPurch : '';
+        return (nameBiggestPurch) ? nameBiggestPurch : 'Invisible';
     });
 
 

@@ -8,7 +8,7 @@
                 />
                 <div class="flex flex-col items-end gap-3">
                     <SetThreshold width="w-[30vw]" :isIconActive="isIconActive" />
-                    <p :class="`pl-[12px] ${colorValue} font-[400] text-[18px]`">{{ amountValue }}</p>
+                    <p :class="`pl-[12px] ${colorValue} text-[18px] font-light`">{{ amountValue }}</p>
                 </div>
             </div>
     

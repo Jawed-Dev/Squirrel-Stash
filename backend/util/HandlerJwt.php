@@ -51,6 +51,7 @@
             return $decodedJwt;
         }
         public function prepareDataForModel() {
+            
             $TokenJwtFromHeader = $this->getJwtFromHeader();
             $decodedJwt = $this->decodeJwt($TokenJwtFromHeader);
 
@@ -60,6 +61,7 @@
             $userId = $this->getControllerMain()->getControllerUser()->getUserIdFromJwt($decodedJwt);
             
             $bodyDataJson = $this->getControllerMain()->getRequestBodyJson();
+            
             $bodyData = json_decode($bodyDataJson, true);
             
             return [

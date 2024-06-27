@@ -4,9 +4,9 @@ import { getLStorageAuthToken } from "@/composable/useLocalStorage";
 export async function saveThreshold(month, year, amount) {
     const localToken = getLStorageAuthToken();
     const body = {
-        selectedMonth: month,
-        selectedYear: year,
-        thresholdAmount: amount
+        selectedMonth: Number(month),
+        selectedYear: Number(year),
+        thresholdAmount: Number(amount)
     };
     const dataRequest = await useConfigFetchSetData ({
         request: 'saveThreshold',
@@ -27,11 +27,11 @@ export async function addTransaction(params) {
 
     const localToken = getLStorageAuthToken();
     const body = {
-        transactionAmount: params.amount,
-        transactionCategory: params.trsCategory,
-        transactionType: params.trsType,
-        transactionDate: params.date,
-        transactionNote: params.note
+        transactionAmount: Number(params.amount),
+        transactionCategory: String(params.trsCategory),
+        transactionType: String(params.trsType),
+        transactionDate: String(params.date),
+        transactionNote: String(params.note)
     };
     const dataRequest = await useConfigFetchSetData ({
         request: 'addTransaction',
@@ -52,12 +52,12 @@ export async function updateTransaction(params) {
 
     const localToken = getLStorageAuthToken();
     const body = {
-        transactionId: params.id,
-        transactionAmount: params.amount,
-        transactionCategory: params.trsCategory,
-        transactionType: params.trsType,
-        transactionDate: params.date,
-        transactionNote: params.note
+        transactionId: Number(params.id),
+        transactionAmount: Number(params.amount),
+        transactionCategory: String(params.trsCategory),
+        transactionType: String(params.trsType),
+        transactionDate: String(params.date),
+        transactionNote: String(params.note)
     };
     const dataRequest = await useConfigFetchSetData ({
         request: 'updateTransaction',
@@ -71,7 +71,7 @@ export async function updateTransaction(params) {
 export async function deleteTransaction(transactionId) {
     const localToken = getLStorageAuthToken();
     const body = {
-        transactionId: transactionId,
+        transactionId: Number(transactionId),
     };
     const dataRequest = await useConfigFetchSetData ({
         request: 'deleteTransaction',

@@ -12,7 +12,7 @@ pour argumenter avec le jury
 
 # FAIT
 
-- composant SectionLogin
+- composant ContainerLogin
 - composable inputText
 - 
 
@@ -61,7 +61,7 @@ pour argumenter avec le jury
 > ou peut être un soucis sur le timer ?
 
 
-- il faudrait peut être passé des props de l'index vers SectionLogin 
+- il faudrait peut être passé des props de l'index vers ContainerLogin 
 - changer le fontmain en poppins
 
 

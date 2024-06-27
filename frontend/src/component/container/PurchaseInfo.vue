@@ -9,7 +9,7 @@
     </div>
     <div v-if="(!props.infoTransaction.transaction_id)" class="flex items-center border-t py-6 border-gray-700 text-white">
         <IconLoader nameIcon="Invisible" :svg="svg" :class="`${props.svg.color} rounded-full p-[1.5%] shadow-black shadow-custom-main`"/>
-        <p class="w-full pl-[15px] text-[15px] text-center">Aucune donnée</p>
+        <p class="w-full pl-[15px] text-[15px] text-center font-light">Aucune donnée</p>
     </div>
 </template>
 

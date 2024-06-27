@@ -10,6 +10,7 @@
     require_once './util/HandlerJwt.php';
     require_once './util/HandlerLog.php';
     require_once './util/HandlerError.php';
+    require_once './util/HandlerValidFormat.php';
     
     interface I_ControllerMain {
         // Controllers 
@@ -26,6 +27,7 @@
         function getRequestBodyJson();
         // Handler Error
         function getHandlerError();
+        function getHandlerValidFormat();
         // Prepare pages
         function authorizePageIndex();
     }
@@ -89,6 +91,15 @@
         */
         public function getHandlerError() {
             if (!$this->HandlerError) $this->HandlerError = new HandlerError();
+            return $this->HandlerError;
+        }
+
+        // Handler Valid format
+        /**
+        * @return HandlerValidFormat
+        */
+        public function getHandlerValidFormat() {
+            if (!$this->HandlerError) $this->HandlerError = new HandlerValidFormat();
             return $this->HandlerError;
         }
 

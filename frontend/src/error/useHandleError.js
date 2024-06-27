@@ -42,7 +42,6 @@ const typeError = {
 
 const stateErrors = [];
 export function verifyAddTransaction(params) {
-
     stateErrors.value = [];
     if (!isValidInputAmount(params.trsAmount)) {
         if(params.trsAmount.length > 0) stateErrors.value.push(typeError.trsAmount);
