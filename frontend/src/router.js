@@ -5,15 +5,21 @@ import PageCreateAcc from '@/pages/PageCreateAcc.vue';
 import PageDashboard from '@/pages/PageDashboard.vue'; 
 import PagePurchases from "@/pages/PagePurchases.vue";
 import PageTemporary from '@/pages/PageTemporary.vue';
+import PageForgotPass from '@/pages/PageForgotPass.vue';
+import PageResetPass from '@/pages/PageResetPass.vue';
+
 import useConfigFetchGetPage from "@/composable/useConfigFetchGetPage";
 import { getLStorageAuthToken } from "@/composable/useLocalStorage";
+import { isValidResetPassToken } from "@/composable/useBackendGetData";
 
 const routes = [
-  { path: '/', component: PageTemporary, meta: { page: 'index'}},
+  { path: '/', component: PageTemporary, meta: { page: 'pageIndex'}},
   { path: '/connexion', component: PageLogin, meta: { page: 'pageLogin'}},
-  { path: '/inscription', component: PageCreateAcc, meta: { page: 'createAcc' }},
+  { path: '/inscription', component: PageCreateAcc, meta: { page: 'pageRegister' }},
   { path: '/tableau-de-bord', component: PageDashboard, meta: { page: 'pageDashboard' }},
-  { path: '/list-achats', component: PagePurchases, meta: { page: 'purchases' }}
+  { path: '/mot-de-passe-oublie', component: PageForgotPass, meta: { page: 'pageForgotPass' }},
+  { path: '/reinitialiser-mot-de-passe', component: PageResetPass, meta: { page: 'pageResetPass' }},
+  { path: '/list-achats', component: PagePurchases, meta: { page: 'purchases' }},
 ];
 
 const router = createRouter({
@@ -23,20 +29,34 @@ const router = createRouter({
 
 router.beforeEach(async (to, from, next) => {
   if (to.matched.some(record => record)) {  
-  
-    const page = to.meta.page;  
+    const currentPage = to.meta.page;  
     const localToken = getLStorageAuthToken();
 
-    const dataPage = await useConfigFetchGetPage(`pageIndex`, localToken);
-    console.log(dataPage);
+    const dataPage = await useConfigFetchGetPage(currentPage, localToken);
     const isSessionActive = dataPage?.isSessionActive;
+    console.log(dataPage);
     
-    switch(page) {
-      case 'index' : {
+    switch(currentPage) {
+      case 'pageIndex' : {
         (isSessionActive) ? next('/tableau-de-bord') : next('/connexion');
         break;
       }
       case 'pageLogin' : {
+        (isSessionActive) ? next('/tableau-de-bord') : next();
+        break;
+      }
+      case 'pageRegister' : {
+        (isSessionActive) ? next('/tableau-de-bord') : next();
+        break;
+      }
+      case 'pageForgotPass' : {
+        (isSessionActive) ? next('/tableau-de-bord') : next();
+        break;
+      }
+      case 'pageResetPass' : {
+        const isParamUrlValid = to.query.token;
+        const isValidToken = await isValidResetPassToken(to.query.token);
+        if(!isParamUrlValid || !isValidToken) next('/connexion'); 
         (isSessionActive) ? next('/tableau-de-bord') : next();
         break;
       }
@@ -49,10 +69,7 @@ router.beforeEach(async (to, from, next) => {
           next();
           break;
       }
-      
-    }
-
-    
+    }    
   } 
 });
 

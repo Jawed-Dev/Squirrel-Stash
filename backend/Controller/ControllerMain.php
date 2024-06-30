@@ -1,4 +1,7 @@
 <?php
+
+use App\Mail\EmailSender;
+
     require_once './config.php';
     require_once './vendor/autoload.php';
 
@@ -11,6 +14,8 @@
     require_once './util/HandlerLog.php';
     require_once './util/HandlerError.php';
     require_once './util/HandlerValidFormat.php';
+
+    require_once './util/EmailSender.php';
     
     interface I_ControllerMain {
         // Controllers 
@@ -18,16 +23,19 @@
         function getControllerStatistic();
         // Handler JWT
         function getHandlerJwt();
-        // view Main
+        // Email
+        function getEmailSender();
+        // View Main
         function getViewMain();
         // Database
         function getDatabase();
-        // json
+        // Json
         function sendJsonResponse($data);
         function getRequestBodyJson();
         // Handler Error
         function getHandlerError();
         function getHandlerValidFormat();
+        
         // Prepare pages
         function authorizePageIndex();
     }
@@ -40,6 +48,7 @@
         private $HandlerJwt;
         private $HandlerError;
         private $HandlerLog;
+        private $EmailSender;
 
         // Controllers 
         /**
@@ -111,6 +120,14 @@
             if (!$this->HandlerLog) $this->HandlerLog = new HandlerLog();
             return $this->HandlerLog;
         }
+        // EmailSender
+        /**
+        * @return EmailSender
+        */
+        public function getEmailSender() {
+            if (!$this->EmailSender) $this->EmailSender = new EmailSender();
+            return $this->EmailSender;
+        }
 
 
         // json 
@@ -124,9 +141,7 @@
 
         // Prepare Pages
         public function authorizePageIndex() {
-            $tokenJwt = $this->getHandlerJwt()->getJwtFromHeader();
-            if(!$tokenJwt) $tokenJwt = '';
-            $decodedJwt = $this->getHandlerJwt()->decodeJwt($tokenJwt);
+            $decodedJwt = $this->getHandlerJwt()->getJwtFromHeader();
             $isSessionActive = $this->getControllerUser()->isSessionActiveJwt($decodedJwt);
             $dataPage = [
                 'isSessionActive' => $isSessionActive,

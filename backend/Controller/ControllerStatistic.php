@@ -60,11 +60,11 @@
 
         // Set
         public function fetchSaveThreshold() {
-            $db = $this->getControllerMain()->getDatabase();
+            
             $dataRequest = $this->getControllerMain()->getHandlerJwt()->prepareDataForModel();
+            $db = $dataRequest['dataBase'];
             $isTresholdExist = $this->getModelStatistic()->isThresholdExistByMonth($db, $dataRequest);
             $isAnyError = $this->getControllerMain()->getHandlerError()->verifySaveThreshold($dataRequest['bodyData']);
-
             $successReq = false;
             if($isTresholdExist) {
                 if(!$isAnyError) $successReq = $this->getModelStatistic()->updateThresholdByMonth($db, $dataRequest);
@@ -78,9 +78,8 @@
         }
 
         public function fetchInsertTransaction() {
-            $db = $this->getControllerMain()->getDatabase();
             $dataRequest = $this->getControllerMain()->getHandlerJwt()->prepareDataForModel();
-
+            $db = $dataRequest['dataBase'];
             $isAnyError = $this->getControllerMain()->getHandlerError()->verifyInsertTransaction($dataRequest['bodyData']);
             $successReq = false;
             if(!$isAnyError) $successReq = $this->getModelStatistic()->insertTransaction($db, $dataRequest);
@@ -90,9 +89,8 @@
         }
 
         public function fetchDeleteTransaction() {
-            $db = $this->getControllerMain()->getDatabase();
             $dataRequest = $this->getControllerMain()->getHandlerJwt()->prepareDataForModel();
-
+            $db = $dataRequest['dataBase'];
             $isAnyError = $this->getControllerMain()->getHandlerError()->verifyDeleteTransaction($dataRequest['bodyData']);
             $successReq = false;
             if(!$isAnyError) $successReq = $this->getModelStatistic()->deleteTransaction($db, $dataRequest);
@@ -102,8 +100,8 @@
         }
 
         public function fetchUpdateTransaction() {
-            $db = $this->getControllerMain()->getDatabase();
             $dataRequest = $this->getControllerMain()->getHandlerJwt()->prepareDataForModel();
+            $db = $dataRequest['dataBase'];
             //var_dump('test', $dataRequest);
             $isAnyError = $this->getControllerMain()->getHandlerError()->verifyUpdateTransaction($dataRequest['bodyData']);
             $successReq = false;
@@ -115,47 +113,45 @@
 
         // get
         public function fetchTrsMonthByDay() {
-            $db = $this->getControllerMain()->getDatabase();
             $dataRequest = $this->getControllerMain()->getHandlerJwt()->prepareDataForModel();
+            $db = $dataRequest['dataBase'];
             $listTrsMonthByDay = $this->getModelStatistic()->getTrsMonthByDay($db, $dataRequest);
             //var_dump($dataRequest);
             $this->getControllerMain()->sendJsonResponse(['data' => $listTrsMonthByDay]);
-            
         }
 
         public function fetchThresholdByMonth() {
-            $db = $this->getControllerMain()->getDatabase();
             $dataRequest = $this->getControllerMain()->getHandlerJwt()->prepareDataForModel();
+            $db = $dataRequest['dataBase'];
             $amountThresholdByMonth = $this->getModelStatistic()->getThresholdByMonth($db, $dataRequest);
             //var_dump($db);
             $this->getControllerMain()->sendJsonResponse(['data' => $amountThresholdByMonth]);
         }
 
         public function fetchNLastTrsByMonth() {
-            $db = $this->getControllerMain()->getDatabase();
             $dataRequest = $this->getControllerMain()->getHandlerJwt()->prepareDataForModel();
+            $db = $dataRequest['dataBase'];
             $listLastTrsByMonth = $this->getModelStatistic()->getNLastTrsByMonth($db, $dataRequest);
             $this->getControllerMain()->sendJsonResponse(['data' => $listLastTrsByMonth]);
         }
 
         public function fetchTotalTrsByMonth() {
-            $db = $this->getControllerMain()->getDatabase();
             $dataRequest = $this->getControllerMain()->getHandlerJwt()->prepareDataForModel();
+            $db = $dataRequest['dataBase'];
             $totalTransactions = $this->getModelStatistic()->getTotalTrsByMonth($db, $dataRequest);
             $this->getControllerMain()->sendJsonResponse(['data' => $totalTransactions]);
         }
 
         public function fetchBiggestTrsByMonth() {
-            $db = $this->getControllerMain()->getDatabase();
             $dataRequest = $this->getControllerMain()->getHandlerJwt()->prepareDataForModel();
+            $db = $dataRequest['dataBase'];
             $totalTransactions = $this->getModelStatistic()->getBiggestTrsByMonth($db, $dataRequest);
             $this->getControllerMain()->sendJsonResponse(['data' => $totalTransactions]);
         }
 
         // Prepare Pages
         public function authorizePageDashboard() {
-            $tokenJwt = $this->getControllerMain()->getHandlerJwt()->getJwtFromHeader();
-            $decodedJwt = $this->getControllerMain()->getHandlerJwt()->decodeJwt($tokenJwt);
+            $decodedJwt = $this->getControllerMain()->getHandlerJwt()->getJwtFromHeader();
             $isSessionActive = $this->getControllerMain()->getControllerUser()->isSessionActiveJwt($decodedJwt);
             $dataPage = [
                 'isSessionActive' => $isSessionActive,

@@ -75,8 +75,8 @@
             $regex = "/^\d+(,\d+)?$/";
             $maxLen = strlen($trsAmount) <= 10;
             $isValidPattern = preg_match($regex, $trsAmount);
-            $isNumeric = is_numeric($trsAmount);
-            return $isValidPattern && $maxLen && $isNumeric;
+            $isInt = is_int($trsAmount);
+            return $isValidPattern && $maxLen && $isInt;
         }
 
         public function isValidTransactionAmount($trsAmount) {
@@ -86,8 +86,8 @@
             $regex = "/^\d+(,\d+)?$/";
             $maxLen = strlen($trsAmount) <= 10;
             $isValidPattern = preg_match($regex, $trsAmount);
-            $isNumeric  = is_numeric($trsAmount);
-            return $isValidPattern && $maxLen && $isNumeric;
+            $isInt  = is_int($trsAmount);
+            return $isValidPattern && $maxLen && $isInt;
         }
 
         public function isValidTransactionType($trsType) {
@@ -115,17 +115,17 @@
         public function isValidYear($year) {
             if(empty($year)) return false;
 
-            $isNumeric = is_numeric($year);
+            $isInt = is_int($year);
             $isCorrectValue = in_array($year, $this->listAvailableYears());
-            return $isCorrectValue && $isNumeric;
+            return $isCorrectValue && $isInt;
         }
 
         function isValidMonth($month) {
             if(empty($month)) return false;
 
-            $isNumeric = is_numeric($month);
+            $isInt = is_int($month);
             $isCorrectMonth = $month >= 0 && $month <= 12;
-            return $isNumeric && $isCorrectMonth;
+            return $isInt && $isCorrectMonth;
         }
 
         public function isValidTransactionDate($trsDate) {

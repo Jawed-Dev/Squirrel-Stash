@@ -1,5 +1,5 @@
 export function getLStorageAuthToken() {
-    return localStorage.getItem('authToken');
+    return localStorage.getItem('authToken') || '';
 }  
 
 export function setLStorageAuthToken(dataToken) {

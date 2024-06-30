@@ -248,12 +248,15 @@
                 ORDER BY transaction_date DESC
                 LIMIT :limit
             ";
+
+            define("LIMIT_RESULT", 5);
+
             $query = $db->prepare($reqSql);
             $query->bindValue(':userId',  $userId, PDO::PARAM_INT);
             $query->bindValue(':month', $dataQuery['selectedMonth'], PDO::PARAM_INT);
             $query->bindValue(':year',  $dataQuery['selectedYear'], PDO::PARAM_INT);
-            $query->bindValue(':trsType',  $dataQuery['transactionType'], PDO::PARAM_STR);
-            $query->bindValue(':limit',  $dataQuery['limitValue'], PDO::PARAM_INT);
+            $query->bindValue(':trsType', $dataQuery['transactionType'], PDO::PARAM_STR);
+            $query->bindValue(':limit', LIMIT_RESULT, PDO::PARAM_INT);
             $query->execute();
             $listTransactions = $query->fetchAll(PDO::FETCH_ASSOC);
             //var_dump($listTransactions);

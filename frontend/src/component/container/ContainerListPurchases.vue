@@ -1,5 +1,5 @@
 <template>
-    <div class="rounded-[3px] overflow-hidden my-custom-margin-main shadow-black shadow-custom-main ">
+    <div class="rounded-[3px] overflow-hidden my-custom-margin-main shadow-black shadow-custom-main">
         <div class="gradient-border text-white overflow-hidden
             bg-main-gradient w-full pl-3">     
     

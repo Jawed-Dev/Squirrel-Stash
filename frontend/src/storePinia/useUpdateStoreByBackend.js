@@ -83,10 +83,11 @@ export async function updateBiggestTrsByMonth(month, year, transactionType) {
 }
 
 export async function updateAllDataTransations(month, year, transactionType) {
-    updateBiggestTrsByMonth(month, year, transactionType);
     updateListTrsMonthByDay(month, year, transactionType);
     updateBalanceEcoByMonth(month, year);
     updateTotalTrsByMonth(month, year);
     updateLastNTrsByMonth(month, year, 'purchase');
     updateLastNTrsByMonth(month, year, 'recurring');
+    updateBiggestTrsByMonth(month, year, 'purchase');
+    updateBiggestTrsByMonth(month, year, 'recurring');
 }

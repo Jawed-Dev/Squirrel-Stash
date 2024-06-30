@@ -52,21 +52,17 @@
         }
         public function prepareDataForModel() {
             
-            $TokenJwtFromHeader = $this->getJwtFromHeader();
-            $decodedJwt = $this->decodeJwt($TokenJwtFromHeader);
-
-            $isSessionActive = $this->getControllerMain()->getControllerUser()->isSessionActiveJwt($decodedJwt);
-            if(!$isSessionActive) return null;
-
-            $userId = $this->getControllerMain()->getControllerUser()->getUserIdFromJwt($decodedJwt);
-            
             $bodyDataJson = $this->getControllerMain()->getRequestBodyJson();
-            
             $bodyData = json_decode($bodyDataJson, true);
+            $decodedJwt = $this->getJwtFromHeader();
             
+            $db = $this->getControllerMain()->getDatabase();
+            // session active
+            $userId = $this->getControllerMain()->getControllerUser()->getUserIdFromJwt($decodedJwt);
             return [
                 'bodyData' => $bodyData,
-                'userId' => $userId
+                'userId' => $userId,
+                'dataBase' => $db
             ];
         }
         public function isValidTokenJwt($decodedJwt) {
@@ -97,8 +93,11 @@
         }
         function getJwtFromHeader() {
             if (!isset($_SERVER['HTTP_AUTHORIZATION'])) return null;
-            if (preg_match('/Bearer\s(\S+)/', $_SERVER['HTTP_AUTHORIZATION'], $matches)) return $matches[1];
-            return null;
+            if (!preg_match('/Bearer\s(\S+)/', $_SERVER['HTTP_AUTHORIZATION'], $matches)) return null;
+            $tokenJwt = $matches[1];
+            $decodedJwt = $this->decodeJwt($tokenJwt);
+            if(!$decodedJwt) return null;
+            return $decodedJwt;
         }
     }
 ?>

@@ -12,27 +12,49 @@
         header("Access-Control-Allow-Methods: GET, POST");
         header("Content-Type: application/json");
 
+        // Controller Main
+        /**
+        * @return ControllerMain
+        */
+        // Model ControllerMain 
+        function getControllerMain() {
+            $ControllerMain = new ControllerMain();
+            return $ControllerMain;
+        }
+
         // ControllerMain 
-        $ControllerMain = new ControllerMain();
+        //$ControllerMain = new ControllerMain();
 
         // Request get Pages
         if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             if(!empty($_GET['page'])) {
                 switch($_GET['page']) {
                     case 'pageIndex': {
-                        $ControllerMain->authorizePageIndex();
+                        getControllerMain()->authorizePageIndex();
                         break;
                     }
                     case 'pageLogin': {
-                        $ControllerMain->getControllerUser()->authorizePageLogin();
+                        getControllerMain()->getControllerUser()->authorizePageLogin();
                         break;
                     }
                     case 'pageDashboard': {
-                        $ControllerMain->getControllerStatistic()->authorizePageDashboard();
+                        getControllerMain()->getControllerStatistic()->authorizePageDashboard();
+                        break;
+                    }
+                    case 'pageRegister': {
+                        getControllerMain()->getControllerUser()->authorizePageRegister();
+                        break;
+                    }
+                    case 'pageForgotPass': {
+                        getControllerMain()->getControllerUser()->authorizePageForgotPass();
+                        break;
+                    }
+                    case 'pageResetPass': {
+                        getControllerMain()->getControllerUser()->authorizePageResetPassword();
                         break;
                     }
                     default: {
-                        $ControllerMain->sendJsonResponse(['message' => 'Page not found', 'status' => 404]);
+                        getControllerMain()->sendJsonResponse(['message' => 'Page not found', 'status' => 404]);
                         break;
                     }
                 }
@@ -45,28 +67,36 @@
                 switch($_GET['getData']) {
                     // auth
                     case 'getHandleLogin': {
-                        $ControllerMain->getControllerUser()->handleSuccessLogin();
+                        getControllerMain()->getControllerUser()->handleSuccessLogin();
+                        break;
+                    }
+                    case 'getStateSession' : {
+                        getControllerMain()->getControllerUser()->getStateSession();
                         break;
                     }
                     // statistic
                     case 'getlistTrsMonthByDay': {
-                        $ControllerMain->getControllerStatistic()->fetchTrsMonthByDay();
+                        getControllerMain()->getControllerStatistic()->fetchTrsMonthByDay();
                         break;
                     }
                     case 'getThresholdByMonth' : {
-                        $ControllerMain->getControllerStatistic()->fetchThresholdByMonth();
+                        getControllerMain()->getControllerStatistic()->fetchThresholdByMonth();
                         break;
                     }
                     case 'getLastNTransactions' : {
-                        $ControllerMain->getControllerStatistic()->fetchNLastTrsByMonth();
+                        getControllerMain()->getControllerStatistic()->fetchNLastTrsByMonth();
                         break;
                     }
                     case 'getTotalTrsByMonth' : {
-                        $ControllerMain->getControllerStatistic()->fetchTotalTrsByMonth();
+                        getControllerMain()->getControllerStatistic()->fetchTotalTrsByMonth();
                         break;
                     }
                     case 'getBiggestTrsByMonth' : {
-                        $ControllerMain->getControllerStatistic()->fetchBiggestTrsByMonth();
+                        getControllerMain()->getControllerStatistic()->fetchBiggestTrsByMonth();
+                        break;
+                    }
+                    case 'IsValidResetPassToken' : {
+                        getControllerMain()->getControllerUser()->fetchIsValidResetPassToken();
                         break;
                     }
                 }
@@ -77,20 +107,32 @@
         if ($_SERVER['REQUEST_METHOD'] === 'POST') { 
             if(!empty($_GET['setData'])) {
                 switch($_GET['setData']) {
+                    case 'createAccount': {
+                        getControllerMain()->getControllerUser()->fetchInsertUser();
+                        break;
+                    }
                     case 'saveThreshold': {
-                        $ControllerMain->getControllerStatistic()->fetchSaveThreshold();
+                        getControllerMain()->getControllerStatistic()->fetchSaveThreshold();
                         break;
                     }
                     case 'addTransaction' : {
-                        $ControllerMain->getControllerStatistic()->fetchInsertTransaction();
+                        getControllerMain()->getControllerStatistic()->fetchInsertTransaction();
                         break;
                     }
                     case 'deleteTransaction' : {
-                        $ControllerMain->getControllerStatistic()->fetchDeleteTransaction();
+                        getControllerMain()->getControllerStatistic()->fetchDeleteTransaction();
                         break;
                     }
                     case 'updateTransaction' : {
-                        $ControllerMain->getControllerStatistic()->fetchUpdateTransaction();
+                        getControllerMain()->getControllerStatistic()->fetchUpdateTransaction();
+                        break;
+                    }
+                    case 'sendResetPass' : {
+                        getControllerMain()->getControllerUser()->FetchSendResetPassToken();
+                        break;
+                    }
+                    case 'updatePassword' : {
+                        getControllerMain()->getControllerUser()->fetchUpdatePassword();
                         break;
                     }
                 }
@@ -104,7 +146,8 @@
 
     finally {
         if (empty($ControllerMain)) return null;
-        $db = $ControllerMain->getDatabase();
+
+        $db = getControllerMain()->getDatabase();
         if($db !== null) $db = null;
     }
 

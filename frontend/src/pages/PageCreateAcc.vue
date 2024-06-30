@@ -1,15 +1,15 @@
 <script setup>
 
-    import SectionNewAccount from '../component/auth/createAcc/SectionNewAccount.vue';
-    import SectionInformation from '../component/auth/createAcc/SectionInformation.vue';
+    import ContainerNewAccount from '@/component/container/ContainerNewAccount.vue';
+    import ContainerInformation from '@/component/container/ContainerInformation.vue';
 
 </script>
 
 
 <template class="">
     <div class="flex h-[100vh]">
-        <section-information />
-        <section-new-account />
+        <ContainerInformation />
+        <ContainerNewAccount />
     </div>
 </template>
 

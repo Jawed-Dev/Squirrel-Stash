@@ -1,5 +1,5 @@
 <template>
-    <section class="w-[50%] flex flex-col items-center justify-center bg-main-blue text-white">
+    <section class="bg-main-bg w-[50%] flex flex-col items-center justify-center text-white">
 
         <div class="w-[300px] px-0 flex flex-col text-center mt-[20px]">
             <h2 class="font-medium text-[25px]">Information</h2>

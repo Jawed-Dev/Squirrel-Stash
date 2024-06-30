@@ -3,6 +3,7 @@ import { NAME_FOLDER_MAIN } from '@/config.js';
 
 export default async function useConfigFetchGetData(params) {
   try {
+    
     //if(!params.form) return null;
     if(!params.method) return null;
     if(!params.dataBody) return null;
@@ -25,7 +26,7 @@ export default async function useConfigFetchGetData(params) {
       method: params.method,
       headers: headers
     };
-
+    
     // data form accepted
     if(params.method !== 'GET' && params.method !== 'HEAD') {
       fetchOptions.body = JSON.stringify(params.dataBody);
@@ -33,10 +34,12 @@ export default async function useConfigFetchGetData(params) {
 
     // fetch
     const response = await fetch(fullPath, fetchOptions);
-    //console.log(response);
     if (!response.ok) throw new Error(`Erreur de Statut HTTP: ${response.status}`);
-    const data = await response.json();
-    return data;
+    const dataRequest = await response.json();
+
+
+  
+    return dataRequest;
   } 
   
   catch (error) {

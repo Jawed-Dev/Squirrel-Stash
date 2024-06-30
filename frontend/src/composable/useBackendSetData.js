@@ -1,7 +1,92 @@
 import useConfigFetchSetData  from "@/composable/useConfigFetchSetData";
 import { getLStorageAuthToken } from "@/composable/useLocalStorage";
+import useConfigFetchGetData from "./useConfigFetchGetData";
+
+async function getStateSession() {
+    const localToken = getLStorageAuthToken();
+    const stateSession = await useConfigFetchGetData ({
+        request: 'getStateSession',
+        method: 'POST',
+        token: localToken,
+        dataBody: 'none',
+    });
+    const isSessionActive = stateSession?.isSessionActive;
+    return (isSessionActive) ? true : false;
+}
+
+async function authRequired() {
+    const isSessionActive = await getStateSession();
+    if(!isSessionActive) {
+        redirectLogin();
+    }
+}
+
+async function notAuthRequired() {
+    const isSessionActive = await getStateSession();
+    if(isSessionActive) {
+        redirectDashboard();
+    }
+}
+
+function redirectLogin() {
+    window.location.href = '/connexion';
+}
+
+function redirectDashboard() {
+    window.location.href = '/tableau-de-bord';
+}
+
+export async function updatePassword(params) {
+    notAuthRequired();
+    const localToken = getLStorageAuthToken();
+    const body = {
+        resetPassToken: String(params.resetPassToken),
+        newPassword: params.password,
+    };
+    const dataRequest = await useConfigFetchSetData ({
+        request: 'updatePassword',
+        method: 'POST',
+        dataBody: body,
+        token: localToken
+    });
+    return dataRequest;
+}
+
+export async function sendResetPass(email) {
+    notAuthRequired();
+    const localToken = getLStorageAuthToken();
+    const body = {
+        email: String(email),
+    };
+    const dataRequest = await useConfigFetchSetData ({
+        request: 'sendResetPass',
+        method: 'POST',
+        dataBody: body,
+        token: localToken
+    });
+    return dataRequest;
+}
+
+export async function createAccount(params) {
+    notAuthRequired();
+    const localToken = getLStorageAuthToken();
+    const body = {
+        firstName: String(params.firstName),
+        lastName: String(params.lastName),
+        email: String(params.email),
+        password: String(params.password),
+    };
+    const dataRequest = await useConfigFetchSetData ({
+        request: 'createAccount',
+        method: 'POST',
+        dataBody: body,
+        token: localToken
+    });
+    return dataRequest;
+}
 
 export async function saveThreshold(month, year, amount) {
+    authRequired();
     const localToken = getLStorageAuthToken();
     const body = {
         selectedMonth: Number(month),
@@ -19,6 +104,7 @@ export async function saveThreshold(month, year, amount) {
 
 
 export async function addTransaction(params) {
+    authRequired();
     if(!params.amount) return null;
     if(!params.trsCategory) return null;
     if(!params.trsType) return null;
@@ -43,6 +129,7 @@ export async function addTransaction(params) {
 }
 
 export async function updateTransaction(params) {
+    authRequired();
     if(!params.amount) return null;
     if(!params.trsCategory) return null;
     if(!params.trsType) return null;
@@ -69,6 +156,7 @@ export async function updateTransaction(params) {
 }
 
 export async function deleteTransaction(transactionId) {
+    authRequired();
     const localToken = getLStorageAuthToken();
     const body = {
         transactionId: Number(transactionId),

@@ -24,7 +24,7 @@
                     width="w-[8vw]"
                     extraClass="text-center font-light " 
                     placeholder="Montant"
-                    type="number"
+                    type="text"
                     id="input-amount-purchase"/>
                 </div>
             </div>

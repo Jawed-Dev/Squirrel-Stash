@@ -2,10 +2,39 @@ import { getAvailableYear } from "@/composable/useGetDate";
 import { listCategories, listRecurings } from "@/svg/listTransactionSvgs";
 
 
-export function isValidFormatMail(email) {
+export function isValidMail(email) {
     const regex = /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/;
     return regex.test(email) && email.length <= 254;
 }
+
+export function isValidPassword(password) {
+    //const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+
+    //const regex = /^(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$/;
+    //  ^ : Démarre l'ancrage au début de la chaîne.
+    // (?=.*[a-z]) : Assure au moins une lettre minuscule.
+    // (?=.*[A-Z]) : Assure au moins une lettre majuscule.
+    // (?=.*\d) : Assure au moins un chiffre.
+    // (?=.*[@$!%*?&]) : Assure au moins un caractère spécial parmi ceux spécifiés dans le groupe (@$!%*?&).
+    // [A-Za-z\d@$!%*?&] : Les caractères autorisés dans le mot de passe.
+    // {8,} : Assure que la longueur du mot de passe est d'au moins 8 caractères.
+    // $ : Fin de l'ancrage de la chaîne.
+
+    //return regex.test(password);
+
+    return true;
+}
+
+export function isValidFirstName(firstName) {
+    const regex = /^[A-Za-zàâçéèêëîïôûùüÿñæœ' -]{2,50}$/;
+    return regex.test(firstName);
+}
+
+export function isValidLastName(lastName) {
+    const regex = /^[A-Za-zàâçéèêëîïôûùüÿñæœ' -]{2,70}$/;
+    return regex.test(lastName);
+}
+
 
 export function isValidInputAmount(amount) {
     const regex = /^\d+(,\d+)?$/;

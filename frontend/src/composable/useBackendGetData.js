@@ -1,7 +1,59 @@
 import useConfigFetchGetData  from "@/composable/useConfigFetchGetData";
 import { getLStorageAuthToken, setLStorageAuthToken } from "@/composable/useLocalStorage";
 
+
+async function authRequired() {
+    const isSessionActive = await getStateSession();
+    if(!isSessionActive) {
+        redirectLogin();
+    }
+}
+
+async function notAuthRequired() {
+    const isSessionActive = await getStateSession();
+    if(isSessionActive) {
+        redirectDashboard();
+    }
+}
+
+function redirectLogin() {
+    window.location.href = '/connexion';
+}
+
+function redirectDashboard() {
+    window.location.href = '/tableau-de-bord';
+}
+
+
+async function getStateSession() {
+    const localToken = getLStorageAuthToken();
+    const stateSession = await useConfigFetchGetData ({
+        request: 'getStateSession',
+        method: 'POST',
+        token: localToken,
+        dataBody: 'none',
+    });
+    const isSessionActive = stateSession?.isSessionActive;
+    return (isSessionActive) ? true : false;
+}
+
+export async function isValidResetPassToken(resetPassToken) {
+    const localToken = getLStorageAuthToken();
+    const body = {
+        resetPassToken: resetPassToken,
+    };
+    const stateSession = await useConfigFetchGetData ({
+        request: 'IsValidResetPassToken',
+        method: 'POST',
+        token: localToken,
+        dataBody: body,
+    });
+    const isSuccessRequest = stateSession?.isSuccessRequest;
+    return (isSuccessRequest) ? true : false;
+}
+
 export async function getListTrsMonthByDay(month, year, transactionType) {
+    authRequired();
     const localToken = getLStorageAuthToken();
     const body = {
         selectedMonth: month,
@@ -18,6 +70,7 @@ export async function getListTrsMonthByDay(month, year, transactionType) {
 }
 
 export async function getThresholdByMonth(month, year) {
+    authRequired();
     const localToken = getLStorageAuthToken();
     const data = {
         selectedMonth: month,
@@ -32,10 +85,11 @@ export async function getThresholdByMonth(month, year) {
     return thresholdAmount;
 }
 
-export async function getHandleLogin(email, pass) {
+export async function getHandleLogin(email, password) {
+    notAuthRequired();
     const dataLogin = {
-        'email': email,
-        'password': pass
+        'email': String(email),
+        'password': String(password)
     }
     const dataHandleLogin = await useConfigFetchGetData ({
         request: 'getHandleLogin', 
@@ -50,6 +104,12 @@ export async function getHandleLogin(email, pass) {
 }
 
 export async function getBalanceEcoByMonth(month, year) {
+    authRequired();
+    const isSessionActive = await getStateSession();
+    if(!isSessionActive) {
+        redirectLogin();
+    }
+
     const localToken = getLStorageAuthToken();
     const data = {
         selectedMonth: month,
@@ -66,12 +126,12 @@ export async function getBalanceEcoByMonth(month, year) {
 }
 
 export async function getLastNTransactions(month, year, transactionType) {
+    authRequired();
     const localToken = getLStorageAuthToken();
     const data = {
         selectedMonth: month,
         selectedYear: year,
         transactionType: transactionType,
-        limitValue: 5
     }
     const lastTransactions = await useConfigFetchGetData ({
         request: 'getLastNTransactions', 
@@ -83,6 +143,7 @@ export async function getLastNTransactions(month, year, transactionType) {
 }
 
 export async function getTotalTrsByMonth(month, year) {
+    authRequired();
     const localToken = getLStorageAuthToken();
     const data = {
         selectedMonth: month,
@@ -99,6 +160,7 @@ export async function getTotalTrsByMonth(month, year) {
 }
 
 export async function getBiggestTrsByMonth(month, year, transactionType) {
+    authRequired();
     const localToken = getLStorageAuthToken();
     const data = {
         selectedMonth: month,

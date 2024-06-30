@@ -71,9 +71,9 @@
     // variables, props, ...
     
     // life cycle / functions
-    onMounted(() => {
-        isLoadedPage.value = true;
-    });
+    // onMounted(() => {
+    //     isLoadedPage.value = true;
+    // });
 
     watch( () => [dateSelected.month, dateSelected.year], async ([newMonth, newYear]) => {
         updateThresholdByMonth(newMonth, newYear);
@@ -91,7 +91,6 @@
     });
 
     const iconNamePurchases = computed(() => {
-        if(!isLoadedPage.value) return;
         console.log(statisticDetails);
         const nameIcon = statisticDetails?.biggestPurchase?.transaction_category;
         return (nameIcon) ? nameIcon : 'Invisible';
@@ -103,11 +102,11 @@
     });
     const nameBiggestPurchase = computed(() => {
         const nameBiggestPurch = statisticDetails?.biggestPurchase?.transaction_category;
-        return (nameBiggestPurch) ? nameBiggestPurch : 'Invisible';
+        return (nameBiggestPurch) ? nameBiggestPurch : 'Aucune donnée';
     });
     const nameBiggestRecurring = computed(() => {
         const nameBiggestPurch = statisticDetails?.biggestRecurring?.transaction_category;
-        return (nameBiggestPurch) ? nameBiggestPurch : 'Invisible';
+        return (nameBiggestPurch) ? nameBiggestPurch : 'Aucune donnée';
     });
 
 
