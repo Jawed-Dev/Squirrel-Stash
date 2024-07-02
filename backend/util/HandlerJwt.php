@@ -42,23 +42,37 @@
                 'issuer' => $issuer,
                 //'jti' => $jti
             );
-            $jwt = JWT::encode($payload, $key, 'HS256');
-            return $jwt;
+            try {
+                $jwt = JWT::encode($payload, $key, 'HS256');
+                return $jwt;
+            }
+            catch (Exception $e) {
+                // log
+                return null;
+            }
         }
         public function decodeJwt($tokenJwt) {
             $key = JWT_SECRET_KEY; 
             $decodedJwt = JWT::decode($tokenJwt, new Key($key, 'HS256'));
             return $decodedJwt;
         }
-        public function prepareDataForModel() {
-            
+        public function prepareDataForModel($requireUserId = true) {
             $bodyDataJson = $this->getControllerMain()->getRequestBodyJson();
             $bodyData = json_decode($bodyDataJson, true);
-            $decodedJwt = $this->getJwtFromHeader();
+
+            foreach ($bodyData as &$value) {
+                if (is_string($value)) $this->getControllerMain()->getHandlerValidFormat()->sanitizeData($value);
+            }
+            //var_dump($bodyData);
             
             $db = $this->getControllerMain()->getDatabase();
-            // session active
-            $userId = $this->getControllerMain()->getControllerUser()->getUserIdFromJwt($decodedJwt);
+            $userId = null;
+
+            if($requireUserId) {
+                $decodedJwt = $this->getJwtFromHeader();
+                $userId = $this->getControllerMain()->getControllerUser()->getUserIdFromJwt($decodedJwt);
+            }
+
             return [
                 'bodyData' => $bodyData,
                 'userId' => $userId,

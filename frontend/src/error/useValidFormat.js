@@ -9,7 +9,6 @@ export function isValidMail(email) {
 
 export function isValidPassword(password) {
     //const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-
     //const regex = /^(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$/;
     //  ^ : Démarre l'ancrage au début de la chaîne.
     // (?=.*[a-z]) : Assure au moins une lettre minuscule.
@@ -19,9 +18,7 @@ export function isValidPassword(password) {
     // [A-Za-z\d@$!%*?&] : Les caractères autorisés dans le mot de passe.
     // {8,} : Assure que la longueur du mot de passe est d'au moins 8 caractères.
     // $ : Fin de l'ancrage de la chaîne.
-
     //return regex.test(password);
-
     return true;
 }
 
@@ -34,7 +31,6 @@ export function isValidLastName(lastName) {
     const regex = /^[A-Za-zàâçéèêëîïôûùüÿñæœ' -]{2,70}$/;
     return regex.test(lastName);
 }
-
 
 export function isValidInputAmount(amount) {
     const regex = /^\d+(,\d+)?$/;
@@ -60,12 +56,21 @@ export function isValidTrsType(transactionType) {
 
 export function isValidInputDate(date) {
     const regex = /^([0-9]{4})-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$/;
+    const year = Number(extractYearFromDate(date));
+    console.log('dateyear',year);
+    if(!isValidYear(year)) return false;
     return regex.test(date);
 }
+
+export function extractYearFromDate(date) {
+    const parts = date.split('-');
+    return parts[0]; 
+  }
 
 export function isValidYear(year) {
     return getAvailableYear().some(item => item === year);
 }
+
 export function isValidMonth(month) {
     return typeof month === 'number' && month >= 0 && month <= 12;
 }

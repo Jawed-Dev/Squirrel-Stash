@@ -14,7 +14,7 @@
         function getViewUser();
         // Auth
         function fetchInsertUser();
-        function isSessionActiveJwt($decodedJwt);
+        function isSessionActiveByJwt($decodedJwt);
         function handleSuccessLogin();
         function getUserIdFromJwt($decodedJwt);
         function getStateSession();
@@ -60,47 +60,44 @@
             return !empty($decodedJwt->userId) ? $decodedJwt->userId : null;
         }
 
-
         private function getUrlToResetPass($tokenResetPass) {
             return FRONT_BASE_URL."/reinitialiser-mot-de-passe?token=".$tokenResetPass;
         }
 
         public function getStateSession() {
             $decodedJwt = $this->getControllerMain()->getHandlerJwt()->getJwtFromHeader();
-            if(!$decodedJwt) return $this->getControllerMain()->sendJsonResponse(['isSessionActive' => false]);
-            $isSessionActive = $this->isSessionActiveJwt($decodedJwt);
+            $isSessionActive = $this->isSessionActiveByJwt($decodedJwt);
             $this->getControllerMain()->sendJsonResponse(['isSessionActive' => $isSessionActive]);
         }
 
-        public function isSessionActiveJwt($decodedJwt) {
+        public function isSessionActiveByJwt($decodedJwt) {
             if(!$decodedJwt) return false;
             $isValidDecodedJwt = $this->getControllerMain()->getHandlerJwt()->isValidTokenJwt($decodedJwt);
             if(!$isValidDecodedJwt) return false;
             $userId = $this->getUserIdFromJwt($decodedJwt);
             $db = $this->getControllerMain()->getDatabase();
             $isUserExistFromId = $this->getModelUser()->isUserExistFromId($db, $userId);
-            return $isUserExistFromId ;
+            return $isUserExistFromId;
         }
 
         public function handleSuccessLogin() {
-            $dataJson = $this->getControllerMain()->getRequestBodyJson();
-            $data = json_decode($dataJson, true);
-            if(empty($data)) return $this->getControllerMain()->sendJsonResponse(['tokenJwt' => null]);
-            
-            $db = $this->getControllerMain()->getDatabase();
-            $userId = $this->getModelUser()->getUserIdFromLogin($db, $data);
-            if(!$userId) return $this->getControllerMain()->sendJsonResponse(['tokenJwt' => null]);
+            $dataRequest = $this->getControllerMain()->prepareAndValidateData(false);
+            $db = $dataRequest['dataBase'];
 
-            $tokenJwt = null;
+            $isAnyError = $this->getControllerMain()->getHandlerError()->verifyHandleSuccessLogin($dataRequest);
+            if($isAnyError) return $this->getControllerMain()->sendJsonResponse(['tokenJwt' => null]);
+
+            $userId = $this->getModelUser()->getUserIdIfValidLogin($db, $dataRequest['bodyData']);
+            if(!$userId) return $this->getControllerMain()->sendJsonResponse(['tokenJwt' => null]);
             $tokenJwt = $this->getControllerMain()->getHandlerJwt()->createTokenJwt($userId);
             $this->getControllerMain()->sendJsonResponse(['tokenJwt' => $tokenJwt]);
         }
 
         public function fetchInsertUser() {
-            $dataRequest = $this->getControllerMain()->getHandlerJwt()->prepareDataForModel();
+            $dataRequest = $this->getControllerMain()->prepareAndValidateData(false);
             $db = $dataRequest['dataBase'];
             
-            $isAnyError = false; //$this->getControllerMain()->getHandlerError()->verifyInsertTransaction($dataRequest['bodyData']);
+            $isAnyError = $this->getControllerMain()->getHandlerError()->verifyInsertUser($dataRequest);
             $successReq = false;
             if(!$isAnyError) $successReq = $this->getModelUser()->insertUser($db, $dataRequest['bodyData']);
 
@@ -109,12 +106,12 @@
         }
 
         public function fetchIsValidResetPassToken() {
-            $dataRequest = $this->getControllerMain()->getHandlerJwt()->prepareDataForModel();
+            $dataRequest = $this->getControllerMain()->prepareAndValidateData(false);
             $db = $dataRequest['dataBase'];
             
-            $isAnyError = false; //$this->getControllerMain()->getHandlerError()->verifyInsertTransaction($dataRequest['bodyData']);
-            $isSuccessReq = false;
+            $isAnyError = $this->getControllerMain()->getHandlerError()->verifyIsValidResetPassToken($dataRequest);
             if($isAnyError) $this->getControllerMain()->sendJsonResponse(['isSuccessRequest' => false]);
+
             $isSuccessReq = $this->getModelUser()->isValidResetPassToken($db, $dataRequest['bodyData']);
             
             // log ici ?
@@ -122,18 +119,21 @@
         }
 
         public function FetchSendResetPassToken() {
-            $dataRequest = $this->getControllerMain()->getHandlerJwt()->prepareDataForModel();
+            $dataRequest = $this->getControllerMain()->prepareAndValidateData(false);
             $db = $dataRequest['dataBase'];
             
-            //var_dump($dataRequest);
-            $isAnyError = false; //$this->getControllerMain()->getHandlerError()->verifyInsertTransaction($dataRequest['bodyData']);
+            $isAnyError = $this->getControllerMain()->getHandlerError()->verifySendResetPassToken($dataRequest);
             $isSuccessReq = false;
-            if($isAnyError) return $this->getControllerMain()->sendJsonResponse(['isSuccessRequest' => false]);
+            if($isAnyError) {
+                $this->getControllerMain()->sendJsonResponse(['isSuccessRequest' => false]);
+                return;
+            }
 
             $dataBody = $dataRequest['bodyData'];
             $isLastTokenDeleted = $this->getModelUser()->deleteResetPassTokenByEmail($db, $dataBody);
 
-            $uniqueTokenResetPass = $this->getModelUser()->getUniqueTokenResetPass($db);
+            $uniqueToken = $this->getControllerMain()->getModelMain()->createRandomHashSha256();
+            $uniqueTokenResetPass = $this->getModelUser()->insertUniqueTokenResetPass($db, $uniqueToken);
             if(empty($uniqueTokenResetPass)) return $this->getControllerMain()->sendJsonResponse(['isSuccessRequest' => false]);
             $dataRequest['bodyData']['resetPassToken'] = $uniqueTokenResetPass;
 
@@ -156,7 +156,11 @@
         }
 
         public function fetchUpdatePassword() {
-            $dataRequest = $this->getControllerMain()->getHandlerJwt()->prepareDataForModel();
+            // attention quand l'utilisateur sera connecté il faudra changer le code, si j'utilsie la mm fonction
+            // pour que l'utiliseur change son mdp
+
+            // ou tout simplement check si l'utilisateur est co, et renvoyé le boolééen dans la fonction
+            $dataRequest = $this->getControllerMain()->prepareAndValidateData(false);
             $db = $dataRequest['dataBase'];
             //var_dump($dataRequest);
             $isAnyError = false; //$this->getControllerMain()->getHandlerError()->verifyInsertTransaction($dataRequest['bodyData']);
@@ -173,7 +177,7 @@
         // Prepare pages
         public function authorizePageLogin() {
             $decodedJwt = $this->getControllerMain()->getHandlerJwt()->getJwtFromHeader();
-            $isSessionActive = $this->isSessionActiveJwt($decodedJwt);
+            $isSessionActive = $this->isSessionActiveByJwt($decodedJwt);
             $dataPage = [
                 'isSessionActive' => $isSessionActive,
             ]; 
@@ -182,7 +186,7 @@
 
         public function authorizePageForgotPass() {
             $decodedJwt = $this->getControllerMain()->getHandlerJwt()->getJwtFromHeader();
-            $isSessionActive = $this->isSessionActiveJwt($decodedJwt);
+            $isSessionActive = $this->isSessionActiveByJwt($decodedJwt);
             $dataPage = [
                 'isSessionActive' => $isSessionActive,
             ]; 
@@ -191,7 +195,7 @@
 
         public function authorizePageRegister() {
             $decodedJwt = $this->getControllerMain()->getHandlerJwt()->getJwtFromHeader();
-            $isSessionActive = $this->isSessionActiveJwt($decodedJwt);
+            $isSessionActive = $this->isSessionActiveByJwt($decodedJwt);
             $dataPage = [
                 'isSessionActive' => $isSessionActive,
             ]; 
@@ -200,11 +204,7 @@
 
         public function authorizePageResetPassword() {
             $decodedJwt = $this->getControllerMain()->getHandlerJwt()->getJwtFromHeader();
-
-            $isSessionActive = $this->isSessionActiveJwt($decodedJwt);
-            //$isValidResetPassToken = $this->getControllerMain()->getControllerUser()->isValidResetPassToken();
-            //$tokenToResetPass = $this->getControllerMain()->getControllerUser()->getDataResetPassFromToken();
-            //var_dump($_GET['token']);
+            $isSessionActive = $this->isSessionActiveByJwt($decodedJwt);
             $dataPage = [
                 'isSessionActive' => $isSessionActive,
             ]; 

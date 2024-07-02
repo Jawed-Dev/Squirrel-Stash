@@ -15,29 +15,27 @@
                 </div>
             </div>
 
-            
-            <div class="w-full">
-                <label for="input-amount-purchase" class="flex justify-center text-[20px] font-extralight mt-[20px]">Montant en €</label>
-                <div class="flex justify-center mt-[5px]">
-                    <InputBase 
-                    v-model="inputPriceVal" 
-                    width="w-[8vw]"
-                    extraClass="text-center font-light " 
-                    placeholder="Montant"
-                    type="text"
-                    id="input-amount-purchase"/>
-                </div>
+            <div class="flex flex-col items-center mt-[25px] w-full">
+                <label for="input-amount-purchase" 
+                class="flex text-[20px] font-extralight">Montant en €</label>
+                <InputBase 
+                v-model="inputPriceVal" 
+                extraClass="border-b-2 py-1 text-white font-light mt-[2px] :placeholder text-center" 
+                placeholder="Montant"
+                type="text"
+                id="input-amount-purchase"/>
             </div>
 
-            <div class="flex items-center gap-2 justify-center pt-[40px]">
+            <div class="flex items-center gap-2 justify-center pt-[25px] w-full">
                 <!-- placeholder notes -->
-                <div class="flex justify-center">
+                <div class="flex justify-center w-full">
                     <InputBase v-model="inputNoteVal"
-                    width="w-[23vw]"
-                    extraClass="font-light"
+                    extraClass="border-b-2 w-[80%] py-1 text-white font-light mt-[2px]"
+                    type="text"
                     placeholder="Note"/>
                 </div>
             </div>
+            
         </div>
     </div>
 </template>

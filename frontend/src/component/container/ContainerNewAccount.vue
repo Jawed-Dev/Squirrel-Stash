@@ -6,7 +6,8 @@
         <form class="mt-[40px]" @submit.prevent="handleSubmit()">
             
             <div class="relative">
-                <p class="absolute text-red-400">{{ computedErrors }}</p>
+                <p class="absolute text-red-400">{{ computedFormatErrors }}</p>
+                <p v-if="computedEmptyInputs.length > 0"></p>
             </div>
             <div class="flex justify-center w-full gap-5 mt-[30px]">
                 <div class="w-[50%]">
@@ -98,9 +99,9 @@
     import InputBase from '@/component/input/InputBase.vue';
     import ButtonComponent from '@/component/button/ButtonBasic.vue';
     import { createAccount } from '@/composable/useBackendSetData';
-    import { verifyCreateAccount } from '@/error/useHandleError';
-    
-    
+    import { useErrorFormat, verifyCreateAccount } from '@/error/useHandleError';
+    import { useMandatoryEmptyInputs } from '@/error/useMandatoryEmptyInputs';
+
     // props, variables ...
     const router = useRouter();
     const firstName = ref('');
@@ -111,10 +112,25 @@
     const confirmCheckbox = ref(false);
 
     // Errors 
-    const stateErrors = ref([]);
+    const { computedEmptyInputs, stateEmptyInputs } = useMandatoryEmptyInputs([
+        { name: 'firstName', ref: firstName },
+        { name: 'lastName', ref: lastName },
+        { name: 'email', ref: email },
+        { name: 'password', ref: password },
+        { name: 'confirmPassword', ref: confirmPassword },
+        { name: 'confirmCheckbox', ref: confirmCheckbox }
+    ]);
+
+    const { stateFormatErrors, computedFormatErrors } = useErrorFormat(verifyCreateAccount, {
+        firstName: {name: 'firstName', ref: firstName}, 
+        lastName: {name: 'lastName', ref: lastName},
+        email: {name: 'email', ref: email}, 
+        password: {name: 'password', ref: password},
+        confirmPassword: {name: 'confirmPassword', ref: confirmPassword}, 
+        confirmCheckbox: {name: 'confirmCheckbox', ref: confirmCheckbox}
+    });
 
     // life cycle / functions
-
     async function handleSubmit() {
         if(isAnyErrorActive()) return;
         const requestFetched = await createAccount({
@@ -129,7 +145,6 @@
             resetInputs();
             router.push('/connexion');
         }
-        
     }
 
     function resetInputs() {
@@ -138,28 +153,12 @@
         confirmPassword.value = '';
         lastName.value = '';
         firstName.value = '';
-        confirmCheckbox = false;
+        confirmCheckbox.value = false;
     }
 
-    
-    const computedErrors = computed(() => {
-        const isError = verifyCreateAccount({
-            email: email.value,
-            password: password.value,
-            firstName: firstName.value,
-            lastName: lastName.value,
-            confirmPassword: confirmPassword.value,
-            checkbox: confirmCheckbox.value
-        });
-        if(isError) {
-            stateErrors.value = isError;
-            return isError[0].message;
-        }
-        else stateErrors.value = [];
-    });
-
     function isAnyErrorActive() {
-        return stateErrors.value.length > 0;
+        console.log(stateEmptyInputs.value, stateEmptyInputs.value.length);
+        return stateFormatErrors.value.length > 0 || stateEmptyInputs.value.length > 0;
     }
     
 </script>

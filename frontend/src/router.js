@@ -28,8 +28,13 @@ const router = createRouter({
 });
 
 router.beforeEach(async (to, from, next) => {
-  if (to.matched.some(record => record)) {  
     const currentPage = to.meta.page;  
+    if(!currentPage) {
+      // 404 ?
+      next('/connexion');
+      return;
+    } 
+
     const localToken = getLStorageAuthToken();
 
     const dataPage = await useConfigFetchGetPage(currentPage, localToken);
@@ -66,11 +71,10 @@ router.beforeEach(async (to, from, next) => {
       }
       default : {
           // page 404 ?
-          next();
+          next('/connexion');
           break;
       }
     }    
-  } 
 });
 
 

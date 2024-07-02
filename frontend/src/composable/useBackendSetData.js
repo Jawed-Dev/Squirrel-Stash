@@ -41,7 +41,7 @@ export async function updatePassword(params) {
     const localToken = getLStorageAuthToken();
     const body = {
         resetPassToken: String(params.resetPassToken),
-        newPassword: params.password,
+        password: params.password,
     };
     const dataRequest = await useConfigFetchSetData ({
         request: 'updatePassword',

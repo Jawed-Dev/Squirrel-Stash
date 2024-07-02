@@ -1,12 +1,12 @@
 <template>
     <div class="w-full py- px-2">
-        <div class="flex justify-center pt-[40px] ">
+        <div class="flex justify-center pt-[20px] ">
             <ToggleButton class="text-[15px]" v-model:typeTransaction="typeTransaction" :text1="'Achats'" :text2="'Prélèvements'" />
         </div>
 
         <!-- liste des catégories -->
-        <h2 class="text-center pt-[60px] text-[18px] font-extralight">Sélectionnez la catégorie</h2>
-        <div class="w-full flex flex-wrap pt-[20px] pb-[60px]">
+        <h2 class="text-center mt-[40px] text-[18px] font-extralight">Sélectionnez la catégorie</h2>
+        <div class="w-full flex flex-wrap pt-[20px] pb-[40px]">
             <SelectInputCategories :width="'w-[70%]'" 
                 v-model:currentCategory="currentCategory" 
                 :typeTransaction="typeTransaction" 

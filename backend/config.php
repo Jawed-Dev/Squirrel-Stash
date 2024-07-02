@@ -3,5 +3,5 @@
     define('FRONT_BASE_URL', 'http://localhost:5173'); //5173
     define('TIME_EXPIRE_TIME_JWT', 3600);
     define('FOLDER_MAIN',"Projet_final_DWWM");
-    http://
+    define('MAX_DATA_BODY_REQUEST', 20);
 ?>

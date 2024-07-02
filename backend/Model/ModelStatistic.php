@@ -11,7 +11,7 @@
         function getTotalTrsByMonth($db, $data);
         function getBiggestTrsByMonth($db, $data);
         function isThresholdExistByMonth($db, $data);
-        // set
+        // action
         function updateThresholdByMonth($db, $data);
         function insertThresholdByMonth($db, $data);
         function insertTransaction($db, $data);
@@ -37,8 +37,8 @@
             $query->bindValue(':trsDate',  $dataQuery['transactionDate'], PDO::PARAM_STR);
             $query->bindValue(':note',  $dataQuery['transactionNote'], PDO::PARAM_STR);
             $query->execute();
-            $isSuccessRequest = $query->rowCount();
-            return ($isSuccessRequest) ? true : false;
+            $isSuccessRequest = $query->rowCount() > 0;
+            return $isSuccessRequest;
         }
 
         public function updateTransaction($db, $data) {
@@ -65,14 +65,13 @@
             $query->bindValue(':trsDate',  $dataQuery['transactionDate'], PDO::PARAM_STR);
             $query->bindValue(':note',  $dataQuery['transactionNote'], PDO::PARAM_STR);
             $query->execute();
-            $isSuccessRequest = $query->rowCount();
-            return ($isSuccessRequest) ? true : false;
+            $isSuccessRequest = $query->rowCount() > 0;
+            return $isSuccessRequest;
         }
 
         public function deleteTransaction($db, $data) {
             $userId = $data['userId'];
             $dataQuery = $data['bodyData'];
-
             $reqSql = 
             "DELETE FROM transaction
             WHERE 
@@ -83,8 +82,8 @@
             $query->bindValue(':userId',  $userId, PDO::PARAM_INT);
             $query->bindValue(':transactionId',  $dataQuery['transactionId'], PDO::PARAM_INT);
             $query->execute();
-            $isSuccessRequest = $query->rowCount();
-            return ($isSuccessRequest) ? true : false;
+            $isSuccessRequest = $query->rowCount() > 0;
+            return $isSuccessRequest;
         }
 
         public function insertThresholdByMonth($db, $data) {
@@ -95,15 +94,16 @@
             (threshold_user_id, threshold_amount, threshold_date)
             VALUES (:userId, :amount, :timeNow)
             ";
-            $selectedDate = sprintf("%04d-%02d-01", $dataQuery['selectedYear'], $dataQuery['selectedMonth']);
+
+            $selectedDateWithFirstDay = sprintf("%04d-%02d-01", $dataQuery['selectedYear'], $dataQuery['selectedMonth']);
 
             $query = $db->prepare($reqSql);
             $query->bindValue(':userId',  $userId, PDO::PARAM_INT);
-            $query->bindValue(':timeNow',  $selectedDate, PDO::PARAM_STR);
+            $query->bindValue(':timeNow',  $selectedDateWithFirstDay, PDO::PARAM_STR);
             $query->bindValue(':amount',  $dataQuery['thresholdAmount'], PDO::PARAM_INT);
             $query->execute();
-            $isSuccessRequest = $query->rowCount();
-            return ($isSuccessRequest) ? true : false;
+            $isSuccessRequest = $query->rowCount() > 0;
+            return $isSuccessRequest;
         }
 
         public function updateThresholdByMonth($db, $data) {
@@ -118,17 +118,18 @@
             AND YEAR(threshold_date) = :year
             LIMIT 1
             ";
-            $selectedDate = sprintf("%04d-%02d-01", $dataQuery['selectedYear'], $dataQuery['selectedMonth']);
+            
+            $selectedDateWithFirstDay = sprintf("%04d-%02d-01", $dataQuery['selectedYear'], $dataQuery['selectedMonth']);
             
             $query = $db->prepare($reqSql);
             $query->bindValue(':userId',  $userId, PDO::PARAM_INT);
-            $query->bindValue(':timeNow', $selectedDate, PDO::PARAM_STR);
+            $query->bindValue(':timeNow', $selectedDateWithFirstDay, PDO::PARAM_STR);
             $query->bindValue(':amount',  $dataQuery['thresholdAmount'], PDO::PARAM_INT);
             $query->bindValue(':month',  $dataQuery['selectedMonth'], PDO::PARAM_INT);
             $query->bindValue(':year',  $dataQuery['selectedYear'], PDO::PARAM_INT);
             $query->execute();
-            $isSuccessRequest = $query->rowCount();
-            return ($isSuccessRequest) ? true : false;
+            $isSuccessRequest = $query->rowCount() > 0;
+            return $isSuccessRequest;
         }
 
         public function getTrsMonthByDay ($db, $data) {
@@ -179,7 +180,6 @@
         public function isThresholdExistByMonth($db, $data) {
             $userId = $data['userId'];
             $dataQuery = $data['bodyData'];
-            //var_dump($dataQuery);
 
             $reqSql = "SELECT EXISTS (
                 SELECT 1 FROM threshold
@@ -194,7 +194,6 @@
             $query->bindValue(':month',  $dataQuery['selectedMonth'], PDO::PARAM_INT);
             $query->execute();
             $isTresholdExist = $query->fetch(PDO::FETCH_ASSOC);
-            //var_dump('$isTresholdExist', $isTresholdExist);
             return ($isTresholdExist['thresholdExist']) ? true : false;
         }
 
@@ -259,7 +258,6 @@
             $query->bindValue(':limit', LIMIT_RESULT, PDO::PARAM_INT);
             $query->execute();
             $listTransactions = $query->fetchAll(PDO::FETCH_ASSOC);
-            //var_dump($listTransactions);
             return $listTransactions;
         }
 
@@ -304,7 +302,6 @@
             $query->bindValue(':year',  $dataQuery['selectedYear'], PDO::PARAM_INT);
             $query->execute();
             $totalTransactions = $query->fetch(PDO::FETCH_ASSOC);
-            //var_dump($listTransactions);
             return $totalTransactions;
         }
 

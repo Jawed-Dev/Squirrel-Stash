@@ -1,5 +1,4 @@
 <?php
-    //use model\Database;
     try {
         require_once './config.php';
         require_once './controller/controllerMain.php';
@@ -21,9 +20,6 @@
             $ControllerMain = new ControllerMain();
             return $ControllerMain;
         }
-
-        // ControllerMain 
-        //$ControllerMain = new ControllerMain();
 
         // Request get Pages
         if ($_SERVER['REQUEST_METHOD'] === 'GET') {
@@ -145,7 +141,7 @@
     }
 
     finally {
-        if (empty($ControllerMain)) return null;
+        //if (empty($ControllerMain)) return null;
 
         $db = getControllerMain()->getDatabase();
         if($db !== null) $db = null;

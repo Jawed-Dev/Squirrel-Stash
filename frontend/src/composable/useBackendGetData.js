@@ -56,9 +56,9 @@ export async function getListTrsMonthByDay(month, year, transactionType) {
     authRequired();
     const localToken = getLStorageAuthToken();
     const body = {
-        selectedMonth: month,
-        selectedYear: year,
-        transactionType: transactionType
+        selectedMonth: Number(month),
+        selectedYear: Number(year),
+        transactionType: String(transactionType)
     };
     const listTransactionsFetched = await useConfigFetchGetData ({
         request: 'getlistTrsMonthByDay',
@@ -73,8 +73,8 @@ export async function getThresholdByMonth(month, year) {
     authRequired();
     const localToken = getLStorageAuthToken();
     const data = {
-        selectedMonth: month,
-        selectedYear: year
+        selectedMonth: Number(month),
+        selectedYear: Number(year)
     }
     const thresholdAmount = await useConfigFetchGetData ({
         request: 'getThresholdByMonth', 
@@ -112,8 +112,8 @@ export async function getBalanceEcoByMonth(month, year) {
 
     const localToken = getLStorageAuthToken();
     const data = {
-        selectedMonth: month,
-        selectedYear: year,
+        selectedMonth: Number(month),
+        selectedYear: Number(year),
     }
     const lastPurchases = await useConfigFetchGetData ({
         request: 'getBalanceEcoByMonth', 
@@ -129,9 +129,9 @@ export async function getLastNTransactions(month, year, transactionType) {
     authRequired();
     const localToken = getLStorageAuthToken();
     const data = {
-        selectedMonth: month,
-        selectedYear: year,
-        transactionType: transactionType,
+        selectedMonth: Number(month),
+        selectedYear: Number(year),
+        transactionType: String(transactionType),
     }
     const lastTransactions = await useConfigFetchGetData ({
         request: 'getLastNTransactions', 
@@ -146,8 +146,8 @@ export async function getTotalTrsByMonth(month, year) {
     authRequired();
     const localToken = getLStorageAuthToken();
     const data = {
-        selectedMonth: month,
-        selectedYear: year,
+        selectedMonth: Number(month),
+        selectedYear: Number(year),
     }
     const lastPurchases = await useConfigFetchGetData ({
         request: 'getTotalTrsByMonth', 
@@ -163,9 +163,9 @@ export async function getBiggestTrsByMonth(month, year, transactionType) {
     authRequired();
     const localToken = getLStorageAuthToken();
     const data = {
-        selectedMonth: month,
-        selectedYear: year,
-        transactionType: transactionType
+        selectedMonth: Number(month),
+        selectedYear: Number(year),
+        transactionType: String(transactionType)
     }
     const biggestTransaction = await useConfigFetchGetData ({
         request: 'getBiggestTrsByMonth', 

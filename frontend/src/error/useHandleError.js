@@ -1,4 +1,4 @@
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import { isValidCategory, isValidMail, isValidInputAmount, isValidInputDate, isValidInputNote, isValidTrsType, isValidPassword, isValidLastName, isValidFirstName } from './useValidFormat';
 
 
@@ -58,99 +58,123 @@ const typeError = {
         code: 9,
         message: "Informations invalides", 
     }
+};
+
+export function useErrorFormat (func, inputs) {
+    const stateFormatErrors = ref([]);
+    const computedFormatErrors = computed(() => {
+        const errors = func(inputs);
+        if(errors) {
+            stateFormatErrors.value = errors;
+            return errors[0].message;
+        }
+        else {
+            stateFormatErrors.value = [];
+        }
+    });
+
+    return {
+        stateFormatErrors,
+        computedFormatErrors
+    }
 }
 
+export function verifyLogin(params) {
+    console.log(params);
+    const stateErrors = [];
+    if (params.email.ref.value.length > 0) {
+        if (!isValidMail(params.email.ref.value)) stateErrors.push(typeError.email);
+    }
+    if (params.password.ref.value.length > 0) {
+        if (!isValidPassword(params.password.ref.value)) stateErrors.push(typeError.password);
+    }
+    return (stateErrors.length > 0) ? stateErrors : null;
+}
 
 export function verifyForgotPass(params) {
     const stateErrors = [];
-    if(params.email.length > 0)  {
-        if(!isValidMail(params.email)) stateErrors.push(typeError.email);
+    if(params.email.ref.value.length > 0)  {
+        if(!isValidMail(params.email.ref.value)) stateErrors.push(typeError.email);
+    }
+    return (stateErrors.length > 0) ? stateErrors : null;
+}
+
+
+export function verifyResetPass(params) {
+    const stateErrors = [];
+    if(params.password.ref.valuelength > 0)  {
+        if(!isValidPassword(params.password.ref.value)) stateErrors.push(typeError.password);
+    }
+    if(params.password.ref.value.length > 0 && params.confirmPassword.ref.value.length > 0) {
+        if(params.password.ref.value !== params.confirmPassword.ref.value) stateErrors.push(typeError.passwordConfirm);
     }
     return (stateErrors.length > 0) ? stateErrors : null;
 }
 
 export function verifyCreateAccount(params) {
     const stateErrors = [];
-    if(params.firstName.length > 0)  {
-        if(!isValidFirstName(params.firstName)) stateErrors.push(typeError.firstName);
+    if(params.firstName.ref.value.length > 0)  {
+        if(!isValidFirstName(params.firstName.ref.value)) stateErrors.push(typeError.firstName);
     }
-    if(params.lastName.length > 0) {
-        if(!isValidLastName(params.lastName)) stateErrors.push(typeError.lastName);
+    if(params.lastName.ref.value.length > 0) {
+        if(!isValidLastName(params.lastName.ref.value)) stateErrors.push(typeError.lastName);
     }
-    if(params.email.length > 0)  {
-        if(!isValidMail(params.email)) stateErrors.push(typeError.email);
+    if(params.email.ref.value.length > 0)  {
+        if(!isValidMail(params.email.ref.value)) stateErrors.push(typeError.email);
     }
-    if(params.password.length > 0) {
-        if(!isValidPassword(params.password)) stateErrors.push(typeError.password);
+    if(params.password.ref.value.length > 0) {
+        if(!isValidPassword(params.password.ref.value)) stateErrors.push(typeError.password);
     }
-    if(params.password.length > 0 && params.confirmPassword.length > 0) {
-        if(params.password !== params.confirmPassword) stateErrors.push(typeError.passwordConfirm);
+    if(params.password.ref.value.length > 0 && params.confirmPassword.ref.value.length > 0) {
+        if(params.password.ref.value !== params.confirmPassword.ref.value) stateErrors.push(typeError.passwordConfirm);
     } 
-    if(params.password !== params.confirmPassword) stateErrors.push(typeError.passwordConfirm);
-
     return (stateErrors.length > 0) ? stateErrors : null;
 }
-
-export function verifyLogin(params) {
-    const stateErrors = [];
-    if(params.email.length > 0)  {
-        if(!isValidMail(params.email)) stateErrors.push(typeError.email);
-    }
-    if(params.password.length > 0) {
-        if(!isValidPassword(params.password)) stateErrors.push(typeError.password);
-    }
-    return (stateErrors.length > 0) ? stateErrors : null;
-}
-
 
 export function verifyAddTransaction(params) {
     const stateErrors = [];
-    if (!isValidInputAmount(params.trsAmount)) {
-        if(params.trsAmount.length > 0) stateErrors.push(typeError.trsAmount);
+    if(params.trsAmount.ref.value.length > 0)  {
+        if (!isValidInputAmount(params.trsAmount.ref.value)) stateErrors.push(typeError.trsAmount);
     }
-    if (!isValidInputDate(params.date)) {
-        if(params.date.length > 0) stateErrors.push(typeError.trsDate);
+    if(params.date.ref.value.length > 0) {
+        if (!isValidInputDate(params.date.ref.value)) stateErrors.push(typeError.trsDate);
     }
-    if (!isValidInputNote(params.note)) {
-        if(params.note.length > 0) stateErrors.push(typeError.trsNote);
+    if(params.note.ref.value.length > 0) {
+        if (!isValidInputNote(params.note.ref.value)) stateErrors.push(typeError.trsNote);
     }
-    if (!isValidCategory(params.trsCategory, params.trsType)) {
-        stateErrors.push(typeError.trsCategory);
+    if(params.trsCategory.ref.value.length > 0) { 
+        if (!isValidCategory(params.trsCategory.ref.value, params.trsType.ref.value)) stateErrors.push(typeError.trsCategory);
+    }
+    if(params.trsType.ref.value.length > 0) { 
+        if(!isValidTrsType(params.trsType)) stateErrors.push(typeError.trsType);
     }
     
-    if(!isValidTrsType(params.trsType)) {
-        stateErrors.push(typeError.trsType);
-    }
-
     return (stateErrors.length > 0) ? stateErrors : null;
 }
 export function verifyEditTransaction(params) {
-
     const stateErrors = [];
-    if (!isValidInputAmount(params.trsAmount)) {
-        if(params.trsAmount.length > 0) stateErrors.push(typeError.trsAmount);
+    if(params.trsAmount.ref.value.length > 0)  {
+        if (!isValidInputAmount(params.trsAmount.ref.value)) stateErrors.push(typeError.trsAmount);
     }
-    if (!isValidInputDate(params.date)) {
-        console.log(params.date);
-        if(params.date.length > 0) stateErrors.push(typeError.trsDate);
+    if(params.date.ref.value.length > 0) {
+        if (!isValidInputDate(params.date.ref.value)) stateErrors.push(typeError.trsDate);
     }
-    if (!isValidInputNote(params.note)) {
-        if(params.note.length > 0) stateErrors.push(typeError.trsNote);
+    if(params.note.ref.value.length > 0) {
+        if (!isValidInputNote(params.note.ref.value)) stateErrors.push(typeError.trsNote);
     }
-    if (!isValidCategory(params.trsCategory, params.trsType)) {
-        stateErrors.push(typeError.trsCategory);
+    if(params.trsCategory.ref.value.length > 0) { 
+        if (!isValidCategory(params.trsCategory.ref.value, params.trsType.ref.value)) stateErrors.push(typeError.trsCategory);
+    }
+    if(params.trsType.ref.value.length > 0) { 
+        if(!isValidTrsType(params.trsType)) stateErrors.push(typeError.trsType);
     }
     
-    if(!isValidTrsType(params.trsType)) {
-        stateErrors.push(typeError.trsType);
-    }
-
     return (stateErrors.length > 0) ? stateErrors : null;
 }
 export function verifySetThreshold(params) {
     const stateErrors = [];
-    if (!isValidInputAmount(params.thresholdAmount)) {
-        if(params.thresholdAmount.length > 0) stateErrors.push(typeError.trsAmount);
+    if(params.thresholdAmount.ref.value.length > 0) {
+        if (!isValidInputAmount(params.thresholdAmount.ref.value)) stateErrors.push(typeError.trsAmount);
     }
     return (stateErrors.length > 0) ? stateErrors : null;
 }

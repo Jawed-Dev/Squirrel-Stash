@@ -14,7 +14,8 @@
             <MainContainerSlot :textBtn1="'Annuler'" :textBtn2="'Choisir'" :titleContainer="'Choisir un nouveau seuil'" @toggleMenu="toggleMenu">
                 <!-- Errors  -->
                 <div class="relative">
-                    <p class="p-3 absolute text-red-400">{{ computedErrors }}</p>
+                    <p class="p-3 absolute text-red-400">{{ computedFormatErrors }}</p>
+                    <p v-if="computedEmptyInputs.length > 0"></p>
                 </div>
                 <div>
                     <div class="flex flex-col rounded-[3px] items-center my-[70px]">
@@ -22,7 +23,7 @@
                         <div class="mt-[10px]">
                             <InputBase v-model="inputAmountThreshold"
                                 width="w-full"
-                                extraClass="text-center font-light "
+                                extraClass="border-b-2 py-1 text-white font-light mt-[2px] :placeholder text-center"
                                 placeholder="seuil"
                                 id="input-amount-treshold"
                             />
@@ -50,11 +51,8 @@
     import { saveThreshold } from '@/composable/useBackendSetData';
     import { storeDateSelected } from '@/storePinia/useStoreDashboard';
     import { updateBalanceEcoByMonth, updateThresholdByMonth, updateTotalTrsByMonth } from '@/storePinia/useUpdateStoreByBackend';
-    import { verifySetThreshold } from '@/error/useHandleError';
-    
-
-    // Errors 
-    const stateErrors = ref([]);
+    import { useErrorFormat, verifySetThreshold } from '@/error/useHandleError';
+    import { useMandatoryEmptyInputs } from '@/error/useMandatoryEmptyInputs';
 
     // variables, props ...
     const svg = svgConfig;
@@ -64,6 +62,14 @@
     });
     const isMenuActive = ref(false);
     const inputAmountThreshold = ref('');
+
+    // Errors 
+    const { computedEmptyInputs, stateEmptyInputs } = useMandatoryEmptyInputs([
+        { name: 'inputAmountThreshold', ref: inputAmountThreshold }
+    ]);
+    const { stateFormatErrors, computedFormatErrors } = useErrorFormat(verifySetThreshold, {
+        thresholdAmount: {name: 'thresholdAmount', ref: inputAmountThreshold}, 
+    });
 
     // life cycle, functions 
     useEscapeKey(isMenuActive, () => {
@@ -76,19 +82,8 @@
 
     const dateSelected = storeDateSelected();
 
-    const computedErrors = computed(() => {
-        const isError = verifySetThreshold({
-            thresholdAmount: inputAmountThreshold.value,
-        });
-        if(isError) {
-            stateErrors.value = isError;
-            return isError[0].message;
-        }
-        else stateErrors.value = [];
-    });
-
     function isAnyErrorActive() {
-        return stateErrors.value.length > 0;
+        return stateFormatErrors.value.length > 0 || stateEmptyInputs.value.length > 0;
     }
 
     async function toggleMenu(request) {

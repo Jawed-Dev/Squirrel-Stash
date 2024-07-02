@@ -35,12 +35,14 @@ use App\Mail\EmailSender;
         // Handler Error
         function getHandlerError();
         function getHandlerValidFormat();
+        function prepareAndValidateData($requireUserId = true);
         
         // Prepare pages
         function authorizePageIndex();
     }
 
     class ControllerMain implements I_ControllerMain {
+        private $ModelMain;
         private $ControllerUser;
         private $ControllerStatistic;
         private $ViewMain;
@@ -79,9 +81,15 @@ use App\Mail\EmailSender;
         /**
         * @return ModelMain
         */
+        public function getModelMain() {
+            if (!$this->ModelMain) $this->ModelMain = new ModelMain();
+            return $this->ModelMain;
+        }
+
+
         public function getDatabase() {
-            if (!$this->db) $this->db = new ModelMain();
-            return $this->db->getConnection();
+            if (!$this->db) $this->db = $this->getModelMain()->getConnection();
+            return $this->db;
         }
 
         
@@ -131,6 +139,23 @@ use App\Mail\EmailSender;
 
 
         // json 
+
+        public function prepareAndValidateData($requireUserId = true) {
+            $dataRequest = $this->getHandlerJwt()->prepareDataForModel($requireUserId);
+            $dataRequire = [ $dataRequest['dataBase'], $dataRequest['bodyData'] ];
+            if ($requireUserId) $dataRequire[] = $dataRequest['userId'];
+
+            if(count($dataRequest['bodyData']) >= MAX_DATA_BODY_REQUEST) return null;
+        
+            $isAnyError = $this->getHandlerError()->verifyDataForModel($dataRequire);
+            if ($isAnyError) {
+                throw new Exception('Erreur: Données invalides.'); 
+                //return null;
+            }
+
+            return $dataRequest;
+        }
+
         public function sendJsonResponse($data) {
             echo json_encode($data);
         }
@@ -142,7 +167,7 @@ use App\Mail\EmailSender;
         // Prepare Pages
         public function authorizePageIndex() {
             $decodedJwt = $this->getHandlerJwt()->getJwtFromHeader();
-            $isSessionActive = $this->getControllerUser()->isSessionActiveJwt($decodedJwt);
+            $isSessionActive = $this->getControllerUser()->isSessionActiveByJwt($decodedJwt);
             $dataPage = [
                 'isSessionActive' => $isSessionActive,
             ];  

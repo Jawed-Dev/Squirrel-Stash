@@ -24,7 +24,8 @@
                 >
                     <!-- Errors  -->
                     <div class="relative">
-                        <p class="p-3 absolute text-red-400">{{ computedErrors }}</p>
+                        <p class="p-3 absolute text-red-400">{{ computedFormatErrors }}</p>
+                        <p v-if="computedEmptyInputs.length > 0"></p>
                     </div>
                     <div>
                         <!-- Inputs  -->
@@ -57,17 +58,15 @@
     import { updateAllDataTransations} from '@/storePinia/useUpdateStoreByBackend';
     import { formatDateForCurrentDay, formatDateForFirstDay, isCurrentMonth } from '@/composable/useGetDate';
     import { listCategories, listRecurings } from '@/svg/listTransactionSvgs';
-    import { verifyAddTransaction } from '@/error/useHandleError';
+    import { useErrorFormat, verifyAddTransaction } from '@/error/useHandleError';
+    import { useMandatoryEmptyInputs } from '@/error/useMandatoryEmptyInputs';
 
     // stores Pinia
     const dateSelected = storeDateSelected();
 
-    // Errors 
-    const stateErrors = ref([]);
-
     // variables, props...
     const props = defineProps({
-        width: { default:'' }
+        width: { default: '' }
     });
 
     // menu
@@ -79,6 +78,18 @@
     const inputNoteVal = ref('');
     const inputPriceVal = ref('');
     const inputDateVal = ref('');
+
+    // Errors 
+    const { computedEmptyInputs, stateEmptyInputs } = useMandatoryEmptyInputs([
+        { name: 'inputPriceVal', ref: inputPriceVal }
+    ]);
+    const { stateFormatErrors, computedFormatErrors } = useErrorFormat(verifyAddTransaction, {
+        trsAmount: {name: 'trsAmount', ref: inputPriceVal}, 
+        date: {name: 'date', ref: inputDateVal},
+        note: {name: 'note', ref: inputNoteVal},
+        trsCategory: {name: 'trsCategory', ref: currentCategory},
+        trsType: {name: 'trsType', ref: typeTransaction},
+    });
 
     // icons
     const svgCfgIconAdd = svgConfig.mediumSmaller;
@@ -98,21 +109,6 @@
 
     useClickOutside('.trigger-add-purchase', isMenuActive, () => {
         closeMenu();
-    });
-
-    const computedErrors = computed(() => {
-        const isError = verifyAddTransaction({
-            trsAmount: inputPriceVal.value,
-            note: inputNoteVal.value,
-            date: inputDateVal.value,
-            trsCategory: getCurrentCategory(),
-            trsType: getCurrentTransactionType()
-        });
-        if(isError) {
-            stateErrors.value = isError;
-            return isError[0].message;
-        }
-        else stateErrors.value = [];
     });
 
     async function toggleMenu(request) {
@@ -145,7 +141,7 @@
     }
     
     function isAnyErrorActive() {
-        return stateErrors.value.length > 0;
+        return stateFormatErrors.value.length > 0 || stateEmptyInputs.value.length > 0;
     }
 
     function getCurrentTransactionType() {

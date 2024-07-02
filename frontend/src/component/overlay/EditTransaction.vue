@@ -15,7 +15,8 @@
                 >
                     <!-- Errors  -->
                     <div class="relative">
-                        <p class="p-3 absolute text-red-400">{{ computedErrors }}</p>
+                        <p class="p-3 absolute text-red-400">{{ computedFormatErrors }}</p>
+                        <p v-if="computedEmptyInputs.length > 0"></p>
                     </div>
 
                     <div>
@@ -47,13 +48,11 @@
     import { updateAllDataTransations} from '@/storePinia/useUpdateStoreByBackend';
     import { formatDateForCurrentDay, formatDateForFirstDay, isCurrentMonth } from '@/composable/useGetDate';
     import { listCategories, listRecurings } from '@/svg/listTransactionSvgs';
-    import { verifyEditTransaction } from '@/error/useHandleError';
+    import { useErrorFormat, verifyEditTransaction } from '@/error/useHandleError';
+    import { useMandatoryEmptyInputs } from '@/error/useMandatoryEmptyInputs';
 
     // stores Pinia
     const dateSelected = storeDateSelected();
-
-    // Errors 
-    const stateErrors = ref([]);
 
     // variables, props...
     const props = defineProps({
@@ -72,6 +71,18 @@
     const inputNoteVal = ref('');
     const inputPriceVal = ref('');
     const inputDateVal = ref('');
+
+    // Errors 
+    const { computedEmptyInputs, stateEmptyInputs } = useMandatoryEmptyInputs([
+        { name: 'inputPriceVal', ref: inputPriceVal }
+    ]);
+    const { stateFormatErrors, computedFormatErrors } = useErrorFormat(verifyEditTransaction, {
+        trsAmount: {name: 'trsAmount', ref: inputPriceVal}, 
+        date: {name: 'date', ref: inputDateVal},
+        note: {name: 'note', ref: inputNoteVal},
+        trsCategory: {name: 'trsCategory', ref: currentCategory},
+        trsType: {name: 'trsType', ref: typeTransaction},
+    });
      
     // life cycle / functions
     onMounted(() => {
@@ -95,37 +106,18 @@
          //alert('test');
     });
 
-    const computedErrors = computed(() => {
-        const isError = verifyEditTransaction({
-            trsAmount: inputPriceVal.value,
-            note: inputNoteVal.value,
-            date: inputDateVal.value,
-            trsCategory: getCurrentCategory(),
-            trsType: getCurrentTransactionType()
-        });
-        if(isError) {
-            stateErrors.value = isError;
-            return isError[0].message;
-        }
-        else stateErrors.value = [];
-    });
-
     function isAnyErrorActive() {
-        return stateErrors.value.length > 0;
+        return stateFormatErrors.value.length > 0 || stateEmptyInputs.value.length > 0;
     }
 
     async function toggleMenu(request) {
         switch(request) {
             case 'valid' : {
-                if(!isMenuActive.value) return;
                 if(isAnyErrorActive()) return;
+                if(!isMenuActive.value) return;
                 prepareUpdateTransaction();
                 isMenuActive.value = false;
                 resetInputs();
-                break;
-            }
-            case 'options' : {
-                //alert('valider');
                 break;
             }
             case 'cancel' : {
@@ -184,7 +176,6 @@
         isDataLoaded.value = true;
     }
     async function prepareUpdateTransaction() {
-        
         const dataRequest = await updateTransaction({
             id: props.infoTransaction.transaction_id,
             amount: inputPriceVal.value,
@@ -194,7 +185,6 @@
             note: inputNoteVal.value
             
         });
-        
         const isSuccessRequest = dataRequest?.isSuccessRequest;
         if(isSuccessRequest) {
             const nameTypeTrs = getCurrentTransactionType();

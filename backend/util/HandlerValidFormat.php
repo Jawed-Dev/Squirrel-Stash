@@ -46,6 +46,13 @@
             ];
         }
 
+        public function sanitizeData(&$data) {
+            $data = htmlspecialchars($data);
+            $data = trim($data);
+            $data = strip_tags($data);
+            return $data;
+        }
+
         public function listAvailableYears() {
             $yearArray = [];
             for ($year = 2020; $year <= date("Y"); $year++) {
@@ -54,19 +61,63 @@
             return $yearArray;
         }
 
-        public function isValidMail($mail) {
-            if(empty($mail)) return false;
-            if(!is_string($mail)) return false;
-            $regex = "/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/";
-            $isValidPattern = preg_match($regex, $mail);
-            $isMaxLen = strlen($mail) <= 254;
+        public function isValidPass($pass) {
+            // if(empty($pass)) return false;
+            // if(!is_string($pass)) return false;
+            // $regex = "/^(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$/";
+            // $isValidPattern = preg_match($regex, $pass);
+            // return $isValidPattern;
+            return true;
+        }
+
+        public function isValidMail($email) {
+            if(empty($email)) return false;
+            if(!is_string($email)) return false;
+            $isValidPattern = filter_var($email, FILTER_SANITIZE_EMAIL);
+            $isMaxLen = strlen($email) <= 254;
             return $isValidPattern && $isMaxLen;
+        }
+
+        public function isValidFirstName($firstName) {
+            if(empty($firstName)) return false;
+            if(!is_string($firstName)) return false;
+            $regex = "/^[A-Za-zàâçéèêëîïôûùüÿñæœ' -]{2,50}$/";
+            $isValidPattern = preg_match($regex, $firstName);
+            return $isValidPattern;
+        }
+
+        public function isValidHashSha256($hash) {
+            if(empty($hash)) return false;
+            if(!is_string($hash)) return false;
+            $regex = '/^[0-9a-fA-F]{64}$/';
+            $isValidPattern = preg_match($regex, $hash);
+            return $isValidPattern;
+        }
+
+        public function isValidLastName($lastName) {
+            if(empty($lastName)) return false;
+            if(!is_string($lastName)) return false;
+            $regex = "/^[A-Za-zàâçéèêëîïôûùüÿñæœ' -]{2,70}$/";
+            $isValidPattern = preg_match($regex, $lastName);
+            return $isValidPattern;
+        }
+
+        public function isValidUserId($data) {
+            $userId = $data['userId'];
+            $db = $data['dataBase'];
+
+            if(empty($userId)) return false;
+            if(!is_int($userId)) return false;
+            $ModelUser = $this->getControllerMain()->getControllerUser()->getModelUser();
+            $isUserExist = $ModelUser->isUserExistFromId($db, $userId);
+            if(!$isUserExist) return false;
+            return true;
         }
 
         public function isValidTransactionId($trsId) {
             if(empty($trsId)) return false;
-            $isInt = is_int($trsId);
-            return $isInt;
+            if(!is_int($trsId)) return false;
+            return true;
         }
 
         public function isValidThresholdAmount($trsAmount) {
@@ -83,8 +134,8 @@
             if(empty($trsAmount)) return false;
             //if(!is_string($trsAmount)) return false;
 
-            $regex = "/^\d+(,\d+)?$/";
             $maxLen = strlen($trsAmount) <= 10;
+            $regex = "/^\d+(,\d+)?$/";
             $isValidPattern = preg_match($regex, $trsAmount);
             $isInt  = is_int($trsAmount);
             return $isValidPattern && $maxLen && $isInt;
@@ -98,9 +149,14 @@
             return $isCorrectValue;
         }
 
-        public function isValidTransactionCategory($trsCategory, $trsType) {
+        public function isValidTransactionCategory($data) {
+            $trsCategory = $data[0];
+            $trsType = $data[1];
+            
             if(empty($trsCategory)) return false;
+            if(empty($trsType)) return false;
             if(!is_string($trsCategory)) return false;
+            if(!is_string($trsType)) return false;
 
             if($trsType === 'purchase') {
                 return in_array($trsCategory, $this->listPurchaseCategories());
@@ -111,7 +167,6 @@
             return false;
         }
 
-        // year is stricly in int, it was help for for the front
         public function isValidYear($year) {
             if(empty($year)) return false;
 

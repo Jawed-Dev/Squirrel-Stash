@@ -19,6 +19,7 @@ export async function updateLastNTrsByMonth(month, year, transactionType) {
     const lastNTransactions = storeLastNTransactions();
     const lastTransactionsFetched = await getLastNTransactions(month, year, transactionType);
     const listLastTransactions = lastTransactionsFetched?.data;
+    if(!listLastTransactions) return;
 
     const MAX_TRANSACTIONS = 5;
 

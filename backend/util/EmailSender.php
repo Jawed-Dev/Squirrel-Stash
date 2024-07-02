@@ -27,7 +27,7 @@
             
             
             $this->getPhpMailer()->Username = 'jaywed@hotmail.fr';
-            $this->getPhpMailer()->Password = 'tdkdtxtekymaymzi'; 
+            $this->getPhpMailer()->Password = 'opylszgarumwbfwc'; 
             $this->getPhpMailer()->SMTPSecure = 'tls';
             
             $this->getPhpMailer()->Port = 587;
