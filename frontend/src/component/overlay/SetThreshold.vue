@@ -48,7 +48,7 @@
     import useClickOutside from '@/composable/useClickOutSide';
     import useEscapeKey from '@/composable/useEscapeKey';
     import InputBase from '@/component//input/InputBase.vue';
-    import { saveThreshold } from '@/composable/useBackendSetData';
+    import { saveThreshold } from '@/composable/useBackendActionData';
     import { storeDateSelected } from '@/storePinia/useStoreDashboard';
     import { updateBalanceEcoByMonth, updateThresholdByMonth, updateTotalTrsByMonth } from '@/storePinia/useUpdateStoreByBackend';
     import { useErrorFormat, verifySetThreshold } from '@/error/useHandleError';

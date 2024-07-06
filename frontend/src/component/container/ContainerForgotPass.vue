@@ -37,7 +37,7 @@
     import { useRouter } from 'vue-router';
     import InputBase from '@/component/input/InputBase.vue';
     import ButtonComponent from '@/component/button/ButtonBasic.vue';
-    import { sendResetPass } from '@/composable/useBackendSetData';
+    import { sendResetPass } from '@/composable/useBackendActionData';
     import { useErrorFormat, verifyForgotPass } from '@/error/useHandleError';
     import { useMandatoryEmptyInputs } from '@/error/useMandatoryEmptyInputs';
 

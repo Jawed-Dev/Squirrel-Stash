@@ -54,7 +54,7 @@
     import ContainerInputs from '@/component/container/ContainerInputs.vue';
     import MainContainerSlot from '@/component/containerSlot/MainContainerSlot.vue';
     import { storeDateSelected } from '@/storePinia/useStoreDashboard';
-    import { addTransaction } from '@/composable/useBackendSetData';
+    import { addTransaction } from '@/composable/useBackendActionData';
     import { updateAllDataTransations} from '@/storePinia/useUpdateStoreByBackend';
     import { formatDateForCurrentDay, formatDateForFirstDay, isCurrentMonth } from '@/composable/useGetDate';
     import { listCategories, listRecurings } from '@/svg/listTransactionSvgs';

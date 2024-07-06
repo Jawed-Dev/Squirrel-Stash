@@ -1,4 +1,4 @@
-import useConfigFetchSetData  from "@/composable/useConfigFetchSetData";
+import useConfigFetchActionData  from "@/composable/useConfigFetchActionData";
 import { getLStorageAuthToken } from "@/composable/useLocalStorage";
 import useConfigFetchGetData from "./useConfigFetchGetData";
 
@@ -43,7 +43,7 @@ export async function updatePassword(params) {
         resetPassToken: String(params.resetPassToken),
         password: params.password,
     };
-    const dataRequest = await useConfigFetchSetData ({
+    const dataRequest = await useConfigFetchActionData ({
         request: 'updatePassword',
         method: 'POST',
         dataBody: body,
@@ -58,7 +58,7 @@ export async function sendResetPass(email) {
     const body = {
         email: String(email),
     };
-    const dataRequest = await useConfigFetchSetData ({
+    const dataRequest = await useConfigFetchActionData ({
         request: 'sendResetPass',
         method: 'POST',
         dataBody: body,
@@ -76,7 +76,7 @@ export async function createAccount(params) {
         email: String(params.email),
         password: String(params.password),
     };
-    const dataRequest = await useConfigFetchSetData ({
+    const dataRequest = await useConfigFetchActionData ({
         request: 'createAccount',
         method: 'POST',
         dataBody: body,
@@ -93,7 +93,7 @@ export async function saveThreshold(month, year, amount) {
         selectedYear: Number(year),
         thresholdAmount: Number(amount)
     };
-    const dataRequest = await useConfigFetchSetData ({
+    const dataRequest = await useConfigFetchActionData ({
         request: 'saveThreshold',
         method: 'POST',
         dataBody: body,
@@ -119,7 +119,7 @@ export async function addTransaction(params) {
         transactionDate: String(params.date),
         transactionNote: String(params.note)
     };
-    const dataRequest = await useConfigFetchSetData ({
+    const dataRequest = await useConfigFetchActionData ({
         request: 'addTransaction',
         method: 'POST',
         dataBody: body,
@@ -146,7 +146,7 @@ export async function updateTransaction(params) {
         transactionDate: String(params.date),
         transactionNote: String(params.note)
     };
-    const dataRequest = await useConfigFetchSetData ({
+    const dataRequest = await useConfigFetchActionData ({
         request: 'updateTransaction',
         method: 'POST',
         dataBody: body,
@@ -161,7 +161,7 @@ export async function deleteTransaction(transactionId) {
     const body = {
         transactionId: Number(transactionId),
     };
-    const dataRequest = await useConfigFetchSetData ({
+    const dataRequest = await useConfigFetchActionData ({
         request: 'deleteTransaction',
         method: 'POST',
         dataBody: body,

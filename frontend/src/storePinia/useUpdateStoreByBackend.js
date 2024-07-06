@@ -1,5 +1,5 @@
-import { getBiggestTrsByMonth, getThresholdByMonth, getTotalTrsByMonth, getListTrsMonthByDay, getLastNTransactions } from '@/composable/useBackendGetData';
-import { storeThreshold, storeStatisticDetails, storeTrsMonthByDay, storeLastNTransactions } from '@/storePinia/useStoreDashboard';
+import { getBiggestTrsByMonth, getThresholdByMonth, getTotalTrsByMonth, getListTrsMonthByDay, getLastNTransactions, getListTrsBySearch } from '@/composable/useBackendGetData';
+import { storeParamsSearch, storeThreshold, storeStatisticDetails, storeTrsMonthByDay, storeLastNTransactions, storeListTrsSearch } from '@/storePinia/useStoreDashboard';
 
 
 // list transactions month By Day
@@ -28,7 +28,7 @@ export async function updateLastNTrsByMonth(month, year, transactionType) {
         for (let index = 0; index < MAX_TRANSACTIONS; index++) {
             if(listLastTransactions[index]) arrayRender[index] = listLastTransactions[index];
             else {
-                arrayRender[index] = {transaction_id: null};
+                arrayRender[index] = {transaction_id: null, transaction_type: 'purchase'};
             }
         }
         lastNTransactions.listPurchases = arrayRender;
@@ -38,7 +38,7 @@ export async function updateLastNTrsByMonth(month, year, transactionType) {
         for (let index = 0; index < MAX_TRANSACTIONS; index++) {
             if(listLastTransactions[index]) arrayRender[index] = listLastTransactions[index];
             else {
-                arrayRender[index] = {transaction_id: null};
+                arrayRender[index] = {transaction_id: null, transaction_type: 'recurring'};
             }
         }
         lastNTransactions.listRecurrings = arrayRender;
@@ -84,6 +84,8 @@ export async function updateBiggestTrsByMonth(month, year, transactionType) {
 }
 
 export async function updateAllDataTransations(month, year, transactionType) {
+    const paramsSearch = storeParamsSearch();
+
     updateListTrsMonthByDay(month, year, transactionType);
     updateBalanceEcoByMonth(month, year);
     updateTotalTrsByMonth(month, year);
@@ -91,4 +93,11 @@ export async function updateAllDataTransations(month, year, transactionType) {
     updateLastNTrsByMonth(month, year, 'recurring');
     updateBiggestTrsByMonth(month, year, 'purchase');
     updateBiggestTrsByMonth(month, year, 'recurring');
+    console.log('params', paramsSearch.params);
+    updateListTrsBySearch(paramsSearch.params);
+}
+
+export async function updateListTrsBySearch(params) {
+    const listTransactionsSearch = storeListTrsSearch();
+    listTransactionsSearch.listTransactions = await getListTrsBySearch(params);
 }

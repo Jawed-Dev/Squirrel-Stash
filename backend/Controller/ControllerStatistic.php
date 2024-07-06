@@ -17,6 +17,7 @@
         function fetchThresholdByMonth();
         function fetchTotalTrsByMonth();
         function fetchBiggestTrsByMonth();
+        function fetchTrsBySearch();
         // action data
         function fetchSaveThreshold();
         function fetchInsertTransaction();
@@ -24,6 +25,7 @@
         function fetchUpdateTransaction();
         // Prepare page
         function authorizePageDashboard();
+        function authorizePageTransactions();
     }
 
     
@@ -116,6 +118,16 @@
         }
 
         // get
+        public function fetchTrsBySearch() {
+            $dataRequest = $this->getControllerMain()->prepareAndValidateData();
+
+            $db = $dataRequest['dataBase'];
+            $isAnyError = false;//$this->getControllerMain()->getHandlerError()->verifyGetTrsMonthByDay($dataRequest);
+            $data = null;
+            if(!$isAnyError) $data = $this->getModelStatistic()->getTrsBySearch($db, $dataRequest);
+            $this->getControllerMain()->sendJsonResponse(['data' => $data]);
+        }
+
         public function fetchTrsMonthByDay() {
             $dataRequest = $this->getControllerMain()->prepareAndValidateData();
 
@@ -169,6 +181,11 @@
 
         // Prepare Pages
         public function authorizePageDashboard() {
+            $decodedJwt = $this->getControllerMain()->getHandlerJwt()->getJwtFromHeader();
+            $isSessionActive = $this->getControllerMain()->getControllerUser()->isSessionActiveByJwt($decodedJwt);
+            $this->getViewStatistic()->renderPageDashboard(['isSessionActive' => $isSessionActive]);
+        }
+        public function authorizePageTransactions() {
             $decodedJwt = $this->getControllerMain()->getHandlerJwt()->getJwtFromHeader();
             $isSessionActive = $this->getControllerMain()->getControllerUser()->isSessionActiveByJwt($decodedJwt);
             $this->getViewStatistic()->renderPageDashboard(['isSessionActive' => $isSessionActive]);

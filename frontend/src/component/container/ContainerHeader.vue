@@ -27,23 +27,20 @@
 
 <script setup>
     import { useRouter } from 'vue-router';
-
-    // icones 
-    import IconDashboard from '../svgs/IconDashboard.vue';
-    import IconPurchases from '../svgs/IconPurchase.vue';
-    import IconGraph from '../svgs/IconGraph.vue';
-    import IconBell from '../svgs/IconBell.vue';
-    import IconUser from '../svgs/IconUser.vue';
-    import { classTransitionHover } from '../../composable/useClassTransitionHover';
-    import IconTarget from '../svgs/IconTarget.vue';
-    import IconLogOut from '../svgs/IconLogOut.vue';
-
     import {ref, onMounted, onUnmounted} from 'vue';
-
-    import TransitionOpacity from '../transition/TransitionOpacity.vue';
+    // icons 
+    import IconDashboard from '@/component/svgs/IconDashboard.vue';
+    import IconPurchases from '@/component/svgs/IconPurchase.vue';
+    import IconGraph from '@/component/svgs/IconGraph.vue';
+    import IconBell from '@/component/svgs/IconBell.vue';
+    import IconUser from '@/component/svgs/IconUser.vue';
+    import { classTransitionHover } from '@/composable/useClassTransitionHover';
+    import IconTarget from '@/component/svgs/IconTarget.vue';
+    import IconLogOut from '@/component/svgs/IconLogOut.vue';
+    import TransitionOpacity from '@/component/transition/TransitionOpacity.vue';
     
 
-    // --- Variables, props, ...
+    // variables, props, ...
 
         // class 
         const classTranslateY = classTransitionHover('translateY');
@@ -67,14 +64,9 @@
                 text: 'Tableau de bord'
             },
             {
-                Component: IconTarget,
-                page: '',
-                text: 'Seuil mensuel'
-            },
-            {
                 Component: IconPurchases,
-                page: '',
-                text: 'Liste des achats'
+                page: 'pageTransactions',
+                text: 'Historique'
             },
             {
                 Component: IconGraph,
@@ -134,6 +126,11 @@
             case 'home': {
                 statePage.value = request;
                 router.push('/connexion');
+                break;
+            }
+            case 'pageTransactions' : {
+                statePage.value = request;
+                router.push('/liste-achats');
                 break;
             }
             case 'disconnect' : {

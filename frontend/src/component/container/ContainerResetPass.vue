@@ -46,7 +46,7 @@
     import { useRouter, useRoute } from 'vue-router';
     import InputBase from '@/component/input/InputBase.vue';
     import ButtonComponent from '@/component/button/ButtonBasic.vue';
-    import { updatePassword } from '@/composable/useBackendSetData';
+    import { updatePassword } from '@/composable/useBackendActionData';
     import { useErrorFormat, verifyResetPass } from '@/error/useHandleError';
     import { useMandatoryEmptyInputs } from '@/error/useMandatoryEmptyInputs';
 

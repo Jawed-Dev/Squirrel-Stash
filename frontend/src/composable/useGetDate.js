@@ -16,6 +16,14 @@ export function getMonthNumber(monthName) {
     return index + 1;
 }
 
+export function getCurrentDate() {
+    const now = new Date();
+    const year = now.getFullYear(); 
+    const month = (now.getMonth() + 1).toString().padStart(2, '0'); 
+    const day = now.getDate().toString().padStart(2, '0'); 
+    return `${year}-${month}-${day}`;
+}
+
 export function getCurrentMonthName() {
     const currentDate = new Date();
     return monthNames[currentDate.getMonth()];

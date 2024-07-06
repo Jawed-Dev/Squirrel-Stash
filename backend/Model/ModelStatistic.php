@@ -11,6 +11,7 @@
         function getTotalTrsByMonth($db, $data);
         function getBiggestTrsByMonth($db, $data);
         function isThresholdExistByMonth($db, $data);
+        function getTrsBySearch($db, $data);
         // action
         function updateThresholdByMonth($db, $data);
         function insertThresholdByMonth($db, $data);
@@ -20,6 +21,10 @@
     }
 
     class ModelStatistic implements I_ModelStatistic {
+
+        static $RESULTS_TRS_MONTH = 5;
+        static $RESULTS_SEARCH_TRS_PER_PAGE = 30;
+
         public function insertTransaction($db, $data) {
             $userId = $data['userId'];
             $dataQuery = $data['bodyData'];
@@ -247,7 +252,6 @@
                 ORDER BY transaction_date DESC
                 LIMIT :limit
             ";
-
             define("LIMIT_RESULT", 5);
 
             $query = $db->prepare($reqSql);
@@ -257,6 +261,110 @@
             $query->bindValue(':trsType', $dataQuery['transactionType'], PDO::PARAM_STR);
             $query->bindValue(':limit', LIMIT_RESULT, PDO::PARAM_INT);
             $query->execute();
+            $listTransactions = $query->fetchAll(PDO::FETCH_ASSOC);
+            return $listTransactions;
+        }
+
+        public function getTrsBySearch($db, $data) {
+            $userId = $data['userId'];
+            
+            $dataQuery = $data['bodyData'];
+
+            $conditions = [];
+            $params = [];
+            $conditions = ["transaction_user_id = :userId"];
+            $params = [':userId' => $userId];
+
+            $ORDER_STATE = [
+                'DATE' => 0,
+                'AMOUNT' => 1,
+                'CATEGORY' => 2,
+                'ITERATION' => 3
+            ];
+
+            $orderByField = 'transaction_date';
+            $orderByState = 'DESC'; 
+
+            switch($dataQuery['currentOrderSelected']) {
+                case $ORDER_STATE['CATEGORY'] : {
+                    $orderByField = 'transaction_category ';
+                    $orderByState = (!$dataQuery['orderAsc']) ? 'DESC' : 'ASC'; 
+                    break;
+                }
+                case $ORDER_STATE['AMOUNT'] : {
+                    $orderByField = 'transaction_amount ';
+                    $orderByState = (!$dataQuery['orderAsc']) ? 'DESC' : 'ASC'; 
+                    break;
+                }
+                case $ORDER_STATE['DATE'] : {
+                    $orderByField = 'transaction_date ';
+                    $orderByState = (!$dataQuery['orderAsc']) ? 'DESC' : 'ASC'; 
+                    break;
+                }
+                case $ORDER_STATE['ITERATION'] : {
+                    $orderByField = 'transaction_transanction_iteration ';
+                    $orderByState = (!$dataQuery['orderAsc']) ? 'DESC' : 'ASC'; 
+                    break;
+                }
+            }
+
+            if (!empty($dataQuery['searchDateRangeDateMin'])) {
+                $conditions[] = 'transaction_date >= DATE(:dateMin)';
+                $params[':dateMin'] = $dataQuery['searchDateRangeDateMin'];
+            }
+            
+            if (!empty($dataQuery['searchDateRangeDateMax'])) {
+                $conditions[] = 'transaction_date <= DATE(:dateMax)';
+                $params[':dateMax'] = $dataQuery['searchDateRangeDateMax'];
+            }
+            
+            if (!empty($dataQuery['searchCategory'])) {
+                $conditions[] = 'transaction_category = :searchCategory';
+                $params[':searchCategory'] = $dataQuery['searchCategory'];
+            }
+            
+            if (!empty($dataQuery['searchType'])) {
+                $conditions[] = 'transaction_type = :searchType';
+                $params[':searchType'] = $dataQuery['searchType'];
+            }
+            
+            if (!empty($dataQuery['searchNote'])) {
+                $conditions[] = 'transaction_note LIKE :searchNote';
+                $params[':searchNote'] = '%' . $dataQuery['searchNote'] . '%';
+            }
+            
+            if (!empty($dataQuery['searchAmountMin'])) {
+                $conditions[] = 'transaction_amount >= :amountMin';
+                $params[':amountMin'] = $dataQuery['searchAmountMin'];
+            }
+            
+            if (!empty($dataQuery['searchAmountMax'])) {
+                $conditions[] = 'transaction_amount <= :amountMax';
+                $params[':amountMax'] = $dataQuery['searchAmountMax'];
+            }
+            
+            $limit = self::$RESULTS_SEARCH_TRS_PER_PAGE;
+            $reqSql = "SELECT 
+                transaction_id,
+                transaction_user_id,
+                transaction_amount,
+                transaction_type,
+                transaction_category,
+                transaction_date,
+                transaction_note,
+                DATE_FORMAT(transaction_date, '%d/%m/%Y') as formatted_date             
+                FROM transaction
+                WHERE " . implode(' AND ', $conditions) . "
+                ORDER BY $orderByField $orderByState
+                LIMIT $limit
+            ";
+            $query = $db->prepare($reqSql);
+            foreach ($params as $key => $value) {
+                $query->bindValue($key, $value);
+            }
+            $query->execute();
+            //var_dump($dataQuery['currentOrderSelected'], $dataQuery['orderAsc']);
+            //var_dump($orderByField, $orderByState);
             $listTransactions = $query->fetchAll(PDO::FETCH_ASSOC);
             return $listTransactions;
         }
@@ -302,6 +410,7 @@
             $query->bindValue(':year',  $dataQuery['selectedYear'], PDO::PARAM_INT);
             $query->execute();
             $totalTransactions = $query->fetch(PDO::FETCH_ASSOC);
+
             return $totalTransactions;
         }
 

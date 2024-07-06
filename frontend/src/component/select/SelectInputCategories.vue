@@ -41,7 +41,4 @@
         alert(index);
       
     }
-
-    
-
 </script>

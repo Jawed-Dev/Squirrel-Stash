@@ -98,7 +98,7 @@
     import { useRouter } from 'vue-router';
     import InputBase from '@/component/input/InputBase.vue';
     import ButtonComponent from '@/component/button/ButtonBasic.vue';
-    import { createAccount } from '@/composable/useBackendSetData';
+    import { createAccount } from '@/composable/useBackendActionData';
     import { useErrorFormat, verifyCreateAccount } from '@/error/useHandleError';
     import { useMandatoryEmptyInputs } from '@/error/useMandatoryEmptyInputs';
 

@@ -44,7 +44,7 @@
     import ContainerInputs from '@/component/container/ContainerInputs.vue';
     import MainContainerSlot from '@/component/containerSlot/MainContainerSlot.vue';
     import { storeDateSelected } from '@/storePinia/useStoreDashboard';
-    import { updateTransaction } from '@/composable/useBackendSetData';
+    import { updateTransaction } from '@/composable/useBackendActionData';
     import { updateAllDataTransations} from '@/storePinia/useUpdateStoreByBackend';
     import { formatDateForCurrentDay, formatDateForFirstDay, isCurrentMonth } from '@/composable/useGetDate';
     import { listCategories, listRecurings } from '@/svg/listTransactionSvgs';
@@ -60,10 +60,9 @@
         indexMenu: {default: 0},
         infoTransaction: { default: {} }
     });
-    const isDataLoaded = ref(false);
 
     // menu
-    const isMenuActive = defineModel('menuActive');
+    const isMenuActive = defineModel('menuActive');    
     const typeTransaction = ref(false); 
     const currentCategory = ref(0);
 
@@ -87,7 +86,6 @@
     // life cycle / functions
     onMounted(() => {
         loadDataTransaction();
-        isDataLoaded.value = true;
     });
 
     watch( () => [dateSelected.month, dateSelected.year], async ([newMonth, newYear]) => {
@@ -96,14 +94,12 @@
 
     watch(isMenuActive, (newVal) => {
         if(newVal) {
-            isDataLoaded.value = false;
             loadDataTransaction();
         }
     });
 
     watch(typeTransaction, (newVal, oldVal) => {
-        if(isDataLoaded.value) currentCategory.value = 0;
-         //alert('test');
+        currentCategory.value = 0;
     });
 
     function isAnyErrorActive() {
@@ -117,12 +113,12 @@
                 if(!isMenuActive.value) return;
                 prepareUpdateTransaction();
                 isMenuActive.value = false;
-                resetInputs();
+                //resetInputs();
                 break;
             }
             case 'cancel' : {
                 closeMenu();
-                resetInputs();
+                //resetInputs();
                 break;
             }
         }
@@ -143,43 +139,34 @@
     }
     function closeMenu() {
         isMenuActive.value = false;
-        typeTransaction.value = false;
+        //typeTransaction.value = false;
     }
     function resetInputs() {
-        if(!isDataLoaded) return;
         inputNoteVal.value = '';
         inputPriceVal.value = '';
         inputDateVal.value = formatDateInput();
     }
-    function getCurrentCategory() {
+    function getCurrentNameCategory() {
         const listTransaction = (!typeTransaction.value) ? listCategories : listRecurings;
         const currentIndex = currentCategory.value;
         const nameCategory = listTransaction[currentIndex].nameIcon;
         return nameCategory;
     }
     function loadDataTransaction() {
-        if(! props.infoTransaction.transaction_id) return;
-        isDataLoaded.value = false;
+        if(!props.infoTransaction.transaction_id) return;
         inputPriceVal.value = props.infoTransaction.transaction_amount;
         inputNoteVal.value = props.infoTransaction.transaction_note;
         inputDateVal.value = props.infoTransaction.transaction_date;
         typeTransaction.value = (props.infoTransaction.transaction_type === 'purchase') ? false : true;
         
-        let index = 0;
-        if(!typeTransaction.value) {
-            index = listCategories.findIndex(item => item.nameIcon === props.infoTransaction.transaction_category);
-        }
-        else {
-            index = listRecurings.findIndex(item => item.nameIcon === props.infoTransaction.transaction_category);
-        }
-        currentCategory.value = index;
-        isDataLoaded.value = true;
+        currentCategory.value = getIndexCategory();
+        //alert(index);
     }
     async function prepareUpdateTransaction() {
         const dataRequest = await updateTransaction({
             id: props.infoTransaction.transaction_id,
             amount: inputPriceVal.value,
-            trsCategory: getCurrentCategory(),
+            trsCategory: getCurrentNameCategory(),
             trsType: getCurrentTransactionType(),
             date: inputDateVal.value,
             note: inputNoteVal.value
@@ -193,5 +180,12 @@
             updateAllDataTransations(month, year, nameTypeTrs);
         }
         
+    }
+
+    function getIndexCategory() {
+        let index = 0;
+        if(!typeTransaction.value) index = listCategories.findIndex(item => item.nameIcon === props.infoTransaction.transaction_category);
+        else index = listRecurings.findIndex(item => item.nameIcon === props.infoTransaction.transaction_category);
+        return index;
     }
 </script>

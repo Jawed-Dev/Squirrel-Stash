@@ -49,6 +49,10 @@
                         getControllerMain()->getControllerUser()->authorizePageResetPassword();
                         break;
                     }
+                    case 'pageTransactions': {
+                        getControllerMain()->getControllerStatistic()->authorizePageTransactions();
+                        break;
+                    }
                     default: {
                         getControllerMain()->sendJsonResponse(['message' => 'Page not found', 'status' => 404]);
                         break;
@@ -91,18 +95,23 @@
                         getControllerMain()->getControllerStatistic()->fetchBiggestTrsByMonth();
                         break;
                     }
+                    case 'getListTrsBySearch' : {
+                        getControllerMain()->getControllerStatistic()->fetchTrsBySearch();
+                        break;
+                    }
                     case 'IsValidResetPassToken' : {
                         getControllerMain()->getControllerUser()->fetchIsValidResetPassToken();
                         break;
                     }
+                    
                 }
             }
         }
 
-        // Request setData
+        // Request actionData
         if ($_SERVER['REQUEST_METHOD'] === 'POST') { 
-            if(!empty($_GET['setData'])) {
-                switch($_GET['setData']) {
+            if(!empty($_GET['actionData'])) {
+                switch($_GET['actionData']) {
                     case 'createAccount': {
                         getControllerMain()->getControllerUser()->fetchInsertUser();
                         break;

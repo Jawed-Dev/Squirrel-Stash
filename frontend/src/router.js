@@ -1,12 +1,12 @@
 // src/router/index.js
 import { createRouter, createWebHistory } from 'vue-router';
-import PageLogin from '@/pages/PageLogin.vue'; 
-import PageCreateAcc from '@/pages/PageCreateAcc.vue'; 
-import PageDashboard from '@/pages/PageDashboard.vue'; 
-import PagePurchases from "@/pages/PagePurchases.vue";
-import PageTemporary from '@/pages/PageTemporary.vue';
-import PageForgotPass from '@/pages/PageForgotPass.vue';
-import PageResetPass from '@/pages/PageResetPass.vue';
+import PageLogin from '@/page/PageLogin.vue'; 
+import PageCreateAcc from '@/page/PageCreateAcc.vue'; 
+import PageDashboard from '@/page/PageDashboard.vue'; 
+import PageTransactions from "@/page/PageTransactions.vue";
+import PageTemporary from '@/page/PageTemporary.vue';
+import PageForgotPass from '@/page/PageForgotPass.vue';
+import PageResetPass from '@/page/PageResetPass.vue';
 
 import useConfigFetchGetPage from "@/composable/useConfigFetchGetPage";
 import { getLStorageAuthToken } from "@/composable/useLocalStorage";
@@ -19,7 +19,7 @@ const routes = [
   { path: '/tableau-de-bord', component: PageDashboard, meta: { page: 'pageDashboard' }},
   { path: '/mot-de-passe-oublie', component: PageForgotPass, meta: { page: 'pageForgotPass' }},
   { path: '/reinitialiser-mot-de-passe', component: PageResetPass, meta: { page: 'pageResetPass' }},
-  { path: '/list-achats', component: PagePurchases, meta: { page: 'purchases' }},
+  { path: '/liste-achats', component: PageTransactions, meta: { page: 'pageTransactions' }},
 ];
 
 const router = createRouter({
@@ -66,6 +66,10 @@ router.beforeEach(async (to, from, next) => {
         break;
       }
       case 'pageDashboard' : {
+        (isSessionActive) ? next() : next('/connexion');
+        break;
+      }
+      case 'pageTransactions' : {
         (isSessionActive) ? next() : next('/connexion');
         break;
       }

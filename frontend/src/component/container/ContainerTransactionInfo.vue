@@ -1,14 +1,17 @@
 <template>
     <div v-if="props.infoTransaction.transaction_id" class="flex items-center border-t py-6 border-gray-700 text-white">
-        <IconLoader :nameIcon="props.nameIcon" :svg="svg" :class="`${props.svg.color} rounded-full p-[1.5%] shadow-black shadow-custom-main`"/>
+        <IconLoader :nameIcon="infoTransaction.transaction_category" 
+        :svg="iconConfig" :class="`${iconConfig.color} rounded-full p-[0.6vw] shadow-black shadow-custom-main`"/>
         <p class="w-[20%] pl-[15px] text-[15px]">{{infoTransaction.transaction_category}}</p>
         <p class="w-[20%] text-[15px]">{{ transactionAmount }}</p>
         <p class="w-[20%] text-[15px]">{{infoTransaction.formatted_date}}</p>
         <p class="w-[15%] text-[15px]">{{ transactionCount }}</p>
-        <EditDeleteTransaction :infoTransaction="infoTransaction" :componentType="componentType" :indexMenu="props.indexMenu" v-model:currentMenuEditDeleteTrs="currentMenuEditDeleteTrs" />
+        <EditDeleteTransaction :infoTransaction="infoTransaction" 
+        :indexMenu="props.indexMenu" 
+        v-model:currentMenuEditDeleteTrs="currentMenuEditDeleteTrs" />
     </div>
     <div v-if="(!props.infoTransaction.transaction_id)" class="flex items-center border-t py-6 border-gray-700 text-white">
-        <IconLoader nameIcon="Invisible" :svg="svg" :class="`${props.svg.color} rounded-full p-[1.5%] shadow-black shadow-custom-main`"/>
+        <IconLoader nameIcon="Invisible" :svg="iconConfig" :class="`${iconConfig.color} rounded-full p-[1.5%] shadow-black shadow-custom-main`"/>
         <p class="w-full pl-[15px] text-[15px] text-center font-light">Aucune donnée</p>
     </div>
 </template>
@@ -19,19 +22,11 @@
     import IconLoader from '@/composable/useIconLoader.vue';
     import EditDeleteTransaction from '@/component/overlay/EditDeleteTransaction.vue';
     
-
-    
-
     // variables, props...
     const props = defineProps({
         infoTransaction: { default: {} },
-        svg: { default: {} }, 
         indexMenu: { default: 0 },
-        componentType: {default: ''},
-        nameIcon: {default: ''},
-        test: {default:''}
     });
-
 
     const currentMenuEditDeleteTrs = defineModel('currentMenuEditDeleteTrs');
 
@@ -41,5 +36,17 @@
     const transactionCount = computed(() =>{
         return (props.infoTransaction.transaction_id) ? props.infoTransaction.count_transaction + ' x' : '';
     });
+    const iconConfig = computed(() =>{
+        return (props.infoTransaction.transaction_type === 'purchase') ? svgConfig('bg-gradient-blue','2.5vw') : svgConfig('bg-gradient-vanusa','2.5vw');
+    });
+
+    function svgConfig(color, width = '3vw') {
+        return {
+            color: color,
+            width: width,
+            height: width,
+            fill: 'white'
+        }
+    }
 
 </script>

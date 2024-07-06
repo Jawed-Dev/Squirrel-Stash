@@ -8,15 +8,15 @@
                 <p :class="`cursor-pointer pr-3 ${translateY}`">Voir plus ></p>
             </div>
             <div class="flex border-gray-700 py-2 pl-3">
-                <p class="ml-[6%] pl-[15px] w-[20%]">Nom</p>
+                <p class="ml-[6%] pl-[15px] w-[20%]">Catégorie</p>
                 <p class="w-[20%]">Montant</p>
                 <p class="w-[20%]">Date</p>
                 <p class="w-[15%]">Itération</p>
             </div>
             <div class="pl-3">
-                <PurchaseInfo v-for="(transaction, index) of listTransactionStore" 
-                    :key="transaction.transaction_id" :nameIcon="transaction.transaction_category" :componentType="componentType" 
-                    v-model:currentMenuEditDeleteTrs="currentMenuEditDeleteTrs" :indexMenu="index" :svg="svg" :infoTransaction="transaction"
+                <ContainerTransactionInfo v-for="(transaction, index) of listTransactionStore" 
+                    :key="transaction.transaction_id"
+                    v-model:currentMenuEditDeleteTrs="currentMenuEditDeleteTrs" :indexMenu="index" :infoTransaction="transaction"
                 />
             </div>
         </div>
@@ -27,7 +27,7 @@
 <script setup>
     // import
     import { ref, watch, computed } from 'vue';
-    import PurchaseInfo from '@/component/container/PurchaseInfo.vue';
+    import ContainerTransactionInfo from '@/component/container/ContainerTransactionInfo.vue';
     import { classTransitionHover } from '@/composable/useClassTransitionHover';
     import { storeLastNTransactions, storeDateSelected } from '@/storePinia/useStoreDashboard';
     import { updateLastNTrsByMonth } from '@/storePinia/useUpdateStoreByBackend';
@@ -42,7 +42,7 @@
     const props = defineProps({
         svg: { default: {} }, 
         title: { default: '' },
-        componentType: {default: ''}
+        componentType: {default: 'purchase'}
     });
 
     // life cycle

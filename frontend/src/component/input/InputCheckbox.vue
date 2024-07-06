@@ -1,28 +1,27 @@
 <template>
-    <input type="checkbox" v-model="state" :class="`mr-1 ${extraClass}`" >
+        <input
+            @change="onChange" 
+            :class="`flex items-center text-[16px] bg-transparent border-white ${width} pl-1 focus:outline-none ${props.extraClass}`"
+            :checked="modelValue"
+            type="checkbox"
+            :id="props.id"
+        >
 </template>
 
 <script setup>
-    import { ref } from 'vue';
-    import { useBoolean } from '@/composable/useBoolean';
 
-    const props = defineProps(['extraClass']);
-    
-    function handleInput(action, param = null) {
-        switch(action) {
-            case 'getState' : {
-                return state.value;
-            }
-            case 'setState' : {
-                updateBoolean(param);
-                break;
-            }
-        }
-    }
-
-    defineExpose({
-        handleInput
+    // variables, props, ...
+    const model = defineModel()
+    const props = defineProps({
+        extraClass: { default:'' },
+        modelValue: { default:''},
+        width: {default:''},
+        id: {default:''},
     });
-
-    const { updateBoolean, state} = useBoolean();
+    // life cycle functions
+    function onChange(event) {
+        model.value = event.target.checked;
+    }
 </script>
+
+

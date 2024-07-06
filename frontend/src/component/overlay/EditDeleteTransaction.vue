@@ -13,8 +13,8 @@
             </TransitionOpacity>
     </div>
 
-    <EditTransaction width="w-[30%]"   :indexMenu="indexMenu" :infoTransaction="infoTransaction" v-model:menuActive="isMenuEditActive"/>
-    <DeleteTransaction width="w-[30%]"  :indexMenu="indexMenu" :infoTransaction="infoTransaction" v-model:menuActive="isMenuDeleteActive"/> 
+    <EditTransaction width="w-[30%]" :indexMenu="indexMenu" :infoTransaction="infoTransaction" v-model:menuActive="isMenuEditActive"/>
+    <DeleteTransaction width="w-[30%]" :indexMenu="indexMenu" :infoTransaction="infoTransaction" v-model:menuActive="isMenuDeleteActive"/> 
 </template>
 
 
@@ -44,7 +44,6 @@
     // functions
     const props = defineProps({
         indexMenu: { default: 0 },
-        componentType: { default: ''},
         infoTransaction: { default: [] }
     });
 

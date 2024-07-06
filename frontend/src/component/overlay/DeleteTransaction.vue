@@ -26,7 +26,7 @@
     import MainContainerSlot from '@/component/containerSlot/MainContainerSlot.vue';
     import useClickOutside from '@/composable/useClickOutSide';
     import useEscapeKey from '@/composable/useEscapeKey';
-    import { deleteTransaction } from '@/composable/useBackendSetData';
+    import { deleteTransaction } from '@/composable/useBackendActionData';
     import { storeDateSelected } from '@/storePinia/useStoreDashboard';
     import { updateAllDataTransations } from '@/storePinia/useUpdateStoreByBackend';
 

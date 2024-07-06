@@ -62,7 +62,10 @@ export async function getIconByName(name) {
             return await import ('@/component/svgs/IconCalculator.vue');
         }
 
-
+        case 'Search' : {
+            return await import ('@/component/svgs/IconSearch.vue');
+        }
+        
         default : {
             return '';
         }

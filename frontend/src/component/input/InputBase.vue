@@ -11,7 +11,6 @@
 
 <script setup>
 
-    import { computed } from 'vue';
     // variables, props, ...
     const model = defineModel()
 

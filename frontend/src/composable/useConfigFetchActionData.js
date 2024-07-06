@@ -11,7 +11,7 @@ export default async function useConfigFetchGetData(params) {
     if(!params.request) return null;
 
     // path
-    const fullPath = `/api/${NAME_FOLDER_MAIN}/backend/?setData=${params.request}`;  
+    const fullPath = `/api/${NAME_FOLDER_MAIN}/backend/?actionData=${params.request}`;  
 
     // header data
     const headers = new Headers();

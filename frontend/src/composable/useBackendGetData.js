@@ -52,6 +52,31 @@ export async function isValidResetPassToken(resetPassToken) {
     return (isSuccessRequest) ? true : false;
 }
 
+export async function getListTrsBySearch(params) {
+    authRequired();
+    const localToken = getLStorageAuthToken();
+    const body = {  
+        searchDateRangeDateMin: String(params.searchDateRangeDateMin),
+        searchDateRangeDateMax: String(params.searchDateRangeDateMax),
+        searchCategory: String(params.searchCategory),
+        searchType: String(params.searchType),
+        searchNote: String(params.searchNote),
+        searchAmountMin: Number(params.searchAmountMin),
+        searchAmountMax: Number(params.searchAmountMax),
+        currentOrderSelected: Number(params.currentOrderSelected),
+        orderAsc: Boolean(params.orderAsc)
+    };
+    const listTransactionsFetched = await useConfigFetchGetData ({
+        request: 'getListTrsBySearch',
+        method: 'POST',
+        dataBody: body,
+        token: localToken
+    });
+    console.log(listTransactionsFetched);
+    return listTransactionsFetched;
+}
+
+
 export async function getListTrsMonthByDay(month, year, transactionType) {
     authRequired();
     const localToken = getLStorageAuthToken();

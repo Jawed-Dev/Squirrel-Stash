@@ -67,7 +67,7 @@ export default {
 
         'gradient-joomla' : "linear-gradient(0deg,#2a5298,#1e3c72)",
         'gradient-namn' : "linear-gradient(0deg,#7a2828,#a73737)",
-        'gradient-grey' : "linear-gradient(0deg,#2c3e50,#bdc3c7)",
+        'gradient-gray' : "linear-gradient(180deg, #2c3e50, #111)",
 
         
         // 'gradient-grey' : "linear-gradient(0deg,#2c3e50,#bdc3c7)",

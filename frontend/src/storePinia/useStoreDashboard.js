@@ -47,3 +47,15 @@ export const storeLastNTransactions = defineStore('lastNTransactions', () => {
   const listRecurrings= ref([]);
   return { listPurchases, listRecurrings };
 });
+
+
+// list Transactions by Search
+export const storeListTrsSearch = defineStore('listTrsSearch', () => {
+  const listTransactions = ref([]);
+  return { listTransactions };
+});
+
+export const storeParamsSearch = defineStore('paramsSearch', () => {
+  const params = ref([]);
+  return { params };
+});

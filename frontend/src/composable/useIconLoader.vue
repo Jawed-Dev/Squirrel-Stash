@@ -5,7 +5,7 @@
 
 <script setup>
     // import
-    import { onMounted, shallowRef, watch } from 'vue';
+    import { onMounted, ref, shallowRef, watch } from 'vue';
     import { getIconByName } from '@/svg/getIcon';
 
     // variables, props...
@@ -14,18 +14,21 @@
         svg:  {default: {} },
         nameIcon: {default: ''},
         extraClass: {default: ''}
-    })
+    });
+    const lastRequestedIcon = ref('');
 
     // life cycle, functions
     async function loadIcon(name) {
+        lastRequestedIcon.value = name;
         const module = await getIconByName(name);
-        iconComponent.value = module.default;
+        if(lastRequestedIcon.value === name) iconComponent.value = module.default;
     }
     onMounted(() => {
          loadIcon(props.nameIcon);
     });
     
     watch(() => props.nameIcon, async (newName) => {
-        if(newName) loadIcon(newName);
+        loadIcon(newName);
+        //alert(newName);
     });
 </script>

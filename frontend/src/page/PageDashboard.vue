@@ -2,7 +2,7 @@
 
     <div class="font-main-font flex flex-col bg-main-bg w-full">
 
-        <HeaderComponent/>
+        <ContainerHeader/>
 
         <div class="ml-[calc(20px+70px+20px)] mr-custom-margin-main flex flex-col mt-[20px]">
             <h1 class="text-[25px] font-extralight text-white">Économie du mois</h1>
@@ -39,8 +39,8 @@
             </section>
 
             <section class="flex justify-between ">
-                <ContainerListPurchases class="w-[calc(50%-10px)]" :title="'Derniers achats'" :componentType="'purchase'"  :svg="svgConfig('restaurant', 'bg-gradient-blue', '6%')" />
-                <ContainerListPurchases class=" w-[calc(50%-10px)]" :title="'Derniers prélèvements'" :componentType="'recurring'" :svg="svgConfig('balance', 'bg-gradient-vanusa', '6%')" />
+                <ContainerListTransactions class="w-[calc(50%-10px)]" :title="'Derniers achats'" :componentType="'purchase'"  :svg="svgConfig('restaurant', 'bg-gradient-blue', '6%')" />
+                <ContainerListTransactions class=" w-[calc(50%-10px)]" :title="'Derniers prélèvements'" :componentType="'recurring'" :svg="svgConfig('balance', 'bg-gradient-vanusa', '6%')" />
             </section>
     
         </div>
@@ -51,12 +51,12 @@
 <script setup>
 
     import { ref, watch, computed, onMounted } from 'vue'; 
-    import HeaderComponent from '@/component/header/Header.vue';
+    import ContainerHeader from '@/component/container/ContainerHeader.vue';
     import ContainerStatMonth from '@/component/container/ContainerStatMonth.vue';
     import SelectYear from '@/component/select/SelectYear.vue';
     import SelectMonth from '@/component/select/SelectMonth.vue';
     import ContainerTransactionsMonth from '@/component/container/ContainerTransactionsMonth.vue';
-    import ContainerListPurchases from '@/component/container/ContainerListPurchases.vue';
+    import ContainerListTransactions from '@/component/container/ContainerListTransactions.vue';
     import AddTransaction from '@/component/overlay/AddTransaction.vue';
     import { monthNames, getAvailableYear } from '@/composable/useGetDate';
     import { storeThreshold, storeDateSelected, storeStatisticDetails } from '@/storePinia/useStoreDashboard';
@@ -108,7 +108,6 @@
         const nameBiggestPurch = statisticDetails?.biggestRecurring?.transaction_category;
         return (nameBiggestPurch) ? nameBiggestPurch : 'Aucune donnée';
     });
-
 
     // functions
     function svgConfig(nameSvg, color, width = '3vw') {
