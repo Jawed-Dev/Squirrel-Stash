@@ -85,7 +85,6 @@ export async function updateBiggestTrsByMonth(month, year, transactionType) {
 
 export async function updateAllDataTransations(month, year, transactionType) {
     const paramsSearch = storeParamsSearch();
-
     updateListTrsMonthByDay(month, year, transactionType);
     updateBalanceEcoByMonth(month, year);
     updateTotalTrsByMonth(month, year);

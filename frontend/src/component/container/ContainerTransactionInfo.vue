@@ -1,7 +1,11 @@
 <template>
     <div v-if="props.infoTransaction.transaction_id" class="flex items-center border-t py-6 border-gray-700 text-white">
-        <IconLoader :nameIcon="infoTransaction.transaction_category" 
-        :svg="iconConfig" :class="`${iconConfig.color} rounded-full p-[0.6vw] shadow-black shadow-custom-main`"/>
+        <IconLoader 
+            :nameIcon="infoTransaction.transaction_category" 
+            :svg="iconConfig" 
+            :class="`${iconConfig.color} rounded-full p-[0.7vw] shadow-black shadow-custom-main`"
+        />
+
         <p class="w-[20%] pl-[15px] text-[15px]">{{infoTransaction.transaction_category}}</p>
         <p class="w-[20%] text-[15px]">{{ transactionAmount }}</p>
         <p class="w-[20%] text-[15px]">{{infoTransaction.formatted_date}}</p>
@@ -31,10 +35,10 @@
     const currentMenuEditDeleteTrs = defineModel('currentMenuEditDeleteTrs');
 
     const transactionAmount = computed(() =>{
-        return (props.infoTransaction.transaction_id) ? props.infoTransaction.transaction_amount + ' €' : '';
+       return (props.infoTransaction.transaction_id) ? props.infoTransaction.transaction_amount + ' €' : '';
     });
     const transactionCount = computed(() =>{
-        return (props.infoTransaction.transaction_id) ? props.infoTransaction.count_transaction + ' x' : '';
+       return (props.infoTransaction.transaction_id) ? props.infoTransaction.count_categories + ' x' : '';
     });
     const iconConfig = computed(() =>{
         return (props.infoTransaction.transaction_type === 'purchase') ? svgConfig('bg-gradient-blue','2.5vw') : svgConfig('bg-gradient-vanusa','2.5vw');

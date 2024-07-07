@@ -1,14 +1,25 @@
 <template>
-    <component :is="iconComponent" :svg="svg" :class="`${svg.color} ${extraClass}`"/>
+    <component v-if="componentLoaded"
+        :is="iconComponent" 
+        :svg="svg" 
+        :class="`${svg.color} ${extraClass}`"
+    />
+    <component v-else
+        :is="IconInvisible" 
+        :svg="svg" 
+        :class="`${svg.color} ${extraClass}`"
+    />
 </template>
 
 
 <script setup>
     // import
-    import { onMounted, ref, shallowRef, watch } from 'vue';
+    import { onMounted, ref, shallowRef, watch, computed } from 'vue';
     import { getIconByName } from '@/svg/getIcon';
+    import IconInvisible from '@/component/svgs/IconInvisible.vue';
 
     // variables, props...
+    const componentLoaded = ref(false);
     const iconComponent = shallowRef(null);
     const props = defineProps({
         svg:  {default: {} },
@@ -16,19 +27,22 @@
         extraClass: {default: ''}
     });
     const lastRequestedIcon = ref('');
+    
 
     // life cycle, functions
     async function loadIcon(name) {
         lastRequestedIcon.value = name;
         const module = await getIconByName(name);
-        if(lastRequestedIcon.value === name) iconComponent.value = module.default;
+        if(lastRequestedIcon.value === name) { 
+            iconComponent.value = module.default;
+            componentLoaded.value = true;
+        }
     }
-    onMounted(() => {
-         loadIcon(props.nameIcon);
+    onMounted(async () => {
+        await loadIcon(props.nameIcon);
     });
     
     watch(() => props.nameIcon, async (newName) => {
-        loadIcon(newName);
-        //alert(newName);
+        await loadIcon(newName);
     });
 </script>

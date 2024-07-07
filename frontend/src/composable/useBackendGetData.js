@@ -64,7 +64,8 @@ export async function getListTrsBySearch(params) {
         searchAmountMin: Number(params.searchAmountMin),
         searchAmountMax: Number(params.searchAmountMax),
         currentOrderSelected: Number(params.currentOrderSelected),
-        orderAsc: Boolean(params.orderAsc)
+        orderAsc: Boolean(params.orderAsc),
+        currentPage: Number(params.currentPage)
     };
     const listTransactionsFetched = await useConfigFetchGetData ({
         request: 'getListTrsBySearch',
@@ -72,7 +73,7 @@ export async function getListTrsBySearch(params) {
         dataBody: body,
         token: localToken
     });
-    console.log(listTransactionsFetched);
+    console.log('listTransactionsFetched', listTransactionsFetched, listTransactionsFetched);
     return listTransactionsFetched;
 }
 

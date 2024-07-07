@@ -22,9 +22,6 @@
 
     class ModelStatistic implements I_ModelStatistic {
 
-        static $RESULTS_TRS_MONTH = 5;
-        static $RESULTS_SEARCH_TRS_PER_PAGE = 30;
-
         public function insertTransaction($db, $data) {
             $userId = $data['userId'];
             $dataQuery = $data['bodyData'];
@@ -226,6 +223,12 @@
         public function getNLastTrsByMonth($db, $data) {
             $userId = $data['userId'];
             $dataQuery = $data['bodyData'];
+            $whereClauseCommon = 
+                "transaction_user_id = :userId
+                AND YEAR(transaction_date) = :year
+                AND MONTH(transaction_date) = :month
+                AND transaction_type = :trsType";
+
             $reqSql = "SELECT 
                 transaction_id,
                 transaction_user_id,
@@ -237,20 +240,18 @@
                 DATE_FORMAT(transaction_date, '%d/%m/%Y') as formatted_date,
                 (SELECT COUNT(*)
                     FROM transaction AS sub
-                    WHERE sub.transaction_user_id = transaction.transaction_user_id
-                    AND YEAR(sub.transaction_date) = YEAR(transaction.transaction_date)
-                    AND MONTH(sub.transaction_date) = MONTH(transaction.transaction_date)
-                    AND sub.transaction_type = transaction.transaction_type
-                    AND sub.transaction_category = transaction.transaction_category
-                ) AS count_transaction
-                
-                FROM transaction
-                WHERE transaction_user_id = :userId
-                AND YEAR(transaction_date) = :year
-                AND MONTH(transaction_date) = :month
-                AND transaction_type = :trsType
-                ORDER BY transaction_date DESC
-                LIMIT :limit
+                    WHERE 
+                        sub.transaction_category = transaction.transaction_category
+                        AND $whereClauseCommon
+                ) AS count_categories
+                FROM 
+                    transaction
+                WHERE 
+                    $whereClauseCommon
+                ORDER BY 
+                    transaction_date DESC
+                LIMIT 
+                    :limit
             ";
             define("LIMIT_RESULT", 5);
 
@@ -267,13 +268,12 @@
 
         public function getTrsBySearch($db, $data) {
             $userId = $data['userId'];
-            
             $dataQuery = $data['bodyData'];
 
             $conditions = [];
-            $params = [];
+            $binds = [];
             $conditions = ["transaction_user_id = :userId"];
-            $params = [':userId' => $userId];
+            $binds = [':userId' => $userId];
 
             $ORDER_STATE = [
                 'DATE' => 0,
@@ -283,67 +283,70 @@
             ];
 
             $orderByField = 'transaction_date';
-            $orderByState = 'DESC'; 
+            $orderType  = 'DESC'; 
 
+            // order desc / asc
             switch($dataQuery['currentOrderSelected']) {
                 case $ORDER_STATE['CATEGORY'] : {
-                    $orderByField = 'transaction_category ';
-                    $orderByState = (!$dataQuery['orderAsc']) ? 'DESC' : 'ASC'; 
+                    $orderByField = 'transaction_category';
+                    $orderType  = (!$dataQuery['orderAsc']) ? 'DESC' : 'ASC'; 
                     break;
                 }
                 case $ORDER_STATE['AMOUNT'] : {
-                    $orderByField = 'transaction_amount ';
-                    $orderByState = (!$dataQuery['orderAsc']) ? 'DESC' : 'ASC'; 
+                    $orderByField = 'transaction_amount';
+                    $orderType  = (!$dataQuery['orderAsc']) ? 'DESC' : 'ASC'; 
                     break;
                 }
                 case $ORDER_STATE['DATE'] : {
-                    $orderByField = 'transaction_date ';
-                    $orderByState = (!$dataQuery['orderAsc']) ? 'DESC' : 'ASC'; 
+                    $orderByField = 'transaction_date';
+                    $orderType  = (!$dataQuery['orderAsc']) ? 'DESC' : 'ASC'; 
                     break;
                 }
                 case $ORDER_STATE['ITERATION'] : {
-                    $orderByField = 'transaction_transanction_iteration ';
-                    $orderByState = (!$dataQuery['orderAsc']) ? 'DESC' : 'ASC'; 
+                    $orderByField = 'transaction_category';
+                    $orderType  = (!$dataQuery['orderAsc']) ? 'DESC' : 'ASC'; 
                     break;
                 }
             }
 
+            // where conditions
             if (!empty($dataQuery['searchDateRangeDateMin'])) {
                 $conditions[] = 'transaction_date >= DATE(:dateMin)';
-                $params[':dateMin'] = $dataQuery['searchDateRangeDateMin'];
+                $binds[':dateMin'] = $dataQuery['searchDateRangeDateMin'];
             }
-            
             if (!empty($dataQuery['searchDateRangeDateMax'])) {
                 $conditions[] = 'transaction_date <= DATE(:dateMax)';
-                $params[':dateMax'] = $dataQuery['searchDateRangeDateMax'];
+                $binds[':dateMax'] = $dataQuery['searchDateRangeDateMax'];
             }
-            
             if (!empty($dataQuery['searchCategory'])) {
                 $conditions[] = 'transaction_category = :searchCategory';
-                $params[':searchCategory'] = $dataQuery['searchCategory'];
+                $binds[':searchCategory'] = $dataQuery['searchCategory'];
             }
-            
             if (!empty($dataQuery['searchType'])) {
                 $conditions[] = 'transaction_type = :searchType';
-                $params[':searchType'] = $dataQuery['searchType'];
+                $binds[':searchType'] = $dataQuery['searchType'];
             }
-            
             if (!empty($dataQuery['searchNote'])) {
                 $conditions[] = 'transaction_note LIKE :searchNote';
-                $params[':searchNote'] = '%' . $dataQuery['searchNote'] . '%';
+                $binds[':searchNote'] = '%' . $dataQuery['searchNote'] . '%';
             }
-            
             if (!empty($dataQuery['searchAmountMin'])) {
                 $conditions[] = 'transaction_amount >= :amountMin';
-                $params[':amountMin'] = $dataQuery['searchAmountMin'];
+                $binds[':amountMin'] = $dataQuery['searchAmountMin'];
             }
-            
             if (!empty($dataQuery['searchAmountMax'])) {
                 $conditions[] = 'transaction_amount <= :amountMax';
-                $params[':amountMax'] = $dataQuery['searchAmountMax'];
+                $binds[':amountMax'] = $dataQuery['searchAmountMax'];
             }
             
-            $limit = self::$RESULTS_SEARCH_TRS_PER_PAGE;
+            // params
+            define("TRS_PER_PAGE", 3);
+            $whereClause = implode(' AND ', $conditions);
+            $limit = TRS_PER_PAGE;
+            $currentPage = !empty($dataQuery['currentPage']) ? $dataQuery['currentPage'] : 1;
+            $offset = $limit * ($currentPage - 1);
+
+            // SELECT
             $reqSql = "SELECT 
                 transaction_id,
                 transaction_user_id,
@@ -352,21 +355,53 @@
                 transaction_category,
                 transaction_date,
                 transaction_note,
-                DATE_FORMAT(transaction_date, '%d/%m/%Y') as formatted_date             
-                FROM transaction
-                WHERE " . implode(' AND ', $conditions) . "
-                ORDER BY $orderByField $orderByState
-                LIMIT $limit
+                DATE_FORMAT(transaction_date, '%d/%m/%Y') as formatted_date, 
+                (
+                    SELECT COUNT(*)
+                    FROM transaction sub
+                    WHERE sub.transaction_category = transaction.transaction_category 
+                    AND $whereClause
+                ) AS count_categories    
+
+                FROM 
+                    transaction
+                WHERE 
+                    $whereClause
+                ORDER BY 
+                    $orderByField $orderType
+                LIMIT 
+                    $limit OFFSET $offset 
             ";
             $query = $db->prepare($reqSql);
-            foreach ($params as $key => $value) {
+
+            // bind
+            foreach ($binds as $key => $value) {
                 $query->bindValue($key, $value);
             }
             $query->execute();
-            //var_dump($dataQuery['currentOrderSelected'], $dataQuery['orderAsc']);
-            //var_dump($orderByField, $orderByState);
             $listTransactions = $query->fetchAll(PDO::FETCH_ASSOC);
-            return $listTransactions;
+
+            // sort
+            // usort($listTransactions, function($a, $b) use ($orderByField, $orderType ) {
+            //     if ($orderType  === 'ASC') return $a[$orderByField] <=> $b[$orderByField];
+            //     else return $b[$orderByField] <=> $a[$orderByField];
+            // });
+
+            // count selected transactions
+            $countSql = "SELECT COUNT(*) AS countTransactions FROM transaction WHERE $whereClause";
+            $countQuery = $db->prepare($countSql);
+            foreach ($binds as $key => $value) {
+                $countQuery->bindValue($key, $value);
+            }
+            $countQuery->execute();
+            $countTrs = $countQuery->fetch()['countTransactions'];
+
+            $transactionsData = [
+                'listTransactions' => $listTransactions,
+                'countTransactions' => $countTrs,
+                'itemPerPage' => $limit 
+            ];
+            return $transactionsData;
         }
 
         public function getBiggestTrsByMonth($db, $data) {

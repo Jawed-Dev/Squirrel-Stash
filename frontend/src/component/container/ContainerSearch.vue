@@ -1,7 +1,10 @@
 <template>
     <div class="flex justify-center rounded-[3px] mt-custom-margin-main">
         <div class="gradient-border text-white overflow-hidden bg-main-gradient pl-3 shadow-black shadow-custom-main w-full relative">   
-            <UseIconLoader extraClass="absolute top-2 rounded-md shadow-black shadow-custom-main p-[0.7vw]" :svg="iconConfig" nameIcon="Search" />
+            <UseIconLoader 
+                extraClass="absolute top-2 rounded-md shadow-black shadow-custom-main p-[0.7vw]" 
+                :svg="iconConfig" nameIcon="Search" 
+            />
             <form class="py-3 flex flex-col" @submit.prevent="handleSubmit()">
                 <div class="flex justify-evenly mt-[20px]">
                     <ContainerAmountInputs 
@@ -78,7 +81,6 @@
     // life cycle, functions...
     onMounted(() => {
         const params = getAllParamsSearch();
-        console.log(params);
         updateListTrsBySearch(params);
         updateStoreParams(params);
     });
@@ -87,10 +89,6 @@
         const params = getAllParamsSearch();
         updateListTrsBySearch(params);
         updateStoreParams(params);
-        // const isSuccessRequest = dataRequest?.isSuccessRequest;
-        // console.log(dataRequest);
-        // if(isSuccessRequest) {
-        // }
     }
 
     watch(searchType, (newVal) => {
@@ -120,7 +118,7 @@
             searchAmountMin: searchAmountMin.value,
             searchAmountMax: searchAmountMax.value,
             currentOrderSelected: props.currentOrderSelected,
-            orderAsc: props.orderAsc
+            orderAsc: props.orderAsc,
         }
     }
 

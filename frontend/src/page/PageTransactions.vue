@@ -2,14 +2,17 @@
     <div class="font-main-font flex bg-main-bg min-h-screen w-full">
         <ContainerHeader/>
         <div class="ml-[calc(20px+70px+20px)] mr-custom-margin-main w-full flex flex-col mt-[20px]">
-            <h1 class="text-[22px] text-center text-white">Listes des transactions</h1>
+            <h1 class="font-extralight flex justify-start text-[25px] text-white">Historique des transactions</h1>
             <ContainerSearch 
                 :currentOrderSelected="currentOrderSelected"
                 :orderAsc="orderAsc"
             />
             <ContainerTransactionsBySearch title="Historique des transactions"
-            v-model:orderAsc="orderAsc"
-            v-model:currentOrderSelected="currentOrderSelected" 
+                v-model:orderAsc="orderAsc"
+                v-model:currentOrderSelected="currentOrderSelected" 
+                v-model:totalItems="totalItems"
+                v-model:currentPage="currentPage"
+                v-model:itemsPerPage="itemsPerPage"
              />
         </div>
     </div>
@@ -33,17 +36,18 @@
     const currentOrderSelected = ref(ORDER_STATE_DATE);
     const orderAsc = ref(false);
 
+    const totalItems = ref(0);
+    const currentPage = ref(1);
+    const itemsPerPage = ref(1);
+
     // life cycle / functions
-    watch([currentOrderSelected, orderAsc], ([newOrder, newAsc], [oldOrder, oldAsc]) => {
+    watch([currentOrderSelected, orderAsc], ([newOrder, newAsc]) => {
         const params = paramsSearch.params;
+        currentPage.value = 1;
+        paramsSearch.params.currentPage = 1;
         paramsSearch.params.currentOrderSelected = newOrder;
         paramsSearch.params.orderAsc = newAsc;
-        //alert(newAsc);
         updateListTrsBySearch(params);
     });
-
-    
-
-    // functions
 
 </script>
