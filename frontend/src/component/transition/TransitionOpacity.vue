@@ -16,7 +16,7 @@
 
     const props = defineProps({
         durationIn: { default: 'duration-300' },
-        durationOut: { default: 'duration-300' }
+        durationOut: { default: 'duration-0' }
     })
 
 </script>

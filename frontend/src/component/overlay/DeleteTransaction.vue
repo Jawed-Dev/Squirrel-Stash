@@ -1,16 +1,17 @@
 <template>
-    <TransitionOpacity :durationIn="'duration-500'" :durationOut="'duration-500'">
+    <TransitionOpacity :durationIn="'duration-300'" :durationOut="'duration-200'">
         <div v-show="isMenuActive" class="fixed inset-0 bg-black bg-opacity-80 z-30"></div>
     </TransitionOpacity>
 
-    <TransitionOpacity :durationIn="'duration-500'" :durationOut="'duration-500'">
-        <div v-show="isMenuActive" :class="`bg-main-gradient flex flex-col gap-[130px] fixed 
+    <TransitionOpacity :durationIn="'duration-300'" :durationOut="'duration-200'">
+        <div v-show="isMenuActive" :class="`bg-main-gradient flex flex-col fixed 
         shadow-black shadow-custom-main rounded-md top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 trigger-menu-delete
         z-30 text-white ${width}`">
     
-            <MainContainerSlot :bgMainBtn="'bg-gradient-vanusa'"  :width="'w-[250px]'" :textBtn1="'Annuler'" :textBtn2="'Supprimer'" :titleContainer="'Suppression d\'achat'" @toggleMenu="toggleMenu">
-                <div class="flex flex-col rounded-[3px] items-center">
-                    <p class="text-[18px] font-light">Voulez vous supprimer cet achat ?</p>
+            <MainContainerSlot :bgMainBtn="'bg-gradient-vanusa'" :width="'w-full'" 
+            :textBtn1="'Annuler'" :textBtn2="'Supprimer'" :titleContainer="textTitleComponent" @toggleMenu="toggleMenu">
+                <div class="flex flex-col rounded-[3px] items-center my-[80px]">
+                    <p class="text-[18px] font-light">{{ textBodyComponent }}</p>
                 </div>
             </MainContainerSlot>
 
@@ -22,6 +23,7 @@
     
 
 <script setup>
+    import { computed } from 'vue';
     import TransitionOpacity from '@/component/transition/TransitionOpacity.vue';  
     import MainContainerSlot from '@/component/containerSlot/MainContainerSlot.vue';
     import useClickOutside from '@/composable/useClickOutSide';
@@ -40,6 +42,16 @@
         indexMenu: {default: 0},
     });
 
+    const textTitleComponent = computed(() => {
+        const isPurchase = props.infoTransaction.transaction_type === 'purchase';
+        return (isPurchase) ? 'Suppression d\'un achat' : 'Suppression d\'un prélèvement';
+    });
+
+    const textBodyComponent = computed(() => {
+        const isPurchase = props.infoTransaction.transaction_type === 'purchase';
+        return (isPurchase) ? 'Voulez vous vraiment supprimer cet achat ?' : 'Voulez vous vraiment supprimer ce prélèvement ?';
+    });
+
     const isMenuActive = defineModel('menuActive');
 
     useEscapeKey(isMenuActive, () => {
@@ -47,7 +59,6 @@
     });
 
     useClickOutside( '.trigger-menu-delete', isMenuActive, () => {
-        //alert('test');
         isMenuActive.value = false;
     },);
 
@@ -55,7 +66,6 @@
         switch(request) {
             case 'valid': {
                 if(!isMenuActive.value) return;
-
                 const transactionId = props.infoTransaction.transaction_id;
                 const isSuccessRequest = await deleteTransaction(transactionId);
                 if(isSuccessRequest) {
@@ -65,7 +75,6 @@
                 break;
             }
             case 'cancel': {
-                //alert('test');
                 isMenuActive.value = false;
                 break;
             }

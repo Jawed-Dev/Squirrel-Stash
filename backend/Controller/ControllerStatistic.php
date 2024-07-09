@@ -17,7 +17,7 @@
         function fetchThresholdByMonth();
         function fetchTotalTrsByMonth();
         function fetchBiggestTrsByMonth();
-        function fetchTrsBySearch();
+        function fetchDataTrsBySearch();
         // action data
         function fetchSaveThreshold();
         function fetchInsertTransaction();
@@ -118,13 +118,13 @@
         }
 
         // get
-        public function fetchTrsBySearch() {
+        public function fetchDataTrsBySearch() {
             $dataRequest = $this->getControllerMain()->prepareAndValidateData();
 
             $db = $dataRequest['dataBase'];
             $isAnyError = false;//$this->getControllerMain()->getHandlerError()->verifyGetTrsMonthByDay($dataRequest);
             $data = null;
-            if(!$isAnyError) $data = $this->getModelStatistic()->getTrsBySearch($db, $dataRequest);
+            if(!$isAnyError) $data = $this->getModelStatistic()->getDataTrsBySearch($db, $dataRequest);
             $this->getControllerMain()->sendJsonResponse(['data' => $data]);
         }
 

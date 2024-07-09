@@ -1,6 +1,11 @@
   <template>
-     <router-view/>
+    <router-view/>
+    <ContainerHeader/>
   </template>
+
+<script setup>
+  import ContainerHeader from '@/component/container/ContainerHeader.vue';
+</script>
 
 
 <!-- <transition

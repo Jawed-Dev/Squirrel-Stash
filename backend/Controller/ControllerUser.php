@@ -12,15 +12,17 @@
         function getModelUser();
         // View 
         function getViewUser();
-        // Auth
+        // User
         function fetchInsertUser();
         function isSessionActiveByJwt($decodedJwt);
         function handleSuccessLogin();
         function getUserIdFromJwt($decodedJwt);
         function getStateSession();
+        function getUserFirstName();
         function FetchSendResetPassToken();
         function fetchUpdatePassword();
         function fetchIsValidResetPassToken();
+        
         // Prepare pages
         function authorizePageLogin();
         function authorizePageForgotPass();
@@ -55,7 +57,7 @@
             return $this->ViewUser;
         }
 
-        // Auth
+    
         public function getUserIdFromJwt($decodedJwt) {
             return !empty($decodedJwt->userId) ? $decodedJwt->userId : null;
         }
@@ -91,6 +93,15 @@
             if(!$userId) return $this->getControllerMain()->sendJsonResponse(['tokenJwt' => null]);
             $tokenJwt = $this->getControllerMain()->getHandlerJwt()->createTokenJwt($userId);
             $this->getControllerMain()->sendJsonResponse(['tokenJwt' => $tokenJwt]);
+        }
+
+        public function getUserFirstName() {
+            $decodedJwt = $this->getControllerMain()->getHandlerJwt()->getJwtFromHeader();
+            $userId = $this->getUserIdFromJwt($decodedJwt);
+            $db = $this->getControllerMain()->getDatabase();
+            $data = $this->getModelUser()->getUserFirstName($db ,$userId);
+            // log ici ?
+            $this->getControllerMain()->sendJsonResponse(['data' => $data]);
         }
 
         public function fetchInsertUser() {

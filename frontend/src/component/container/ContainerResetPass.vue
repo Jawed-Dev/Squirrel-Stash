@@ -11,9 +11,10 @@
             <div class="mt-[30px] w-">
                 <label class="text-white font-light text-[17px]" for="input-pass">Entrez votre mot de passe</label>
                 <InputBase 
+                    unicode="🔒"
                     id="input-pass" 
                     v-model="password" 
-                    extraClass="border-b-2 w-full py-1 text-white font-light mt-[2px]" 
+                    extraClass="" 
                     placeholder="Mot de passe"
                     type="password"
                 />
@@ -21,9 +22,10 @@
             <div class="mt-[30px]">
                 <label class="text-white font-light text-[17px]" for="input-confirm-pass">Confirmez votre mot de passe</label>
                 <InputBase 
+                    unicode="🔒"
                     id="input-confirm-pass" 
                     v-model="confirmPassword" 
-                    extraClass="border-b-2 w-full py-1 text-white font-light mt-[2px]" 
+                    extraClass="" 
                     placeholder="Mot de passe"
                     type="password"
                 />

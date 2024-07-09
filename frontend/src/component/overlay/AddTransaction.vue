@@ -4,22 +4,23 @@
             <div class="bg-main-gradient w-[230px] flex justify-around items-center p-1 gradient-border">
                 <p class="text-white px-3 flex ">Ajouter un achat</p>
                 <IconAddPurchase @click="toggleMenu('openNClose')"
-                class="p-1 bg-gradient-blue rounded-md right-[100px] top-[50vh] cursor-pointer z-10 shadow-black shadow-custom-main trigger-add-purchase" 
+                class="p-1 bg-gradient-blue rounded-md right-[100px] top-[50vh] cursor-pointer 
+                z-10 shadow-black shadow-custom-main trigger-add-purchase" 
                 :svg="svgCfgIconAdd"/>
             </div>
         </div>
 
-        <TransitionOpacity :durationIn="'duration-500'" :durationOut="'duration-500'">
+        <TransitionOpacity :durationIn="'duration-300'" :durationOut="'duration-200'">
             <div v-show="isMenuActive" class="fixed inset-0 bg-black bg-opacity-80 z-10"></div>
         </TransitionOpacity>
 
-        <TransitionOpacity :durationIn="'duration-500'" :durationOut="'duration-500'">
+        <TransitionOpacity :durationIn="'duration-300'" :durationOut="'duration-200'">
             <div v-show="isMenuActive" 
-                :class="`fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 text-white rounded-[3px] overflow-hidden 
+                :class="`fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-30 text-white rounded-[3px] overflow-hidden 
                 shadow-black shadow-custom-main trigger-add-purchase bg-main-gradient ${props.width}`">
 
                 <MainContainerSlot 
-                    :textBtn1="'Annuler'" :textBtn2="'Ajouter'" :titleContainer="(!typeTransaction) ? 'Ajouter achat' : 'Ajouter prélèvement'" 
+                    :textBtn1="'Annuler'" :textBtn2="'Ajouter'" :titleContainer="(!typeTransaction) ? 'Ajouter un achat' : 'Ajouter un prélèvement'" 
                     @toggleMenu="toggleMenu" 
                 >
                     <!-- Errors  -->
@@ -29,7 +30,8 @@
                     </div>
                     <div>
                         <!-- Inputs  -->
-                        <ContainerInputs v-model:inputPriceVal="inputPriceVal" v-model:inputNoteVal="inputNoteVal" v-model:inputDateVal="inputDateVal" />
+                        <ContainerInputs v-model:inputPriceVal="inputPriceVal" v-model:inputNoteVal="inputNoteVal" 
+                        v-model:inputDateVal="inputDateVal" :typeTransaction="typeTransaction" />
                         <!-- Categories -->
                         <ContainerSelectCategories v-model:currentCategory="currentCategory" 
                         v-model:typeTransaction="typeTransaction" />              
@@ -71,7 +73,7 @@
 
     // menu
     const isMenuActive = ref(false); 
-    const typeTransaction = ref (false); // menu state if purchase or reccuring
+    const typeTransaction = ref (false); 
     const currentCategory = ref(0);
 
     // input ref

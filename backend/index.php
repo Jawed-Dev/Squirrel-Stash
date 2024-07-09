@@ -65,13 +65,17 @@
         if ($_SERVER['REQUEST_METHOD'] === 'POST') { 
             if(!empty($_GET['getData'])) {
                 switch($_GET['getData']) {
-                    // auth
+                    // user
                     case 'getHandleLogin': {
                         getControllerMain()->getControllerUser()->handleSuccessLogin();
                         break;
                     }
                     case 'getStateSession' : {
                         getControllerMain()->getControllerUser()->getStateSession();
+                        break;
+                    }
+                    case 'getUserFirstName' : {
+                        getControllerMain()->getControllerUser()->getUserFirstName();
                         break;
                     }
                     // statistic
@@ -95,8 +99,8 @@
                         getControllerMain()->getControllerStatistic()->fetchBiggestTrsByMonth();
                         break;
                     }
-                    case 'getListTrsBySearch' : {
-                        getControllerMain()->getControllerStatistic()->fetchTrsBySearch();
+                    case 'getDataTrsBySearch' : {
+                        getControllerMain()->getControllerStatistic()->fetchDataTrsBySearch();
                         break;
                     }
                     case 'IsValidResetPassToken' : {

@@ -13,7 +13,7 @@
                         />
                     </div>
                 </div>
-                <div class="flex border-gray-700 py-2 pl-3 mt-3 bg-main-bg">
+                <div class="flex py-2 pl-3 mt-3 bg-main-bg">
                     <div class="ml-[2.5vw] pl-[15px] w-[20%]">
                         <p @click="toggleOrder(ORDER_STATE.CATEGORY)" 
                         :class="`${colorForOrderSelected(ORDER_STATE.CATEGORY)} w-fit cursor-pointer`" 
@@ -23,22 +23,22 @@
                         <p 
                             @click="toggleOrder(ORDER_STATE.AMOUNT)" 
                             :class="`${colorForOrderSelected(ORDER_STATE.AMOUNT)} w-fit cursor-pointer`"  
-                            v-html="renderStateOrder(ORDER_STATE.AMOUNT) + ' Montant'">
+                            v-html="'Montant' + renderStateOrder(ORDER_STATE.AMOUNT) ">
                         </p>
                     </div>
                     <div class="w-[20%]">
                         <p @click="toggleOrder(ORDER_STATE.DATE)" :class="`${colorForOrderSelected(ORDER_STATE.DATE)} w-fit cursor-pointer`"  
-                        v-html="renderStateOrder(ORDER_STATE.DATE) + ' Date'"></p>
+                        v-html="'Date' + renderStateOrder(ORDER_STATE.DATE)"></p>
                     </div>
                     <div class="w-[15%]">
                         <p @click="toggleOrder(ORDER_STATE.ITERATION)" :class="`${colorForOrderSelected(ORDER_STATE.ITERATION)} w-fit cursor-pointer`"  
-                        v-html="renderStateOrder(ORDER_STATE.ITERATION) + ' Itération'"></p>
+                        v-html="'Itération' + renderStateOrder(ORDER_STATE.ITERATION)"></p>
                     </div>
                 </div>
-                <div class="pl-3">
+                <div class="">
                     <ContainerTransactionInfo v-for="(transaction, index) of filteredTransactions" 
                         :key="transaction.transaction_id" v-model:currentMenuEditDeleteTrs="currentMenuEditDeleteTrs" 
-                        :indexMenu="index" :infoTransaction="transaction"
+                        :indexMenu="index" :infoTransaction="transaction" :lengthData="filteredTransactions.length"
                     />
                 </div>
             </div>
@@ -55,12 +55,12 @@
     import { ref, computed, watch, onMounted, nextTick } from 'vue';
     import ContainerTransactionInfo from '@/component/container/ContainerTransactionInfo.vue';
     import ContainerPagination from '@/component/container/ContainerPagination.vue';
-    import { storeListTrsSearch, storeParamsSearch } from '@/storePinia/useStoreDashboard';
-    import { updateListTrsBySearch } from '@/storePinia/useUpdateStoreByBackend';
+    import { storeDataTrsSearch, storeParamsSearch } from '@/storePinia/useStoreDashboard';
+    import { updateDataTrsSearch } from '@/storePinia/useUpdateStoreByBackend';
 
     // Store Pinia
     const paramsSearch = storeParamsSearch();
-    const listTrsSearch = storeListTrsSearch();
+    const dataTrsSearch = storeDataTrsSearch();
 
     const ORDER_STATE = {
         DATE: 0,
@@ -91,17 +91,17 @@
 
     onMounted(async () => {
         const params = paramsSearch.params;
-        await updateListTrsBySearch(params);
+        await updateDataTrsSearch(params);
         componentLoaded.value = true;
     });
 
     watch(  () => currentPage.value, (newPage) => {
         const params = paramsSearch.params;
         params.currentPage = newPage;
-        updateListTrsBySearch(params);
+        updateDataTrsSearch(params);
     });
 
-    watch(() => listTrsSearch.listTransactions?.data, (newData) => {
+    watch(() => dataTrsSearch.dataTransactions?.data, (newData) => {
         if (newData) {
             const params = paramsSearch.params;
             params.currentPage = 1;
@@ -111,7 +111,7 @@
     }, { deep: true });
 
     const filteredTransactions = computed(() => {
-        const transactionsData = listTrsSearch.listTransactions?.data?.listTransactions;
+        const transactionsData = dataTrsSearch.dataTransactions?.data?.listTransactions;
         return transactionsData ? [...transactionsData] : [];
     });
 

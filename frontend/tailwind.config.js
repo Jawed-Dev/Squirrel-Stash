@@ -45,12 +45,13 @@ export default {
         'main-color': "#121422"
       },
       spacing: {
-        'header-width' : '70px',
+        'header-width' : '3.5vw',
         'top-Header' : '20px',
         'custom-margin-main' : '20px'
       },
       backgroundImage: {
-        'main-gradient': "linear-gradient(to top left, #1b1e33 40%, #536976 300%)",
+        'main-gradient': "linear-gradient(to top left, #1b1e33 40%, #536976 250%)",
+        //'main-gradient' : "linear-gradient(to top left, #83858f 40%, #24428a 100%)",
         'header-gradient': "linear-gradient(0deg,#3358f4,#1d8cf8)",
 
         'gradient': "linear-gradient(to top left, #101010 70%, #ffffff 450%)",
@@ -68,6 +69,9 @@ export default {
         'gradient-joomla' : "linear-gradient(0deg,#2a5298,#1e3c72)",
         'gradient-namn' : "linear-gradient(0deg,#7a2828,#a73737)",
         'gradient-gray' : "linear-gradient(180deg, #2c3e50, #111)",
+
+
+        'gradient-x-blue' : "linear-gradient(60deg, #2197ff, #1b8bf5, #167feb, #1173e1, #0c68d6, #085dcc, #0453c2, #0049b8)",
 
         
         // 'gradient-grey' : "linear-gradient(0deg,#2c3e50,#bdc3c7)",

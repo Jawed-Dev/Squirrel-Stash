@@ -12,21 +12,21 @@
         <div v-if="(page === 1 && !showEllipsisAfterFirstPage && totalItems >= 1)"
             @click="handlePagination(page)"
             :class="`${showColorPagination(page)} flex justify-center w-[1.3vw] px-[10px] 
-                    rounded-sm font-medium shadow-black shadow-custom-lower cursor-pointer`">
+                rounded-sm font-medium shadow-black shadow-custom-lower cursor-pointer`">
             {{ page }}
         </div>
 
         <div v-if="(page === getTotalPages() && !showEllipsisBeforeLastPage) && getTotalPages() !== 1"
             @click="handlePagination(page)"
             :class="`${showColorPagination(page)} flex justify-center w-[1.3vw] px-[10px] 
-                    rounded-sm font-medium shadow-black shadow-custom-lower cursor-pointer`">
+                rounded-sm font-medium shadow-black shadow-custom-lower cursor-pointer`">
             {{ page }}
         </div>
         
         <!-- Autres boutons -->
         <div v-if="page !== 1 && page !== getTotalPages()" @click="handlePagination(page)" 
             :class="`${showColorPagination(page)} flex justify-center w-[1.3vw] px-[10px] 
-                    rounded-sm font-medium shadow-black shadow-custom-lower cursor-pointer`">
+                rounded-sm font-medium shadow-black shadow-custom-lower cursor-pointer`">
             {{ page }}
         </div>
     </div>
@@ -35,7 +35,7 @@
         <p>...</p>
         <div @click="handlePagination(getTotalPages())"
         :class="`${showColorPagination(getTotalPages())} flex justify-center w-[1.3vw] px-[10px] 
-                rounded-sm font-medium shadow-black shadow-custom-lower cursor-pointer`">
+            rounded-sm font-medium shadow-black shadow-custom-lower cursor-pointer`">
         {{ getTotalPages() }}
         </div>
     </div>

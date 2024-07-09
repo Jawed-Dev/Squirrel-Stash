@@ -13,15 +13,16 @@
             <div class="mt-[30px]">
                 <label class="text-white font-light text-[17px]" for="login-mail">Entrez votre addresse email</label>
                 <InputBase 
+                    unicode="📧"
                     id="login-mail" 
                     v-model="email" 
-                    extraClass="border-b-2 w-full py-1 text-white font-light mt-[2px]" 
+                    extraClass="" 
                     placeholder="Adresse email"
                     type="mail"
                 />
             </div>
                 
-            <ButtonComponent :extraClass="'shadow-black shadow-custom-main w-full py-[6.5px] mt-[40px]'" :titleButton="'Envoyer'" />
+            <ButtonComponent :extraClass="'shadow-black shadow-custom-main w-full py-[6.5px] mt-[20px]'" :titleButton="'Envoyer'" />
             
             <div class="flex mt-[20px] gap-9 justify-center">
                 <p class="text-white font-light">Retour à la connexion</p> 

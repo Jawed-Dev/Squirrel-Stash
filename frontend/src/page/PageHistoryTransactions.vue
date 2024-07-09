@@ -1,8 +1,7 @@
 <template>
     <div class="font-main-font flex bg-main-bg min-h-screen w-full">
-        <ContainerHeader/>
         <div class="ml-[calc(20px+70px+20px)] mr-custom-margin-main w-full flex flex-col mt-[20px]">
-            <h1 class="font-extralight flex justify-start text-[25px] text-white">Historique des transactions</h1>
+            <h1 class="font-light flex justify-start text-[25px] text-white">Historique des transactions</h1>
             <ContainerSearch 
                 :currentOrderSelected="currentOrderSelected"
                 :orderAsc="orderAsc"
@@ -23,11 +22,10 @@
 
     // imports
     import { ref, watch } from 'vue';
-    import ContainerHeader from '@/component/container/ContainerHeader.vue';
     import ContainerTransactionsBySearch from "@/component/container/ContainerTransactionsBySearch.vue";
     import ContainerSearch from '@/component/container/ContainerSearch.vue';
     import { storeParamsSearch } from '@/storePinia/useStoreDashboard';
-    import { updateListTrsBySearch } from '@/storePinia/useUpdateStoreByBackend';
+    import { updateDataTrsSearch } from '@/storePinia/useUpdateStoreByBackend';
 
     const paramsSearch = storeParamsSearch();
 
@@ -47,7 +45,7 @@
         paramsSearch.params.currentPage = 1;
         paramsSearch.params.currentOrderSelected = newOrder;
         paramsSearch.params.orderAsc = newAsc;
-        updateListTrsBySearch(params);
+        updateDataTrsSearch(params);
     });
 
 </script>

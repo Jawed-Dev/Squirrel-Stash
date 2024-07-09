@@ -1,7 +1,11 @@
 <template>
-    <div :class="`flex flex-col items-center rounded-t-[3px] shadow-red ${bgHead} shadow-black shadow-custom-main py-[2vh]`">
+    <div @click="$emit('toggleMenu','cancel')" class="text-[14px] flex justify-end pr-2 cursor-pointer py-1">
+        <p class="py-1 px-1"> ❌ </p>
+    </div>
+    <div :class="`flex flex-col items-center shadow-red ${bgHead} shadow-black shadow-custom-main py-[10px]`">
         <h2 :class="`${width} flex justify-center text-[22px] pt-3 py-2 font-extralight`">{{titleContainer}}</h2>
     </div>
+    
     <slot></slot> <!-- content slot -->
     <div>
         <div class="flex shadow-black shadow-custom-main">
@@ -23,7 +27,7 @@
         titleContainer: { default: ''},
         textBtn1: { default: ''},
         textBtn2: { default: ''},
-        bgHead: { default: 'bg-main-blue'},
+        bgHead: { default: 'bg-gradient-x-blue'},
         typeTransaction: { default: false },
         bgMainBtn: {default: 'bg-gradient-blue'},
         width: {default: '250px'},

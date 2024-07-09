@@ -12,6 +12,7 @@
         function updatePassword($db, $data);
         function insertUniqueTokenResetPass($db, $uniqueToken);
         function deleteResetPassTokenByEmail($db, $data);
+        function getUserFirstName($db, $userId);
     }
 
     class ModelUser implements I_ModelUser {
@@ -69,6 +70,16 @@
             $isLoginSuccess = $isValidUserId && $isCorrectPassword;
 
             return ($isLoginSuccess) ? $userInfo['user_id'] : null;
+        }
+
+        public function getUserFirstName($db, $userId) {
+            //var_dump($db, $userId);
+            $reqSql = "SELECT user_first_name FROM user WHERE user_id = :userId";
+            $query = $db->prepare($reqSql);
+            $query->bindValue(':userId', $userId, PDO::PARAM_INT);
+            $query->execute();
+            $result = $query->fetch(PDO::FETCH_ASSOC);
+            return ($result) ? $result : null;
         }
 
         public function updatePassword($db, $data) {

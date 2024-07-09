@@ -11,7 +11,7 @@
         function getTotalTrsByMonth($db, $data);
         function getBiggestTrsByMonth($db, $data);
         function isThresholdExistByMonth($db, $data);
-        function getTrsBySearch($db, $data);
+        function getDataTrsBySearch($db, $data);
         // action
         function updateThresholdByMonth($db, $data);
         function insertThresholdByMonth($db, $data);
@@ -266,22 +266,24 @@
             return $listTransactions;
         }
 
-        public function getTrsBySearch($db, $data) {
+        public function getDataTrsBySearch($db, $data) {
             $userId = $data['userId'];
             $dataQuery = $data['bodyData'];
 
+            // conditions / binds
             $conditions = [];
             $binds = [];
             $conditions = ["transaction_user_id = :userId"];
             $binds = [':userId' => $userId];
 
+            // order state
             $ORDER_STATE = [
                 'DATE' => 0,
                 'AMOUNT' => 1,
                 'CATEGORY' => 2,
                 'ITERATION' => 3
             ];
-
+            // init order
             $orderByField = 'transaction_date';
             $orderType  = 'DESC'; 
 
@@ -303,48 +305,26 @@
                     break;
                 }
                 case $ORDER_STATE['ITERATION'] : {
-                    $orderByField = 'transaction_category';
+                    $orderByField = 'count_categories';
                     $orderType  = (!$dataQuery['orderAsc']) ? 'DESC' : 'ASC'; 
                     break;
                 }
             }
 
             // where conditions
-            if (!empty($dataQuery['searchDateRangeDateMin'])) {
-                $conditions[] = 'transaction_date >= DATE(:dateMin)';
-                $binds[':dateMin'] = $dataQuery['searchDateRangeDateMin'];
-            }
-            if (!empty($dataQuery['searchDateRangeDateMax'])) {
-                $conditions[] = 'transaction_date <= DATE(:dateMax)';
-                $binds[':dateMax'] = $dataQuery['searchDateRangeDateMax'];
-            }
-            if (!empty($dataQuery['searchCategory'])) {
-                $conditions[] = 'transaction_category = :searchCategory';
-                $binds[':searchCategory'] = $dataQuery['searchCategory'];
-            }
-            if (!empty($dataQuery['searchType'])) {
-                $conditions[] = 'transaction_type = :searchType';
-                $binds[':searchType'] = $dataQuery['searchType'];
-            }
-            if (!empty($dataQuery['searchNote'])) {
-                $conditions[] = 'transaction_note LIKE :searchNote';
-                $binds[':searchNote'] = '%' . $dataQuery['searchNote'] . '%';
-            }
-            if (!empty($dataQuery['searchAmountMin'])) {
-                $conditions[] = 'transaction_amount >= :amountMin';
-                $binds[':amountMin'] = $dataQuery['searchAmountMin'];
-            }
-            if (!empty($dataQuery['searchAmountMax'])) {
-                $conditions[] = 'transaction_amount <= :amountMax';
-                $binds[':amountMax'] = $dataQuery['searchAmountMax'];
-            }
+            $this->addConditionQuery($conditions, $binds, 'transaction_date', '>=', ':dateMin', $dataQuery['searchDateRangeDateMin']);
+            $this->addConditionQuery($conditions, $binds, 'transaction_date', '<=', ':dateMax', $dataQuery['searchDateRangeDateMax']);
+            $this->addConditionQuery($conditions, $binds, 'transaction_category', 'LIKE',':searchCategory', $dataQuery['searchCategory'], true);
+            $this->addConditionQuery($conditions, $binds, 'transaction_note', 'LIKE', ':searchNote', $dataQuery['searchNote'], true);
+            $this->addConditionQuery($conditions, $binds, 'transaction_amount', '>=', ':amountMin', $dataQuery['searchAmountMin']);
+            $this->addConditionQuery($conditions, $binds, 'transaction_amount', '<=', ':amountMax', $dataQuery['searchAmountMax']);
             
             // params
-            define("TRS_PER_PAGE", 3);
+            define("RESULT_PER_PAGE", 15);
             $whereClause = implode(' AND ', $conditions);
-            $limit = TRS_PER_PAGE;
+            $limit = RESULT_PER_PAGE;
             $currentPage = !empty($dataQuery['currentPage']) ? $dataQuery['currentPage'] : 1;
-            $offset = $limit * ($currentPage - 1);
+            $offset = RESULT_PER_PAGE * ($currentPage - 1);
 
             // SELECT
             $reqSql = "SELECT 
@@ -362,15 +342,14 @@
                     WHERE sub.transaction_category = transaction.transaction_category 
                     AND $whereClause
                 ) AS count_categories    
-
                 FROM 
                     transaction
                 WHERE 
                     $whereClause
                 ORDER BY 
                     $orderByField $orderType
-                LIMIT 
-                    $limit OFFSET $offset 
+                LIMIT  
+                    " .RESULT_PER_PAGE. " OFFSET $offset 
             ";
             $query = $db->prepare($reqSql);
 
@@ -379,13 +358,8 @@
                 $query->bindValue($key, $value);
             }
             $query->execute();
+            // list transactions by search
             $listTransactions = $query->fetchAll(PDO::FETCH_ASSOC);
-
-            // sort
-            // usort($listTransactions, function($a, $b) use ($orderByField, $orderType ) {
-            //     if ($orderType  === 'ASC') return $a[$orderByField] <=> $b[$orderByField];
-            //     else return $b[$orderByField] <=> $a[$orderByField];
-            // });
 
             // count selected transactions
             $countSql = "SELECT COUNT(*) AS countTransactions FROM transaction WHERE $whereClause";
@@ -396,12 +370,20 @@
             $countQuery->execute();
             $countTrs = $countQuery->fetch()['countTransactions'];
 
+            // data selected
             $transactionsData = [
                 'listTransactions' => $listTransactions,
                 'countTransactions' => $countTrs,
                 'itemPerPage' => $limit 
             ];
             return $transactionsData;
+        }
+
+        private function addConditionQuery(&$conditions, &$binds, $field, $operator, $dataKey, $value, $like = false) {
+            if (!empty($value)) {
+                $conditions[] = "$field $operator $dataKey";
+                $binds[$dataKey] = ($like) ? "%$value%" : $value;
+            }
         }
 
         public function getBiggestTrsByMonth($db, $data) {

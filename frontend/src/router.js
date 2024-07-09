@@ -3,7 +3,7 @@ import { createRouter, createWebHistory } from 'vue-router';
 import PageLogin from '@/page/PageLogin.vue'; 
 import PageCreateAcc from '@/page/PageCreateAcc.vue'; 
 import PageDashboard from '@/page/PageDashboard.vue'; 
-import PageTransactions from "@/page/PageTransactions.vue";
+import PageHistoryTransactions from "@/page/PageHistoryTransactions.vue";
 import PageTemporary from '@/page/PageTemporary.vue';
 import PageForgotPass from '@/page/PageForgotPass.vue';
 import PageResetPass from '@/page/PageResetPass.vue';
@@ -19,7 +19,7 @@ const routes = [
   { path: '/tableau-de-bord', component: PageDashboard, meta: { page: 'pageDashboard' }},
   { path: '/mot-de-passe-oublie', component: PageForgotPass, meta: { page: 'pageForgotPass' }},
   { path: '/reinitialiser-mot-de-passe', component: PageResetPass, meta: { page: 'pageResetPass' }},
-  { path: '/liste-achats', component: PageTransactions, meta: { page: 'pageTransactions' }},
+  { path: '/historique-transactions', component: PageHistoryTransactions, meta: { page: 'pageTransactions' }},
 ];
 
 const router = createRouter({

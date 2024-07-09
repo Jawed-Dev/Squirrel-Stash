@@ -1,136 +1,127 @@
 <template>
-    <div ref="mainRefHeader" :class="`
-            flex flex-col items-center 
-            w-header-width top-top-Header left-top-Header fixed pt-10  h-[calc(100vh-40px)] 
-            bg-header-gradient rounded-md
-            shadow-black shadow-custom-main
-           ${classTranslateWidth} z-10`"
-                @mouseenter="isHovered = true"
-                @mouseleave="isHovered = false"
-            >
-            
-            <div class="pl-5 w-[70%] border-[1px] border-white mt-[40px] "></div>
- 
-            <div class="w-[100%] flex flex-col gap-5 mt-[20px]" v-for="(icon, index) of listIcons">
-                
-                <div :key="index" @click="handleClickIcon(icon.page)" :class="`flex relative ${classTranslateY} cursor-pointer ${borderCurrentPage(icon.page)} pl-3 ml-1`">
-                    <component :is="icon.Component" :svg="svgConfig(icon.page)"/>
-                    <TransitionOpacity :durationIn="'duration-500'" :durationOut="'duration-0'">
-                        <p v-if="isHovered && isTextIconsVisible" class="w-[150px] absolute right-[0px] top-1 pl-3 flex items-center text-[14px] text-white">{{ icon.text }}</p>
+    <nav v-show="isValidPage"
+        ref="headerRef" 
+        :class="`font-main-font flex flex-col items-center 
+        w-header-width top-top-Header left-top-Header fixed pt-10 h-[calc(100vh-40px)] 
+        bg-header-gradient rounded-md
+        shadow-black shadow-custom-main
+        ${classTranslateWidth} z-10`"
+            @mouseenter="isHovered = true"
+            @mouseleave="isHovered = false"
+        >
+        
+        <div class="w-[70%] border-[1px] border-white mt-[40px]"></div>
+
+        <div class="mt-2 w-full">
+            <div class="w-full flex flex-col gap-5 relative" v-for="(icon, index) of dataIcons">
+                <div :key="index" @click="handleClickHeader(icon.page)" 
+                    :class="`flex relative ${classTranslateY} py-[5px] cursor-pointer ${bordergetCurrentPage(icon.page)}`">
+
+                    <component :is="icon.Component" :svg="svgConfig(icon.page)" class="w-header-width "/>
+                    <TransitionOpacity :durationIn="'duration-200'" :durationOut="'duration-0'">
+                        <router-link :to="icon.link" v-show="isHovered && isTextIconsVisible" 
+                        class="absolute w-[150px] right-[0px] top-[50%] transform -translate-y-1/2 pl-3 flex 
+                        items-center text-[14px] text-white">{{ icon.text }}</router-link>
                     </TransitionOpacity>
                 </div>
-                
             </div>
-    </div>
+        </div>
+    </nav>
 </template>
 
 
 <script setup>
+
+    import {ref, onMounted, onUnmounted, computed, defineAsyncComponent} from 'vue';
     import { useRouter } from 'vue-router';
-    import {ref, onMounted, onUnmounted} from 'vue';
-    // icons 
-    import IconDashboard from '@/component/svgs/IconDashboard.vue';
-    import IconPurchases from '@/component/svgs/IconPurchase.vue';
-    import IconGraph from '@/component/svgs/IconGraph.vue';
-    import IconBell from '@/component/svgs/IconBell.vue';
-    import IconUser from '@/component/svgs/IconUser.vue';
+
+    // import async icons & dynamic
+    const IconDashboard = defineAsyncComponent(() => import('@/component/svgs/IconDashboard.vue'));
+    const IconPurchases = defineAsyncComponent(() => import('@/component/svgs/IconPurchase.vue'));
+    const IconGraph = defineAsyncComponent(() => import('@/component/svgs/IconGraph.vue'));
+    const IconBell = defineAsyncComponent(() => import('@/component/svgs/IconBell.vue'));
+    const IconUser = defineAsyncComponent(() => import('@/component/svgs/IconUser.vue'));
+    const IconLogOut = defineAsyncComponent(() => import('@/component/svgs/IconLogOut.vue'));
     import { classTransitionHover } from '@/composable/useClassTransitionHover';
-    import IconTarget from '@/component/svgs/IconTarget.vue';
-    import IconLogOut from '@/component/svgs/IconLogOut.vue';
     import TransitionOpacity from '@/component/transition/TransitionOpacity.vue';
-    
+
 
     // variables, props, ...
 
-        // class 
-        const classTranslateY = classTransitionHover('translateY');
-        const classTranslateWidth = classTransitionHover('extendHeader');
+    // data icons
+    const dataIcons = [
+    { Component: IconDashboard, link:'/tableau-de-bord', page: 'tableau-de-bord', text: 'Tableau de bord' },
+    { Component: IconPurchases, link:'/historique-transactions',page: 'historique-transactions', text: 'Historique' },
+    { Component: IconGraph, link:'',page: '', text: 'Graphiques' },
+    { Component: IconBell, link:'',page: '', text: 'Alarmes' },
+    { Component: IconUser, link:'',page: '', text: 'Utilisateur' },
+    { Component: IconLogOut, link:'',page: 'disconnect', text: 'Déconnexion' },
+    ];
 
-        // conditions / bool
-        const isHovered = ref(false);
-        const isTextIconsVisible = ref(false);
-        const isCurrentPage = ref(false);
+    // class 
+    const classTranslateY = classTransitionHover('translateY');
+    const classTranslateWidth = classTransitionHover('extendHeader');
 
-        // 
-        const statePage = ref(null);
-        const router = useRouter();
-        const mainRefHeader = ref(null);
+    // conditions / bool
+    const isHovered = ref(false);
+    const isTextIconsVisible = ref(false);
 
-        // icons
-        const listIcons = [ 
-            {
-                Component: IconDashboard,
-                page: 'home',
-                text: 'Tableau de bord'
-            },
-            {
-                Component: IconPurchases,
-                page: 'pageTransactions',
-                text: 'Historique'
-            },
-            {
-                Component: IconGraph,
-                page: '',
-                text: 'Graphiques'
-            },
-            {
-                Component: IconBell,
-                page: '',
-                text: 'Alarmes'
-            },
-            {
-                Component: IconUser,
-                page: '',
-                text: 'Utilisateur'
-            },
-            {
-                Component: IconLogOut,
-                page: 'disconnect',
-                text: 'Déconnexion'
-            }
-        ];
+    //
+    const router = useRouter();
+    const headerRef = ref(null);
+
+    // 
+    const notAllowedPages = [
+        'connexion',
+        'inscription',
+        'mot-de-passe-oublie',
+        'reinitialiser-mot-de-passe',
+    ];
+
 
     const updateTextVisibility = () => {
-        isTextIconsVisible.value = mainRefHeader.value.clientWidth > 150;
+        if(headerRef.value) isTextIconsVisible.value = headerRef.value.clientWidth > 160;
     };
 
-    // --- Cycle de vie 
+    // life cycle, functions ...
+    let observer;
     onMounted( () => {
-        const observer = new ResizeObserver(() => {
-            updateTextVisibility();
-        });
-
-        if (mainRefHeader.value) {
-            observer.observe(mainRefHeader.value);
-        }
-        onUnmounted(() => {
-            observer.disconnect();
-        });
+        const observer = new ResizeObserver( () => updateTextVisibility());
+        if (headerRef.value) observer.observe(headerRef.value);
     });
 
+    onUnmounted(() => {
+        if (observer) observer.disconnect();
+    });
 
-    // --- Fonctions
+    const isValidPage = computed(() => {
+        const currentPath = router.currentRoute.value.path.substring(1);
+        return !notAllowedPages.includes(currentPath);
+    });
 
-    
-    function svgConfig(nameSvg) {
+    const bordergetCurrentPage = computed(() => {
+        return (page) => {
+            return  page === router.currentRoute.value.path.substring(1) ? 'bg-main-bg' : '';
+        }
+    });
+
+    function svgConfig() {
         const sizeSvg = '30px';
         return {
             width: sizeSvg,
             height: sizeSvg,
-            fill: currentPage(nameSvg) ? '#1b1e33' : 'white',
+            fill: 'white',
         }
     }
 
-    function handleClickIcon(request) {
-        switch (request) {
-            case 'home': {
-                statePage.value = request;
-                router.push('/connexion');
+    function handleClickHeader(page) {
+        switch (page) {
+            case 'tableau-de-bord': {
+                router.push('/tableau-de-bord');
                 break;
             }
-            case 'pageTransactions' : {
-                statePage.value = request;
-                router.push('/liste-achats');
+            case 'historique-transactions' : {
+                router.push('/historique-transactions');
                 break;
             }
             case 'disconnect' : {
@@ -138,22 +129,12 @@
                 router.push('/connexion');
                 break;
             }
-            default:
-                statePage.value = request;
-                alert(statePage.value );
+            default: {
+                router.push('/connexion');
                 break;
+            }
         }
-    }
-
-    function borderCurrentPage(page) {
-        return currentPage(page) ? 'border-l-2' : '';
-    }
-
-    function currentPage(page) {
-        const pathname = window.location.pathname;
-        const argUrl = pathname.substring(1);
-        return isCurrentPage.value = page === argUrl;
-    }
+    }    
 </script>
 
 

@@ -2,11 +2,11 @@
 
     <div class="font-main-font flex flex-col bg-main-bg w-full">
 
-        <ContainerHeader/>
+        <!-- <ContainerHeader/> -->
 
         <div class="ml-[calc(20px+70px+20px)] mr-custom-margin-main flex flex-col mt-[20px]">
-            <h1 class="text-[25px] font-extralight text-white">Économie du mois</h1>
-            <p class="font-normal py-3 mr-[190px] text-white">Bonjour Jawed, voici votre résumé du mois.</p> 
+            <h1 class="text-[25px] font-light text-white">Économie du mois</h1>
+            <p class="font-light text-white mt-2">Bonjour {{ firstNameUser }}, voici votre résumé du mois.</p> 
 
             <ContainerStatMonth 
                 :isIconActive="true" :svg="svgConfig('target', 'bg-gradient-blue')" 
@@ -56,7 +56,6 @@
 <script setup>
 
     import { ref, watch, computed, onMounted } from 'vue'; 
-    import ContainerHeader from '@/component/container/ContainerHeader.vue';
     import ContainerStatMonth from '@/component/container/ContainerStatMonth.vue';
     import SelectYear from '@/component/select/SelectYear.vue';
     import SelectMonth from '@/component/select/SelectMonth.vue';
@@ -64,6 +63,7 @@
     import ContainerListTransactions from '@/component/container/ContainerListTransactions.vue';
     import AddTransaction from '@/component/overlay/AddTransaction.vue';
     import { monthNames, getAvailableYear } from '@/composable/useGetDate';
+    import { getUserFirstName } from '@/composable/useBackendGetData';
     import { storeThreshold, storeDateSelected, storeStatisticDetails } from '@/storePinia/useStoreDashboard';
     import { updateThresholdByMonth, updateTotalTrsByMonth, updateBalanceEcoByMonth, updateBiggestTrsByMonth } from '@/storePinia/useUpdateStoreByBackend';
 
@@ -71,14 +71,17 @@
     const threshold = storeThreshold();
     const dateSelected = storeDateSelected();
     const statisticDetails = storeStatisticDetails();
-    const isLoadedPage = ref(false);
+    const firstNameUser = ref('');
 
     // variables, props, ...
     
     // life cycle / functions
-    // onMounted(() => {
-    //     isLoadedPage.value = true;
-    // });
+    onMounted(async () => {
+        const response = await getUserFirstName();
+        console.log(response);
+        const userFirstName = response?.data?.user_first_name;
+        firstNameUser.value = userFirstName;
+    });
 
     watch( () => [dateSelected.month, dateSelected.year], async ([newMonth, newYear]) => {
         updateThresholdByMonth(newMonth, newYear);

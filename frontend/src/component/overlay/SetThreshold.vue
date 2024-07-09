@@ -1,36 +1,42 @@
 <template>
     <IconPreferences @click="toggleMenu('openNClose')" class='cursor-pointer' v-show="isIconActive" :svg="svg.verySmallIcon" /> 
 
-    <TransitionOpacity :durationIn="'duration-500'" :durationOut="'duration-500'">
+    <TransitionOpacity :durationIn="'duration-300'" :durationOut="'duration-200'">
         <div v-show="isMenuActive" class="fixed inset-0 bg-black bg-opacity-80 z-30"></div>
     </TransitionOpacity>
 
-    <TransitionOpacity :durationIn="'duration-500'" :durationOut="'duration-500'">
+    
+
+    <TransitionOpacity :durationIn="'duration-300'" :durationOut="'duration-200'">
+        
         <div v-show="isMenuActive" 
         :class="`bg-main-gradient flex flex-col fixed 
             shadow-black shadow-custom-main rounded-md top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 trigger-set-treshold
             z-30 text-white ${width}`"
         >
-            <MainContainerSlot :textBtn1="'Annuler'" :textBtn2="'Choisir'" :titleContainer="'Choisir un nouveau seuil'" @toggleMenu="toggleMenu">
+            
+            <MainContainerSlot 
+                :textBtn1="'Annuler'" :textBtn2="'Choisir'" :titleContainer="'Choisir un nouveau seuil'" @toggleMenu="toggleMenu">
                 <!-- Errors  -->
                 <div class="relative">
                     <p class="p-3 absolute text-red-400">{{ computedFormatErrors }}</p>
                     <p v-if="computedEmptyInputs.length > 0"></p>
                 </div>
                 <div>
-                    <div class="flex flex-col rounded-[3px] items-center my-[70px]">
-                        <label class="font-extralight" for="input-amount-treshold">Montant du seuil en €</label>
-                        <div class="mt-[10px]">
+                    <div class="flex flex-col items-center mt-[60px]">
+                        <div class="text-center w-[40%]">
+                            <label class="font-extralight text-center" for="input-amount-treshold">Montant du seuil (€)</label>
                             <InputBase v-model="inputAmountThreshold"
+                                unicode="🎯"
                                 width="w-full"
-                                extraClass="border-b-2 py-1 text-white font-light mt-[2px] :placeholder text-center"
+                                extraClass=""
                                 placeholder="seuil"
                                 id="input-amount-treshold"
                             />
                         </div>
                     </div>
-                    <div class="flex justify-center my-[70px]">
-                        <p class="w-[full] text-[15px] font-light text-gray-200">Ce seuil sera effectif pour ce mois <span class="block">et les suivants jusqu'au nouveau seuil.</span></p>
+                    <div class="flex justify-center my-[60px]">
+                        <p class="w-[full] text-[15px] font-light text-gray-200">Ce seuil sera effectif pour le mois actuel <span class="block">et les suivants, jusqu'à un nouveau seuil.</span></p>
                     </div>
                 </div>
             </MainContainerSlot>

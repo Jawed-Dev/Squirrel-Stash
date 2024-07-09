@@ -1,12 +1,13 @@
 <template>
-    <div class="w-[30%]">
-        <label class="flex text-[20px] text-white font-light" for="login-pass">Recherche par note</label>
+    <div class="w-[15%]">
+        <label class="flex text-[18px] text-white font-light" for="input-note">Note</label>
         <InputBase 
+        unicode="🔍"
         v-model="searchNote" 
         width="w-fit"
-        extraClass="border-b-2 w-full py-1 text-white font-light mt-[2px]" 
-        placeholder="Note"
-        id="input-date"
+        extraClass="text-[16px]" 
+        placeholder="Ex : Cadeau pour Maman"
+        id="input-note"
         type="text"/>
     </div>
 </template>

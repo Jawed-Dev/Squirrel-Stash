@@ -37,6 +37,18 @@ async function getStateSession() {
     return (isSessionActive) ? true : false;
 }
 
+
+export async function getUserFirstName() {
+    const localToken = getLStorageAuthToken();
+    const response = await useConfigFetchGetData ({
+        request: 'getUserFirstName',
+        method: 'POST',
+        token: localToken,
+        dataBody: 'none',
+    });
+    return response;
+}
+
 export async function isValidResetPassToken(resetPassToken) {
     const localToken = getLStorageAuthToken();
     const body = {
@@ -52,7 +64,7 @@ export async function isValidResetPassToken(resetPassToken) {
     return (isSuccessRequest) ? true : false;
 }
 
-export async function getListTrsBySearch(params) {
+export async function getDataTrsBySearch(params) {
     authRequired();
     const localToken = getLStorageAuthToken();
     const body = {  
@@ -67,14 +79,13 @@ export async function getListTrsBySearch(params) {
         orderAsc: Boolean(params.orderAsc),
         currentPage: Number(params.currentPage)
     };
-    const listTransactionsFetched = await useConfigFetchGetData ({
-        request: 'getListTrsBySearch',
+    const dataTrsSearch = await useConfigFetchGetData ({
+        request: 'getDataTrsBySearch',
         method: 'POST',
         dataBody: body,
         token: localToken
     });
-    console.log('listTransactionsFetched', listTransactionsFetched, listTransactionsFetched);
-    return listTransactionsFetched;
+    return dataTrsSearch;
 }
 
 

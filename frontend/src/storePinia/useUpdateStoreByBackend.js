@@ -1,5 +1,5 @@
-import { getBiggestTrsByMonth, getThresholdByMonth, getTotalTrsByMonth, getListTrsMonthByDay, getLastNTransactions, getListTrsBySearch } from '@/composable/useBackendGetData';
-import { storeParamsSearch, storeThreshold, storeStatisticDetails, storeTrsMonthByDay, storeLastNTransactions, storeListTrsSearch } from '@/storePinia/useStoreDashboard';
+import { getBiggestTrsByMonth, getThresholdByMonth, getTotalTrsByMonth, getListTrsMonthByDay, getLastNTransactions, getDataTrsBySearch } from '@/composable/useBackendGetData';
+import { storeParamsSearch, storeThreshold, storeStatisticDetails, storeTrsMonthByDay, storeLastNTransactions, storeDataTrsSearch } from '@/storePinia/useStoreDashboard';
 
 
 // list transactions month By Day
@@ -93,10 +93,10 @@ export async function updateAllDataTransations(month, year, transactionType) {
     updateBiggestTrsByMonth(month, year, 'purchase');
     updateBiggestTrsByMonth(month, year, 'recurring');
     console.log('params', paramsSearch.params);
-    updateListTrsBySearch(paramsSearch.params);
+    updateDataTrsSearch(paramsSearch.params);
 }
 
-export async function updateListTrsBySearch(params) {
-    const listTransactionsSearch = storeListTrsSearch();
-    listTransactionsSearch.listTransactions = await getListTrsBySearch(params);
+export async function updateDataTrsSearch(params) {
+    const dataStore = storeDataTrsSearch();
+    dataStore.dataTransactions = await getDataTrsBySearch(params);
 }

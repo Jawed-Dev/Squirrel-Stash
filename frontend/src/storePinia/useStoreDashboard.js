@@ -50,9 +50,9 @@ export const storeLastNTransactions = defineStore('lastNTransactions', () => {
 
 
 // list Transactions by Search
-export const storeListTrsSearch = defineStore('listTrsSearch', () => {
-  const listTransactions = ref([]);
-  return { listTransactions };
+export const storeDataTrsSearch = defineStore('listTrsSearch', () => {
+  const dataTransactions = ref([]);
+  return { dataTransactions };
 });
 
 export const storeParamsSearch = defineStore('paramsSearch', () => {

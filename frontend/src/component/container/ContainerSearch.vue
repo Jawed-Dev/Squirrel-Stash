@@ -1,12 +1,12 @@
 <template>
-    <div class="flex justify-center rounded-[3px] mt-custom-margin-main">
+    <div class="flex justify-center rounded-[3px] mt-[10px]">
         <div class="gradient-border text-white overflow-hidden bg-main-gradient pl-3 shadow-black shadow-custom-main w-full relative">   
             <UseIconLoader 
-                extraClass="absolute top-2 rounded-md shadow-black shadow-custom-main p-[0.7vw]" 
+                extraClass="absolute top-2 rounded-md shadow-black shadow-custom-main p-[0.5vw]" 
                 :svg="iconConfig" nameIcon="Search" 
             />
             <form class="py-3 flex flex-col" @submit.prevent="handleSubmit()">
-                <div class="flex justify-evenly mt-[20px]">
+                <div class="flex justify-center items-center gap-[10vw] mt-[20px]">
                     <ContainerAmountInputs 
                         v-model:searchAmountMin="searchAmountMin" 
                         v-model:searchAmountMax="searchAmountMax" 
@@ -14,7 +14,7 @@
                     <ContainerNoteInput v-model="searchNote" />
                 </div>
 
-                <div class="flex justify-evenly mt-[50px]">
+                <div class="flex justify-center items-center gap-[10vw] mt-[40px] ">
                     <ContainerDateInputs 
                         v-model:checkboxDateMin="checkboxDateMin" 
                         v-model:checkboxDateMax="checkboxDateMax" 
@@ -46,7 +46,7 @@
     import { ref, watch, onMounted } from 'vue';
 
     import {getCurrentDate} from '@/composable/useGetDate';
-    import { updateListTrsBySearch } from '@/storePinia/useUpdateStoreByBackend';
+    import { updateDataTrsSearch } from '@/storePinia/useUpdateStoreByBackend';
     import { storeParamsSearch } from '@/storePinia/useStoreDashboard';
     import ContainerAmountInputs from '@/component/container/ContainerAmountInputs.vue';
     import ContainerNoteInput from '@/component/container/ContainerNoteInput.vue';
@@ -70,10 +70,10 @@
     const paramsSearch = storeParamsSearch();
     const currentDate = getCurrentDate();
 
-    const dateStart = ref(currentDate);
-    const dateEnd = ref(currentDate);
-    const searchCategory = ref('Alimentation');
-    const searchType = ref('Achat');
+    const dateStart = ref('');
+    const dateEnd = ref('');
+    const searchCategory = ref('');
+    const searchType = ref('');
     const searchAmountMin = ref('');
     const searchAmountMax = ref('');
     const searchNote= ref('');
@@ -81,19 +81,15 @@
     // life cycle, functions...
     onMounted(() => {
         const params = getAllParamsSearch();
-        updateListTrsBySearch(params);
+        updateDataTrsSearch(params);
         updateStoreParams(params);
     });
 
     async function handleSubmit() {
         const params = getAllParamsSearch();
-        updateListTrsBySearch(params);
+        updateDataTrsSearch(params);
         updateStoreParams(params);
     }
-
-    watch(searchType, (newVal) => {
-        //resetTrsCategory();
-    });
 
     function translateTypeTrs() {
         if(!searchType.value) return '';
@@ -110,10 +106,10 @@
 
     function getAllParamsSearch() {
         return {
-            searchDateRangeDateMin: (checkboxDateMin.value) ? dateStart.value : '',
-            searchDateRangeDateMax: (checkboxDateMax.value) ?  dateEnd.value : '',
-            searchCategory: (checkboxCategory.value) ? searchCategory.value : '',
-            searchType: (checkboxCategory.value) ? translateTypeTrs() : '',
+            searchDateRangeDateMin: dateStart.value || '',
+            searchDateRangeDateMax: dateEnd.value || '',
+            searchCategory: searchCategory.value || '',
+            searchType: translateTypeTrs() || '',
             searchNote: searchNote.value,
             searchAmountMin: searchAmountMin.value,
             searchAmountMax: searchAmountMax.value,

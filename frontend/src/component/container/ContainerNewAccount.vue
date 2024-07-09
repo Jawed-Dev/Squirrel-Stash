@@ -13,9 +13,9 @@
                 <div class="w-[50%]">
                     <label class="text-white font-light" for="input-fname-crt-acc">Votre prénom</label>
                     <InputBase 
+                        unicode="🛂"
                         v-model="firstName"
-                        extraClass="
-                        border-b-2 w-full pl-2 w-full py-1 text-white font-light mt-[5px]"
+                        extraClass=""
                         id="input-fname-crt-acc"
                         placeholder="Entrez votre prénom"
                     />
@@ -24,9 +24,9 @@
                 <div class="w-[50%]">
                     <label class="text-white font-light" for="input-lname-crt-acc">Votre nom</label>
                     <InputBase 
+                        unicode="🛂"
                         v-model="lastName"
-                        extraClass="
-                        border-b-2 w-full w-full pl-2 py-1 text-white font-light mt-[5px]"
+                        extraClass=""
                         id="input-lname-crt-acc"
                         placeholder="Entrez votre nom"
                     />
@@ -38,9 +38,9 @@
             <div class="mt-[40px]">
                 <label class="text-white font-light" for="input-email-crt-acc">Votre email</label>
                 <InputBase 
+                    unicode="📧"
                     v-model="email"
-                    extraClass=" 
-                    border-b-2 w-full pl-2 w-full text-white font-light mt-[5px]"
+                    extraClass=""
                     id="input-email-crt-acc"
                     type="email"
                     placeholder="Entrez votre email"
@@ -50,9 +50,9 @@
             <div class="mt-[40px]">
                 <label class="text-white font-light" for="input-pass-crt-acc">Votre mot de passe</label>
                 <InputBase 
+                    unicode="🔒"
                     v-model="password"
-                    extraClass="
-                    border-b-2 w-full pl-2 w-full py-1 text-white font-light mt-[5px]"
+                    extraClass=""
                     id="input-pass-crt-acc"
                     placeholder="Entrez votre mot de passe"
                     type="password"
@@ -62,17 +62,17 @@
             <div class="mt-[40px]">
                 <label class="text-white font-light " for="input-cpass-crt-acc">Confirmer votre mot de passe </label>
                 <InputBase 
+                    unicode="🔒"
                     v-model="confirmPassword"
-                    extraClass="
-                    border-b-2 w-full pl-2 w-full py-1 text-white font-light mt-[5px]"
+                    extraClass=""
                     id="input-cpass-crt-acc"
                     placeholder="Entrez votre mot de passe"
                     type="password"
                 />
             </div>
 
-            <div class="flex mt-[40px] justify-center gap-1">
-                <InputBase v-model="confirmCheckbox" type="checkbox" />
+            <div class="flex mt-[20px] justify-center gap-1">
+                <InputCheckbox v-model="confirmCheckbox" type="checkbox" />
                 <a 
                     class="txt-main-blue text-[14px] text-white font-light" 
                     href="">
@@ -80,7 +80,7 @@
                 </a>
             </div>
 
-            <button-component :extraClass="'shadow-black shadow-custom-main w-[389px] py-[6.5px]'" :titleButton="'S\'inscrire'" />
+            <button-component :extraClass="'shadow-black shadow-custom-main w-full py-[6.5px]'" :titleButton="'S\'inscrire'" />
 
             <div class="flex pt-[28px] gap-9 justify-center">
                 <p class="text-white font-light">Vous avez déjà un compte ?</p> 
@@ -101,6 +101,8 @@
     import { createAccount } from '@/composable/useBackendActionData';
     import { useErrorFormat, verifyCreateAccount } from '@/error/useHandleError';
     import { useMandatoryEmptyInputs } from '@/error/useMandatoryEmptyInputs';
+    import InputCheckbox from '../input/InputCheckbox.vue';
+    
 
     // props, variables ...
     const router = useRouter();
