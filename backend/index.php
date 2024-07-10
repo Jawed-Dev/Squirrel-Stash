@@ -45,6 +45,10 @@
                         getControllerMain()->getControllerUser()->authorizePageForgotPass();
                         break;
                     }
+                    case 'pageUser': {
+                        getControllerMain()->getControllerUser()->authorizePageUser();
+                        break;
+                    }
                     case 'pageResetPass': {
                         getControllerMain()->getControllerUser()->authorizePageResetPassword();
                         break;
@@ -53,6 +57,7 @@
                         getControllerMain()->getControllerStatistic()->authorizePageTransactions();
                         break;
                     }
+                    
                     default: {
                         getControllerMain()->sendJsonResponse(['message' => 'Page not found', 'status' => 404]);
                         break;
@@ -103,11 +108,15 @@
                         getControllerMain()->getControllerStatistic()->fetchDataTrsBySearch();
                         break;
                     }
+                    case 'getDataUserProfil' : {
+                        getControllerMain()->getControllerUser()->getDataUserProfil();
+                        break;
+                    }
                     case 'IsValidResetPassToken' : {
                         getControllerMain()->getControllerUser()->fetchIsValidResetPassToken();
                         break;
                     }
-                    
+                   
                 }
             }
         }
@@ -144,6 +153,11 @@
                         getControllerMain()->getControllerUser()->fetchUpdatePassword();
                         break;
                     }
+                    case 'updateDataUserProfil' : {
+                        getControllerMain()->getControllerUser()->updateDataUserProfil();
+                        break;
+                    }
+                    
                 }
             }
         }

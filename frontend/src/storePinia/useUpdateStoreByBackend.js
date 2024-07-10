@@ -1,5 +1,15 @@
-import { getBiggestTrsByMonth, getThresholdByMonth, getTotalTrsByMonth, getListTrsMonthByDay, getLastNTransactions, getDataTrsBySearch } from '@/composable/useBackendGetData';
-import { storeParamsSearch, storeThreshold, storeStatisticDetails, storeTrsMonthByDay, storeLastNTransactions, storeDataTrsSearch } from '@/storePinia/useStoreDashboard';
+import 
+        { 
+            getBiggestTrsByMonth, getThresholdByMonth, getTotalTrsByMonth, 
+            getListTrsMonthByDay, getLastNTransactions, getDataTrsBySearch,
+            getDataUserProfil 
+        } from '@/composable/useBackendGetData';
+import { 
+        storeParamsSearch, storeThreshold, storeStatisticDetails, 
+        storeTrsMonthByDay, storeLastNTransactions, storeDataTrsSearch,
+        storeDataProfilUser
+        
+    } from '@/storePinia/useStoreDashboard';
 
 
 // list transactions month By Day
@@ -100,3 +110,21 @@ export async function updateDataTrsSearch(params) {
     const dataStore = storeDataTrsSearch();
     dataStore.dataTransactions = await getDataTrsBySearch(params);
 }
+
+export async function updateStoreUserProfil() {
+    const dataStore = storeDataProfilUser();
+    const response = await getDataUserProfil();
+    const firstName = response.data.user_first_name;
+    const lastName = response.data.user_last_name;
+    const birthday = response.data.user_birthday;
+    const gender = response.data.user_gender;
+    const roleLevel = response.data.user_role_level;
+
+    dataStore.data.firstName = firstName;
+    dataStore.data.lastName = lastName;
+    dataStore.data.birthday = birthday;
+    dataStore.data.gender = gender;
+    dataStore.data.roleLevel = roleLevel;
+}
+
+

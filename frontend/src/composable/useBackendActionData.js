@@ -171,3 +171,21 @@ export async function deleteTransaction(transactionId) {
 }
 
 
+export async function updateDataUserProfil(params) {
+    authRequired();
+    const localToken = getLStorageAuthToken();
+    const body = {
+        firstName: String(params.firstName),
+        lastName: String(params.lastName),
+        birthday: String(params.birthday),
+        gender: String(params.gender)
+    };
+    const response = await useConfigFetchActionData ({
+        request: 'updateDataUserProfil', 
+        method: 'POST', 
+        dataBody: body, 
+        token: localToken
+    });
+    return response;
+}
+

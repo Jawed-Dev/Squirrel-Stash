@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { ref } from 'vue';
+import { ref, reactive } from 'vue';
 import { getCurrentMonthName, getCurrentYear, getMonthNumber } from '@/composable/useGetDate';
 
 
@@ -59,3 +59,18 @@ export const storeParamsSearch = defineStore('paramsSearch', () => {
   const params = ref([]);
   return { params };
 });
+
+// store user profil
+
+export const storeDataProfilUser = defineStore('dataProfilUser', () => {
+  const data = reactive({
+    firstName: '',
+    lastName: '',
+    birthday: '',
+    gender: '',
+    roleLevel: ''
+  });
+
+  return { data };
+});
+

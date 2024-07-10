@@ -7,6 +7,7 @@ import PageHistoryTransactions from "@/page/PageHistoryTransactions.vue";
 import PageTemporary from '@/page/PageTemporary.vue';
 import PageForgotPass from '@/page/PageForgotPass.vue';
 import PageResetPass from '@/page/PageResetPass.vue';
+import PageUser from '@/page/PageUser.vue';
 
 import useConfigFetchGetPage from "@/composable/useConfigFetchGetPage";
 import { getLStorageAuthToken } from "@/composable/useLocalStorage";
@@ -20,6 +21,7 @@ const routes = [
   { path: '/mot-de-passe-oublie', component: PageForgotPass, meta: { page: 'pageForgotPass' }},
   { path: '/reinitialiser-mot-de-passe', component: PageResetPass, meta: { page: 'pageResetPass' }},
   { path: '/historique-transactions', component: PageHistoryTransactions, meta: { page: 'pageTransactions' }},
+  { path: '/utilisateur', component: PageUser, meta: { page: 'pageUser' }},
 ];
 
 const router = createRouter({
@@ -63,6 +65,10 @@ router.beforeEach(async (to, from, next) => {
         const isValidToken = await isValidResetPassToken(to.query.token);
         if(!isParamUrlValid || !isValidToken) next('/connexion'); 
         (isSessionActive) ? next('/tableau-de-bord') : next();
+        break;
+      }
+      case 'pageUser' : {
+        (isSessionActive) ? next() : next('/connexion');
         break;
       }
       case 'pageDashboard' : {

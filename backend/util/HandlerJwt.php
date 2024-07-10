@@ -61,7 +61,7 @@
             $bodyData = json_decode($bodyDataJson, true);
 
             foreach ($bodyData as &$value) {
-                if (is_string($value)) $this->getControllerMain()->getHandlerValidFormat()->sanitizeData($value);
+                if (is_string($value) && $value) $this->getControllerMain()->getHandlerValidFormat()->sanitizeData($value);
             }
             //var_dump($bodyData);
             

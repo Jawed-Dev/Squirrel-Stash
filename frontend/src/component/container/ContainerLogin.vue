@@ -63,7 +63,7 @@
     import { getHandleLogin } from '@/composable/useBackendGetData';
     import { verifyLogin, useErrorFormat } from '@/error/useHandleError';
     import { useMandatoryEmptyInputs } from '@/error/useMandatoryEmptyInputs';
-
+        
     // props, variables
     const router = useRouter();
     const email = ref('');

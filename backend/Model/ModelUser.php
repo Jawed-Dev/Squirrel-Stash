@@ -12,7 +12,10 @@
         function updatePassword($db, $data);
         function insertUniqueTokenResetPass($db, $uniqueToken);
         function deleteResetPassTokenByEmail($db, $data);
+
         function getUserFirstName($db, $userId);
+        function getDataUserProfil($db, $userId);
+        function updateDataUserProfil($db, $data);
     }
 
     class ModelUser implements I_ModelUser {
@@ -46,8 +49,51 @@
             $query = $db->prepare($reqSql);
             $query->bindValue(':id',  $userId, PDO::PARAM_INT);
             $query->execute();
-            $result = $query->fetch();
+            $result = $query->fetch(PDO::FETCH_ASSOC);
             $isSuccessRequest = $result !== false;
+            return $isSuccessRequest;
+        }
+
+        public function getDataUserProfil($db, $userId) {
+            $reqSql = 
+            "SELECT 
+                user_first_name,
+                user_last_name,
+                user_birthday,
+                user_gender,
+                user_role_level
+            FROM 
+                user 
+            WHERE 
+                user_id = :id";
+            $query = $db->prepare($reqSql);
+            $query->bindValue(':id',  $userId, PDO::PARAM_INT);
+            $query->execute();
+            $result = $query->fetch(PDO::FETCH_ASSOC);
+            return ($result) ? $result : null;
+        }
+
+        public function updateDataUserProfil($db, $data) {
+            $dataQuery = $data['bodyData'];
+            $userId = $data['userId'];
+            $reqSql = 
+            "UPDATE 
+                user 
+            SET 
+                user_first_name = :firstName,
+                user_last_name = :lastName,
+                user_birthday = :birthday,
+                user_gender = :gender
+            WHERE 
+                user_id = :userId";
+            $query = $db->prepare($reqSql);
+            $query->bindValue(':userId',  $userId, PDO::PARAM_INT);
+            $query->bindValue(':firstName',  $dataQuery['firstName'], PDO::PARAM_STR);
+            $query->bindValue(':lastName',  $dataQuery['lastName'], PDO::PARAM_STR);
+            $query->bindValue(':birthday',  $dataQuery['birthday'], PDO::PARAM_STR);
+            $query->bindValue(':gender',  $dataQuery['gender'], PDO::PARAM_STR);
+            $query->execute();
+            $isSuccessRequest = $query->rowCount() > 0;
             return $isSuccessRequest;
         }
 

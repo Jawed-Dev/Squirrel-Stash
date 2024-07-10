@@ -22,12 +22,15 @@
         function FetchSendResetPassToken();
         function fetchUpdatePassword();
         function fetchIsValidResetPassToken();
+        function getDataUserProfil();
+        function updateDataUserProfil();
         
         // Prepare pages
         function authorizePageLogin();
         function authorizePageForgotPass();
         function authorizePageRegister();
         function authorizePageResetPassword();
+        function authorizePageUser();
     }
 
     class ControllerUser implements I_ControllerUser {
@@ -185,6 +188,32 @@
             $this->getControllerMain()->sendJsonResponse(['isSuccessRequest' => $isSuccessReq]);
         }
 
+        
+
+        
+
+        public function getDataUserProfil() {
+            $dataRequest = $this->getControllerMain()->prepareAndValidateData();
+            $db = $dataRequest['dataBase'];
+            $userId = $dataRequest['userId'];
+
+            $isAnyError = false;//$this->getControllerMain()->getHandlerError()->verifyGetBiggestTrsByMonth($dataRequest);
+            $data = null;
+            if(!$isAnyError) $data = $this->getModelUser()->getDataUserProfil($db, $userId);
+            $this->getControllerMain()->sendJsonResponse(['data' => $data]);
+        }
+
+        public function updateDataUserProfil() {
+            $dataRequest = $this->getControllerMain()->prepareAndValidateData();
+            $db = $dataRequest['dataBase'];
+            //var_dump($dataRequest);
+
+            $isAnyError = false;//$this->getControllerMain()->getHandlerError()->verifyGetBiggestTrsByMonth($dataRequest);
+            $isSuccessReq = false;
+            if(!$isAnyError) $isSuccessReq = $this->getModelUser()->updateDataUserProfil($db, $dataRequest);
+            $this->getControllerMain()->sendJsonResponse(['isSuccessRequest' => $isSuccessReq]);
+        }
+
         // Prepare pages
         public function authorizePageLogin() {
             $decodedJwt = $this->getControllerMain()->getHandlerJwt()->getJwtFromHeader();
@@ -214,6 +243,15 @@
         }
 
         public function authorizePageResetPassword() {
+            $decodedJwt = $this->getControllerMain()->getHandlerJwt()->getJwtFromHeader();
+            $isSessionActive = $this->isSessionActiveByJwt($decodedJwt);
+            $dataPage = [
+                'isSessionActive' => $isSessionActive,
+            ]; 
+            $this->getViewUser()->renderPageLogin($dataPage);  
+        }
+
+        public function authorizePageUser() {
             $decodedJwt = $this->getControllerMain()->getHandlerJwt()->getJwtFromHeader();
             $isSessionActive = $this->isSessionActiveByJwt($decodedJwt);
             $dataPage = [

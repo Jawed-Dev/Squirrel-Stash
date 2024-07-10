@@ -213,3 +213,15 @@ export async function getBiggestTrsByMonth(month, year, transactionType) {
 
     return biggestTransaction;
 }
+
+export async function getDataUserProfil() {
+    authRequired();
+    const localToken = getLStorageAuthToken();
+    const response = await useConfigFetchGetData ({
+        request: 'getDataUserProfil', 
+        method: 'POST', 
+        dataBody: ['none'], 
+        token: localToken
+    });
+    return response;
+}

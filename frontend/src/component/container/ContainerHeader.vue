@@ -15,8 +15,7 @@
         <div class="mt-2 w-full">
             <div class="w-full flex flex-col gap-5 relative" v-for="(icon, index) of dataIcons">
                 <div :key="index" @click="handleClickHeader(icon.page)" 
-                    :class="`flex relative ${classTranslateY} py-[5px] cursor-pointer ${bordergetCurrentPage(icon.page)}`">
-
+                    :class="`flex relative ${classTranslateY} py-[6px] cursor-pointer ${bordergetCurrentPage(icon.page)}`">
                     <component :is="icon.Component" :svg="svgConfig(icon.page)" class="w-header-width "/>
                     <TransitionOpacity :durationIn="'duration-200'" :durationOut="'duration-0'">
                         <router-link :to="icon.link" v-show="isHovered && isTextIconsVisible" 
@@ -52,9 +51,12 @@
     const dataIcons = [
     { Component: IconDashboard, link:'/tableau-de-bord', page: 'tableau-de-bord', text: 'Tableau de bord' },
     { Component: IconPurchases, link:'/historique-transactions',page: 'historique-transactions', text: 'Historique' },
+    { Component: IconUser, link:'/utilisateur', page: 'utilisateur', text: 'Utilisateur' },
     { Component: IconGraph, link:'',page: '', text: 'Graphiques' },
-    { Component: IconBell, link:'',page: '', text: 'Alarmes' },
-    { Component: IconUser, link:'',page: '', text: 'Utilisateur' },
+    
+    { Component: IconBell, link:'',page: '', text: 'Confidentialité' },
+    { Component: IconBell, link:'',page: '', text: 'Support et aide' },
+    { Component: IconBell, link:'',page: '', text: 'Version 1.0' },
     { Component: IconLogOut, link:'',page: 'disconnect', text: 'Déconnexion' },
     ];
 
@@ -122,6 +124,14 @@
             }
             case 'historique-transactions' : {
                 router.push('/historique-transactions');
+                break;
+            }
+            case 'historique-transactions' : {
+                router.push('/historique-transactions');
+                break;
+            }
+            case 'utilisateur' : {
+                router.push('/utilisateur');
                 break;
             }
             case 'disconnect' : {
