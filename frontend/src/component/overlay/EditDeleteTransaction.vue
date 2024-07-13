@@ -3,7 +3,7 @@
             <IconOptions @click="toggleMenu()" class="cursor-pointer trigger-menu-editdelete" :svg="iconOptions"/>
 
             <TransitionOpacity ref="elementTransition" :durationIn="'duration-500'" :durationOut="'duration-500'">
-                <div v-show="isMenuActive" 
+                <div v-if="isMenuActive" 
                     class="flex flex-col items-center absolute top-[-20px] left-[2vw] z-10 trigger-menu-editdelete
                     bg-main-gradient w-[100px] rounded-md overflow-hidden
                     shadow-black shadow-custom-main">

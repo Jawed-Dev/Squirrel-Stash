@@ -1,6 +1,6 @@
 <template>
-    <div class="pl-5 bg-main-gradient text-white rounded-md gradient-border ">
-        <h2 class="py-3 text-[25px] font-extralight">{{(!typeTransaction) ? 'Achats du mois' : 'Transactions du mois'}}</h2>
+    <div class="pl-3 bg-main-gradient text-white rounded-md gradient-border ">
+        <h2 class="py-3 text-[20px] font-extralight">{{(!typeTransaction) ? 'Achats du mois' : 'Transactions du mois'}}</h2>
         <div class="w-full flex justify-center">
             <ToggleButton v-model:typeTransaction="typeTransaction" :text1="'Achats'" :text2="'Prélèvements'" />
         </div>

@@ -6,6 +6,9 @@
 
     interface I_Emailsender {
         function sendEmailResetPass($params);
+        function sendEmailUpdateEmail($params);
+        function setParamServer();
+        function getPhpMailer();
     };
 
     class EmailSender implements I_Emailsender {
@@ -50,9 +53,25 @@
 
             $this->getPhpMailer()->isHTML(true);
             $this->getPhpMailer()->Subject = 'Réintialisation du mot de passe.';
-            $this->getPhpMailer()->Body = "<a href='".$params['urlToResetPass']. "'>".$params['urlToResetPass'].".</a>";
+            $this->getPhpMailer()->Body = "<a href='".$params['urlToResetPass']. "'>".$params['urlToResetPass']."</a>";
 
-            $this->getPhpMailer()->AltBody = 'Un mail a été envoyé pour réinitialiser votre mot de passe.';                               
+            $this->getPhpMailer()->AltBody = 'Un mail a été envoyé pour réinitialiser votre mot de passe, cliquez sur le lien.';                               
+
+            return $this->getPhpMailer()->send();
+        }
+
+        public function sendEmailUpdateEmail($params) {
+            $this->setParamServer();
+            $this->getPhpMailer()->setFrom('jaywed@hotmail.fr', 'Ecofast');
+            $this->getPhpMailer()->addAddress($params['email']);  
+
+            $this->getPhpMailer()->isHTML(true);
+            $this->getPhpMailer()->Subject = 'Mise à jour de votre email.';
+            $this->getPhpMailer()->Body = "Cliquez sur ce lien pour pouvoir mettre à jour votre email.
+            
+            <a href='".$params['urlToResetPass']. "'>".$params['urlToResetPass']."</a>";
+
+            $this->getPhpMailer()->AltBody = 'Un mail a été envoyé pour réinitialiser votre email, cliquez sur le lien.';                               
 
             return $this->getPhpMailer()->send();
         }

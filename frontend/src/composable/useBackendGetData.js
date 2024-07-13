@@ -225,3 +225,16 @@ export async function getDataUserProfil() {
     });
     return response;
 }
+
+export async function getUserEmail() {
+    authRequired();
+    const localToken = getLStorageAuthToken();
+    const response = await useConfigFetchGetData ({
+        request: 'getUserEmail', 
+        method: 'POST', 
+        dataBody: ['none'], 
+        token: localToken
+    });
+    return response;
+}
+

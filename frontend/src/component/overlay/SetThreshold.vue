@@ -36,7 +36,7 @@
                         </div>
                     </div>
                     <div class="flex justify-center my-[60px]">
-                        <p class="w-[full] text-[15px] font-light text-gray-200">Ce seuil sera effectif pour le mois actuel <span class="block">et les suivants, jusqu'à un nouveau seuil.</span></p>
+                        <p class="w-[full] text-[15px] font-light text-white">Ce seuil sera effectif pour le mois actuel <span class="block">et les suivants, jusqu'à un nouveau seuil.</span></p>
                     </div>
                 </div>
             </MainContainerSlot>

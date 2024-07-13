@@ -31,11 +31,12 @@
                 </div>
             </div>
 
-            <div class="flex flex-col px-[25%] gap-2 justify-center mt-[25px] w-full">
+            <div class="flex flex-col px-[25%] mt-[30px] w-full">
                 <!-- placeholder notes -->
                 <div class="">
                     <label for="input-note-trs" class="flex justify-center text-[16px] font-light">{{textNote}}</label>
-                    <InputBase v-model="inputNoteVal"
+                    <InputBase 
+                        v-model="inputNoteVal"
                         unicode="✏️"
                         extraClass="text-[16px]"
                         type="text"

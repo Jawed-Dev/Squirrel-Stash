@@ -98,12 +98,12 @@
 
     const isValidPage = computed(() => {
         const currentPath = router.currentRoute.value.path.substring(1);
-        return !notAllowedPages.includes(currentPath);
+        return !notAllowedPages.includes(currentPath) && currentPath;
     });
 
     const bordergetCurrentPage = computed(() => {
         return (page) => {
-            return  page === router.currentRoute.value.path.substring(1) ? 'bg-main-bg' : '';
+            return  page === router.currentRoute.value.path.substring(1) ? 'bg-second-bg' : '';
         }
     });
 

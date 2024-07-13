@@ -262,7 +262,7 @@
             return $this->getStateErrors();
         }
 
-        public function verifyUpdatePassword($data) {
+        public function verifyUpdatePasswordByToken($data) {
             $this->clearErrors();
             $bodyData = $data['bodyData'];
             

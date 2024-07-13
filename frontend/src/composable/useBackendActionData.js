@@ -36,7 +36,7 @@ function redirectDashboard() {
     window.location.href = '/tableau-de-bord';
 }
 
-export async function updatePassword(params) {
+export async function updatePasswordByToken(params) {
     notAuthRequired();
     const localToken = getLStorageAuthToken();
     const body = {
@@ -44,7 +44,23 @@ export async function updatePassword(params) {
         password: params.password,
     };
     const dataRequest = await useConfigFetchActionData ({
-        request: 'updatePassword',
+        request: 'updatePasswordByToken',
+        method: 'POST',
+        dataBody: body,
+        token: localToken
+    });
+    return dataRequest;
+}
+
+export async function updatePasswordByUserId(params) {
+    authRequired();
+    const localToken = getLStorageAuthToken();
+    const body = {
+        oldPass: String(params.oldPass),
+        newPass: String(params.newPass),
+    };
+    const dataRequest = await useConfigFetchActionData ({
+        request: 'updatePasswordByUserId',
         method: 'POST',
         dataBody: body,
         token: localToken
@@ -171,7 +187,7 @@ export async function deleteTransaction(transactionId) {
 }
 
 
-export async function updateDataUserProfil(params) {
+export async function updateUserProfil(params) {
     authRequired();
     const localToken = getLStorageAuthToken();
     const body = {
@@ -181,7 +197,7 @@ export async function updateDataUserProfil(params) {
         gender: String(params.gender)
     };
     const response = await useConfigFetchActionData ({
-        request: 'updateDataUserProfil', 
+        request: 'updateUserProfil', 
         method: 'POST', 
         dataBody: body, 
         token: localToken
@@ -189,3 +205,32 @@ export async function updateDataUserProfil(params) {
     return response;
 }
 
+export async function sendUpdateMail(params) {
+    authRequired();
+    const localToken = getLStorageAuthToken();
+    const body = {
+        newEmail: String(params.newEmail),
+    };
+    const response = await useConfigFetchActionData ({
+        request: 'sendUpdateMail', 
+        method: 'POST', 
+        dataBody: body, 
+        token: localToken
+    });
+    return response;
+}
+
+export async function updateEmail(token) {
+    authRequired();
+    const localToken = getLStorageAuthToken();
+    const body = {
+        token: String(token),
+    };
+    const response = await useConfigFetchActionData({
+        request: 'updateEmail', 
+        method: 'POST', 
+        dataBody: body, 
+        token: localToken
+    });
+    return response;
+}

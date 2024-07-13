@@ -78,7 +78,6 @@
     // life cycle / functions
     onMounted(async () => {
         const response = await getUserFirstName();
-        console.log(response);
         const userFirstName = response?.data?.user_first_name;
         firstNameUser.value = userFirstName;
     });

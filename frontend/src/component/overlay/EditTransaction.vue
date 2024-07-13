@@ -1,11 +1,11 @@
 <template>
     <div>
         <TransitionOpacity :durationIn="'duration-300'" :durationOut="'duration-200'">
-            <div v-show="isMenuActive" class="fixed inset-0 bg-black bg-opacity-80 z-10"></div>
+            <div v-if="isMenuActive" class="fixed inset-0 bg-black bg-opacity-80 z-10"></div>
         </TransitionOpacity>
 
         <TransitionOpacity :durationIn="'duration-300'" :durationOut="'duration-200'">
-            <div v-show="isMenuActive" 
+            <div v-if="isMenuActive" 
                 :class="`fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 text-white rounded-[3px] overflow-hidden 
                 shadow-black shadow-custom-main trigger-edit-transaction bg-main-gradient ${props.width}`">
 
@@ -36,13 +36,17 @@
 
 <script setup>
     // import
-    import { ref, watch, onMounted, computed } from 'vue';
+    import { ref, watch, onMounted, defineAsyncComponent } from 'vue';
     import TransitionOpacity from '@/component/transition/TransitionOpacity.vue';
     import useClickOutside from '@/composable/useClickOutSide';
     import useEscapeKey from '@/composable/useEscapeKey';
 
-    import ContainerSelectCategories from '@/component/container/ContainerSelectCategories.vue';
-    import ContainerInputs from '@/component/container/ContainerInputs.vue';
+    const ContainerInputs = defineAsyncComponent(() => import('@/component/container/ContainerInputs.vue'));
+    const ContainerSelectCategories = defineAsyncComponent(() => import('../container/ContainerSelectCategories.vue'));
+    // import ContainerSelectCategories from '@/component/container/ContainerSelectCategories.vue';
+    // import ContainerInputs from '@/component/container/ContainerInputs.vue';
+
+
     import MainContainerSlot from '@/component/containerSlot/MainContainerSlot.vue';
     import { storeDateSelected } from '@/storePinia/useStoreDashboard';
     import { updateTransaction } from '@/composable/useBackendActionData';

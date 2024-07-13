@@ -39,9 +39,8 @@ export default {
         'custom-purple' : '#e14eca',
         'custom-turquoise' : '#00f2c3',
         
-        'second-bg' : '#1b1e33',
+        'second-bg' : '#1b1e3390',
         'main-bg': "#121422",
-
         'main-color': "#121422"
       },
       spacing: {
@@ -71,7 +70,7 @@ export default {
         'gradient-gray' : "linear-gradient(180deg, #2c3e50, #111)",
 
 
-        'gradient-x-blue' : "linear-gradient(60deg, #2197ff, #1b8bf5, #167feb, #1173e1, #0c68d6, #085dcc, #0453c2, #0049b8)",
+        'gradient-x-blue' : "linear-gradient(240deg, #174285, #3c78e3)",
 
         
         // 'gradient-grey' : "linear-gradient(0deg,#2c3e50,#bdc3c7)",

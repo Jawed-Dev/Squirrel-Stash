@@ -3,7 +3,7 @@
         <p class="py-1 px-1"> ❌ </p>
     </div>
     <div :class="`flex flex-col items-center shadow-red ${bgHead} shadow-black shadow-custom-main py-[10px]`">
-        <h2 :class="`${width} flex justify-center text-[22px] pt-3 py-2 font-extralight`">{{titleContainer}}</h2>
+        <h2 :class="`${width} flex justify-center text-[22px] py-1 font-extralight`">{{titleContainer}}</h2>
     </div>
     
     <slot></slot> <!-- content slot -->

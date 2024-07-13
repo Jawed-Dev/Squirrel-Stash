@@ -6,7 +6,7 @@
             <input
                 @input="onInput" 
                 
-                :class="`${props.extraClass} bg-transparent pl-1 focus:outline-none`"
+                :class="`${props.extraClass} bg-transparent pl-1 focus:outline-none w-full ${width}`"
                 :value="modelValue"
                 :type="type"
                 :placeholder="placeholder"

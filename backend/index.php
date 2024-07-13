@@ -5,7 +5,7 @@
 
         $allowedOrigin = FRONT_BASE_URL;
         $origin = isset($_SERVER['HTTP_X_CUSTOM_ORIGIN']) ? $_SERVER['HTTP_X_CUSTOM_ORIGIN'] : '';
-        if ($origin !== $allowedOrigin) throw new Exception('Erreur CORS');
+        //if ($origin !== $allowedOrigin) throw new Exception('Erreur CORS'); A REACRIVER
 
         header("Access-Control-Allow-Origin: ".FRONT_BASE_URL);
         header("Access-Control-Allow-Methods: GET, POST");
@@ -112,6 +112,10 @@
                         getControllerMain()->getControllerUser()->getDataUserProfil();
                         break;
                     }
+                    case 'getUserEmail' : {
+                        getControllerMain()->getControllerUser()->getUserEmail();
+                        break;
+                    }
                     case 'IsValidResetPassToken' : {
                         getControllerMain()->getControllerUser()->fetchIsValidResetPassToken();
                         break;
@@ -149,12 +153,25 @@
                         getControllerMain()->getControllerUser()->FetchSendResetPassToken();
                         break;
                     }
-                    case 'updatePassword' : {
-                        getControllerMain()->getControllerUser()->fetchUpdatePassword();
+                    case 'sendUpdateMail' : {
+                        getControllerMain()->getControllerUser()->sendUpdateMail();
                         break;
                     }
-                    case 'updateDataUserProfil' : {
-                        getControllerMain()->getControllerUser()->updateDataUserProfil();
+                    case 'updatePasswordByToken' : {
+                        getControllerMain()->getControllerUser()->updatePasswordByToken();
+                        break;
+                    }
+                    case 'updatePasswordByUserId' : {
+                        getControllerMain()->getControllerUser()->updatePasswordByUserId();
+                        break;
+                    }
+                    
+                    case 'updateEmail' : {
+                        getControllerMain()->getControllerUser()->updateEmail();
+                        break;
+                    }
+                    case 'updateUserProfil' : {
+                        getControllerMain()->getControllerUser()->updateUserProfil();
                         break;
                     }
                     

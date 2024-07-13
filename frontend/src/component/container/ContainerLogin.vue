@@ -19,6 +19,7 @@
                     extraClass=""
                     type="email"
                     placeholder="Entrez votre email"
+                    width="w-full"
                 />
             </div>
 
@@ -31,6 +32,7 @@
                     extraClass=""
                     type="password"
                     placeholder="Entrez votre mot de passe"
+                    width="w-full"
                 />
             </div>
      

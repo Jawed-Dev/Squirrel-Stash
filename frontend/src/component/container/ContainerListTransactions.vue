@@ -5,9 +5,9 @@
     
             <div class="flex items-center justify-between">
                 <h2 class="pl-3 py-3 text-[20px] font-extralight pr-8">{{ props.title}}</h2>
-                <router-link to="/historique-transactions" :class="`cursor-pointer pr-3 ${translateY}`">Voir plus ></router-link>
+                <router-link to="/historique-transactions" :class="`font-light cursor-pointer pr-3 ${translateY}`">Voir plus ></router-link>
             </div>
-            <div class="flex py-2 pl-3 mt-3 bg-main-bg">
+            <div class="flex py-2 pl-3 mt-3 bg-gradient-x-blue shadow-black shadow-custom-main">
                 <p class="ml-[2.5vw] pl-[15px] w-[20%]">Catégorie</p>
                 <p class="w-[20%]">Montant</p>
                 <p class="w-[20%]">Date</p>

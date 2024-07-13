@@ -61,14 +61,29 @@ export const storeParamsSearch = defineStore('paramsSearch', () => {
 });
 
 // store user profil
-
-export const storeDataProfilUser = defineStore('dataProfilUser', () => {
+export const storeProfilUser = defineStore('dataProfilUser', () => {
   const data = reactive({
     firstName: '',
     lastName: '',
     birthday: '',
     gender: '',
     roleLevel: ''
+  });
+
+  return { data };
+});
+
+export const storeEmailUser = defineStore('dataProfilUser', () => {
+  const currentEmail = ref('');
+
+  return { currentEmail };
+});
+
+export const storePassUser = defineStore('dataPassUser', () => {
+  const data = reactive({
+    currentPass: '',
+    newPass: '',
+    confirmNewPass: ''
   });
 
   return { data };

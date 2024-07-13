@@ -1,42 +1,43 @@
 <template>
-    <div class="flex justify-center rounded-[3px] mt-[10px]">
-        <div class="gradient-border text-white overflow-hidden bg-main-gradient pl-3 shadow-black shadow-custom-main w-full relative">   
-            <UseIconLoader 
-                extraClass="absolute top-2 rounded-md shadow-black shadow-custom-main p-[0.5vw]" 
-                :svg="iconConfig" nameIcon="Search" 
-            />
-            <form class="py-3 flex flex-col" @submit.prevent="handleSubmit()">
-                <div class="flex justify-center items-center gap-[10vw] mt-[20px]">
-                    <ContainerAmountInputs 
-                        v-model:searchAmountMin="searchAmountMin" 
-                        v-model:searchAmountMax="searchAmountMax" 
-                    />
-                    <ContainerNoteInput v-model="searchNote" />
-                </div>
+    <div class="flex justify-center rounded-[3px] mt-[10px] overflow-hidden">
+        <div class=" text-white bg-main-gradient
+        shadow-black shadow-custom-main w-full relative">   
+        
+            <h2 class="absolute w-full mt-5 shadow-black shadow-custom-main bg-gradient-x-blue p-2 
+            font-light flex justify-start text-[18px] text-white">Paramètres de recherche</h2>
 
-                <div class="flex justify-center items-center gap-[10vw] mt-[40px] ">
-                    <ContainerDateInputs 
-                        v-model:checkboxDateMin="checkboxDateMin" 
-                        v-model:checkboxDateMax="checkboxDateMax" 
-                        v-model:dateStart="dateStart" 
-                        v-model:dateEnd="dateEnd" 
-                    />
-                    <ContainerCategoryInput 
-                        v-model:checkboxCategory="checkboxCategory" 
-                        v-model:searchCategory="searchCategory" 
-                        v-model:searchType="searchType" 
-                    />
-                </div>
-
-                <div class="w-full flex justify-center">
-                    <div class="mt-[40px] shadow-black shadow-custom-main w-[25%]">
-                        <button class=
-                            "text-[17px] w-full rounded-sm py-2 bg-gradient-blue 
-                            rounded-br-[3px] font-light">Rechercher
-                        </button>
+            <div class="gradient-border overflow-hidden">
+                <form class="py-3 flex flex-col mt-12" @submit.prevent="handleSubmit()">
+                    <div class="flex justify-center items-center gap-[10vw] mt-[20px]">
+                        <ContainerAmountInputs 
+                            v-model:searchAmountMin="searchAmountMin" 
+                            v-model:searchAmountMax="searchAmountMax" 
+                        />
+                        <ContainerNoteInput v-model="searchNote" />
                     </div>
-                </div>
-            </form>
+                    <div class="flex justify-center items-center gap-[10vw] mt-[40px] ">
+                        <ContainerDateInputs 
+                            v-model:checkboxDateMin="checkboxDateMin" 
+                            v-model:checkboxDateMax="checkboxDateMax" 
+                            v-model:dateStart="dateStart" 
+                            v-model:dateEnd="dateEnd" 
+                        />
+                        <ContainerCategoryInput 
+                            v-model:checkboxCategory="checkboxCategory" 
+                            v-model:searchCategory="searchCategory" 
+                            v-model:searchType="searchType" 
+                        />
+                    </div>
+                    <div class="w-full flex justify-center">
+                        <div class="mt-[40px] shadow-black shadow-custom-main w-[25%]">
+                            <button class=
+                                "text-[17px] w-full rounded-sm py-2 bg-gradient-blue 
+                                rounded-br-[3px] font-light">Rechercher
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 </template>

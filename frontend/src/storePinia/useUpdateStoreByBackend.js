@@ -1,14 +1,14 @@
 import 
-        { 
-            getBiggestTrsByMonth, getThresholdByMonth, getTotalTrsByMonth, 
-            getListTrsMonthByDay, getLastNTransactions, getDataTrsBySearch,
-            getDataUserProfil 
-        } from '@/composable/useBackendGetData';
+    { 
+        getBiggestTrsByMonth, getThresholdByMonth, getTotalTrsByMonth, 
+        getListTrsMonthByDay, getLastNTransactions, getDataTrsBySearch,
+        getDataUserProfil, getUserEmail
+    } from '@/composable/useBackendGetData';
 import { 
         storeParamsSearch, storeThreshold, storeStatisticDetails, 
         storeTrsMonthByDay, storeLastNTransactions, storeDataTrsSearch,
-        storeDataProfilUser
-        
+        storeProfilUser,
+        storeEmailUser
     } from '@/storePinia/useStoreDashboard';
 
 
@@ -112,7 +112,7 @@ export async function updateDataTrsSearch(params) {
 }
 
 export async function updateStoreUserProfil() {
-    const dataStore = storeDataProfilUser();
+    const dataStore = storeProfilUser();
     const response = await getDataUserProfil();
     const firstName = response.data.user_first_name;
     const lastName = response.data.user_last_name;
@@ -125,6 +125,15 @@ export async function updateStoreUserProfil() {
     dataStore.data.birthday = birthday;
     dataStore.data.gender = gender;
     dataStore.data.roleLevel = roleLevel;
+}
+
+
+export async function updateStoreUserEmail() {
+    const dataStore = storeEmailUser();
+    const response = await getUserEmail();
+    const email = response.data;
+    dataStore.currentEmail = email;
+    
 }
 
 

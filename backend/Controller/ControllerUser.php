@@ -12,18 +12,27 @@
         function getModelUser();
         // View 
         function getViewUser();
+
         // User
-        function fetchInsertUser();
+
+        // get
+        function getDataUserProfil();
         function isSessionActiveByJwt($decodedJwt);
-        function handleSuccessLogin();
+        function fetchInsertUser();
         function getUserIdFromJwt($decodedJwt);
         function getStateSession();
         function getUserFirstName();
+        function getUserEmail();
+
+        // action
+        function handleSuccessLogin();
         function FetchSendResetPassToken();
-        function fetchUpdatePassword();
+        function updatePasswordByToken();
+        function updatePasswordByUserId();
         function fetchIsValidResetPassToken();
-        function getDataUserProfil();
-        function updateDataUserProfil();
+        function updateUserProfil();
+        function sendUpdateMail();
+        function updateEmail();
         
         // Prepare pages
         function authorizePageLogin();
@@ -65,8 +74,12 @@
             return !empty($decodedJwt->userId) ? $decodedJwt->userId : null;
         }
 
-        private function getUrlToResetPass($tokenResetPass) {
-            return FRONT_BASE_URL."/reinitialiser-mot-de-passe?token=".$tokenResetPass;
+        private function getUrlToResetPass($token) {
+            return FRONT_BASE_URL."/reinitialiser-mot-de-passe?token=".$token;
+        }
+
+        private function getUrlToUpdateMail($token) {
+            return FRONT_BASE_URL."/reinitialiser-email?token=".$token;
         }
 
         public function getStateSession() {
@@ -86,7 +99,8 @@
         }
 
         public function handleSuccessLogin() {
-            $dataRequest = $this->getControllerMain()->prepareAndValidateData(false);
+            $requiredAuthFalse = false;
+            $dataRequest = $this->getControllerMain()->prepareAndValidateData($requiredAuthFalse);
             $db = $dataRequest['dataBase'];
 
             $isAnyError = $this->getControllerMain()->getHandlerError()->verifyHandleSuccessLogin($dataRequest);
@@ -108,7 +122,8 @@
         }
 
         public function fetchInsertUser() {
-            $dataRequest = $this->getControllerMain()->prepareAndValidateData(false);
+            $requiredAuthFalse = false;
+            $dataRequest = $this->getControllerMain()->prepareAndValidateData($requiredAuthFalse);
             $db = $dataRequest['dataBase'];
             
             $isAnyError = $this->getControllerMain()->getHandlerError()->verifyInsertUser($dataRequest);
@@ -120,7 +135,8 @@
         }
 
         public function fetchIsValidResetPassToken() {
-            $dataRequest = $this->getControllerMain()->prepareAndValidateData(false);
+            $requiredAuthFalse = false;
+            $dataRequest = $this->getControllerMain()->prepareAndValidateData($requiredAuthFalse);
             $db = $dataRequest['dataBase'];
             
             $isAnyError = $this->getControllerMain()->getHandlerError()->verifyIsValidResetPassToken($dataRequest);
@@ -133,7 +149,8 @@
         }
 
         public function FetchSendResetPassToken() {
-            $dataRequest = $this->getControllerMain()->prepareAndValidateData(false);
+            $requiredAuthFalse = false;
+            $dataRequest = $this->getControllerMain()->prepareAndValidateData($requiredAuthFalse);
             $db = $dataRequest['dataBase'];
             
             $isAnyError = $this->getControllerMain()->getHandlerError()->verifySendResetPassToken($dataRequest);
@@ -144,53 +161,116 @@
             }
 
             $dataBody = $dataRequest['bodyData'];
-            $isLastTokenDeleted = $this->getModelUser()->deleteResetPassTokenByEmail($db, $dataBody);
+            $isLastTokenDeleted = $this->getModelUser()->deleteResetPassToken($db, $dataBody);
 
-            $uniqueToken = $this->getControllerMain()->getModelMain()->createRandomHashSha256();
-            $uniqueTokenResetPass = $this->getModelUser()->insertUniqueTokenResetPass($db, $uniqueToken);
-            if(empty($uniqueTokenResetPass)) return $this->getControllerMain()->sendJsonResponse(['isSuccessRequest' => false]);
-            $dataRequest['bodyData']['resetPassToken'] = $uniqueTokenResetPass;
+            $uniqueToken = $this->getModelUser()->insertUniqueTokenResetPass($db);
+            if(empty($uniqueToken)) return $this->getControllerMain()->sendJsonResponse(['isSuccessRequest' => false]);
+            $dataRequest['bodyData']['resetPassToken'] = $uniqueToken;
 
             $isSuccessReqDb = $this->getModelUser()->insertResetPassToken($db, $dataRequest);
             if(!$isSuccessReqDb) return $this->getControllerMain()->sendJsonResponse(['isSuccessRequest' => false]);
 
-            //var_dump($dataRequest);
-            $requestUrl = $this->getUrlToResetPass($dataRequest['bodyData']['resetPassToken']); 
-            $params = [
+            $requestUrl = $this->getUrlToResetPass($uniqueToken); 
+            $paramsEmail = [
                 'email' => $dataBody['email'],
                 'urlToResetPass' => $requestUrl,
             ];
             //var_dump($params);
-            $isSuccessReqEmail = $this->getControllerMain()->getEmailSender()->sendEmailResetPass($params);
+            $isSuccessReqEmail = $this->getControllerMain()->getEmailSender()->sendEmailResetPass($paramsEmail);
             $isSuccessReq = $isSuccessReqDb && $isSuccessReqEmail;
             
+            // log ici ?
+            $this->getControllerMain()->sendJsonResponse(['isSuccessRequest' => $isSuccessReq]);
+        }
+
+        public function sendUpdateMail() {
+
+            // prepare data
+            $dataRequest = $this->getControllerMain()->prepareAndValidateData();
+            $db = $dataRequest['dataBase'];
+            $userId = $dataRequest['userId'];
+            $currentEmail = $this->getModelUser()->getCurrentEmail($db, $userId);
+            
+            $isAnyError = false;//$this->getControllerMain()->getHandlerError()->verifySendResetPassToken($dataRequest);
+            $isSuccessReq = false;
+            if($isAnyError) {
+                $this->getControllerMain()->sendJsonResponse(['isSuccessRequest' => false]);
+                return;
+            }
+
+            $dataBody = $dataRequest['bodyData'];
+            //delete last token
+            $isLastTokenDeleted = $this->getModelUser()->deleteUpdateEmailToken($db, $dataRequest);
+
+            // unique token
+            $uniqueToken = $this->getModelUser()->insertUniqueTokenUpdateEmail($db);
+            if(empty($uniqueToken)) return $this->getControllerMain()->sendJsonResponse(['isSuccessRequest' => false]);
+
+            $dataRequest['bodyData']['token'] = $uniqueToken;
+            $dataRequest['bodyData']['currentEmail'] = $currentEmail;
+            $receiverEmail = $dataBody['newEmail'];
+            // insert token
+            $isSuccessReqDb = $this->getModelUser()->insertUpdateMailToken($db, $dataRequest);            
+            if(!$isSuccessReqDb) return $this->getControllerMain()->sendJsonResponse(['isSuccessRequest' => false]);
+
+            // email config
+            $requestUrl = $this->getUrlToUpdateMail($uniqueToken);
+            $paramsEmail = [
+                'email' => $receiverEmail,
+                'urlToResetPass' => $requestUrl,
+            ];
+            //var_dump($params);
+            $isSuccessReqEmail = $this->getControllerMain()->getEmailSender()->sendEmailUpdateEmail($paramsEmail);
+            $isSuccessReq = $isSuccessReqDb && $isSuccessReqEmail;
+            
+            // log ici ?
+            $this->getControllerMain()->sendJsonResponse(['isSuccessRequest' => $isSuccessReq]);
+        }
+
+        public function updatePasswordByToken() {
+            $requiredAuthFalse = false;
+            $dataRequest = $this->getControllerMain()->prepareAndValidateData($requiredAuthFalse);
+            $db = $dataRequest['dataBase'];
+
+            // j'ai commencé le verify
+            $isAnyError = false; //$this->getControllerMain()->getHandlerError()->verifyInsertTransaction($dataRequest['bodyData']);
+            $isSuccessReq = false;
+            if(!$isAnyError) $isSuccessReq = $this->getModelUser()->updatePasswordByToken($db, $dataRequest['bodyData']);
+            if($isSuccessReq) {
+                $this->getModelUser()->deleteResetPassTokenByToken($db, $dataRequest['bodyData']);
+            }
+            // log ici ?
+            $this->getControllerMain()->sendJsonResponse(['isSuccessRequest' => $isSuccessReq]);
+        }
+
+        public function updatePasswordByUserId() {
+            $dataRequest = $this->getControllerMain()->prepareAndValidateData();
+            $db = $dataRequest['dataBase'];
+
+            var_dump($dataRequest);
+
+            $isAnyError = false; //$this->getControllerMain()->getHandlerError()->verifyInsertTransaction($dataRequest['bodyData']);
+            $isSuccessReq = false;
+            if(!$isAnyError) $isSuccessReq = $this->getModelUser()->updatePasswordByUserId($db, $dataRequest);
 
             // log ici ?
             $this->getControllerMain()->sendJsonResponse(['isSuccessRequest' => $isSuccessReq]);
         }
 
-        public function fetchUpdatePassword() {
-            // attention quand l'utilisateur sera connecté il faudra changer le code, si j'utilsie la mm fonction
-            // pour que l'utiliseur change son mdp
-
-            // ou tout simplement check si l'utilisateur est co, et renvoyé le boolééen dans la fonction
-            $dataRequest = $this->getControllerMain()->prepareAndValidateData(false);
+        public function updateEmail() {
+            $dataRequest = $this->getControllerMain()->prepareAndValidateData();
             $db = $dataRequest['dataBase'];
-            //var_dump($dataRequest);
+
             $isAnyError = false; //$this->getControllerMain()->getHandlerError()->verifyInsertTransaction($dataRequest['bodyData']);
             $isSuccessReq = false;
-            if(!$isAnyError) $isSuccessReq = $this->getModelUser()->updatePassword($db, $dataRequest['bodyData']);
+            if(!$isAnyError) $isSuccessReq = $this->getModelUser()->updateEmail($db, $dataRequest);
             if($isSuccessReq) {
-                $this->getModelUser()->deleteResetPassTokenByToken($db, $dataRequest['bodyData']);
+                $this->getModelUser()->deleteUpdateEmailToken($db, $dataRequest);
             }
 
             // log ici ?
             $this->getControllerMain()->sendJsonResponse(['isSuccessRequest' => $isSuccessReq]);
-        }
-
-        
-
-        
+        }        
 
         public function getDataUserProfil() {
             $dataRequest = $this->getControllerMain()->prepareAndValidateData();
@@ -203,14 +283,26 @@
             $this->getControllerMain()->sendJsonResponse(['data' => $data]);
         }
 
-        public function updateDataUserProfil() {
+        public function getUserEmail() {
+            $dataRequest = $this->getControllerMain()->prepareAndValidateData();
+            $db = $dataRequest['dataBase'];
+            $userId = $dataRequest['userId'];
+
+            $isAnyError = false;//$this->getControllerMain()->getHandlerError()->verifyGetBiggestTrsByMonth($dataRequest);
+            $data = null;
+            if(!$isAnyError) $data = $this->getModelUser()->getCurrentEmail($db, $userId);
+            $this->getControllerMain()->sendJsonResponse(['data' => $data]);
+        }
+        
+
+        public function updateUserProfil() {
             $dataRequest = $this->getControllerMain()->prepareAndValidateData();
             $db = $dataRequest['dataBase'];
             //var_dump($dataRequest);
 
             $isAnyError = false;//$this->getControllerMain()->getHandlerError()->verifyGetBiggestTrsByMonth($dataRequest);
             $isSuccessReq = false;
-            if(!$isAnyError) $isSuccessReq = $this->getModelUser()->updateDataUserProfil($db, $dataRequest);
+            if(!$isAnyError) $isSuccessReq = $this->getModelUser()->updateUserProfil($db, $dataRequest);
             $this->getControllerMain()->sendJsonResponse(['isSuccessRequest' => $isSuccessReq]);
         }
 

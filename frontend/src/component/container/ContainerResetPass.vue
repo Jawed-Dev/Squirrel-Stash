@@ -1,6 +1,6 @@
 <template>
     <section class="bg-main-gradient flex flex-col items-center font-main-font w-[50%] justify-center shadow-black shadow-custom-main">
-        <h1 class="text-[25px] text-white">Mot de passe oublié</h1>
+        <h1 class="text-[25px] text-white">Changer votre mot de passe</h1>
         
         <form class="mt-[40px] w-[20vw]" @submit.prevent="handleSubmit()">
             <!-- Errors -->
@@ -9,7 +9,7 @@
                 <p v-if="computedEmptyInputs.length > 0"></p>
             </div>
             <div class="mt-[30px] w-">
-                <label class="text-white font-light text-[17px]" for="input-pass">Entrez votre mot de passe</label>
+                <label class="text-white font-light text-[17px]" for="input-pass">Nouveau mot de passe</label>
                 <InputBase 
                     unicode="🔒"
                     id="input-pass" 
@@ -20,7 +20,7 @@
                 />
             </div>
             <div class="mt-[30px]">
-                <label class="text-white font-light text-[17px]" for="input-confirm-pass">Confirmez votre mot de passe</label>
+                <label class="text-white font-light text-[17px]" for="input-confirm-pass">Confirmer le mot de passe</label>
                 <InputBase 
                     unicode="🔒"
                     id="input-confirm-pass" 
@@ -48,7 +48,7 @@
     import { useRouter, useRoute } from 'vue-router';
     import InputBase from '@/component/input/InputBase.vue';
     import ButtonComponent from '@/component/button/ButtonBasic.vue';
-    import { updatePassword } from '@/composable/useBackendActionData';
+    import { updatePasswordByToken } from '@/composable/useBackendActionData';
     import { useErrorFormat, verifyResetPass } from '@/error/useHandleError';
     import { useMandatoryEmptyInputs } from '@/error/useMandatoryEmptyInputs';
 
@@ -71,7 +71,7 @@
     // life cycle, functions
     async function handleSubmit() {
         if(isAnyErrorActive()) return;
-        const isSuccessRequest = await updatePassword({
+        const isSuccessRequest = await updatePasswordByToken({
             resetPassToken: getTokenResetPass(),
             password: password.value
         });

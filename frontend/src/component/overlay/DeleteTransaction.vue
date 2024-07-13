@@ -1,10 +1,10 @@
 <template>
     <TransitionOpacity :durationIn="'duration-300'" :durationOut="'duration-200'">
-        <div v-show="isMenuActive" class="fixed inset-0 bg-black bg-opacity-80 z-30"></div>
+        <div v-if="isMenuActive" class="fixed inset-0 bg-black bg-opacity-80 z-30"></div>
     </TransitionOpacity>
 
     <TransitionOpacity :durationIn="'duration-300'" :durationOut="'duration-200'">
-        <div v-show="isMenuActive" :class="`bg-main-gradient flex flex-col fixed 
+        <div v-if="isMenuActive" :class="`bg-main-gradient flex flex-col fixed 
         shadow-black shadow-custom-main rounded-md top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 trigger-menu-delete
         z-30 text-white ${width}`">
     

@@ -4,7 +4,7 @@
         <InputBase 
         unicode="🔍"
         v-model="searchNote" 
-        width="w-fit"
+        width="w-full"
         extraClass="text-[16px]" 
         placeholder="Ex : Cadeau pour Maman"
         id="input-note"

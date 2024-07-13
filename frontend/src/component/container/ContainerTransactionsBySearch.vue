@@ -13,7 +13,7 @@
                         />
                     </div>
                 </div>
-                <div class="flex py-2 pl-3 mt-3 bg-main-bg">
+                <div class="flex py-2 pl-3 mt-3  bg-gradient-x-blue shadow-black shadow-custom-main">
                     <div class="ml-[2.5vw] pl-[15px] w-[20%]">
                         <p @click="toggleOrder(ORDER_STATE.CATEGORY)" 
                         :class="`${colorForOrderSelected(ORDER_STATE.CATEGORY)} w-fit cursor-pointer`" 
@@ -27,7 +27,7 @@
                         </p>
                     </div>
                     <div class="w-[20%]">
-                        <p @click="toggleOrder(ORDER_STATE.DATE)" :class="`${colorForOrderSelected(ORDER_STATE.DATE)} w-fit cursor-pointer`"  
+                        <p @click="toggleOrder(ORDER_STATE.DATE)" :class="` ${colorForOrderSelected(ORDER_STATE.DATE)} w-fit cursor-pointer`"  
                         v-html="'Date' + renderStateOrder(ORDER_STATE.DATE)"></p>
                     </div>
                     <div class="w-[15%]">
@@ -141,7 +141,7 @@
 
     const colorForOrderSelected = (index) => {
         const color = computed(() => {
-            return (getCurrentIndexOrder() === index) ? 'text-main-blue' : '';
+            return (getCurrentIndexOrder() === index) ? 'text-main-bg' : '';
         });
         return color.value;
     };
