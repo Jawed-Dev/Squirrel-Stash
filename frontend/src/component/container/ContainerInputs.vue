@@ -8,13 +8,14 @@
                     <InputBase 
                         v-model="inputDateVal" 
                         width="w-full"
-                        extraClass="text-[16px] border-hidden" 
+                        extraClass="text-[16px]" 
                         placeholder="Date"
                         id="input-date"
                         type="date"
                         :borderHidden="true"
                     />
                 </div>
+                
             </div>
 
             <div class="flex flex-col items-center mt-[10px] w-full">

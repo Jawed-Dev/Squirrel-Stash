@@ -17,7 +17,7 @@
                 <div :key="index" @click="handleClickHeader(icon.page)" 
                     :class="`flex relative ${classTranslateY} py-[6px] cursor-pointer ${bordergetCurrentPage(icon.page)}`">
                     <component :is="icon.Component" :svg="svgConfig(icon.page)" class="w-header-width "/>
-                    <TransitionOpacity :durationIn="'duration-200'" :durationOut="'duration-0'">
+                    <TransitionOpacity :durationIn="'duration-300'" :durationOut="'duration-0'">
                         <router-link :to="icon.link" v-show="isHovered && isTextIconsVisible" 
                         class="absolute w-[150px] right-[0px] top-[50%] transform -translate-y-1/2 pl-3 flex 
                         items-center text-[14px] text-white">{{ icon.text }}</router-link>
@@ -26,12 +26,18 @@
             </div>
         </div>
     </nav>
+
+    <TransitionOpacity durationIn="duration-300" durationOut="duration-200" >
+        <OverlayPrivacy v-if="isOverlayActive.privacy" v-model="isOverlayActive.privacy" width="w-[50%]" />
+        <OverlayUserRules v-if="isOverlayActive.userRules" v-model="isOverlayActive.userRules" width="w-[50%]" />
+        <OverlayContactUs v-if="isOverlayActive.contactUs" v-model="isOverlayActive.contactUs" width="w-[50%]" />
+    </TransitionOpacity>
 </template>
 
 
 <script setup>
 
-    import {ref, onMounted, onUnmounted, computed, defineAsyncComponent} from 'vue';
+    import {ref, onMounted, onUnmounted, computed, defineAsyncComponent, reactive} from 'vue';
     import { useRouter } from 'vue-router';
 
     // import async icons & dynamic
@@ -41,8 +47,19 @@
     const IconBell = defineAsyncComponent(() => import('@/component/svgs/IconBell.vue'));
     const IconUser = defineAsyncComponent(() => import('@/component/svgs/IconUser.vue'));
     const IconLogOut = defineAsyncComponent(() => import('@/component/svgs/IconLogOut.vue'));
+    const IconPrivacy = defineAsyncComponent(() => import('@/component/svgs/IconPrivacy.vue'));
+    const IconUserRules = defineAsyncComponent(() => import('@/component/svgs/IconUserRules.vue'));
+    const IconSupport = defineAsyncComponent(() => import('@/component/svgs/IconSupport.vue'));
+    const IconInfo = defineAsyncComponent(() => import('@/component/svgs/IconInfo.vue'));
+
+    const OverlayPrivacy = defineAsyncComponent(() => import('@/component/overlay/OverlayPrivacy.vue'));
+    const OverlayUserRules = defineAsyncComponent(() => import('@/component/overlay/OverlayUserRules.vue'));
+    const OverlayContactUs = defineAsyncComponent(() => import('@/component/overlay/OverlayContactUs.vue'));
+    import TransitionOpacity from '@/component/transition/TransitionOpacity.vue';  
+
     import { classTransitionHover } from '@/composable/useClassTransitionHover';
-    import TransitionOpacity from '@/component/transition/TransitionOpacity.vue';
+    //import OverlayPrivacy from '@/component/overlay/OverlayPrivacy.vue';
+    //import OverlayUserRules from '@/component/overlay/OverlayUserRules.vue';
 
 
     // variables, props, ...
@@ -54,9 +71,10 @@
     { Component: IconUser, link:'/utilisateur', page: 'utilisateur', text: 'Utilisateur' },
     { Component: IconGraph, link:'',page: '', text: 'Graphiques' },
     
-    { Component: IconBell, link:'',page: '', text: 'Confidentialité' },
-    { Component: IconBell, link:'',page: '', text: 'Support et aide' },
-    { Component: IconBell, link:'',page: '', text: 'Version 1.0' },
+    { Component: IconPrivacy, link:'',page: 'confidentialité', text: 'Confidentialité' },
+    { Component: IconUserRules, link:'',page: 'règles', text: "Règles d'utilisateur" },
+    { Component: IconSupport, link:'',page: 'contact', text: 'Support et aide' },
+    { Component: IconInfo, link:'',page: '', text: 'Version 1.0' },
     { Component: IconLogOut, link:'',page: 'disconnect', text: 'Déconnexion' },
     ];
 
@@ -67,6 +85,11 @@
     // conditions / bool
     const isHovered = ref(false);
     const isTextIconsVisible = ref(false);
+    const isOverlayActive = reactive({
+        privacy: false,
+        userRules: false,
+        contactUs: false
+    });
 
     //
     const router = useRouter();
@@ -132,6 +155,18 @@
             }
             case 'utilisateur' : {
                 router.push('/utilisateur');
+                break;
+            }
+            case 'confidentialité' : {
+                isOverlayActive.privacy = true;
+                break;
+            }
+            case 'règles' : {
+                isOverlayActive.userRules = true;
+                break;
+            }
+            case 'contact' : {
+                isOverlayActive.contactUs = true;
                 break;
             }
             case 'disconnect' : {

@@ -17,7 +17,6 @@
 
         </div>
     </TransitionOpacity>
-
 </template>
 
     

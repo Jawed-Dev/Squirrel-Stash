@@ -174,6 +174,13 @@
                         getControllerMain()->getControllerUser()->updateUserProfil();
                         break;
                     }
+
+                    case 'sendEmailToSupport' : {
+                        getControllerMain()->getControllerUser()->sendEmailToSupport();
+                        break;
+                    }
+
+                    
                     
                 }
             }

@@ -33,6 +33,7 @@
         function updateUserProfil();
         function sendUpdateMail();
         function updateEmail();
+        function sendEmailToSupport();
         
         // Prepare pages
         function authorizePageLogin();
@@ -223,6 +224,31 @@
             $isSuccessReqEmail = $this->getControllerMain()->getEmailSender()->sendEmailUpdateEmail($paramsEmail);
             $isSuccessReq = $isSuccessReqDb && $isSuccessReqEmail;
             
+            // log ici ?
+            $this->getControllerMain()->sendJsonResponse(['isSuccessRequest' => $isSuccessReq]);
+        }
+
+        public function sendEmailToSupport() {
+            $dataRequest = $this->getControllerMain()->prepareAndValidateData();
+            $db = $dataRequest['dataBase'];
+            $dataBody = $dataRequest['bodyData'];
+
+            $isAnyError = false;//$this->getControllerMain()->getHandlerError()->verifySendResetPassToken($dataRequest);
+            $isSuccessReq = false;
+            if($isAnyError) {
+                $this->getControllerMain()->sendJsonResponse(['isSuccessRequest' => false]);
+                return;
+            }
+
+            $paramsEmail = [
+                'firstName' => $dataBody['firstName'],
+                'lastName' => $dataBody['lastName'],
+                'emailSender' => $dataBody['emailSender'],
+                'message' => $dataBody['message'],
+            ];
+            $isSuccessReqEmail = $this->getControllerMain()->getEmailSender()->sendEmailToSupport($paramsEmail);
+            $isSuccessReq = $isSuccessReqEmail;
+
             // log ici ?
             $this->getControllerMain()->sendJsonResponse(['isSuccessRequest' => $isSuccessReq]);
         }

@@ -5,7 +5,6 @@
             </div>
             <input
                 @input="onInput" 
-                
                 :class="`${props.extraClass} bg-transparent pl-1 focus:outline-none w-full ${width}`"
                 :value="modelValue"
                 :type="type"
@@ -17,26 +16,28 @@
 
 <script setup>
     import { computed } from 'vue';
+
     // variables, props, ...
-    const model = defineModel()
-
     
-
     const props = defineProps({
         extraClass: { default:'' },
-        modelValue: { default:''},
+        id: {default:''},
         type: {default: 'text'},
         placeholder: {default: ''},
         width: {default:''},
-        id: {default:''},
+
+        modelValue: { default:''},
+        
+        borderHidden: {default: false},
+        isTextArea: {default: false},
         unicode: {default:''},
-        borderHidden: {default: false}
     });
+
+    const model = defineModel();
    
     // life cycle functions
     function onInput(event) {
         model.value = event.target.value;
-        //console.log(event.target.value, typeof(event.target.value));
     }
 
     const border = computed(() => {

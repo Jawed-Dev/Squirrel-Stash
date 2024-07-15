@@ -1,13 +1,6 @@
-// src/router/index.js
 import { createRouter, createWebHistory } from 'vue-router';
-// import PageLogin from '@/page/PageLogin.vue'; 
-// import PageCreateAcc from '@/page/PageCreateAcc.vue'; 
-// import PageDashboard from '@/page/PageDashboard.vue'; 
-// import PageHistoryTransactions from "@/page/PageHistoryTransactions.vue";
-// import PageTemporary from '@/page/PageTemporary.vue';
-// import PageForgotPass from '@/page/PageForgotPass.vue';
-// import PageResetPass from '@/page/PageResetPass.vue';
-// import PageUser from '@/page/PageUser.vue';
+import { ref } from 'vue';
+const isConsentCookiesAllowed = ref(true);
 
 const PageLogin = () => import('@/page/PageLogin.vue');
 const PageCreateAcc = () => import('@/page/PageCreateAcc.vue');
@@ -18,8 +11,8 @@ const PageForgotPass = () => import('@/page/PageForgotPass.vue');
 const PageResetPass = () => import('@/page/PageResetPass.vue');
 const PageUser = () => import('@/page/PageUser.vue');
 
-import useConfigFetchGetPage from "@/composable/useConfigFetchGetPage";
-import { getLStorageAuthToken } from "@/composable/useLocalStorage";
+import  useConfigFetchGetPage from "@/composable/useConfigFetchGetPage";
+import { getLStorageAuthToken, getLStorageCookieConsent, setLStorageCookieConsent } from "@/composable/useLocalStorage";
 import { isValidResetPassToken } from "@/composable/useBackendGetData";
 import { updateEmail } from './composable/useBackendActionData';
 
@@ -47,7 +40,6 @@ router.beforeEach(async (to, from, next) => {
       next('/connexion');
       return;
     } 
-
     const localToken = getLStorageAuthToken();
 
     const dataPage = await useConfigFetchGetPage(currentPage, localToken);

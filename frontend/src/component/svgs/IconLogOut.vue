@@ -1,7 +1,14 @@
 <template>
-	<svg :width="svg.width" :height="svg.height" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-		<path d="M18 8L22 12M22 12L18 16M22 12H9M15 4.20404C13.7252 3.43827 12.2452 3 10.6667 3C5.8802 3 2 7.02944 2 12C2 16.9706 5.8802 21 10.6667 21C12.2452 21 13.7252 20.5617 15 19.796" 
-		:stroke="svg.fill" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+	<svg xmlns="http://www.w3.org/2000/svg" :width="svg.width" :height="svg.height" viewBox="0 0 24 24" fill="none" :stroke="svg.fill" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-plug-connected-x">
+		<path stroke="none" d="M0 0h24v24H0z" fill="none" />
+		<path d="M20 16l-4 4" />
+		<path d="M7 12l5 5l-1.5 1.5a3.536 3.536 0 1 1 -5 -5l1.5 -1.5z" />
+		<path d="M17 12l-5 -5l1.5 -1.5a3.536 3.536 0 1 1 5 5l-1.5 1.5z" />
+		<path d="M3 21l2.5 -2.5" />
+		<path d="M18.5 5.5l2.5 -2.5" />
+		<path d="M10 11l-2 2" />
+		<path d="M13 14l-2 2" />
+		<path d="M16 16l4 4" />
 	</svg>
 </template>
 

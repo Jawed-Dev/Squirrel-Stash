@@ -220,6 +220,23 @@ export async function sendUpdateMail(params) {
     return response;
 }
 
+export async function sendEmailToSupport(params) {
+    const localToken = getLStorageAuthToken();
+    const body = {
+        firstName: String(params.firstName),
+        lastName: String(params.lastName),
+        emailSender: String(params.emailSender),
+        message: String(params.message),
+    };
+    const response = await useConfigFetchActionData ({
+        request: 'sendEmailToSupport', 
+        method: 'POST', 
+        dataBody: body, 
+        token: localToken
+    });
+    return response;
+}
+
 export async function updateEmail(token) {
     authRequired();
     const localToken = getLStorageAuthToken();

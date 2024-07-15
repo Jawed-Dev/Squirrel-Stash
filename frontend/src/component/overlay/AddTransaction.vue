@@ -53,7 +53,7 @@
     import useEscapeKey from '@/composable/useEscapeKey';
 
     const ContainerInputs = defineAsyncComponent(() => import('@/component/container/ContainerInputs.vue'));
-    const ContainerSelectCategories = defineAsyncComponent(() => import('../container/ContainerSelectCategories.vue'));
+    const ContainerSelectCategories = defineAsyncComponent(() => import('@/component/container/ContainerSelectCategories.vue'));
 
     // import ContainerSelectCategories from '../container/ContainerSelectCategories.vue';
     // import ContainerInputs from '@/component/container/ContainerInputs.vue';
