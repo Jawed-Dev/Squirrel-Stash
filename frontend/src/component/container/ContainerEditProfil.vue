@@ -5,8 +5,12 @@
         font-light flex justify-start text-[18px] text-white">Édition de profil</h2>
 
         <div class="gradient-border overflow-hidden">
-
+            
             <form class="mt-24 flex flex-col" @submit.prevent="handleSubmit"> 
+                <!-- Errors -->
+                <div class="relative pb-5">
+                    <p class="text-sm font-light absolute text-red-300">{{ textError }}</p>
+                </div>
                 <div class="pl-10 pr-12">
                     <div class="flex gap-24">
                         <div class="flex flex-col justify-center w-[20%]">
@@ -14,10 +18,14 @@
                             <InputBase 
                                 unicode="🔒"
                                 id="input-firstname" 
-                                v-model="inputsProfil.firstName" 
+                                v-model="inputsProfil.firstName"
+                                v-model:stateError="errorInputs.firstName"
                                 extraClass="" 
                                 :placeholder="`test`"
                                 type="text"
+                                validFormat="firstName"
+                                :hideAnimation="true"
+
                             />
                         </div>
 
@@ -27,9 +35,12 @@
                                 unicode="🔒"
                                 id="input-lastname" 
                                 v-model="inputsProfil.lastName" 
+                                v-model:stateError="errorInputs.lastName"
                                 extraClass="" 
                                 placeholder="Mot de passe"
                                 type="text"
+                                validFormat="lastName"
+                                :hideAnimation="true"
                             />
                         </div>
 
@@ -39,9 +50,12 @@
                                 unicode="🔒"
                                 id="input-birthday" 
                                 v-model="inputsProfil.birthday" 
+                                v-model:stateError="errorInputs.birthday"
                                 extraClass="" 
                                 placeholder="Mot de passe"
                                 type="date"
+                                validFormat="date"
+                                :hideAnimation="true"
                             />
                         </div>
                     </div>
@@ -54,9 +68,12 @@
                                 unicode="🔒"
                                 id="input-gender" 
                                 v-model="inputsProfil.gender" 
+                                v-model:stateError="errorInputs.gender"
                                 extraClass="" 
                                 placeholder="Non défini"
                                 type="text"
+                                validFormat="gender"
+                                :hideAnimation="true"
                             />
                         </div>
 
@@ -88,12 +105,13 @@
 
 
 <script setup>
-    import { reactive, onMounted, computed } from 'vue';
+    import { ref, reactive, onMounted, computed } from 'vue';
     import ContainerTextUnderline from '@/component/container/ContainerTextUnderline.vue'; 
     import InputBase from '@/component/input/InputBase.vue';
     import { storeProfilUser } from '@/storePinia/useStoreDashboard';
     import { updateStoreUserProfil } from '@/storePinia/useUpdateStoreByBackend';
     import { updateUserProfil } from '@/composable/useBackendActionData';
+    import { isAnyMandatInputEmpty, isAnyInputError, TYPE_SUBMIT_ERROR } from '@/error/useHandleError';
 
     // Store Pinia
     const dataProfilUser = storeProfilUser();
@@ -106,6 +124,21 @@
         roleLevel: ''
     });
 
+    const errorInputs = reactive({
+        firstName: false,
+        lastName: false,
+        birthday: false,
+        gender: false
+    });
+
+    const submitError = ref(null);
+
+    // life cycle, functions
+
+    const textError = computed(() => {
+        if(submitError.value === TYPE_SUBMIT_ERROR.MANDATORY_EMPTY_INPUTS) return "Veuillez remplir tous les champs obligatoires.";
+        else if(submitError.value === TYPE_SUBMIT_ERROR.NOT_SUCCESS_REQUEST) return "La requête a échoué.";
+    });
 
     onMounted(async () => {
         await updateStoreUserProfil();
@@ -117,14 +150,31 @@
     });
 
     async function handleSubmit() {
-        await updateUserProfil({
+
+        const allErrorsInputs = getStatesErrorInputs();
+        const allMandatoryValInputs = getValuesMandantInputs();
+        if(isAnyMandatInputEmpty(allMandatoryValInputs)) {
+            submitError.value = TYPE_SUBMIT_ERROR.MANDATORY_EMPTY_INPUTS;
+            return;
+        }
+        else if(isAnyInputError(allErrorsInputs)) {
+            submitError.value = TYPE_SUBMIT_ERROR.INPUTS_FORMAT_ERRORS;
+            return;
+        }
+        const response = await await updateUserProfil({
             firstName: inputsProfil.firstName,
             lastName: inputsProfil.lastName,
             birthday: inputsProfil.birthday,
             gender: inputsProfil.gender,
         });
+        const isSuccessRequest = response?.isSuccessRequest;
+        if(!isSuccessRequest) {
+            submitError.value = TYPE_SUBMIT_ERROR.NOT_SUCCESS_REQUEST;
+            return;
+        }
         await updateStoreUserProfil();
         updateEditProfil();
+        submitError.value = null;
     }
 
     function updateEditProfil() {
@@ -133,5 +183,20 @@
         inputsProfil.birthday = (dataProfilUser.data.birthday && dataProfilUser.data.birthday !== '0000-00-00') ? dataProfilUser.data.birthday : '';
         inputsProfil.gender = dataProfilUser.data.gender;
         inputsProfil.roleLevel = dataProfilUser.data.roleLevel;
+    }
+
+    function getStatesErrorInputs() {
+        return {
+            firstName: errorInputs.firstName,
+            lastName: errorInputs.lastName,
+            birthday: errorInputs.birthday,
+            gender: errorInputs.birthday,
+        }
+    }
+    function getValuesMandantInputs() {
+        return {
+            firstName: inputsProfil.firstName,
+            lastName: inputsProfil.lastName,
+        }
     }
 </script>

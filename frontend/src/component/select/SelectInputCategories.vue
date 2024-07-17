@@ -32,7 +32,7 @@
     const svgReccurings = svgConfig.setColorDynamic(svgConfig.mediumSmaller, 'bg-gradient-vanusa');  
 
     const nameIcon = computed(() => {
-        return (props.listSelect[currentCategory.value].nameIcon) ? props.listSelect[currentCategory.value].nameIcon : '';
+        return (props.listSelect[currentCategory.value].text) ? props.listSelect[currentCategory.value].text : '';
     });
 
     // life cycle, functions ...

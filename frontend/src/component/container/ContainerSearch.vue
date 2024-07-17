@@ -7,15 +7,17 @@
             font-light flex justify-start text-[18px] text-white">Paramètres de recherche</h2>
 
             <div class="gradient-border overflow-hidden">
-                <form class="py-3 flex flex-col mt-12" @submit.prevent="handleSubmit()">
-                    <div class="flex justify-center items-center gap-[10vw] mt-[20px]">
+                <form class="py-3 flex flex-col items-center mt-12 w-full" @submit.prevent="handleSubmit()">
+                 
+                    <div class="flex justify-center gap-40 mt-5 w-full">
                         <ContainerAmountInputs 
                             v-model:searchAmountMin="searchAmountMin" 
                             v-model:searchAmountMax="searchAmountMax" 
                         />
                         <ContainerNoteInput v-model="searchNote" />
                     </div>
-                    <div class="flex justify-center items-center gap-[10vw] mt-[40px] ">
+
+                    <div class="flex justify-center gap-40 mt-10 w-full">
                         <ContainerDateInputs 
                             v-model:checkboxDateMin="checkboxDateMin" 
                             v-model:checkboxDateMax="checkboxDateMax" 
@@ -28,11 +30,11 @@
                             v-model:searchType="searchType" 
                         />
                     </div>
+            
+                   
                     <div class="w-full flex justify-center">
-                        <div class="mt-[40px] shadow-black shadow-custom-main w-[25%]">
-                            <button class=
-                                "text-[17px] w-full rounded-sm py-2 bg-gradient-blue 
-                                rounded-br-[3px] font-light">Rechercher
+                        <div class=" shadow-black shadow-custom-main w-1/5 mt-10">
+                            <button class= "w-full rounded-sm py-2 bg-gradient-blue rounded-br-[3px] font-light">Rechercher
                             </button>
                         </div>
                     </div>
@@ -53,7 +55,6 @@
     import ContainerNoteInput from '@/component/container/ContainerNoteInput.vue';
     import ContainerDateInputs from '@/component/container/ContainerDateInputs.vue';
     import ContainerCategoryInput from '@/component/container/ContainerCategoryInput.vue';
-    import UseIconLoader from '@/composable/useIconLoader.vue';
     import { svgConfig } from '@/svg/svgConfig';
 
     const iconConfig = svgConfig.setColorDynamic(svgConfig.largeIcon, 'bg-gradient-blue');   

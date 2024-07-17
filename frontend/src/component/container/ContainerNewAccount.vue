@@ -1,34 +1,36 @@
 <template>
     <section class="bg-main-gradient flex flex-col items-center font-main-font w-[50%] justify-center shadow-black shadow-custom-main">
         <h1 class="text-white text-[25px]">Inscription</h1>
-
-        
-        <form class="mt-[40px]" @submit.prevent="handleSubmit()">
-            
+        <form class="w-1/2 mt-[40px]" @submit.prevent="handleSubmit()">
+            <!-- Errors -->
             <div class="relative">
-                <p class="absolute text-red-400">{{ computedFormatErrors }}</p>
-                <p v-if="computedEmptyInputs.length > 0"></p>
+                <p class="text-sm font-light absolute text-red-300">{{ textError }}</p>
             </div>
+
             <div class="flex justify-center w-full gap-5 mt-[30px]">
-                <div class="w-[50%]">
+                <div>
                     <label class="text-white font-light" for="input-fname-crt-acc">Votre prénom</label>
                     <InputBase 
                         unicode="🛂"
                         v-model="firstName"
+                        v-model:stateError="errorInput.firstName"
                         extraClass=""
                         id="input-fname-crt-acc"
-                        placeholder="Entrez votre prénom"
+                        placeholder="Prénom"
+                        validFormat="firstName"
                     />
                 </div>
 
-                <div class="w-[50%]">
+                <div>
                     <label class="text-white font-light" for="input-lname-crt-acc">Votre nom</label>
                     <InputBase 
                         unicode="🛂"
                         v-model="lastName"
+                        v-model:stateError="errorInput.lastName"
                         extraClass=""
                         id="input-lname-crt-acc"
-                        placeholder="Entrez votre nom"
+                        placeholder="Nom"
+                        validFormat="lastName"
                     />
                 </div>
     
@@ -39,11 +41,14 @@
                 <label class="text-white font-light" for="input-email-crt-acc">Votre email</label>
                 <InputBase 
                     unicode="📧"
-                    v-model="email"
+                    v-model="email" 
+                    v-model:stateError="errorInput.email"
                     extraClass=""
                     id="input-email-crt-acc"
                     type="email"
-                    placeholder="Entrez votre email"
+                    placeholder="exemple.domaine.com"
+                    validFormat="email"
+                    
                 />
             </div>
 
@@ -52,10 +57,12 @@
                 <InputBase 
                     unicode="🔒"
                     v-model="password"
+                    v-model:stateError="errorInput.password"
                     extraClass=""
                     id="input-pass-crt-acc"
-                    placeholder="Entrez votre mot de passe"
+                    placeholder="Mot de passe"
                     type="password"
+                    validFormat="password"
                 />
             </div>
 
@@ -64,10 +71,12 @@
                 <InputBase 
                     unicode="🔒"
                     v-model="confirmPassword"
+                    v-model:stateError="errorInput.confirmPassword"
                     extraClass=""
                     id="input-cpass-crt-acc"
-                    placeholder="Entrez votre mot de passe"
+                    placeholder="Mot de passe"
                     type="password"
+                    validFormat="password"
                 />
             </div>
 
@@ -94,16 +103,14 @@
 
 
 <script setup>
-    import { ref, computed } from 'vue';
+    import { ref, computed, reactive } from 'vue';
     import { useRouter } from 'vue-router';
     import InputBase from '@/component/input/InputBase.vue';
     import ButtonComponent from '@/component/button/ButtonBasic.vue';
     import { createAccount } from '@/composable/useBackendActionData';
-    import { useErrorFormat, verifyCreateAccount } from '@/error/useHandleError';
-    import { useMandatoryEmptyInputs } from '@/error/useMandatoryEmptyInputs';
     import InputCheckbox from '../input/InputCheckbox.vue';
+    import { isAnyMandatInputEmpty, isAnyInputError, TYPE_SUBMIT_ERROR } from '@/error/useHandleError';
     
-
     // props, variables ...
     const router = useRouter();
     const firstName = ref('');
@@ -113,28 +120,38 @@
     const confirmPassword = ref('');
     const confirmCheckbox = ref(false);
 
-    // Errors 
-    const { computedEmptyInputs, stateEmptyInputs } = useMandatoryEmptyInputs([
-        { name: 'firstName', ref: firstName },
-        { name: 'lastName', ref: lastName },
-        { name: 'email', ref: email },
-        { name: 'password', ref: password },
-        { name: 'confirmPassword', ref: confirmPassword },
-        { name: 'confirmCheckbox', ref: confirmCheckbox }
-    ]);
-
-    const { stateFormatErrors, computedFormatErrors } = useErrorFormat(verifyCreateAccount, {
-        firstName: {name: 'firstName', ref: firstName}, 
-        lastName: {name: 'lastName', ref: lastName},
-        email: {name: 'email', ref: email}, 
-        password: {name: 'password', ref: password},
-        confirmPassword: {name: 'confirmPassword', ref: confirmPassword}, 
-        confirmCheckbox: {name: 'confirmCheckbox', ref: confirmCheckbox}
-    });
+    const errorInput = reactive({
+        firstName: false,
+        lastName: false,
+        email: false,
+        password: false,
+        confirmPassword: false
+    }); 
+    const submitError = ref(null);
 
     // life cycle / functions
+    const textError = computed(() => {
+        if(submitError.value === TYPE_SUBMIT_ERROR.MANDATORY_EMPTY_INPUTS) return "Veuillez remplir tous les champs obligatoires.";
+        else if(submitError.value === TYPE_SUBMIT_ERROR.NOT_SUCCESS_REQUEST) return "La requête a échoué.";
+        else if(submitError.value === TYPE_SUBMIT_ERROR.CONFIRM_PASS_ERROR) return "Les mots de passe ne sont pas identiques.";
+    });
+
     async function handleSubmit() {
-        if(isAnyErrorActive()) return;
+        const allErrorsInputs = getStatesErrorInputs();
+        const allMandatoryValInputs = getValuesMandantInputs();
+        if(isAnyMandatInputEmpty(allMandatoryValInputs)) {
+            submitError.value = TYPE_SUBMIT_ERROR.MANDATORY_EMPTY_INPUTS;
+            return;
+        }
+        else if(isAnyInputError(allErrorsInputs)) {
+            submitError.value = TYPE_SUBMIT_ERROR.INPUTS_FORMAT_ERRORS;
+            return;
+        }
+        else if(isPasswordsAreDifferent()) {
+            submitError.value = TYPE_SUBMIT_ERROR.CONFIRM_PASS_ERROR;
+            resetInputsPass();
+            return;
+        }
         const requestFetched = await createAccount({
             email: email.value,
             password: password.value,
@@ -143,24 +160,46 @@
             lastName: lastName.value
         });
         const isSuccessRequest = requestFetched?.isSuccessRequest;
-        if(isSuccessRequest) {
-            resetInputs();
-            router.push('/connexion');
+        if(!isSuccessRequest) {
+            submitError.value = TYPE_SUBMIT_ERROR.NOT_SUCCESS_REQUEST;
+            resetInputsPass();
+            return;
+        }
+        //resetInputs();
+        submitError.value = null;
+        router.push('/connexion');
+    }
+
+    function resetInputsPass() {
+        password.value = '';
+        confirmPassword.value = '';
+    }
+
+    function getStatesErrorInputs() {
+        return {
+            email: errorInput.email,
+            password: errorInput.password,
+            confirmPassword: errorInput.confirmPassword,
+            firstName: errorInput.firstName,
+            lastName: errorInput.lastName,
+        }
+    }
+ 
+    function getValuesMandantInputs() {
+        return {
+            email: email.value,
+            password: password.value,
+            confirmPassword: confirmPassword.value,
+            firstName: firstName.value,
+            lastName: lastName.value,
+            confirmCheckbox: confirmCheckbox.value
         }
     }
 
-    function resetInputs() {
-        email.value = '';
-        password.value = '';
-        confirmPassword.value = '';
-        lastName.value = '';
-        firstName.value = '';
-        confirmCheckbox.value = false;
+    function isPasswordsAreDifferent() {
+        if(password.value.length <= 0 || confirmPassword.value.length <= 0) return false;
+        return password.value !== confirmPassword.value;
     }
 
-    function isAnyErrorActive() {
-        console.log(stateEmptyInputs.value, stateEmptyInputs.value.length);
-        return stateFormatErrors.value.length > 0 || stateEmptyInputs.value.length > 0;
-    }
     
 </script>

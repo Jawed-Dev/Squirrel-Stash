@@ -1,5 +1,5 @@
 import { getAvailableYear } from "@/composable/useGetDate";
-import { listCategories, listRecurings } from "@/svg/listTransactionSvgs";
+import { listPurchases, listRecurings } from "@/svg/listTransactionSvgs";
 
 
 export function isValidMail(email) {
@@ -22,6 +22,13 @@ export function isValidPassword(password) {
     return true;
 }
 
+
+
+export function isValidGender(gender) {
+    const genderLowerCase = gender.toLowerCase();
+    return genderLowerCase === 'homme' || genderLowerCase === 'femme' || genderLowerCase === 'autre';
+}
+
 export function isValidFirstName(firstName) {
     const regex = /^[A-Za-zàâçéèêëîïôûùüÿñæœ' -]{2,50}$/;
     return regex.test(firstName);
@@ -33,31 +40,29 @@ export function isValidLastName(lastName) {
 }
 
 export function isValidInputAmount(amount) {
+    console.log('amount',amount);
     const regex = /^\d+(,\d+)?$/;
-    return regex.test(amount) && amount.length <= 10;
+    return regex.test(amount) && amount <= 1000000000;
 }
 
 export function isValidInputNote(note) {
     return note.length <= 30;
 }   
 
-export function isValidCategory(category, transactionType) {
-    if(transactionType ==='purchase') {
-        return listCategories.some(item => item.nameIcon.toLowerCase() === category.toLowerCase());
-    }
-    else {
-        return listRecurings.some(item => item.nameIcon.toLowerCase() === category.toLowerCase());
-    }
+export function isValidCategory(category) {
+    console.log('errorCatego', category);
+    const isPurchase = listPurchases.some(item => item.text.toLowerCase() === category.toLowerCase());
+    const isRecurring = listRecurings.some(item => item.text.toLowerCase() === category.toLowerCase());
+    return (isPurchase || isRecurring);
 }
 
 export function isValidTrsType(transactionType) {
-    return transactionType ==='purchase' || transactionType ==='recurring';
+    return transactionType === 'purchase' || transactionType === 'recurring';
 }
 
 export function isValidInputDate(date) {
     const regex = /^([0-9]{4})-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$/;
     const year = Number(extractYearFromDate(date));
-    console.log('dateyear',year);
     if(!isValidYear(year)) return false;
     return regex.test(date);
 }

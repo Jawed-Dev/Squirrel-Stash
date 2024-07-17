@@ -5,18 +5,20 @@
         <form class="mt-[40px] w-[20vw]" @submit.prevent="handleSubmit()">
             <!-- Errors -->
             <div class="relative">
-                <p class="absolute text-red-400">{{ computedFormatErrors }}</p>
-                <p v-if="computedEmptyInputs.length > 0"></p>
+                <p class="text-sm font-light pt-3 absolute text-red-300">{{ textError }}</p>
             </div>
+
             <div class="mt-[30px] w-">
                 <label class="text-white font-light text-[17px]" for="input-pass">Nouveau mot de passe</label>
                 <InputBase 
                     unicode="🔒"
                     id="input-pass" 
                     v-model="password" 
+                    v-model:stateError="errorInput.password"
                     extraClass="" 
                     placeholder="Mot de passe"
                     type="password"
+                    validFormat="password"
                 />
             </div>
             <div class="mt-[30px]">
@@ -24,10 +26,11 @@
                 <InputBase 
                     unicode="🔒"
                     id="input-confirm-pass" 
-                    v-model="confirmPassword" 
-                    extraClass="" 
+                    v-model="confirmPassword"
+                    v-model:stateError="errorInput.confirmPassword" 
                     placeholder="Mot de passe"
                     type="password"
+                    validFormat="password"
                 />
             </div>
                 
@@ -44,13 +47,12 @@
 
 
 <script setup>
-    import { ref } from 'vue';
+    import { ref, reactive } from 'vue';
     import { useRouter, useRoute } from 'vue-router';
     import InputBase from '@/component/input/InputBase.vue';
     import ButtonComponent from '@/component/button/ButtonBasic.vue';
     import { updatePasswordByToken } from '@/composable/useBackendActionData';
-    import { useErrorFormat, verifyResetPass } from '@/error/useHandleError';
-    import { useMandatoryEmptyInputs } from '@/error/useMandatoryEmptyInputs';
+    import { isAnyMandatInputEmpty, isAnyInputError, TYPE_SUBMIT_ERROR } from '@/error/useHandleError';
 
     // props, variables
     const router = useRouter();
@@ -58,27 +60,47 @@
     const password = ref('');
     const confirmPassword = ref('');
 
-    // Errors 
-    const { computedEmptyInputs, stateEmptyInputs } = useMandatoryEmptyInputs([
-        { name: 'password', ref: password },
-        { name: 'confirmPassword', ref: confirmPassword },
-    ]);
-    const { stateFormatErrors, computedFormatErrors } = useErrorFormat(verifyResetPass, {
-        password: {name: 'password', ref: password}, 
-        confirmPassword: {name: 'confirmPassword', ref: confirmPassword}
-    });
+    const errorInput = reactive({
+        password: false,
+        confirmPassword: false
+    }); 
+    const submitError = ref(null);
 
     // life cycle, functions
+    const textError = computed(() => {
+        if(submitError.value === TYPE_SUBMIT_ERROR.MANDATORY_EMPTY_INPUTS) return "Veuillez remplir tous les champs obligatoires.";
+        else if(submitError.value === TYPE_SUBMIT_ERROR.NOT_SUCCESS_REQUEST) return "La requête a échoué.";
+        else if(submitError.value === TYPE_SUBMIT_ERROR.CONFIRM_PASS_ERROR) return "Les mots de passe ne sont pas identiques.";
+    });
+
     async function handleSubmit() {
-        if(isAnyErrorActive()) return;
+        const allErrorsInputs = getStatesErrorInputs();
+        const allMandatoryValInputs = getValuesMandantInputs();
+        if(isAnyMandatInputEmpty(allMandatoryValInputs)) {
+            submitError.value = TYPE_SUBMIT_ERROR.MANDATORY_EMPTY_INPUTS;
+            return;
+        }
+        else if(isAnyInputError(allErrorsInputs)) {
+            submitError.value = TYPE_SUBMIT_ERROR.INPUTS_FORMAT_ERRORS;
+            return;
+        }
+        else if(isPasswordsAreDifferent()) {
+            submitError.value = TYPE_SUBMIT_ERROR.CONFIRM_PASS_ERROR;
+            resetInputs();
+            return;
+        }
         const isSuccessRequest = await updatePasswordByToken({
             resetPassToken: getTokenResetPass(),
             password: password.value
         });
-        if(isSuccessRequest) {
-            router.push('/connexion');
+        if(!isSuccessRequest) {
+            submitError.value = TYPE_SUBMIT_ERROR.NOT_SUCCESS_REQUEST;
             resetInputs();
+            return;
         }
+
+        submitError.value = null;
+        router.push('/connexion');
     }
 
     function resetInputs() {
@@ -86,12 +108,27 @@
         confirmPassword.value = '';
     }
 
-    function isAnyErrorActive() {
-        return stateFormatErrors.value.length > 0 || stateEmptyInputs.value.length > 0;
-    }
-
     function getTokenResetPass() {
         return route.query.token;
+    }
+
+    function getStatesErrorInputs() {
+        return {
+            password: errorInput.password,
+            confirmPassword: errorInput.confirmPassword
+        }
+    }
+ 
+    function getValuesMandantInputs() {
+        return {
+            password: password.value,
+            confirmPassword: password.value
+        }
+    }
+
+    function isPasswordsAreDifferent() {
+        if(password.value.length <= 0 || confirmPassword.value.length <= 0) return false;
+        return password.value !== confirmPassword.value;
     }
 
 

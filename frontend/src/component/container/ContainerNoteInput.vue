@@ -1,14 +1,15 @@
 <template>
-    <div class="w-[15%]">
+    <div class="flex flex-col w-[20%]">
         <label class="flex text-[18px] text-white font-light" for="input-note">Note</label>
         <InputBase 
         unicode="🔍"
-        v-model="searchNote" 
-        width="w-full"
-        extraClass="text-[16px]" 
-        placeholder="Ex : Cadeau pour Maman"
+        v-model="searchNote"
+        placeholder="Ex : Cadeau"
         id="input-note"
-        type="text"/>
+        type="text"
+        :hideAnimation="true"
+        />
+        
     </div>
 </template>
 

@@ -31,7 +31,7 @@
         <OverlayPrivacy v-if="isOverlayActive.privacy" v-model="isOverlayActive.privacy" width="w-[50%]" />
         <OverlayUserRules v-if="isOverlayActive.userRules" v-model="isOverlayActive.userRules" width="w-[50%]" />
         <OverlayContactUs v-if="isOverlayActive.contactUs" v-model="isOverlayActive.contactUs" width="w-[50%]" />
-    </TransitionOpacity>
+    </TransitionOpacity>        
 </template>
 
 
@@ -44,7 +44,6 @@
     const IconDashboard = defineAsyncComponent(() => import('@/component/svgs/IconDashboard.vue'));
     const IconPurchases = defineAsyncComponent(() => import('@/component/svgs/IconPurchase.vue'));
     const IconGraph = defineAsyncComponent(() => import('@/component/svgs/IconGraph.vue'));
-    const IconBell = defineAsyncComponent(() => import('@/component/svgs/IconBell.vue'));
     const IconUser = defineAsyncComponent(() => import('@/component/svgs/IconUser.vue'));
     const IconLogOut = defineAsyncComponent(() => import('@/component/svgs/IconLogOut.vue'));
     const IconPrivacy = defineAsyncComponent(() => import('@/component/svgs/IconPrivacy.vue'));

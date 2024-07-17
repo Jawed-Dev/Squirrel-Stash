@@ -34,6 +34,21 @@ select:-webkit-autofill:focus {
   font-size: initial;
 }
 
+.webkit-red {
+    -webkit-text-fill-color:  #FCA5A5 !important;
+    color: #FCA5A5 !important;
+}
+
+.webkit-green {
+    -webkit-text-fill-color: #6EE7B7 !important;
+    color: #6EE7B7 !important;
+}
+
+.webkit-white {
+    -webkit-text-fill-color: white !important;
+    color: white !important;
+}
+    
 input {
     caret-color: white;
 }

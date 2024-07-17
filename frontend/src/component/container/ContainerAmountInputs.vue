@@ -1,33 +1,30 @@
 <template>
-    <div class="flex gap-[10vw] w-[40%]">
-
-        <div class="w-[50%]">
-            <label class="flex text-[18px] text-white font-light" for="login-pass">Montant minimum</label>
-            <InputBase 
-                unicode="🔍"
-                v-model="searchAmountMin" 
-                width="w-fit"
-                extraClass="" 
-                placeholder="Ex : 100"
-                id="input-date"
-                type="text"
-            />
-        </div>
-
-        <div class="w-[50%]">
-            <label class="flex text-[18px] text-white font-light" for="login-pass">Montant maximum</label>
-            <InputBase 
-                unicode="🔍"
-                v-model="searchAmountMax" 
-                width="w-fit"
-                extraClass="" 
-                placeholder="Ex : 200"
-                id="input-date"
-                type="text"
-            />
-        </div>
-
+ 
+    <div class="flex flex-col w-[20%]">
+        <label class="flex text-[18px] text-white font-light" for="input-amount-min">Montant minimum (€)</label>
+        <InputBase 
+            unicode="🔍"
+            v-model="searchAmountMin" 
+            placeholder="Ex : 100"
+            id="input-amount-min"
+            type="text"
+            :hideAnimation="true"
+        />
     </div>
+
+    <div class="flex flex-col w-[20%]">
+        <label class="flex text-[18px] text-white font-light" for="input-amount-max">Montant maximum (€)</label>
+        <InputBase 
+            unicode="🔍"
+            v-model="searchAmountMax" 
+            placeholder="Ex : 200"
+            id="input-amount-max"
+            type="text"
+            :hideAnimation="true"
+        />
+    </div>
+
+ 
 </template>
 
 <script setup>

@@ -1,7 +1,7 @@
 <template>
         <input
             @change="onChange" 
-            :class="`flex items-center text-[16px] bg-transparent border-white ${width} pl-1 focus:outline-none ${props.extraClass}`"
+            :class="`flex items-center text-[16px] bg-transparent border-white ${width} pl-1 ${props.extraClass}`"
             :checked="modelValue"
             type="checkbox"
             :id="props.id"

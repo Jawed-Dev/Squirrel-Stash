@@ -2,36 +2,34 @@
     <IconPreferences @click="toggleMenu('openNClose')" class='cursor-pointer' v-show="isIconActive" :svg="svg.verySmallIcon" /> 
 
     <TransitionOpacity :durationIn="'duration-300'" :durationOut="'duration-200'">
-        <div v-show="isMenuActive" class="fixed inset-0 bg-black bg-opacity-80 z-30"></div>
+        <div v-show="isOverlayActive" class="fixed inset-0 bg-black bg-opacity-80 z-30"></div>
     </TransitionOpacity>
-
-    
 
     <TransitionOpacity :durationIn="'duration-300'" :durationOut="'duration-200'">
         
-        <div v-show="isMenuActive" 
-        :class="`bg-main-gradient flex flex-col fixed 
+        <div 
+            v-show="isOverlayActive" 
+            :class="`bg-main-gradient flex flex-col fixed 
             shadow-black shadow-custom-main rounded-md top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 trigger-set-treshold
             z-30 text-white ${width}`"
         >
-            
             <MainContainerSlot 
                 :textBtn1="'Annuler'" :textBtn2="'Choisir'" :titleContainer="'Choisir un nouveau seuil'" @toggleMenu="toggleMenu">
-                <!-- Errors  -->
+                <!-- Errors -->
                 <div class="relative">
-                    <p class="p-3 absolute text-red-400">{{ computedFormatErrors }}</p>
-                    <p v-if="computedEmptyInputs.length > 0"></p>
+                    <p class="text-sm font-light pt-3 absolute text-red-300">{{ textError }}</p>
                 </div>
                 <div>
                     <div class="flex flex-col items-center mt-[60px]">
                         <div class="text-center w-[40%]">
                             <label class="font-extralight text-center" for="input-amount-treshold">Montant du seuil (€)</label>
-                            <InputBase v-model="inputAmountThreshold"
+                            <InputBase 
+                                v-model="AmountThreshold"
+                                v-model:stateError="errorInput" 
                                 unicode="🎯"
-                                width="w-full"
-                                extraClass=""
                                 placeholder="seuil"
                                 id="input-amount-treshold"
+                                validFormat="amount"
                             />
                         </div>
                     </div>
@@ -57,8 +55,7 @@
     import { saveThreshold } from '@/composable/useBackendActionData';
     import { storeDateSelected } from '@/storePinia/useStoreDashboard';
     import { updateBalanceEcoByMonth, updateThresholdByMonth, updateTotalTrsByMonth } from '@/storePinia/useUpdateStoreByBackend';
-    import { useErrorFormat, verifySetThreshold } from '@/error/useHandleError';
-    import { useMandatoryEmptyInputs } from '@/error/useMandatoryEmptyInputs';
+    import { isAnyMandatInputEmpty, isAnyInputError, TYPE_SUBMIT_ERROR } from '@/error/useHandleError';
 
     // variables, props ...
     const svg = svgConfig;
@@ -66,57 +63,86 @@
         isIconActive: { default: false},
         width: {default:''}
     });
-    const isMenuActive = ref(false);
-    const inputAmountThreshold = ref('');
+    const isOverlayActive = ref(false);
+    const AmountThreshold = ref('');
 
-    // Errors 
-    const { computedEmptyInputs, stateEmptyInputs } = useMandatoryEmptyInputs([
-        { name: 'inputAmountThreshold', ref: inputAmountThreshold }
-    ]);
-    const { stateFormatErrors, computedFormatErrors } = useErrorFormat(verifySetThreshold, {
-        thresholdAmount: {name: 'thresholdAmount', ref: inputAmountThreshold}, 
+    const errorInput = ref(false);
+    const submitError = ref(null);
+
+    // life cycle, functions
+    const textError = computed(() => {
+        if(submitError.value === TYPE_SUBMIT_ERROR.MANDATORY_EMPTY_INPUTS) return "Veuillez remplir tous les champs obligatoires.";
+        else if(submitError.value === TYPE_SUBMIT_ERROR.NOT_SUCCESS_REQUEST) return "La requête a échoué.";
     });
 
-    // life cycle, functions 
-    useEscapeKey(isMenuActive, () => {
-        isMenuActive.value = false;
+    useEscapeKey(isOverlayActive, () => {
+        closeOverlay();
     });
 
-    useClickOutside('.trigger-set-treshold',  isMenuActive, () => {
-        isMenuActive.value = false;
+    useClickOutside('.trigger-set-treshold',  isOverlayActive, () => {
+        closeOverlay();
     },);
 
     const dateSelected = storeDateSelected();
 
-    function isAnyErrorActive() {
-        return stateFormatErrors.value.length > 0 || stateEmptyInputs.value.length > 0;
-    }
-
     async function toggleMenu(request) {
         switch(request) {
             case 'openNClose' : {
-                inputAmountThreshold.value = '';
-                isMenuActive.value = !isMenuActive.value;
+                AmountThreshold.value = '';
+                isOverlayActive.value = !isOverlayActive.value;
                 break
             }
             case 'valid': {
-                if(isAnyErrorActive()) return;
-                const responseFetched = await saveThreshold(dateSelected.month, dateSelected.year, inputAmountThreshold.value);
-                const isSuccessRequest = responseFetched?.isSuccessRequest;
-                if(isSuccessRequest) {
-                    updateThresholdByMonth(dateSelected.month, dateSelected.year);
-                    updateTotalTrsByMonth(dateSelected.month, dateSelected.year);
-                    updateBalanceEcoByMonth(dateSelected.month, dateSelected.year);
+                const allErrorsInputs = getStatesErrorInputs();
+                const allMandatoryValInputs = getValuesMandantInputs();
+                if(isAnyMandatInputEmpty(allMandatoryValInputs)) {
+                    submitError.value = TYPE_SUBMIT_ERROR.MANDATORY_EMPTY_INPUTS;
+                    return;
                 }
-                isMenuActive.value = false;
+                else if(isAnyInputError(allErrorsInputs)) {
+                    submitError.value = TYPE_SUBMIT_ERROR.INPUTS_FORMAT_ERRORS;
+                    return;
+                }
+                const responseFetched = await saveThreshold(dateSelected.month, dateSelected.year, AmountThreshold.value);
+                const isSuccessRequest = responseFetched?.isSuccessRequest;
+                if(!isSuccessRequest) {
+                    submitError.value = TYPE_SUBMIT_ERROR.NOT_SUCCESS_REQUEST;
+                    resetInput();
+                    return;
+                }
+
+                updateThresholdByMonth(dateSelected.month, dateSelected.year);
+                updateTotalTrsByMonth(dateSelected.month, dateSelected.year);
+                updateBalanceEcoByMonth(dateSelected.month, dateSelected.year);
+                closeOverlay();
+                submitError.value = null;
                 break;
             }
             case 'cancel': {
-                inputAmountThreshold.value = '';
-                isMenuActive.value = false;
+                AmountThreshold.value = '';
+                closeOverlay();
                 break;
             }
         }
     }
+    function getStatesErrorInputs() {
+        return {
+            amount: errorInput.value,
+        }
+    }
+    function getValuesMandantInputs() {
+        return {
+            amount: AmountThreshold.value
+        }
+    }
+
+    function resetInput() {
+        AmountThreshold.value = '';
+    }
+
+    function closeOverlay() {
+        isOverlayActive.value = false;
+    }
+    
 
 </script>

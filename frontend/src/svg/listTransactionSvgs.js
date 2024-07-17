@@ -1,4 +1,4 @@
-export const listCategories = [
+export const listPurchases = [
     {nameIcon:'Alimentation',color:'bg-gradient-blue', text:'Alimentation'},
     {nameIcon:'Vestimentaire',color:'bg-gradient-blue', text:'Vestimentaire'},
     {nameIcon:'Famille',color:'bg-gradient-blue', text:'Famille'},

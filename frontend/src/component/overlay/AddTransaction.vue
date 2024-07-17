@@ -11,11 +11,11 @@
         </div>
 
         <TransitionOpacity :durationIn="'duration-300'" :durationOut="'duration-200'">
-            <div v-if="isMenuActive" class="fixed inset-0 bg-black bg-opacity-80 z-10"></div>
+            <div v-if="isOverlayActive" class="fixed inset-0 bg-black bg-opacity-80 z-10"></div>
         </TransitionOpacity>
 
         <TransitionOpacity :durationIn="'duration-300'" :durationOut="'duration-200'">
-            <div v-if="isMenuActive" 
+            <div v-if="isOverlayActive" 
                 :class="`fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-30 text-white rounded-[3px] overflow-hidden 
                 shadow-black shadow-custom-main trigger-add-purchase bg-main-gradient ${props.width}`">
 
@@ -23,15 +23,19 @@
                     :textBtn1="'Annuler'" :textBtn2="'Ajouter'" :titleContainer="(!typeTransaction) ? 'Ajouter un achat' : 'Ajouter un prélèvement'" 
                     @toggleMenu="toggleMenu" 
                 >
-                    <!-- Errors  -->
+                    <!-- Errors -->
                     <div class="relative">
-                        <p class="p-3 absolute text-red-400">{{ computedFormatErrors }}</p>
-                        <p v-if="computedEmptyInputs.length > 0"></p>
+                        <p class="text-sm font-light p-3 absolute text-red-300">{{ textError }}</p>
                     </div>
                     <div>
                         <!-- Inputs  -->
-                        <ContainerInputs v-model:inputPriceVal="inputPriceVal" v-model:inputNoteVal="inputNoteVal" 
-                        v-model:inputDateVal="inputDateVal" :typeTransaction="typeTransaction" />
+                        <ContainerInputs 
+                            v-model:errorInputs="errorInputs"
+                            v-model:inputPriceVal="inputPriceVal" 
+                            v-model:inputNoteVal="inputNoteVal" 
+                            v-model:inputDateVal="inputDateVal" 
+                            :typeTransaction="typeTransaction" 
+                        />
                         <!-- Categories -->
                         <ContainerSelectCategories v-model:currentCategory="currentCategory" 
                         v-model:typeTransaction="typeTransaction" />              
@@ -45,26 +49,23 @@
 
 <script setup>
     // import
-    import { ref, watch, computed, defineAsyncComponent  } from 'vue';
+    import { ref, watch, computed, reactive, defineAsyncComponent  } from 'vue';
+    import { svgConfig } from '@/svg/svgConfig';
     import IconAddPurchase from '@/component/svgs/IconAddPurchase.vue';
     import TransitionOpacity from '@/component/transition/TransitionOpacity.vue';
-    import { svgConfig } from '@/svg/svgConfig';
     import useClickOutside from '@/composable/useClickOutSide';
     import useEscapeKey from '@/composable/useEscapeKey';
-
-    const ContainerInputs = defineAsyncComponent(() => import('@/component/container/ContainerInputs.vue'));
-    const ContainerSelectCategories = defineAsyncComponent(() => import('@/component/container/ContainerSelectCategories.vue'));
-
-    // import ContainerSelectCategories from '../container/ContainerSelectCategories.vue';
-    // import ContainerInputs from '@/component/container/ContainerInputs.vue';
     import MainContainerSlot from '@/component/containerSlot/MainContainerSlot.vue';
     import { storeDateSelected } from '@/storePinia/useStoreDashboard';
     import { addTransaction } from '@/composable/useBackendActionData';
     import { updateAllDataTransations} from '@/storePinia/useUpdateStoreByBackend';
     import { formatDateForCurrentDay, formatDateForFirstDay, isCurrentMonth } from '@/composable/useGetDate';
-    import { listCategories, listRecurings } from '@/svg/listTransactionSvgs';
-    import { useErrorFormat, verifyAddTransaction } from '@/error/useHandleError';
-    import { useMandatoryEmptyInputs } from '@/error/useMandatoryEmptyInputs';
+    import { listPurchases, listRecurings } from '@/svg/listTransactionSvgs';
+    import { isAnyMandatInputEmpty, isAnyInputError, TYPE_SUBMIT_ERROR } from '@/error/useHandleError';
+    import { isValidCategory } from '@/error/useValidFormat';
+    
+    const ContainerInputs = defineAsyncComponent(() => import('@/component/container/ContainerInputs.vue'));
+    const ContainerSelectCategories = defineAsyncComponent(() => import('@/component/container/ContainerSelectCategories.vue'));
 
     // stores Pinia
     const dateSelected = storeDateSelected();
@@ -75,7 +76,7 @@
     });
 
     // menu
-    const isMenuActive = ref(false); 
+    const isOverlayActive = ref(false); 
     const typeTransaction = ref (false); 
     const currentCategory = ref(0);
 
@@ -84,22 +85,24 @@
     const inputPriceVal = ref('');
     const inputDateVal = ref('');
 
-    // Errors 
-    const { computedEmptyInputs, stateEmptyInputs } = useMandatoryEmptyInputs([
-        { name: 'inputPriceVal', ref: inputPriceVal }
-    ]);
-    const { stateFormatErrors, computedFormatErrors } = useErrorFormat(verifyAddTransaction, {
-        trsAmount: {name: 'trsAmount', ref: inputPriceVal}, 
-        date: {name: 'date', ref: inputDateVal},
-        note: {name: 'note', ref: inputNoteVal},
-        trsCategory: {name: 'trsCategory', ref: currentCategory},
-        trsType: {name: 'trsType', ref: typeTransaction},
+    const errorInputs = reactive({
+        inputNoteVal: false,
+        inputPriceVal: false,
+        inputDateVal: false
     });
+
+    const submitError = ref(null);
 
     // icons
     const svgCfgIconAdd = svgConfig.mediumSmaller;
 
     // life cycle / functions
+    const textError = computed(() => {
+        if(submitError.value === TYPE_SUBMIT_ERROR.MANDATORY_EMPTY_INPUTS) return "Veuillez remplir tous les champs obligatoires.";
+        else if(submitError.value === TYPE_SUBMIT_ERROR.NOT_SUCCESS_REQUEST) return "La requête a échoué.";
+        else if(submitError.value === TYPE_SUBMIT_ERROR.CATEGORY_ERROR) return "Catégorie invalide.";
+    });
+
     watch( () => [dateSelected.month, dateSelected.year], async ([newMonth, newYear]) => {
         inputDateVal.value = formatDateInput();
     }, {  immediate:true, deep:true });
@@ -108,11 +111,11 @@
         currentCategory.value = 0;
     });
 
-    useEscapeKey(isMenuActive, () => {
+    useEscapeKey(isOverlayActive, () => {
         closeMenu();
     });
 
-    useClickOutside('.trigger-add-purchase', isMenuActive, () => {
+    useClickOutside('.trigger-add-purchase', isOverlayActive, () => {
         closeMenu();
     });
 
@@ -121,43 +124,45 @@
             case 'openNClose' : {
                 typeTransaction.value = false;
                 resetInputs();
-                isMenuActive.value = !isMenuActive.value;
+                isOverlayActive.value = !isOverlayActive.value;
                 break;
             }
             case 'valid' : {
-                if(!isMenuActive.value) return;
-                if(isAnyErrorActive()) return;
-                //if(stateErrors.length > 0) return;
+                if(!isOverlayActive.value) return;
+                const allErrorsInputs = getStatesErrorInputs();
+                const allMandatoryValInputs = getValuesMandantInputs();
+                const nameCategory = getCurrentNameCategory();
+                if(isAnyMandatInputEmpty(allMandatoryValInputs)) {
+                    submitError.value = TYPE_SUBMIT_ERROR.MANDATORY_EMPTY_INPUTS;
+                    return;
+                }
+                else if(isAnyInputError(allErrorsInputs)) {
+                    submitError.value = TYPE_SUBMIT_ERROR.INPUTS_FORMAT_ERRORS;
+                    return;
+                }
+                else if(!isValidCategory(nameCategory)) {
+                    submitError.value = TYPE_SUBMIT_ERROR.CATEGORY_ERROR;
+                    return;
+                }
                 prepareAddTransaction();
-                resetInputs();
-                isMenuActive.value = false;
-                break;
-            }
-            case 'options' : {
-                //alert('valider');
+                closeMenu()
                 break;
             }
             case 'cancel' : {
-                resetInputs();
-                isMenuActive.value = false;
+                closeMenu()
                 break;
             }
         }
     }
     
-    function isAnyErrorActive() {
-        return stateFormatErrors.value.length > 0 || stateEmptyInputs.value.length > 0;
-    }
-
     function getCurrentTransactionType() {
         return (!typeTransaction.value) ? 'purchase' : 'recurring';
     }
 
-    function getCurrentCategory() {
-        const listTransaction = (!typeTransaction.value) ? listCategories : listRecurings;
+    function getCurrentNameCategory() {
+        const listTransaction = (!typeTransaction.value) ? listPurchases : listRecurings;
         const currentIndex = currentCategory.value;
-        console.log(listTransaction);
-        const nameCategory = listTransaction[currentIndex].text;
+        const nameCategory = (listTransaction[currentIndex]?.text) ? listTransaction[currentIndex].text : '';
         return nameCategory;
     }
 
@@ -176,24 +181,43 @@
     }
 
     function closeMenu() {
-        isMenuActive.value = false;
+        isOverlayActive.value = false;
     }
     
     async function prepareAddTransaction() {
         const dataRequest = await addTransaction({
             amount: inputPriceVal.value,
-            trsCategory: getCurrentCategory(),
+            trsCategory: getCurrentNameCategory(),
             trsType: getCurrentTransactionType(),
             date: inputDateVal.value,
             note: inputNoteVal.value
         });
-        //console.log(dataRequest);
         const isSuccessRequest = dataRequest?.isSuccessRequest;
-        if(isSuccessRequest) {
-            const nameTypeTrs = getCurrentTransactionType();
-            const month = dateSelected.month;
-            const year = dateSelected.year;
-            updateAllDataTransations(month, year, nameTypeTrs);
+        if(!isSuccessRequest) {
+            submitError.value = TYPE_SUBMIT_ERROR.NOT_SUCCESS_REQUEST;
+            return;
+        }
+        const nameTypeTrs = getCurrentTransactionType();
+        const month = dateSelected.month;
+        const year = dateSelected.year;
+        updateAllDataTransations(month, year, nameTypeTrs);
+        submitError.value = null;
+    }
+
+    function getStatesErrorInputs() {
+        return {
+            date: errorInputs.inputDateVal,
+            amount: errorInputs.inputPriceVal,
+            note: errorInputs.inputNoteVal
         }
     }
+    function getValuesMandantInputs() {
+        return {
+            date: inputDateVal.value,
+            amount: inputPriceVal.value,
+            category: currentCategory.value,
+        }
+    }
+
+
 </script>

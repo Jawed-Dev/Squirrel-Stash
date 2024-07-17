@@ -1,5 +1,5 @@
 <template>
-    <div class="pl-3 flex items-center w-full py-1 border-b 
+    <div class="transition-all duration-500 pl-3 flex items-center w-full py-[1px] border-b 
         text-white font-light">
         <div>
             <span>{{ unicode }}</span>

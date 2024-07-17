@@ -5,12 +5,12 @@
         </div>
 
         <!-- liste des catégories -->
-        <h2 class="text-center mt-[40px] text-[18px] font-extralight">Sélectionnez la catégorie</h2>
+        <h2 class="text-center mt-[40px] text-[18px] font-light">Sélectionner la catégorie</h2>
         <div class="w-full flex flex-wrap pt-[20px] pb-[40px]">
             <SelectInputCategories :width="'w-[70%]'" 
                 v-model:currentCategory="currentCategory" 
                 :typeTransaction="typeTransaction" 
-                :listSelect="(!typeTransaction) ? listCategories : listRecurings" 
+                :listSelect="(!typeTransaction) ? listPurchases : listRecurings" 
             />
         </div>
     
@@ -22,7 +22,7 @@
 
 import ToggleButton from "@/component/button/ToggleButton.vue";
 import SelectInputCategories from "@/component/select/SelectInputCategories.vue";
-import { listCategories, listRecurings } from '@/svg/listTransactionSvgs';
+import { listPurchases, listRecurings } from '@/svg/listTransactionSvgs';
 
 // variables, props, ...
 const typeTransaction = defineModel('typeTransaction');

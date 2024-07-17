@@ -2,23 +2,24 @@ import { ref, computed } from 'vue';
 import { isValidCategory, isValidMail, isValidInputAmount, isValidInputDate, isValidInputNote, isValidTrsType, isValidPassword, isValidLastName, isValidFirstName } from './useValidFormat';
 
 
-export const CONFIG_TYPE_ERROR = {
-    MAIL_ERROR : 0,
-    TRS_AMOUNT_ERROR : 1,
-    TRS_DATE_ERROR : 2,
-    TRS_NOTE_ERROR : 3,
+export const TYPE_SUBMIT_ERROR = {
+    MANDATORY_EMPTY_INPUTS : 0,
+    INPUTS_FORMAT_ERRORS : 1,
+    NOT_SUCCESS_REQUEST : 2,
+    CONFIRM_PASS_ERROR : 3,
+    CATEGORY_ERROR : 4,
 }
 
-const typeError = {
+export const typeError = {
     email: { 
         code: 0, 
         message: "Adresse email invalide", 
-        adviceFormat: "L'adresse doit suivre le format 'exemple@domaine.com'",
+        adviceFormat: "Un email doit suivre le format suivant: 'exemple@domaine.com'",
     },   
     password: { 
         code: 1, 
         message: "Mot de passe invalide", 
-        adviceFormat: "L'adresse doit suivre le format 'exemple@domaine.com'",
+        adviceFormat: "Le mot de passe doit comporter, 8 caractères, une majuscule et un chiffre.'",
     },  
     passwordConfirm: { 
         code: 2, 
@@ -28,37 +29,49 @@ const typeError = {
     lastName: { 
         code: 3, 
         message: "Nom invalide", 
-        adviceFormat: "L'adresse doit suivre le format 'exemple@domaine.com'",
+        adviceFormat: "Nom invalide.",
     },  
     firstName: { 
         code: 4, 
         message: "Prénom invalide", 
-        adviceFormat: "L'adresse doit suivre le format 'exemple@domaine.com'",
+        adviceFormat: "Prénom invalide.",
     },  
-    trsAmount: { 
+    amount: { 
         code: 5, 
         message: "Montant invalide", 
-        adviceFormat: "Le montant ne doit former que des lettre",
+        adviceFormat: "Montant invalide.",
     },   
     trsDate: { 
         code: 6, 
         message: "Date invalide", 
-        adviceFormat: "La note est trop longue"
+        adviceFormat: "Date invalide."
     },
-    trsNote: { 
+    note: { 
         code: 7, 
         message: "La note est trop longue", 
-        adviceFormat: "La note est trop longue"
+        adviceFormat: "Note invalide."
     },   
     trsCategory: {
         code: 8,
-        message: "Informations invalides", 
+        message: "Catégorie invalide.", 
     },
     trsType: {
         code: 9,
-        message: "Informations invalides", 
+        message: "Type de transaction invalide.", 
+    },
+    gender: {
+        code: 10,
+        message: "Genre invalide.", 
     }
 };
+
+export function isAnyInputError(inputs) {
+    return Object.values(inputs).some(value => value);
+}
+
+export function isAnyMandatInputEmpty(inputs) {
+    return Object.values(inputs).some(value => value === '' || value === false);
+}
 
 export function useErrorFormat (func, inputs) {
     const stateFormatErrors = ref([]);
