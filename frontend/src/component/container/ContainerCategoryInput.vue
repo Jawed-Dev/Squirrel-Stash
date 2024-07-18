@@ -1,9 +1,9 @@
 <template>
     <div class="flex justify-end flex-col w-[20%]">
         <div class="flex flex-col w-full">
-            <label class="text-white text-[18px] font-light" for="input-category">Catégorie</label>
+            <label class="text-white font-light" for="input-category">Catégorie</label>
             <InputBase 
-                unicode="🔍"
+                iconName="Category"
                 v-model="searchCategory" 
                 placeholder="Ex : Restaurant"
                 id="input-category"

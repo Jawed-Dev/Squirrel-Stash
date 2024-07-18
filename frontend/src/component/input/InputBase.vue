@@ -1,16 +1,16 @@
 <template>
-    <div>
+    <div class="mt-1">
         <div 
-            :class="`pl-3 flex items-center py-[1px] ${border} transition-all duration-500 ${colorBorder} text-white font-light`">
-            <div>
-                <span>{{ unicode }}</span>
+            :class="`pl-1 flex items-center py-[1px] rounded-sm ${border} transition-all duration-500 ${colorBorder} text-white font-light`">
+            <div v-show="iconName">
+                <UseIconLoader :nameIcon="iconName" :svg="{width:'20px', fill:'rgba(255, 255, 255, 1)'}"  />
             </div>
 
             <input
                 @input="onInput"
                 @focus="isInputFocused = true" 
                 @blur="isInputFocused = false"
-                :class="`${props.extraClass} text-[15px] transition-colors duration-500 ${colorValidationInput} bg-transparent pl-1 focus:outline-none ${width} .webkit-white w-full`"
+                :class="`${props.extraClass} p-1 text-[15px] transition-colors duration-500 ${colorValidationInput} bg-transparent pl-1 focus:outline-none ${width} .webkit-white w-full`"
                 :value="inputValue"
                 :type="type"
                 :placeholder="placeholder"
@@ -23,7 +23,7 @@
         </div>
     </div>
     <TransitionOpacity duration-in="duration-150" duration-out="duration-0">
-        <div v-if="isAnyError" :class="`text-red-200 font-light`">
+        <div v-if="isAnyError" :class="`text-red-200 font-light relative`">
             <p class="text-sm pt-1 absolute">{{ isAnyError }}</p>
         </div>
     </TransitionOpacity>
@@ -33,6 +33,8 @@
     import { ref, computed, watch } from 'vue';
     import TransitionOpacity from '@/component/transition/TransitionOpacity.vue';
     import { typeError } from '@/error/useHandleError';
+    import UseIconLoader from '@/composable/useIconLoader.vue';
+
     import {
         isValidMail,
         isValidPassword,
@@ -43,7 +45,8 @@
         isValidCategory,
         isValidTrsType,
         isValidInputDate,
-        isValidGender
+        isValidGender,
+        isValidMessage
     } from '@/error/useValidFormat';
 
     // variables, props, ...
@@ -57,7 +60,8 @@
         category: isValidCategory,
         transactionType: isValidTrsType,
         date: isValidInputDate,
-        gender: isValidGender
+        gender: isValidGender,
+        message: isValidMessage
     };
     
     const props = defineProps({
@@ -67,6 +71,8 @@
         type: {default: 'text'},
         placeholder: {default: ''},
         width: {default:''},
+        iconName: {default: ''},
+        onlyNumbers: false,
         
         borderHidden: {default: false},
         hideAnimation: {default: false},
@@ -91,7 +97,7 @@
             }
             return "border-custom-blue";
         }
-        return (isInputFocused.value) ? "border-custom-blue" : "hover:border-custom-blue";
+        return (isInputFocused.value) ? "border-custom-blue" : "hover:border-custom-blue border-custom-gray-2";
     });
 
     const colorValidationInput = computed(() => {
@@ -109,7 +115,10 @@
     });
 
     const isAnyError = computed(() => {
-        if (isInputEmpty()) return '';
+        if(isInputEmpty()) {
+            modelStateError.value = false;
+            return '';
+        }
         if(props.validFormat) {
             const isValidInputFunction = validators[props.validFormat];
             if(!isValidInputFunction) return '';
@@ -124,7 +133,7 @@
     });
 
     //life cycle functions
-    watch(inputValue, (newValue) => {
+    watch(inputValue, () => {
         if(isTimerCheckErrorActive()) clearTimeout(timeoutCheckError.value);
         timeoutCheckError.value = setTimeout(() => {
             timeoutCheckError.value = null;
@@ -137,12 +146,17 @@
     }
 
     function onInput(event) {
+        if(props.onlyNumbers && event.target.value.trim() !== '') {
+            if(!isValidInputAmount(event.target.value)) {
+                event.target.value = inputValue.value;
+                return;
+            }
+        }
         inputValue.value = event.target.value;
-        console.log(inputValue.value);
     }
 
     const border = computed(() => {
-        return (!props.borderHidden) ? 'border-b' : 'border-none';
+        return (!props.borderHidden) ? 'border' : 'border-none';
     });
 
     function isTimerCheckErrorActive() {

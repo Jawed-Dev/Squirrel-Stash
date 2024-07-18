@@ -1,9 +1,6 @@
 <template>
 
     <div class="font-main-font flex flex-col bg-main-bg w-full">
-
-        <!-- <ContainerHeader/> -->
-
         <div class="ml-[calc(20px+70px+20px)] mr-custom-margin-main flex flex-col mt-[20px]">
             <h1 class="text-[25px] font-light text-white">Économie du mois</h1>
             <p class="font-light text-white mt-2">Bonjour {{ firstNameUser }}, voici votre résumé du mois.</p> 
@@ -13,15 +10,15 @@
                 :colorValue="'text-white'" 
                 :amountValue="threshold.amount +' €'" 
                 :nameStat="'Seuil mensuel'" 
-                :width="'w-[520px]'"
+                :width="'w-[30%]'"
             />
-            <section class="flex justify-between pt-[20px]">
-                <div class="flex gap-[20px] ">
+            <section class="flex justify-between pt-5">
+                <div class="flex gap-[20px] w-[30%]">
                     <SelectMonth v-model="dateSelected.month" :listSelect="monthNames" />
                     <SelectYear v-model="dateSelected.year" :listSelect="getAvailableYear()" />
                 </div>
                 <div class="flex justify-end">
-                    <AddTransaction width="w-[30vw]"/>
+                    <AddTransaction width="w-[30%]"/>
                 </div>
             </section>
 
@@ -47,7 +44,6 @@
                 <ContainerListTransactions class="w-[calc(50%-10px)]" :title="'Derniers achats'" :componentType="'purchase'"  :svg="svgConfig('restaurant', 'bg-gradient-blue', '6%')" />
                 <ContainerListTransactions class=" w-[calc(50%-10px)]" :title="'Derniers prélèvements'" :componentType="'recurring'" :svg="svgConfig('balance', 'bg-gradient-vanusa', '6%')" />
             </section>
-    
         </div>
     </div>
 </template>

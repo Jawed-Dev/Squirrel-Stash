@@ -22,19 +22,21 @@
                 <div>
                     <div class="flex flex-col items-center mt-[60px]">
                         <div class="text-center w-[40%]">
-                            <label class="font-extralight text-center" for="input-amount-treshold">Montant du seuil (€)</label>
+                            <label class="font-light" for="input-amount-treshold">Montant du seuil</label>
                             <InputBase 
+                                iconName="Amount"
                                 v-model="AmountThreshold"
                                 v-model:stateError="errorInput" 
-                                unicode="🎯"
-                                placeholder="seuil"
+                                placeholder="Montant"
                                 id="input-amount-treshold"
                                 validFormat="amount"
+                                :hideAnimation="true"
+                                :onlyNumbers="true"
                             />
                         </div>
                     </div>
                     <div class="flex justify-center my-[60px]">
-                        <p class="w-[full] text-[15px] font-light text-white">Ce seuil sera effectif pour le mois actuel <span class="block">et les suivants, jusqu'à un nouveau seuil.</span></p>
+                        <p class="w-[full] text-[15px] font-light text-slate-300">Ce seuil sera effectif pour le mois actuel <span class="block">et les suivants, jusqu'à un nouveau seuil.</span></p>
                     </div>
                 </div>
             </MainContainerSlot>
@@ -55,7 +57,7 @@
     import { saveThreshold } from '@/composable/useBackendActionData';
     import { storeDateSelected } from '@/storePinia/useStoreDashboard';
     import { updateBalanceEcoByMonth, updateThresholdByMonth, updateTotalTrsByMonth } from '@/storePinia/useUpdateStoreByBackend';
-    import { isAnyMandatInputEmpty, isAnyInputError, TYPE_SUBMIT_ERROR } from '@/error/useHandleError';
+    import { isAnyMandatInputEmpty, isAnyInputError, TYPE_SUBMIT_ERROR, TEXT_SUBMIT_ERROR} from '@/error/useHandleError';
 
     // variables, props ...
     const svg = svgConfig;
@@ -71,7 +73,7 @@
 
     // life cycle, functions
     const textError = computed(() => {
-        if(submitError.value === TYPE_SUBMIT_ERROR.MANDATORY_EMPTY_INPUTS) return "Veuillez remplir tous les champs obligatoires.";
+        if(submitError.value === TYPE_SUBMIT_ERROR.MANDATORY_EMPTY_INPUTS) return TEXT_SUBMIT_ERROR.MANDATORY_EMPTY_INPUTS;
         else if(submitError.value === TYPE_SUBMIT_ERROR.NOT_SUCCESS_REQUEST) return "La requête a échoué.";
     });
 
@@ -90,6 +92,7 @@
             case 'openNClose' : {
                 AmountThreshold.value = '';
                 isOverlayActive.value = !isOverlayActive.value;
+                submitError.value = null;
                 break
             }
             case 'valid': {

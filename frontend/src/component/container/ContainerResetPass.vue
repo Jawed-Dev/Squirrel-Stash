@@ -9,9 +9,9 @@
             </div>
 
             <div class="mt-[30px] w-">
-                <label class="text-white font-light text-[17px]" for="input-pass">Nouveau mot de passe</label>
+                <label class="text-white font-light" for="input-pass">Nouveau mot de passe</label>
                 <InputBase 
-                    unicode="🔒"
+                    iconName = 'Password'
                     id="input-pass" 
                     v-model="password" 
                     v-model:stateError="errorInput.password"
@@ -22,9 +22,9 @@
                 />
             </div>
             <div class="mt-[30px]">
-                <label class="text-white font-light text-[17px]" for="input-confirm-pass">Confirmer le mot de passe</label>
+                <label class="text-white font-light" for="input-confirm-pass">Confirmer le mot de passe</label>
                 <InputBase 
-                    unicode="🔒"
+                    iconName = 'Password'
                     id="input-confirm-pass" 
                     v-model="confirmPassword"
                     v-model:stateError="errorInput.confirmPassword" 
@@ -52,7 +52,7 @@
     import InputBase from '@/component/input/InputBase.vue';
     import ButtonComponent from '@/component/button/ButtonBasic.vue';
     import { updatePasswordByToken } from '@/composable/useBackendActionData';
-    import { isAnyMandatInputEmpty, isAnyInputError, TYPE_SUBMIT_ERROR } from '@/error/useHandleError';
+    import { isAnyMandatInputEmpty, isAnyInputError, TYPE_SUBMIT_ERROR, TEXT_SUBMIT_ERROR } from '@/error/useHandleError';
 
     // props, variables
     const router = useRouter();
@@ -68,9 +68,9 @@
 
     // life cycle, functions
     const textError = computed(() => {
-        if(submitError.value === TYPE_SUBMIT_ERROR.MANDATORY_EMPTY_INPUTS) return "Veuillez remplir tous les champs obligatoires.";
+        if(submitError.value === TYPE_SUBMIT_ERROR.MANDATORY_EMPTY_INPUTS) return TEXT_SUBMIT_ERROR.ALL_INPUTS_MANDATORY;
         else if(submitError.value === TYPE_SUBMIT_ERROR.NOT_SUCCESS_REQUEST) return "La requête a échoué.";
-        else if(submitError.value === TYPE_SUBMIT_ERROR.CONFIRM_PASS_ERROR) return "Les mots de passe ne sont pas identiques.";
+        else if(submitError.value === TYPE_SUBMIT_ERROR.CONFIRM_PASS_ERROR) return TEXT_SUBMIT_ERROR.CONFIRM_PASS_ERROR;
     });
 
     async function handleSubmit() {

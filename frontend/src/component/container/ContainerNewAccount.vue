@@ -8,10 +8,10 @@
             </div>
 
             <div class="flex justify-center w-full gap-5 mt-[30px]">
-                <div>
+                <div class="px-2">
                     <label class="text-white font-light" for="input-fname-crt-acc">Votre prénom</label>
                     <InputBase 
-                        unicode="🛂"
+                        iconName="Name"
                         v-model="firstName"
                         v-model:stateError="errorInput.firstName"
                         extraClass=""
@@ -21,10 +21,10 @@
                     />
                 </div>
 
-                <div>
+                <div class="px-2">
                     <label class="text-white font-light" for="input-lname-crt-acc">Votre nom</label>
                     <InputBase 
-                        unicode="🛂"
+                        iconName="Name"
                         v-model="lastName"
                         v-model:stateError="errorInput.lastName"
                         extraClass=""
@@ -37,10 +37,10 @@
                 
             </div>
 
-            <div class="mt-[40px]">
+            <div class="mt-[40px] px-2">
                 <label class="text-white font-light" for="input-email-crt-acc">Votre email</label>
                 <InputBase 
-                    unicode="📧"
+                    iconName="Email"
                     v-model="email" 
                     v-model:stateError="errorInput.email"
                     extraClass=""
@@ -52,10 +52,10 @@
                 />
             </div>
 
-            <div class="mt-[40px]">
+            <div class="mt-[40px] px-2">
                 <label class="text-white font-light" for="input-pass-crt-acc">Votre mot de passe</label>
                 <InputBase 
-                    unicode="🔒"
+                    iconName="Password"
                     v-model="password"
                     v-model:stateError="errorInput.password"
                     extraClass=""
@@ -66,10 +66,10 @@
                 />
             </div>
 
-            <div class="mt-[40px]">
+            <div class="mt-[40px] px-2">
                 <label class="text-white font-light " for="input-cpass-crt-acc">Confirmer votre mot de passe </label>
                 <InputBase 
-                    unicode="🔒"
+                    iconName="Password"
                     v-model="confirmPassword"
                     v-model:stateError="errorInput.confirmPassword"
                     extraClass=""
@@ -109,7 +109,7 @@
     import ButtonComponent from '@/component/button/ButtonBasic.vue';
     import { createAccount } from '@/composable/useBackendActionData';
     import InputCheckbox from '../input/InputCheckbox.vue';
-    import { isAnyMandatInputEmpty, isAnyInputError, TYPE_SUBMIT_ERROR } from '@/error/useHandleError';
+    import { isAnyMandatInputEmpty, isAnyInputError, TYPE_SUBMIT_ERROR, TEXT_SUBMIT_ERROR } from '@/error/useHandleError';
     
     // props, variables ...
     const router = useRouter();
@@ -131,9 +131,9 @@
 
     // life cycle / functions
     const textError = computed(() => {
-        if(submitError.value === TYPE_SUBMIT_ERROR.MANDATORY_EMPTY_INPUTS) return "Veuillez remplir tous les champs obligatoires.";
+        if(submitError.value === TYPE_SUBMIT_ERROR.MANDATORY_EMPTY_INPUTS) return TEXT_SUBMIT_ERROR.ALL_INPUTS_MANDATORY;
         else if(submitError.value === TYPE_SUBMIT_ERROR.NOT_SUCCESS_REQUEST) return "La requête a échoué.";
-        else if(submitError.value === TYPE_SUBMIT_ERROR.CONFIRM_PASS_ERROR) return "Les mots de passe ne sont pas identiques.";
+        else if(submitError.value === TYPE_SUBMIT_ERROR.CONFIRM_PASS_ERROR) return TEXT_SUBMIT_ERROR.CONFIRM_PASS_ERROR;
     });
 
     async function handleSubmit() {

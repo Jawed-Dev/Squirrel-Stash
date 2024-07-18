@@ -3,8 +3,9 @@ import { listPurchases, listRecurings } from "@/svg/listTransactionSvgs";
 
 
 export function isValidMail(email) {
+    const emailTrim = email.trim();
     const regex = /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/;
-    return regex.test(email) && email.length <= 254;
+    return regex.test(emailTrim) && emailTrim.length <= 254;
 }
 
 export function isValidPassword(password) {
@@ -22,11 +23,9 @@ export function isValidPassword(password) {
     return true;
 }
 
-
-
 export function isValidGender(gender) {
-    const genderLowerCase = gender.toLowerCase();
-    return genderLowerCase === 'homme' || genderLowerCase === 'femme' || genderLowerCase === 'autre';
+    const validGenders = ['homme', 'femme', 'autre'];
+    return validGenders.includes(gender.toLowerCase());
 }
 
 export function isValidFirstName(firstName) {
@@ -41,12 +40,12 @@ export function isValidLastName(lastName) {
 
 export function isValidInputAmount(amount) {
     console.log('amount',amount);
-    const regex = /^\d+(,\d+)?$/;
+    const regex = /^\d+$/;
     return regex.test(amount) && amount <= 1000000000;
 }
 
 export function isValidInputNote(note) {
-    return note.length <= 30;
+    return note.trim().length <= 30;
 }   
 
 export function isValidCategory(category) {
@@ -67,10 +66,14 @@ export function isValidInputDate(date) {
     return regex.test(date);
 }
 
+export function isValidMessage(message) {
+    return message.trim().length <= 1000;
+}
+
 export function extractYearFromDate(date) {
     const parts = date.split('-');
     return parts[0]; 
-  }
+}
 
 export function isValidYear(year) {
     return getAvailableYear().some(item => item === year);

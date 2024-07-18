@@ -52,7 +52,7 @@
     import { updateAllDataTransations} from '@/storePinia/useUpdateStoreByBackend';
     import { formatDateForCurrentDay, formatDateForFirstDay, isCurrentMonth } from '@/composable/useGetDate';
     import { listPurchases, listRecurings } from '@/svg/listTransactionSvgs';
-    import { isAnyMandatInputEmpty, isAnyInputError, TYPE_SUBMIT_ERROR } from '@/error/useHandleError';
+    import { isAnyMandatInputEmpty, isAnyInputError, TYPE_SUBMIT_ERROR, TEXT_SUBMIT_ERROR } from '@/error/useHandleError';
     import { isValidCategory } from '@/error/useValidFormat';
 
     // stores Pinia
@@ -84,9 +84,10 @@
 
     // life cycle / functions
     const textError = computed(() => {
-        if(submitError.value === TYPE_SUBMIT_ERROR.MANDATORY_EMPTY_INPUTS) return "Veuillez remplir tous les champs obligatoires.";
+        if(submitError.value === TYPE_SUBMIT_ERROR.MANDATORY_EMPTY_INPUTS) return TEXT_SUBMIT_ERROR.MANDATORY_EMPTY_INPUTS;
         else if(submitError.value === TYPE_SUBMIT_ERROR.NOT_SUCCESS_REQUEST) return "La requête a échoué.";
-        else if(submitError.value === TYPE_SUBMIT_ERROR.CATEGORY_ERROR) return "Catégorie invalide.";
+        else if(submitError.value === TYPE_SUBMIT_ERROR.CATEGORY_ERROR) return TEXT_SUBMIT_ERROR.CATEGORY_ERROR;
+        else if(submitError.value === TYPE_SUBMIT_ERROR.DATE_EMPTY) return TEXT_SUBMIT_ERROR.DATE_EMPTY;
     });
 
     onMounted(() => {
@@ -98,6 +99,7 @@
     }, {  immediate:true, deep:true });
 
     watch(isOverlayActive, (newVal) => {
+        submitError.value = null;
         if(newVal) loadDataTransaction();
     });
 
@@ -112,7 +114,12 @@
                 const allErrorsInputs = getStatesErrorInputs();
                 const allMandatoryValInputs = getValuesMandantInputs();
                 const nameCategory = getCurrentNameCategory();
-                if(isAnyMandatInputEmpty(allMandatoryValInputs)) {
+
+                if(isDateEmpty(nameCategory)) {
+                    submitError.value = TYPE_SUBMIT_ERROR.DATE_EMPTY;
+                    return;
+                }
+                else if(isAnyMandatInputEmpty(allMandatoryValInputs)) {
                     submitError.value = TYPE_SUBMIT_ERROR.MANDATORY_EMPTY_INPUTS;
                     return;
                 }
@@ -214,4 +221,9 @@
             category: currentCategory.value,
         }
     }
+
+    function isDateEmpty() {
+        return inputDateVal.value === '';
+    }
+
 </script>

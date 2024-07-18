@@ -6,91 +6,85 @@
 
         <div class="gradient-border overflow-hidden">
             
-            <form class="mt-24 flex flex-col" @submit.prevent="handleSubmit"> 
+            <form class="mt-24" @submit.prevent="handleSubmit"> 
                 <!-- Errors -->
                 <div class="relative pb-5">
                     <p class="text-sm font-light absolute text-red-300">{{ textError }}</p>
                 </div>
-                <div class="pl-10 pr-12">
-                    <div class="flex gap-24">
-                        <div class="flex flex-col justify-center w-[20%]">
-                            <label class="text-white font-light text-[16px]" for="input-firstname">Prénom</label>
-                            <InputBase 
-                                unicode="🔒"
-                                id="input-firstname" 
-                                v-model="inputsProfil.firstName"
-                                v-model:stateError="errorInputs.firstName"
-                                extraClass="" 
-                                :placeholder="`test`"
-                                type="text"
-                                validFormat="firstName"
-                                :hideAnimation="true"
 
-                            />
-                        </div>
+                <div class="flex justify-start w-full gap-24 pl-52">
+                    <div class="flex flex-col w-1/4">
+                        <label class="text-white font-light" for="input-firstname">Prénom *</label>
+                        <InputBase 
+                            iconName="Name"
+                            id="input-firstname" 
+                            v-model="inputsProfil.firstName"
+                            v-model:stateError="errorInputs.firstName"
+                            extraClass="" 
+                            :placeholder="`Prénom`"
+                            type="text"
+                            validFormat="firstName"
+                            :hideAnimation="true"
 
-                        <div class="flex flex-col justify-center w-[20%]">
-                            <label class="text-white font-light text-[16px]" for="input-lastname">Nom</label>
-                            <InputBase 
-                                unicode="🔒"
-                                id="input-lastname" 
-                                v-model="inputsProfil.lastName" 
-                                v-model:stateError="errorInputs.lastName"
-                                extraClass="" 
-                                placeholder="Mot de passe"
-                                type="text"
-                                validFormat="lastName"
-                                :hideAnimation="true"
-                            />
-                        </div>
+                        />
+                    </div>
+                    <div class="flex flex-col w-1/4">
+                        <label class="text-white font-light" for="input-lastname">Nom *</label>
+                        <InputBase 
+                            iconName="Name"
+                            id="input-lastname" 
+                            v-model="inputsProfil.lastName" 
+                            v-model:stateError="errorInputs.lastName"
+                            extraClass="" 
+                            placeholder="Nom"
+                            type="text"
+                            validFormat="lastName"
+                            :hideAnimation="true"
+                        />
+                    </div>
 
-                        <div class="flex flex-col justify-center w-[20%]">
-                            <label class="text-white font-light text-[16px]" for="input-birthday">Date de naissance</label>
-                            <InputBase 
-                                unicode="🔒"
-                                id="input-birthday" 
-                                v-model="inputsProfil.birthday" 
-                                v-model:stateError="errorInputs.birthday"
-                                extraClass="" 
-                                placeholder="Mot de passe"
-                                type="date"
-                                validFormat="date"
-                                :hideAnimation="true"
-                            />
-                        </div>
+                    <div class="flex flex-col w-1/4">
+                        <label class="text-white font-light" for="input-birthday">Date de naissance</label>
+                        <InputBase 
+                            id="input-birthday" 
+                            v-model="inputsProfil.birthday" 
+                            v-model:stateError="errorInputs.birthday"
+                            extraClass="" 
+                            placeholder="Mot de passe"
+                            type="date"
+                            validFormat="date"
+                            :hideAnimation="true"
+                        />
                     </div>
                 </div>
-                <div class="mt-12 pl-10 ">
-                    <div class="flex gap-24 ">
-                        <div class="flex flex-col  w-[20%]">
-                            <label class="text-white font-light text-[16px]" for="input-gender">Genre</label>
-                            <InputBase 
-                                unicode="🔒"
-                                id="input-gender" 
-                                v-model="inputsProfil.gender" 
-                                v-model:stateError="errorInputs.gender"
-                                extraClass="" 
-                                placeholder="Non défini"
-                                type="text"
-                                validFormat="gender"
-                                :hideAnimation="true"
-                            />
-                        </div>
-
-                        <div class="flex flex-col w-[20%]">
-                            <label class="text-white font-light text-[16px]" for="input-pass">Rôle</label>
-
-                            <ContainerTextUnderline 
-                                unicode="🔒"
-                                :text="textUserLevel" 
-                                extraClass="text-[16px]"
-                                id="input-current-mail"
-                            />
-                        </div>
+                
+                <div class="mt-12 flex justify-start w-full gap-24 pl-52">
+                    <div class="flex flex-col w-1/4">
+                        <label class="text-white font-light" for="input-gender">Genre</label>
+                        <InputBase 
+                            iconName="Gender"
+                            id="input-gender" 
+                            v-model="inputsProfil.gender" 
+                            v-model:stateError="errorInputs.gender"
+                            extraClass="" 
+                            placeholder="Votre genre"
+                            type="text"
+                            validFormat="gender"
+                            :hideAnimation="true"
+                        />
+                    </div>
+                    <div class="flex flex-col w-1/4">
+                        <label class="text-white font-light" for="input-pass">Rôle</label>
+                        <ContainerTextUnderline 
+                            iconName="Crown"
+                            :text="textUserLevel" 
+                            extraClass="text-[16px]"
+                            id="input-current-mail"
+                        />
                     </div>
                 </div>
-
-                <div class="w-full flex justify-center relative my-5">
+               
+                <div class="w-full flex justify-center mt-8 my-3">
                     <div class="shadow-black shadow-custom-main w-[20%]">
                         <button class=
                             "text-[17px] w-full rounded-sm py-2 bg-gradient-blue 
@@ -111,7 +105,7 @@
     import { storeProfilUser } from '@/storePinia/useStoreDashboard';
     import { updateStoreUserProfil } from '@/storePinia/useUpdateStoreByBackend';
     import { updateUserProfil } from '@/composable/useBackendActionData';
-    import { isAnyMandatInputEmpty, isAnyInputError, TYPE_SUBMIT_ERROR } from '@/error/useHandleError';
+    import { isAnyMandatInputEmpty, isAnyInputError, TYPE_SUBMIT_ERROR, TEXT_SUBMIT_ERROR } from '@/error/useHandleError';
 
     // Store Pinia
     const dataProfilUser = storeProfilUser();
@@ -136,7 +130,7 @@
     // life cycle, functions
 
     const textError = computed(() => {
-        if(submitError.value === TYPE_SUBMIT_ERROR.MANDATORY_EMPTY_INPUTS) return "Veuillez remplir tous les champs obligatoires.";
+        if(submitError.value === TYPE_SUBMIT_ERROR.MANDATORY_EMPTY_INPUTS) return TEXT_SUBMIT_ERROR.MANDATORY_EMPTY_INPUTS;
         else if(submitError.value === TYPE_SUBMIT_ERROR.NOT_SUCCESS_REQUEST) return "La requête a échoué.";
     });
 
@@ -150,7 +144,6 @@
     });
 
     async function handleSubmit() {
-
         const allErrorsInputs = getStatesErrorInputs();
         const allMandatoryValInputs = getValuesMandantInputs();
         if(isAnyMandatInputEmpty(allMandatoryValInputs)) {
@@ -190,7 +183,7 @@
             firstName: errorInputs.firstName,
             lastName: errorInputs.lastName,
             birthday: errorInputs.birthday,
-            gender: errorInputs.birthday,
+            gender: errorInputs.gender,
         }
     }
     function getValuesMandantInputs() {

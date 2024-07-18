@@ -1,19 +1,35 @@
 <template>
     <nav v-show="isValidPage"
         ref="headerRef" 
-        :class="`font-main-font flex flex-col items-center 
-        w-header-width top-top-Header left-top-Header fixed pt-10 h-[calc(100vh-40px)] 
-        bg-header-gradient rounded-md
+        :class="`font-main-font flex flex-col items-center
+        w-header-width top-top-Header left-top-Header fixed h-[calc(100vh-40px)] 
+        bg-header-gradient rounded-md 
         shadow-black shadow-custom-main
         ${classTranslateWidth} z-10`"
             @mouseenter="isHovered = true"
             @mouseleave="isHovered = false"
         >
         
-        <div class="w-[70%] border-[1px] border-white mt-[40px]"></div>
+        <div class="w-[80%] border-[1px] mt-24"></div>
 
         <div class="mt-2 w-full">
             <div class="w-full flex flex-col gap-5 relative" v-for="(icon, index) of dataIcons">
+                <div :key="index" @click="handleClickHeader(icon.page)" 
+                    :class="`flex relative ${classTranslateY} py-[6px] cursor-pointer ${bordergetCurrentPage(icon.page)}`">
+                    <component :is="icon.Component" :svg="svgConfig(icon.page)" class="w-header-width "/>
+                    <TransitionOpacity :durationIn="'duration-300'" :durationOut="'duration-0'">
+                        <router-link :to="icon.link" v-show="isHovered && isTextIconsVisible" 
+                        class="absolute w-[150px] right-[0px] top-[50%] transform -translate-y-1/2 pl-3 flex 
+                        items-center text-[14px] text-white">{{ icon.text }}</router-link>
+                    </TransitionOpacity>
+                </div>
+            </div>
+        </div>
+
+        <div class="w-[80%] border-[1px] mt-5"></div>
+
+        <div class="w-full mt-5">
+            <div class="w-full flex flex-col gap-5 relative" v-for="(icon, index) of dateIcons2">
                 <div :key="index" @click="handleClickHeader(icon.page)" 
                     :class="`flex relative ${classTranslateY} py-[6px] cursor-pointer ${bordergetCurrentPage(icon.page)}`">
                     <component :is="icon.Component" :svg="svgConfig(icon.page)" class="w-header-width "/>
@@ -67,9 +83,11 @@
     const dataIcons = [
     { Component: IconDashboard, link:'/tableau-de-bord', page: 'tableau-de-bord', text: 'Tableau de bord' },
     { Component: IconPurchases, link:'/historique-transactions',page: 'historique-transactions', text: 'Historique' },
-    { Component: IconUser, link:'/utilisateur', page: 'utilisateur', text: 'Utilisateur' },
     { Component: IconGraph, link:'',page: '', text: 'Graphiques' },
-    
+    { Component: IconUser, link:'/utilisateur', page: 'utilisateur', text: 'Utilisateur' },
+    ];
+
+    const dateIcons2 = [    
     { Component: IconPrivacy, link:'',page: 'confidentialité', text: 'Confidentialité' },
     { Component: IconUserRules, link:'',page: 'règles', text: "Règles d'utilisateur" },
     { Component: IconSupport, link:'',page: 'contact', text: 'Support et aide' },
@@ -125,7 +143,7 @@
 
     const bordergetCurrentPage = computed(() => {
         return (page) => {
-            return  page === router.currentRoute.value.path.substring(1) ? 'bg-second-bg' : '';
+            return  page === router.currentRoute.value.path.substring(1) ? 'bg-[#121422A0]' : '';
         }
     });
 

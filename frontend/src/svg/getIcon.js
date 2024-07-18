@@ -65,6 +65,43 @@ export async function getIconByName(name) {
         case 'Search' : {
             return await import ('@/component/svgs/IconSearch.vue');
         }
+
+        case 'Amount' : {
+            return await import ('@/component/svgs/IconAmount.vue');
+        }
+
+        case 'Crown' : {
+            return await import ('@/component/svgs/IconCrown.vue');
+        }
+
+        case 'Pencil' : {
+            return await import ('@/component/svgs/IconPencil.vue');
+        }
+
+        case 'Category' : {
+            return await import ('@/component/svgs/IconCategoryTrs.vue');
+        }
+
+        case 'Name' : {
+            return await import ('@/component/svgs/IconName.vue');
+        }
+
+        case 'Password' : {
+            return await import ('@/component/svgs/IconPassword.vue');
+        }
+
+        case 'Email' : {
+            return await import ('@/component/svgs/IconEmail.vue');
+        }
+
+        case 'Cross' : {
+            return await import ('@/component/svgs/IconCross.vue');
+        }
+
+        case 'Gender' : {
+            return await import ('@/component/svgs/IconGender.vue');
+        }
+        
         
         default : {
             return '';

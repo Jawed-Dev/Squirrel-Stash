@@ -1,8 +1,8 @@
 <template>
     <div class="flex flex-col w-[20%]">
-        <label class="flex text-[18px] text-white font-light" for="input-note">Note</label>
+        <label class="flex text-white font-light" for="input-note">Note</label>
         <InputBase 
-        unicode="🔍"
+        iconName="Pencil"
         v-model="searchNote"
         placeholder="Ex : Cadeau"
         id="input-note"

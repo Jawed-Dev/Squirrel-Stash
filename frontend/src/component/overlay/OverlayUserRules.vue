@@ -63,13 +63,13 @@
 
     const isOverlayActive = defineModel();
 
-    useEscapeKey(isOverlayActive, () => {
-        isOverlayActive.value = false;
-    });
+    // useEscapeKey(isOverlayActive, () => {
+    //     isOverlayActive.value = false;
+    // });
 
-    useClickOutside( '.trigger-overlay-rules', isOverlayActive, () => {
-        isOverlayActive.value = false;
-    },);
+    // useClickOutside( '.trigger-overlay-rules', isOverlayActive, () => {
+    //     isOverlayActive.value = false;
+    // },);
 
     async function toggleMenu(request) {
         switch(request) {

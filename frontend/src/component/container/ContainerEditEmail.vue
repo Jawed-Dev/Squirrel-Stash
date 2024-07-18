@@ -6,33 +6,39 @@
     
         <div class="gradient-border overflow-hidden">
             <form class="mt-24 flex flex-col" @submit.prevent="handleSubmit()">
-                <div class="pl-12 w-1/2">
-                    <div class="flex gap-12">
-                        <div class="flex flex-col justify-center w-1/2">
-                            <label class="text-white font-light text-[16px]" for="input-current-mail">Email</label>
-                            <ContainerTextUnderline 
-                                unicode="🔒"
-                                :text="inputsMail.currentMail" 
-                                extraClass="text-[16px]"
-                                id="input-current-mail"
-                            />
-                        </div>
-
-                        <div class="flex flex-col w-1/2">
-                            <label class="text-white font-light text-[16px]" for="input-new-mail">Nouvel email</label>
-                            <InputBase 
-                                unicode="🔒"
-                                id="input-new-mail" 
-                                v-model="inputsMail.newMail" 
-                                extraClass="" 
-                                placeholder="Non défini"
-                                type="mail"
-                            />
-                        </div>
-                    </div>
+                <!-- Errors -->
+                <div class="relative pl-5 pb-5">
+                    <p class="text-sm font-light absolute text-red-300">{{ textError }}</p>
                 </div>
 
-                <div class="w-full flex justify-center relative my-5">
+                <div class="flex justify-start w-full gap-24 pl-52">
+                    <div class="flex flex-col justify-center w-1/4">
+                        <label class="text-white font-light" for="input-current-mail">Email</label>
+                        <ContainerTextUnderline 
+                            iconName="Email"
+                            :text="inputsMail.currentMail" 
+                            extraClass="text-[16px]"
+                            id="input-current-mail"
+                        />
+                    </div>
+                    <div class="flex flex-col w-1/4">
+                        <label class="text-white font-light" for="input-new-mail">Nouvel email</label>
+                        <InputBase 
+                            iconName="Email"
+                            id="input-new-mail" 
+                            v-model="inputsMail.newMail" 
+                            v-model:stateError="errorInput"
+                            extraClass="" 
+                            placeholder="Non défini"
+                            type="mail"
+                            validFormat="email"
+                            :hideAnimation="true"
+                        />
+                    </div>
+                </div>
+               
+
+                <div class="w-full flex justify-center mt-8 my-3">
                     <div class=" shadow-black shadow-custom-main w-1/5">
                         <button class="text-[17px] w-full rounded-sm py-2 bg-gradient-blue 
                             rounded-br-[3px] font-light">Éditer
@@ -47,12 +53,13 @@
 
 
 <script setup>
-    import { reactive, onMounted } from 'vue';
+    import { ref, computed, reactive, onMounted } from 'vue';
     import { storeEmailUser } from '@/storePinia/useStoreDashboard';
     import { updateStoreUserEmail } from '@/storePinia/useUpdateStoreByBackend';
     import { sendUpdateMail } from '@/composable/useBackendActionData';
     import InputBase from '@/component/input/InputBase.vue';
     import ContainerTextUnderline from '@/component/container/ContainerTextUnderline.vue'; 
+    import { isAnyMandatInputEmpty, isAnyInputError, TYPE_SUBMIT_ERROR, TEXT_SUBMIT_ERROR } from '@/error/useHandleError';
     
     const emailUser = storeEmailUser();
     const inputsMail = reactive({
@@ -60,7 +67,16 @@
         newMail: '',
     });
 
+    const errorInput = ref(false);
+    const submitError = ref(null);
+
     // life cycle, functions
+    const textError = computed(() => {
+        if(submitError.value === TYPE_SUBMIT_ERROR.MANDATORY_EMPTY_INPUTS) return TEXT_SUBMIT_ERROR.ALL_INPUTS_MANDATORY;
+        else if(submitError.value === TYPE_SUBMIT_ERROR.NOT_SUCCESS_REQUEST) return "La requête a échoué.";
+        else if(submitError.value === TYPE_SUBMIT_ERROR.NEW_EMAIL_ERROR) return TEXT_SUBMIT_ERROR.NEW_EMAIL_ERROR;
+    });
+
     onMounted(async () => {
         await updateStoreUserEmail();
         updateEditEmail();
@@ -73,11 +89,49 @@
         inputsMail.newMail = '';
     }
     async function handleSubmit() {
-        await sendUpdateMail({
+        const allErrorsInputs = getStatesErrorInputs();
+        const allMandatoryValInputs = getValuesMandantInputs();
+        if(isAnyMandatInputEmpty(allMandatoryValInputs)) {
+            submitError.value = TYPE_SUBMIT_ERROR.MANDATORY_EMPTY_INPUTS;
+            return;
+        }
+        else if(isAnyInputError(allErrorsInputs)) {
+            submitError.value = TYPE_SUBMIT_ERROR.INPUTS_FORMAT_ERRORS;
+            return;
+        }
+        else if(isNewEmailSameAsOld()) {
+            submitError.value = TYPE_SUBMIT_ERROR.NEW_EMAIL_ERROR;
+            resetInputs();
+            return;
+        }
+        const response = await sendUpdateMail({
             newEmail: inputsMail.newMail
         });
+        const isSuccessRequest = response?.isSuccessRequest;
+        if(!isSuccessRequest) {
+            submitError.value = TYPE_SUBMIT_ERROR.NOT_SUCCESS_REQUEST;
+            return;
+        }
         await updateStoreUserEmail();
         updateEditEmail();
         clearInputsEmail();
+        submitError.value = null;
+    }
+
+    function getStatesErrorInputs() {
+        return {
+            email: errorInput.value
+        }
+    }
+    function getValuesMandantInputs() {
+        return {
+            email: inputsMail.newMail
+        }
+    }
+
+    function isNewEmailSameAsOld() {
+        const newMail = inputsMail.newMail.trim();
+        if(inputsMail.currentMail.length <= 0 || inputsMail.newMail.length <= 0) return false;
+        return inputsMail.currentMail === newMail;
     }
 </script>

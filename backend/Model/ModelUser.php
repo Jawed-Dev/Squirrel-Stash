@@ -174,8 +174,6 @@
             $dataQuery = $data['bodyData'];
             $userId = $data['userId'];
 
-            var_dump($dataQuery, $userId);
-
             $currentPassDb = $this->getUserPass($db, $userId);
 
             $reqSql = 

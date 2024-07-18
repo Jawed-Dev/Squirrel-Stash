@@ -9,10 +9,10 @@
             </div>
 
             <div class="mt-[50px]">
-                <label class="text-white font-light " for="login-mail">Adresse email</label>
+                <label class="text-white font-light" for="login-mail">Adresse email</label>
                 <InputBase 
                     id="login-mail" 
-                    unicode="📧"
+                    iconName="Email"
                     v-model="email" 
                     v-model:stateError="errorInput.email"
                     type="email"
@@ -22,11 +22,11 @@
                 />
             </div>
 
-            <div class="mt-[50px]">
+            <div class="mt-[30px]">
                 <label class="text-white font-light" for="login-pass">Mot de passe</label>
                 <InputBase 
                     id="login-pass" 
-                    unicode="🔒"
+                    iconName="Password"
                     v-model="password" 
                     v-model:stateError="errorInput.password"
                     type="password"
@@ -36,7 +36,7 @@
                 />
             </div>
      
-            <div class="mt-[50px] flex pt-[6px] px-[10px] justify-between ">
+            <div class="mt-[30px] flex pt-[6px] px-[10px] justify-between ">
                 <div class="flex gap-1">
                     <InputCheckbox :extraClass="''" v-model="confirmCheckbox" type="checkbox" />
                     <a class="txt-main-blue text-[13px] text-white font-light" href="">Se rappeler de moi</a>
@@ -63,7 +63,7 @@
     import ButtonComponent from '@/component/button/ButtonBasic.vue';
     import InputCheckbox from '@/component/input/InputCheckbox.vue';
     import { getHandleLogin } from '@/composable/useBackendGetData';
-    import { isAnyMandatInputEmpty, isAnyInputError, TYPE_SUBMIT_ERROR } from '@/error/useHandleError';
+    import { isAnyMandatInputEmpty, isAnyInputError, TYPE_SUBMIT_ERROR, TEXT_SUBMIT_ERROR } from '@/error/useHandleError';
         
     // props, variables
     const router = useRouter();
@@ -78,7 +78,7 @@
     const submitError = ref(null);
 
     const textError = computed(() => {
-        if(submitError.value === TYPE_SUBMIT_ERROR.MANDATORY_EMPTY_INPUTS) return "Veuillez remplir tous les champs obligatoires.";
+        if(submitError.value === TYPE_SUBMIT_ERROR.MANDATORY_EMPTY_INPUTS) return TEXT_SUBMIT_ERROR.ALL_INPUTS_MANDATORY;
         else if(submitError.value === TYPE_SUBMIT_ERROR.NOT_SUCCESS_REQUEST) return "La requête a échoué.";
     });
 

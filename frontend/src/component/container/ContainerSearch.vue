@@ -31,7 +31,6 @@
                         />
                     </div>
             
-                   
                     <div class="w-full flex justify-center">
                         <div class=" shadow-black shadow-custom-main w-1/5 mt-10">
                             <button class= "w-full rounded-sm py-2 bg-gradient-blue rounded-br-[3px] font-light">Rechercher

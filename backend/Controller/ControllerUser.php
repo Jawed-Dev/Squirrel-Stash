@@ -273,8 +273,6 @@
             $dataRequest = $this->getControllerMain()->prepareAndValidateData();
             $db = $dataRequest['dataBase'];
 
-            var_dump($dataRequest);
-
             $isAnyError = false; //$this->getControllerMain()->getHandlerError()->verifyInsertTransaction($dataRequest['bodyData']);
             $isSuccessReq = false;
             if(!$isAnyError) $isSuccessReq = $this->getModelUser()->updatePasswordByUserId($db, $dataRequest);

@@ -46,7 +46,6 @@
     </div>
 </template>
 
-
 <script setup>
     // import
     import { ref, watch, computed, reactive, defineAsyncComponent  } from 'vue';
@@ -61,7 +60,7 @@
     import { updateAllDataTransations} from '@/storePinia/useUpdateStoreByBackend';
     import { formatDateForCurrentDay, formatDateForFirstDay, isCurrentMonth } from '@/composable/useGetDate';
     import { listPurchases, listRecurings } from '@/svg/listTransactionSvgs';
-    import { isAnyMandatInputEmpty, isAnyInputError, TYPE_SUBMIT_ERROR } from '@/error/useHandleError';
+    import { isAnyMandatInputEmpty, isAnyInputError, TYPE_SUBMIT_ERROR, TEXT_SUBMIT_ERROR } from '@/error/useHandleError';
     import { isValidCategory } from '@/error/useValidFormat';
     
     const ContainerInputs = defineAsyncComponent(() => import('@/component/container/ContainerInputs.vue'));
@@ -98,16 +97,17 @@
 
     // life cycle / functions
     const textError = computed(() => {
-        if(submitError.value === TYPE_SUBMIT_ERROR.MANDATORY_EMPTY_INPUTS) return "Veuillez remplir tous les champs obligatoires.";
+        if(submitError.value === TYPE_SUBMIT_ERROR.MANDATORY_EMPTY_INPUTS) return TEXT_SUBMIT_ERROR.MANDATORY_EMPTY_INPUTS;
         else if(submitError.value === TYPE_SUBMIT_ERROR.NOT_SUCCESS_REQUEST) return "La requête a échoué.";
-        else if(submitError.value === TYPE_SUBMIT_ERROR.CATEGORY_ERROR) return "Catégorie invalide.";
+        else if(submitError.value === TYPE_SUBMIT_ERROR.CATEGORY_ERROR) return TEXT_SUBMIT_ERROR.CATEGORY_ERROR;
+        else if(submitError.value === TYPE_SUBMIT_ERROR.DATE_EMPTY) return TEXT_SUBMIT_ERROR.DATE_EMPTY;
     });
 
     watch( () => [dateSelected.month, dateSelected.year], async ([newMonth, newYear]) => {
         inputDateVal.value = formatDateInput();
     }, {  immediate:true, deep:true });
 
-    watch(typeTransaction, (newVal, oldVal) => {
+    watch(typeTransaction, () => {
         currentCategory.value = 0;
     });
 
@@ -122,6 +122,7 @@
     async function toggleMenu(request) {
         switch(request) {
             case 'openNClose' : {
+                submitError.value = null;
                 typeTransaction.value = false;
                 resetInputs();
                 isOverlayActive.value = !isOverlayActive.value;
@@ -132,7 +133,12 @@
                 const allErrorsInputs = getStatesErrorInputs();
                 const allMandatoryValInputs = getValuesMandantInputs();
                 const nameCategory = getCurrentNameCategory();
-                if(isAnyMandatInputEmpty(allMandatoryValInputs)) {
+
+                if(isDateEmpty(nameCategory)) {
+                    submitError.value = TYPE_SUBMIT_ERROR.DATE_EMPTY;
+                    return;
+                }
+                else if(isAnyMandatInputEmpty(allMandatoryValInputs)) {
                     submitError.value = TYPE_SUBMIT_ERROR.MANDATORY_EMPTY_INPUTS;
                     return;
                 }
@@ -219,5 +225,7 @@
         }
     }
 
-
+    function isDateEmpty() {
+        return inputDateVal.value === '';
+    }
 </script>

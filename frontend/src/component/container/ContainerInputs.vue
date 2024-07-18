@@ -2,7 +2,7 @@
     <div class="flex">
         <!-- dépenses valeur -->
         <div class="flex items-center flex-col w-full border-b-[1px] border-gray-700 py-[20px]">
-            <div class="flex justify-end items-center w-full pr-3">
+            <div class="flex justify-end w-full pr-3">
                 <div class="flex items-center justify-center mt-[5px]">
                     <InputBase 
                         v-model="inputDateVal" 
@@ -14,21 +14,25 @@
                         :borderHidden="true"
                         validFormat="date"
                         :hideAnimation="true"
+                        
                     />
                 </div>
             </div>
 
-            <div class="w-1/3 flex flex-col items-center mt-3">
+            <div class="w-1/3 mt-3">
                 <div class="w-full">
-                    <label for="input-amount-trs" class="flex justify-center font-light">Montant (€)</label>
+                    <label for="input-amount-trs" class="flex justify-center font-light">Montant *</label>
                     <InputBase 
-                        unicode="💵"
+                        extraClass="text-sm"
+                        iconName="Amount"
                         v-model="inputPriceVal" 
                         v-model:stateError="errorInputs.inputPriceVal" 
                         placeholder="Montant"
                         type="text"
                         id="input-amount-trs"
                         validFormat="amount"
+                        :hideAnimation="true"
+                        :onlyNumbers="true"
                     />
                 </div>
             </div>
@@ -38,13 +42,15 @@
                 <div class="w-full">
                     <label for="input-note-trs" class="flex justify-center font-light">{{textNote}}</label>
                     <InputBase 
+                        extraClass="text-sm"
+                        iconName="Pencil"
                         v-model="inputNoteVal"
                         v-model:stateError="errorInputs.inputNoteVal" 
-                        unicode="✏️"
                         type="text"
                         placeholder="Note"
                         id="input-note-trs"
                         validFormat="note"
+                        :hideAnimation="true"
                     />
                 
                 </div>
@@ -72,6 +78,7 @@
             return (isPurchase) ? "Note d'achat" : "Note de prélèvement";
         }
     });
+
     const textAmount = computed(() => {
         if(props.infoTransaction) {
             const isPurchase = props.typeTransaction === false;
@@ -82,6 +89,7 @@
             return (isPurchase) ? "Montant (€)" : "Montant de prélèvement (€)";
         }
     });
+    
     const inputNoteVal = defineModel('inputNoteVal');
     const inputPriceVal = defineModel('inputPriceVal');
     const inputDateVal = defineModel('inputDateVal');
