@@ -26,35 +26,35 @@
             if(!empty($_GET['page'])) {
                 switch($_GET['page']) {
                     case 'pageIndex': {
-                        getControllerMain()->authorizePageIndex();
+                        getControllerMain()->authorizePage();
                         break;
                     }
                     case 'pageLogin': {
-                        getControllerMain()->getControllerUser()->authorizePageLogin();
-                        break;
-                    }
-                    case 'pageDashboard': {
-                        getControllerMain()->getControllerStatistic()->authorizePageDashboard();
+                        getControllerMain()->getControllerUser()->authorizePage();
                         break;
                     }
                     case 'pageRegister': {
-                        getControllerMain()->getControllerUser()->authorizePageRegister();
+                        getControllerMain()->getControllerUser()->authorizePage();
                         break;
                     }
                     case 'pageForgotPass': {
-                        getControllerMain()->getControllerUser()->authorizePageForgotPass();
+                        getControllerMain()->getControllerUser()->authorizePage();
                         break;
                     }
                     case 'pageUser': {
-                        getControllerMain()->getControllerUser()->authorizePageUser();
+                        getControllerMain()->getControllerUser()->authorizePage();
                         break;
                     }
                     case 'pageResetPass': {
-                        getControllerMain()->getControllerUser()->authorizePageResetPassword();
+                        getControllerMain()->getControllerUser()->authorizePage();
                         break;
                     }
                     case 'pageTransactions': {
-                        getControllerMain()->getControllerStatistic()->authorizePageTransactions();
+                        getControllerMain()->getControllerStatistic()->authorizePage();
+                        break;
+                    }
+                    case 'pageDashboard': {
+                        getControllerMain()->getControllerStatistic()->authorizePage();
                         break;
                     }
                     
@@ -71,7 +71,7 @@
             if(!empty($_GET['getData'])) {
                 switch($_GET['getData']) {
                     // user
-                    case 'getHandleLogin': {
+                    case 'getTokenIfSuccessLogin': {
                         getControllerMain()->getControllerUser()->handleSuccessLogin();
                         break;
                     }

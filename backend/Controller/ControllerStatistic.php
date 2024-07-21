@@ -24,8 +24,8 @@
         function fetchDeleteTransaction();
         function fetchUpdateTransaction();
         // Prepare page
-        function authorizePageDashboard();
-        function authorizePageTransactions();
+        function authorizePage();
+        //function authorizePageTransactions();
     }
 
     
@@ -62,7 +62,7 @@
 
         // Set
         public function fetchSaveThreshold() {
-            $dataRequest = $this->getControllerMain()->prepareAndValidateData();
+            $dataRequest = $this->getControllerMain()->validateDataForController();
 
             $db = $dataRequest['dataBase'];
             $isTresholdExist = $this->getModelStatistic()->isThresholdExistByMonth($db, $dataRequest);
@@ -80,7 +80,7 @@
         }
 
         public function fetchInsertTransaction() {
-            $dataRequest = $this->getControllerMain()->prepareAndValidateData();
+            $dataRequest = $this->getControllerMain()->validateDataForController();
 
             //var_dump($dataRequest['dataBase']);
             $db = $dataRequest['dataBase'];
@@ -94,7 +94,7 @@
         }
 
         public function fetchDeleteTransaction() {
-            $dataRequest = $this->getControllerMain()->prepareAndValidateData();
+            $dataRequest = $this->getControllerMain()->validateDataForController();
 
             $db = $dataRequest['dataBase'];
             $isAnyError = $this->getControllerMain()->getHandlerError()->verifyDeleteTransaction($dataRequest);
@@ -106,7 +106,7 @@
         }
 
         public function fetchUpdateTransaction() {
-            $dataRequest = $this->getControllerMain()->prepareAndValidateData();
+            $dataRequest = $this->getControllerMain()->validateDataForController();
 
             $db = $dataRequest['dataBase'];
             $isAnyError = $this->getControllerMain()->getHandlerError()->verifyUpdateTransaction($dataRequest);
@@ -119,7 +119,7 @@
 
         // get
         public function fetchDataTrsBySearch() {
-            $dataRequest = $this->getControllerMain()->prepareAndValidateData();
+            $dataRequest = $this->getControllerMain()->validateDataForController();
 
             $db = $dataRequest['dataBase'];
             $isAnyError = false;//$this->getControllerMain()->getHandlerError()->verifyGetTrsMonthByDay($dataRequest);
@@ -129,7 +129,7 @@
         }
 
         public function fetchTrsMonthByDay() {
-            $dataRequest = $this->getControllerMain()->prepareAndValidateData();
+            $dataRequest = $this->getControllerMain()->validateDataForController();
 
             $db = $dataRequest['dataBase'];
             $isAnyError = $this->getControllerMain()->getHandlerError()->verifyGetTrsMonthByDay($dataRequest);
@@ -139,7 +139,7 @@
         }
 
         public function fetchThresholdByMonth() {
-            $dataRequest = $this->getControllerMain()->prepareAndValidateData();
+            $dataRequest = $this->getControllerMain()->validateDataForController();
             $db = $dataRequest['dataBase'];
 
             $isAnyError = $this->getControllerMain()->getHandlerError()->verifyGetThresholdByMonth($dataRequest);
@@ -149,7 +149,7 @@
         }
 
         public function fetchNLastTrsByMonth() {
-            $dataRequest = $this->getControllerMain()->prepareAndValidateData();
+            $dataRequest = $this->getControllerMain()->validateDataForController();
             if(!$dataRequest) ('Erreur de donnée'); 
             $db = $dataRequest['dataBase'];
 
@@ -160,7 +160,7 @@
         }
 
         public function fetchTotalTrsByMonth() {
-            $dataRequest = $this->getControllerMain()->prepareAndValidateData();
+            $dataRequest = $this->getControllerMain()->validateDataForController();
             $db = $dataRequest['dataBase'];
 
             $isAnyError = $this->getControllerMain()->getHandlerError()->verifyGetTotalTrsByMonth($dataRequest);
@@ -170,7 +170,7 @@
         }
 
         public function fetchBiggestTrsByMonth() {
-            $dataRequest = $this->getControllerMain()->prepareAndValidateData();
+            $dataRequest = $this->getControllerMain()->validateDataForController();
             $db = $dataRequest['dataBase'];
 
             $isAnyError = $this->getControllerMain()->getHandlerError()->verifyGetBiggestTrsByMonth($dataRequest);
@@ -180,15 +180,15 @@
         }
 
         // Prepare Pages
-        public function authorizePageDashboard() {
+        public function authorizePage() {
             $decodedJwt = $this->getControllerMain()->getHandlerJwt()->getJwtFromHeader();
             $isSessionActive = $this->getControllerMain()->getControllerUser()->isSessionActive($decodedJwt);
-            $this->getViewStatistic()->renderPageDashboard(['isSessionActive' => $isSessionActive]);
+            $this->getViewStatistic()->renderJson(['isSessionActive' => $isSessionActive]);
         }
-        public function authorizePageTransactions() {
-            $decodedJwt = $this->getControllerMain()->getHandlerJwt()->getJwtFromHeader();
-            $isSessionActive = $this->getControllerMain()->getControllerUser()->isSessionActive($decodedJwt);
-            $this->getViewStatistic()->renderPageDashboard(['isSessionActive' => $isSessionActive]);
-        }
+        // public function authorizePageTransactions() {
+        //     $decodedJwt = $this->getControllerMain()->getHandlerJwt()->getJwtFromHeader();
+        //     $isSessionActive = $this->getControllerMain()->getControllerUser()->isSessionActive($decodedJwt);
+        //     $this->getViewStatistic()->renderPageDashboard(['isSessionActive' => $isSessionActive]);
+        // }
     }
 ?>

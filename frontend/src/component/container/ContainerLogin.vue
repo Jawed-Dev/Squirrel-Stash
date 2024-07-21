@@ -62,7 +62,7 @@
     import InputBase from '@/component/input/InputBase.vue';
     import ButtonComponent from '@/component/button/ButtonBasic.vue';
     import InputCheckbox from '@/component/input/InputCheckbox.vue';
-    import { getHandleLogin } from '@/composable/useBackendGetData';
+    import { getTokenIfSuccessLogin } from '@/composable/useBackendGetData';
     import { isAnyMandatInputEmpty, isAnyInputError, TYPE_SUBMIT_ERROR, TEXT_SUBMIT_ERROR } from '@/error/useHandleError';
         
     // props, variables
@@ -94,7 +94,7 @@
             submitError.value = TYPE_SUBMIT_ERROR.INPUTS_FORMAT_ERRORS;
             return;
         }
-        const isSuccessLogin = await getHandleLogin({
+        const isSuccessLogin = await getTokenIfSuccessLogin({
             email: email.value, 
             password: password.value, 
             stayConnected: confirmCheckbox.value

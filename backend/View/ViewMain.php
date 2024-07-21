@@ -2,12 +2,12 @@
     //namespace View;
 
     interface I_ViewMain {
-        function renderPageIndexJson($dataPage);
+        function renderJson($dataPage);
     }
 
     class ViewMain implements I_ViewMain  {
         
-        function renderPageIndexJson($dataPage) {
+        function renderJson($dataPage) {
             echo json_encode([
                 'isSessionActive' => $dataPage['isSessionActive'],
             ]);

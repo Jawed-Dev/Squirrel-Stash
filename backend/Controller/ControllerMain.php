@@ -35,11 +35,14 @@ use App\Mail\EmailSender;
         // Handler Error
         function getHandlerError();
         function getHandlerValidFormat();
-        function prepareAndValidateData($requireUserId = true);
-        //function prepareDataForModel($requireUserId = true, $requireBodyData = true );
+        function validateDataForController($requireUserId = true);
+        //function prepareDataForController($requireUserId = true, $requireBodyData = true );
+        // cookies
+        function createCookieStayConnected($stayConnect = false);
+        function createCookieByRefreshToken($tokenJwt);
         
         // Prepare pages
-        function authorizePageIndex();
+        function authorizePage();
     }
 
     class ControllerMain implements I_ControllerMain {
@@ -139,8 +142,7 @@ use App\Mail\EmailSender;
             return $this->EmailSender;
         }
 
-
-        public function prepareDataForModel($requireUserId = true, $requireBodyData = true ) {
+        public function prepareDataForController($requireUserId = true, $requireBodyData = true ) {
             $bodyDataJson = null;
             $bodyData = null;
             if($requireBodyData) {
@@ -168,19 +170,47 @@ use App\Mail\EmailSender;
             ];
         }
 
+        public function validateDataForController($requireUserId = true, $requireBodyData = true) {
+            $dataRequest = $this->prepareDataForController($requireUserId, $requireBodyData);
 
-        public function prepareAndValidateData($requireUserId = true, $requireBodyData = true ) {
-            $dataRequest = $this->prepareDataForModel($requireUserId, $requireBodyData);
+            // $requireUserId = $params['requireUserId'];
+            // $requireBodyData = $params['requireBodyData'];
+            // $requireDb = $params['requireDatabase'];
+
             $dataRequire[] = $dataRequest['dataBase'];
             if($requireUserId) $dataRequire[] = $dataRequest['userId'];
             if($requireBodyData) {
                 $dataRequire[] = $dataRequest['bodyData'];
                 if(count($dataRequest['bodyData']) >= MAX_DATA_BODY_REQUEST) return null;
             }
-            $isAnyError = $this->getHandlerError()->verifyMainDataRequired($dataRequire);
-            if ($isAnyError) return null;
+            $isAnyMainDataEmpty = $this->getHandlerError()->verifyIfMainDataExists($dataRequire);
+            if ($isAnyMainDataEmpty) return null;
+
+
+
 
             return $dataRequest;
+        }
+
+        public function createCookieStayConnected($stayConnect = false) {
+            $valueCookie = ($stayConnect) ? 1 : 0;
+            setcookie('stayConnected', $valueCookie, [
+                'expires' => time() + TIME_EXPIRE_TIME_STAY_CONNECTED, 
+                'httponly' => true,
+                'secure' => true,
+                'samesite' => 'Strict'
+            ]);
+            $_COOKIE['stayConnected'] = $stayConnect;
+        }
+
+        function createCookieByRefreshToken($tokenJwt) {
+            setcookie('refreshToken', $tokenJwt, [
+                'expires' => time() + TIME_EXPIRE_TIME_STAY_CONNECTED, 
+                'httponly' => true,
+                'secure' => true,
+                'samesite' => 'Strict'
+            ]);
+            $_COOKIE['refreshToken'] = $tokenJwt;
         }
 
         public function sendJsonResponse($data) {
@@ -192,13 +222,13 @@ use App\Mail\EmailSender;
         }
 
         // Prepare Pages
-        public function authorizePageIndex() {
+        public function authorizePage() {
             $decodedJwt = $this->getHandlerJwt()->getJwtFromHeader();
             $isSessionActive = $this->getControllerUser()->isSessionActive($decodedJwt);
             $dataPage = [
                 'isSessionActive' => $isSessionActive,
             ];  
-            $this->getViewMain()->renderPageIndexJson($dataPage);
+            $this->getViewMain()->renderJson($dataPage);
         }
     }
 

@@ -1,11 +1,11 @@
 <?php
 
     interface I_ViewStatistic {
-        function renderPageDashboard($dataPage);
+        function renderJson($dataPage);
     }
 
     class ViewStatistic implements I_ViewStatistic {
-        function renderPageDashboard($dataPage) {
+        function renderJson($dataPage) {
             echo json_encode([
                 'isSessionActive' => $dataPage['isSessionActive'],
             ]);

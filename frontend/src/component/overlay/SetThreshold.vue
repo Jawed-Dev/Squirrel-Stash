@@ -44,7 +44,7 @@
             </div>
         </TransitionOpacity>
         <TransitionPopUp duration-in="500" duration-out="500">
-            <OverlaySuccessAction text="Votre seuil  à partir de ce mois a été changé." v-if="isSuccessAction" v-model:overlayActive="isSuccessAction" />
+            <OverlaySuccessAction text="Votre seuil de transaction a été modifié." v-if="isSuccessAction" v-model:overlayActive="isSuccessAction" />
         </TransitionPopUp>
    
 </template>

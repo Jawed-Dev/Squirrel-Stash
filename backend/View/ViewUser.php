@@ -1,11 +1,11 @@
 <?php
 
     interface I_ViewUser {
-        function renderPageLogin($dataPage);
+        function renderJson($dataPage);
     }
 
     class ViewUser implements I_ViewUser {
-        function renderPageLogin($dataPage) {
+        function renderJson($dataPage) {
             echo json_encode([
                 'isSessionActive' => $dataPage['isSessionActive'],
             ]);

@@ -33,15 +33,16 @@
         function updateEmail();
         function sendEmailToSupport();
         function disconnectUser();
-        function createCookieStayConnected($stayConnect = false);
+        //function createCookieStayConnected($stayConnect = false);
         function updateAccessToken();
         
         // Prepare pages
-        function authorizePageLogin();
-        function authorizePageForgotPass();
-        function authorizePageRegister();
-        function authorizePageResetPassword();
-        function authorizePageUser();
+        function authorizePage();
+        // function authorizePageLogin();
+        // function authorizePageForgotPass();
+        // function authorizePageRegister();
+        // function authorizePageResetPassword();
+        // function authorizePageUser();
     }
 
     class ControllerUser implements I_ControllerUser {
@@ -94,33 +95,16 @@
             $this->getControllerMain()->sendJsonResponse(['successRequest' => $isSuccessRequest]);
         }
 
-        // public function getNewAccessToken() {
-        //     if(!empty($_COOKIE['refreshToken'])) {
-        //         $currentRefreshToken = $_COOKIE['refreshToken'];
-        //         $decodedRefreshJwt = $this->getControllerMain()->getHandlerJwt()->decodeJwt($currentRefreshToken);
-        //         $isValidToken = $this->getControllerMain()->getHandlerJwt()->isValidTokenJwt($decodedRefreshJwt);
-        //         if(!$isValidToken) return null;
-        //         $userId = $this->getUserIdFromJwt($decodedRefreshJwt);
-        //         $newTokenJwt = $this->getControllerMain()->getHandlerJwt()->createAccessTokenJwt($userId);
-
-        //         //$tokenJwt = $newTokenJwt;
-        //         //$newTokenRefreshJwt = $this->getControllerMain()->getHandlerJwt()->createRefreshTokenJwt($userId);
-        //         //$this->getControllerMain()->getHandlerJwt()->createCookieByRefreshToken($newTokenRefreshJwt);
-        //         return $newTokenJwt;
-        //     }
-        //     return null;
+        // public function createCookieStayConnected($stayConnect = false) {
+        //     $valueCookie = ($stayConnect) ? 1 : 0;
+        //     setcookie('stayConnected', $valueCookie, [
+        //         'expires' => time() + TIME_EXPIRE_TIME_STAY_CONNECTED, 
+        //         'httponly' => true,
+        //         'secure' => true,
+        //         'samesite' => 'Strict'
+        //     ]);
+        //     $_COOKIE['stayConnected'] = $stayConnect;
         // }
-
-        public function createCookieStayConnected($stayConnect = false) {
-            $valueCookie = ($stayConnect) ? 1 : 0;
-            setcookie('stayConnected', $valueCookie, [
-                'expires' => time() + TIME_EXPIRE_TIME_STAY_CONNECTED, 
-                'httponly' => true,
-                'secure' => true,
-                'samesite' => 'Strict'
-            ]);
-            $_COOKIE['stayConnected'] = $stayConnect;
-        }
 
         public function getStateSession() {
             $decodedJwt = $this->getControllerMain()->getHandlerJwt()->getJwtFromHeader();
@@ -149,7 +133,7 @@
 
         public function handleSuccessLogin() {
             $requireAuth = false;
-            $dataRequest = $this->getControllerMain()->prepareAndValidateData($requireAuth);
+            $dataRequest = $this->getControllerMain()->validateDataForController($requireAuth);
             $db = $dataRequest['dataBase'];
 
             $isAnyError = $this->getControllerMain()->getHandlerError()->verifyHandleSuccessLogin($dataRequest);
@@ -160,18 +144,18 @@
 
             //var_dump($dataRequest);
             $choiceStayConnected = $dataRequest['bodyData']['stayConnected'];
-            $this->createCookieStayConnected($choiceStayConnected);
+            $this->getControllerMain()->createCookieStayConnected($choiceStayConnected);
 
             $tokenJwt = $this->getControllerMain()->getHandlerJwt()->createAccessTokenJwt($userId);
             $tokenRefreshJwt = $this->getControllerMain()->getHandlerJwt()->createRefreshTokenJwt($userId);
-            $this->getControllerMain()->getHandlerJwt()->createCookieByRefreshToken($tokenRefreshJwt);
+            $this->getControllerMain()->createCookieByRefreshToken($tokenRefreshJwt);
             $this->getControllerMain()->sendJsonResponse(['tokenJwt' => $tokenJwt]);
         }
 
         public function getUserFirstName() {
             $requireBodyData = false;
             $requireAuth = true;
-            $dataRequest = $this->getControllerMain()->prepareAndValidateData($requireAuth, $requireBodyData);
+            $dataRequest = $this->getControllerMain()->validateDataForController($requireAuth, $requireBodyData);
             //var_dump($dataRequest);
             //$decodedJwt = $this->getControllerMain()->getHandlerJwt()->getJwtFromHeader();
             $userId = $dataRequest['userId'];
@@ -183,7 +167,7 @@
 
         public function fetchInsertUser() {
             $requireAuth = false;
-            $dataRequest = $this->getControllerMain()->prepareAndValidateData($requireAuth);
+            $dataRequest = $this->getControllerMain()->validateDataForController($requireAuth);
             $db = $dataRequest['dataBase'];
             
             $isAnyError = $this->getControllerMain()->getHandlerError()->verifyInsertUser($dataRequest);
@@ -201,7 +185,7 @@
 
         public function fetchIsValidResetPassToken() {
             $requireAuth = false;
-            $dataRequest = $this->getControllerMain()->prepareAndValidateData($requireAuth);
+            $dataRequest = $this->getControllerMain()->validateDataForController($requireAuth);
             $db = $dataRequest['dataBase'];
             
             $isAnyError = $this->getControllerMain()->getHandlerError()->verifyIsValidResetPassToken($dataRequest);
@@ -215,7 +199,7 @@
 
         public function FetchSendResetPassToken() {
             $requireAuth= false;
-            $dataRequest = $this->getControllerMain()->prepareAndValidateData($requireAuth);
+            $dataRequest = $this->getControllerMain()->validateDataForController($requireAuth);
             $db = $dataRequest['dataBase'];
             
             $isAnyError = $this->getControllerMain()->getHandlerError()->verifySendResetPassToken($dataRequest);
@@ -250,7 +234,7 @@
 
         public function sendUpdateMail() {
             // prepare data
-            $dataRequest = $this->getControllerMain()->prepareAndValidateData();
+            $dataRequest = $this->getControllerMain()->validateDataForController();
             $db = $dataRequest['dataBase'];
             $userId = $dataRequest['userId'];
             $currentEmail = $this->getModelUser()->getCurrentEmail($db, $userId);
@@ -292,7 +276,7 @@
         }
 
         public function sendEmailToSupport() {
-            $dataRequest = $this->getControllerMain()->prepareAndValidateData();
+            $dataRequest = $this->getControllerMain()->validateDataForController();
             $db = $dataRequest['dataBase'];
             $dataBody = $dataRequest['bodyData'];
 
@@ -318,7 +302,7 @@
 
         public function updatePasswordByToken() {
             $requiredAuthFalse = false;
-            $dataRequest = $this->getControllerMain()->prepareAndValidateData($requiredAuthFalse);
+            $dataRequest = $this->getControllerMain()->validateDataForController($requiredAuthFalse);
             $db = $dataRequest['dataBase'];
 
             // j'ai commencé le verify
@@ -333,7 +317,7 @@
         }
 
         public function updatePasswordByUserId() {
-            $dataRequest = $this->getControllerMain()->prepareAndValidateData();
+            $dataRequest = $this->getControllerMain()->validateDataForController();
             $db = $dataRequest['dataBase'];
 
             $isAnyError = false; //$this->getControllerMain()->getHandlerError()->verifyInsertTransaction($dataRequest['bodyData']);
@@ -345,7 +329,7 @@
         }
 
         public function updateEmail() {
-            $dataRequest = $this->getControllerMain()->prepareAndValidateData();
+            $dataRequest = $this->getControllerMain()->validateDataForController();
             $db = $dataRequest['dataBase'];
 
             $isAnyError = false; //$this->getControllerMain()->getHandlerError()->verifyInsertTransaction($dataRequest['bodyData']);
@@ -360,7 +344,7 @@
         }        
 
         public function getDataUserProfil() {
-            $dataRequest = $this->getControllerMain()->prepareAndValidateData();
+            $dataRequest = $this->getControllerMain()->validateDataForController();
             $db = $dataRequest['dataBase'];
             $userId = $dataRequest['userId'];
 
@@ -371,7 +355,7 @@
         }
 
         public function getUserEmail() {
-            $dataRequest = $this->getControllerMain()->prepareAndValidateData();
+            $dataRequest = $this->getControllerMain()->validateDataForController();
             $db = $dataRequest['dataBase'];
             $userId = $dataRequest['userId'];
 
@@ -383,7 +367,7 @@
         
 
         public function updateUserProfil() {
-            $dataRequest = $this->getControllerMain()->prepareAndValidateData();
+            $dataRequest = $this->getControllerMain()->validateDataForController();
             $db = $dataRequest['dataBase'];
             //var_dump($dataRequest);
 
@@ -394,49 +378,56 @@
         }
 
         // Prepare pages
-        public function authorizePageLogin() {
+        public function authorizePage() {
             $decodedJwt = $this->getControllerMain()->getHandlerJwt()->getJwtFromHeader();
             $isSessionActive = $this->isSessionActive($decodedJwt);
-            $dataPage = [
-                'isSessionActive' => $isSessionActive,
-            ]; 
-            $this->getViewUser()->renderPageLogin($dataPage);
+            $dataPage = ['isSessionActive' => $isSessionActive]; 
+            $this->getViewUser()->renderJson($dataPage);
         }
 
-        public function authorizePageForgotPass() {
-            $decodedJwt = $this->getControllerMain()->getHandlerJwt()->getJwtFromHeader();
-            $isSessionActive = $this->isSessionActive($decodedJwt);
-            $dataPage = [
-                'isSessionActive' => $isSessionActive,
-            ]; 
-            $this->getViewUser()->renderPageLogin($dataPage);
-        }      
+        // public function authorizePageLogin() {
+        //     $decodedJwt = $this->getControllerMain()->getHandlerJwt()->getJwtFromHeader();
+        //     $isSessionActive = $this->isSessionActive($decodedJwt);
+        //     $dataPage = [
+        //         'isSessionActive' => $isSessionActive,
+        //     ]; 
+        //     $this->getViewUser()->renderPageLogin($dataPage);
+        // }
 
-        public function authorizePageRegister() {
-            $decodedJwt = $this->getControllerMain()->getHandlerJwt()->getJwtFromHeader();
-            $isSessionActive = $this->isSessionActive($decodedJwt);
-            $dataPage = [
-                'isSessionActive' => $isSessionActive,
-            ]; 
-            $this->getViewUser()->renderPageLogin($dataPage);  
-        }
+        // public function authorizePageForgotPass() {
+        //     $decodedJwt = $this->getControllerMain()->getHandlerJwt()->getJwtFromHeader();
+        //     $isSessionActive = $this->isSessionActive($decodedJwt);
+        //     $dataPage = [
+        //         'isSessionActive' => $isSessionActive,
+        //     ]; 
+        //     $this->getViewUser()->renderPageLogin($dataPage);
+        // }      
 
-        public function authorizePageResetPassword() {
-            $decodedJwt = $this->getControllerMain()->getHandlerJwt()->getJwtFromHeader();
-            $isSessionActive = $this->isSessionActive($decodedJwt);
-            $dataPage = [
-                'isSessionActive' => $isSessionActive,
-            ]; 
-            $this->getViewUser()->renderPageLogin($dataPage);  
-        }
+        // public function authorizePageRegister() {
+        //     $decodedJwt = $this->getControllerMain()->getHandlerJwt()->getJwtFromHeader();
+        //     $isSessionActive = $this->isSessionActive($decodedJwt);
+        //     $dataPage = [
+        //         'isSessionActive' => $isSessionActive,
+        //     ]; 
+        //     $this->getViewUser()->renderPageLogin($dataPage);  
+        // }
 
-        public function authorizePageUser() {
-            $decodedJwt = $this->getControllerMain()->getHandlerJwt()->getJwtFromHeader();
-            $isSessionActive = $this->isSessionActive($decodedJwt);
-            $dataPage = [
-                'isSessionActive' => $isSessionActive,
-            ]; 
-            $this->getViewUser()->renderPageLogin($dataPage);  
-        }
+        // public function authorizePageResetPassword() {
+        //     $decodedJwt = $this->getControllerMain()->getHandlerJwt()->getJwtFromHeader();
+        //     $isSessionActive = $this->isSessionActive($decodedJwt);
+        //     $dataPage = [
+        //         'isSessionActive' => $isSessionActive,
+        //     ]; 
+        //     $this->getViewUser()->renderPageLogin($dataPage);  
+        // }
+
+        // public function authorizePageUser() {
+        //     $decodedJwt = $this->getControllerMain()->getHandlerJwt()->getJwtFromHeader();
+        //     $isSessionActive = $this->isSessionActive($decodedJwt);
+        //     $dataPage = [
+        //         'isSessionActive' => $isSessionActive,
+        //     ]; 
+        //     $this->getViewUser()->renderPageLogin($dataPage);  
+        // }
     }
 ?>

@@ -129,7 +129,7 @@ export async function getThresholdByMonth(month, year) {
     return thresholdAmount;
 }
 
-export async function getHandleLogin(params) {
+export async function getTokenIfSuccessLogin(params) {
     //notAuthRequired();
     const dataLogin = {
         'email': String(params.email),
@@ -137,7 +137,7 @@ export async function getHandleLogin(params) {
         'stayConnected': Boolean(params.stayConnected),
     }
     const dataHandleLogin = await useConfigFetchGetData ({
-        request: 'getHandleLogin', 
+        request: 'getTokenIfSuccessLogin', 
         method: 'POST', 
         dataBody: dataLogin, 
     });

@@ -16,7 +16,6 @@
         function decodeJwt($tokenJwt);
         function getJwtFromHeader();
         function createRefreshTokenJwt($userId);
-        function createCookieByRefreshToken($decodedJwt);
         function getNewAccessToken();
     }
 
@@ -77,7 +76,7 @@
             $key = JWT_SECRET_KEY; 
             $issuedAt = time();
             if(empty($_COOKIE['stayConnected'])) {
-                $this->getControllerMain()->getControllerUser()->createCookieStayConnected(0);
+                $this->getControllerMain()->createCookieStayConnected(0);
             }
             $timeExpiration = ($_COOKIE['stayConnected']) ? TIME_EXPIRE_TIME_STAY_CONNECTED : TIME_EXPIRE_TIME_REFRESH_JWT;
             $expirationTime = $issuedAt + $timeExpiration;  
@@ -100,16 +99,6 @@
             }
         }
 
-        function createCookieByRefreshToken($tokenJwt) {
-            setcookie('refreshToken', $tokenJwt, [
-                'expires' => time() + TIME_EXPIRE_TIME_STAY_CONNECTED, 
-                'httponly' => true,
-                'secure' => true,
-                'samesite' => 'Strict'
-            ]);
-            $_COOKIE['refreshToken'] = $tokenJwt;
-        }
-
         public function decodeJwt($tokenJwt) {
             try {
                 $key = JWT_SECRET_KEY; 
@@ -120,35 +109,6 @@
                 return null;
             }
         }
-
-        // public function prepareDataForModel($requireUserId = true, $requireBodyData = true ) {
-        //     $bodyDataJson = null;
-        //     $bodyData = null;
-        //     if($requireBodyData) {
-        //         $bodyDataJson = $this->getControllerMain()->getRequestBodyJson();
-        //         $bodyData = json_decode($bodyDataJson, true);
-        //         foreach ($bodyData as &$value) {
-        //             if (is_string($value) && $value) $this->getControllerMain()->getHandlerValidFormat()->sanitizeData($value);
-        //         }
-        //     }
-
-        //     $db = $this->getControllerMain()->getDatabase();
-        //     $userId = null;
-
-        //     if($requireUserId) {
-        //         $decodedJwt = $this->getJwtFromHeader();
-        //         $isSessionActive = $this->getControllerMain()->getControllerUser()->isSessionActive($decodedJwt);
-        //         if(!$isSessionActive) throw new Exception('Erreur prépare data');
-        //         $userId = $this->getControllerMain()->getControllerUser()->getUserIdFromJwt($decodedJwt);
-        //     }
-
-        //     return [
-        //         'bodyData' => $bodyData,
-        //         'userId' => $userId,
-        //         'dataBase' => $db
-        //     ];
-        // }
-
 
         public function isValidTokenJwt($decodedJwt) {
             $timeNow = time();
