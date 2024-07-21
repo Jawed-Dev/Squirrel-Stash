@@ -61,19 +61,6 @@
     const isSuccessDelete = ref(false);
     const isSuccessEdit = ref(false);
 
-    watch(isSuccessEdit, (newVal, oldVal) => {
-        alert(`Edit status changed from ${oldVal} to ${newVal}`);
-    });
-
-    watch(isSuccessDelete, (newVal, oldVal) => {
-        alert(`Edit status changed from ${oldVal} to ${newVal}`);
-    });
-
-    watchEffect(() => {
-        console.log('isSuccessEdit changed:', isSuccessEdit.value);
-    });
-
-
     // life cycle
     watch( () => [dateSelected.month, dateSelected.year], async ([newMonth, newYear]) => {
         updateLastNTrsByMonth(newMonth, newYear, 'purchase');

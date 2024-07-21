@@ -36,6 +36,7 @@ use App\Mail\EmailSender;
         function getHandlerError();
         function getHandlerValidFormat();
         function prepareAndValidateData($requireUserId = true);
+        //function prepareDataForModel($requireUserId = true, $requireBodyData = true );
         
         // Prepare pages
         function authorizePageIndex();
@@ -49,6 +50,7 @@ use App\Mail\EmailSender;
         private $db;
         private $HandlerJwt;
         private $HandlerError;
+        private $HandlerValidFormat;
         private $HandlerLog;
         private $EmailSender;
 
@@ -116,8 +118,8 @@ use App\Mail\EmailSender;
         * @return HandlerValidFormat
         */
         public function getHandlerValidFormat() {
-            if (!$this->HandlerError) $this->HandlerError = new HandlerValidFormat();
-            return $this->HandlerError;
+            if (!$this->HandlerValidFormat) $this->HandlerValidFormat = new HandlerValidFormat();
+            return $this->HandlerValidFormat;
         }
 
         // HandlerLog
@@ -138,15 +140,44 @@ use App\Mail\EmailSender;
         }
 
 
-        // json 
+        public function prepareDataForModel($requireUserId = true, $requireBodyData = true ) {
+            $bodyDataJson = null;
+            $bodyData = null;
+            if($requireBodyData) {
+                $bodyDataJson = $this->getRequestBodyJson();
+                $bodyData = json_decode($bodyDataJson, true);
+                foreach ($bodyData as &$value) {
+                    if (is_string($value) && $value) $this->getHandlerValidFormat()->sanitizeData($value);
+                }
+            }
 
-        public function prepareAndValidateData($requireUserId = true) {
-            $dataRequest = $this->getHandlerJwt()->prepareDataForModel($requireUserId);
-            $dataRequire = [ $dataRequest['dataBase'], $dataRequest['bodyData'] ];
-            if ($requireUserId) $dataRequire[] = $dataRequest['userId'];
+            $db = $this->getDatabase();
+            $userId = null;
 
-            if(count($dataRequest['bodyData']) >= MAX_DATA_BODY_REQUEST) return null;
-            $isAnyError = $this->getHandlerError()->verifyDataForModel($dataRequire);
+            if($requireUserId) {
+                $decodedJwt = $this->getHandlerJwt()->getJwtFromHeader();
+                $isSessionActive = $this->getControllerUser()->isSessionActive($decodedJwt);
+                if(!$isSessionActive) throw new Exception('Erreur prépare data');
+                $userId = $this->getControllerUser()->getUserIdFromJwt($decodedJwt);
+            }
+
+            return [
+                'bodyData' => $bodyData,
+                'userId' => $userId,
+                'dataBase' => $db
+            ];
+        }
+
+
+        public function prepareAndValidateData($requireUserId = true, $requireBodyData = true ) {
+            $dataRequest = $this->prepareDataForModel($requireUserId, $requireBodyData);
+            $dataRequire[] = $dataRequest['dataBase'];
+            if($requireUserId) $dataRequire[] = $dataRequest['userId'];
+            if($requireBodyData) {
+                $dataRequire[] = $dataRequest['bodyData'];
+                if(count($dataRequest['bodyData']) >= MAX_DATA_BODY_REQUEST) return null;
+            }
+            $isAnyError = $this->getHandlerError()->verifyMainDataRequired($dataRequire);
             if ($isAnyError) return null;
 
             return $dataRequest;
@@ -163,7 +194,7 @@ use App\Mail\EmailSender;
         // Prepare Pages
         public function authorizePageIndex() {
             $decodedJwt = $this->getHandlerJwt()->getJwtFromHeader();
-            $isSessionActive = $this->getControllerUser()->isSessionActiveByJwt($decodedJwt);
+            $isSessionActive = $this->getControllerUser()->isSessionActive($decodedJwt);
             $dataPage = [
                 'isSessionActive' => $isSessionActive,
             ];  

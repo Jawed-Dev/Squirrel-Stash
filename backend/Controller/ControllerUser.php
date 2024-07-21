@@ -15,13 +15,12 @@
 
         // get
         function getDataUserProfil();
-        function isSessionActiveByJwt($decodedJwt);
+        function isSessionActive($decodedJwt);
         function fetchInsertUser();
         function getUserIdFromJwt($decodedJwt);
         function getStateSession();
         function getUserFirstName();
         function getUserEmail();
-        function getNewAccessToken();
 
         // action
         function handleSuccessLogin();
@@ -95,47 +94,47 @@
             $this->getControllerMain()->sendJsonResponse(['successRequest' => $isSuccessRequest]);
         }
 
-        public function getNewAccessToken() {
-            if(!empty($_COOKIE['refreshToken'])) {
-                $currentRefreshToken = $_COOKIE['refreshToken'];
-                $decodedRefreshJwt = $this->getControllerMain()->getHandlerJwt()->decodeJwt($currentRefreshToken);
-                $isValidToken = $this->getControllerMain()->getHandlerJwt()->isValidTokenJwt($decodedRefreshJwt);
-                if(!$isValidToken) return null;
-                $userId = $this->getUserIdFromJwt($decodedRefreshJwt);
-                $newTokenJwt = $this->getControllerMain()->getHandlerJwt()->createAccessTokenJwt($userId);
+        // public function getNewAccessToken() {
+        //     if(!empty($_COOKIE['refreshToken'])) {
+        //         $currentRefreshToken = $_COOKIE['refreshToken'];
+        //         $decodedRefreshJwt = $this->getControllerMain()->getHandlerJwt()->decodeJwt($currentRefreshToken);
+        //         $isValidToken = $this->getControllerMain()->getHandlerJwt()->isValidTokenJwt($decodedRefreshJwt);
+        //         if(!$isValidToken) return null;
+        //         $userId = $this->getUserIdFromJwt($decodedRefreshJwt);
+        //         $newTokenJwt = $this->getControllerMain()->getHandlerJwt()->createAccessTokenJwt($userId);
 
-                //$tokenJwt = $newTokenJwt;
-                //$newTokenRefreshJwt = $this->getControllerMain()->getHandlerJwt()->createRefreshTokenJwt($userId);
-                //$this->getControllerMain()->getHandlerJwt()->createCookieByRefreshToken($newTokenRefreshJwt);
-                return $newTokenJwt;
-            }
-            return null;
-        }
+        //         //$tokenJwt = $newTokenJwt;
+        //         //$newTokenRefreshJwt = $this->getControllerMain()->getHandlerJwt()->createRefreshTokenJwt($userId);
+        //         //$this->getControllerMain()->getHandlerJwt()->createCookieByRefreshToken($newTokenRefreshJwt);
+        //         return $newTokenJwt;
+        //     }
+        //     return null;
+        // }
 
         public function createCookieStayConnected($stayConnect = false) {
             $valueCookie = ($stayConnect) ? 1 : 0;
             setcookie('stayConnected', $valueCookie, [
                 'expires' => time() + TIME_EXPIRE_TIME_STAY_CONNECTED, 
-                //'httponly' => true,
-                //'secure' => true,
-                //'samesite' => 'Strict'
+                'httponly' => true,
+                'secure' => true,
+                'samesite' => 'Strict'
             ]);
             $_COOKIE['stayConnected'] = $stayConnect;
         }
 
         public function getStateSession() {
             $decodedJwt = $this->getControllerMain()->getHandlerJwt()->getJwtFromHeader();
-            $isSessionActive = $this->isSessionActiveByJwt($decodedJwt);
+            $isSessionActive = $this->isSessionActive($decodedJwt);
             $this->getControllerMain()->sendJsonResponse(['isSessionActive' => $isSessionActive]);
         }
 
-        public function isSessionActiveByJwt($decodedJwt) {
+        public function isSessionActive($decodedJwt) {
             if(!$decodedJwt) return false;
             $isValidDecodedJwt = $this->getControllerMain()->getHandlerJwt()->isValidTokenJwt($decodedJwt);
             $tokenRefresh = null;
 
             if(!$isValidDecodedJwt) {
-                $tokenRefresh = $this->getControllerMain()->getControllerUser()->getNewAccessToken();
+                $tokenRefresh = $this->getControllerMain()->getHandlerJwt()->getNewAccessToken();
                 if(!$tokenRefresh) return false;
 
                 $decodedTokenRefresh = $this->getControllerMain()->getHandlerJwt()->decodeJwt($tokenRefresh);
@@ -149,8 +148,8 @@
         }
 
         public function handleSuccessLogin() {
-            $requiredAuthFalse = false;
-            $dataRequest = $this->getControllerMain()->prepareAndValidateData($requiredAuthFalse);
+            $requireAuth = false;
+            $dataRequest = $this->getControllerMain()->prepareAndValidateData($requireAuth);
             $db = $dataRequest['dataBase'];
 
             $isAnyError = $this->getControllerMain()->getHandlerError()->verifyHandleSuccessLogin($dataRequest);
@@ -170,17 +169,21 @@
         }
 
         public function getUserFirstName() {
-            $decodedJwt = $this->getControllerMain()->getHandlerJwt()->getJwtFromHeader();
-            $userId = $this->getUserIdFromJwt($decodedJwt);
-            $db = $this->getControllerMain()->getDatabase();
-            $data = $this->getModelUser()->getUserFirstName($db ,$userId);
+            $requireBodyData = false;
+            $requireAuth = true;
+            $dataRequest = $this->getControllerMain()->prepareAndValidateData($requireAuth, $requireBodyData);
+            //var_dump($dataRequest);
+            //$decodedJwt = $this->getControllerMain()->getHandlerJwt()->getJwtFromHeader();
+            $userId = $dataRequest['userId'];
+            $db = $dataRequest['dataBase'];
+            $firstName = $this->getModelUser()->getUserFirstName($db ,$userId);
             // log ici ?
-            $this->getControllerMain()->sendJsonResponse(['data' => $data]);
+            $this->getControllerMain()->sendJsonResponse(['data' => $firstName]);
         }
 
         public function fetchInsertUser() {
-            $requiredAuthFalse = false;
-            $dataRequest = $this->getControllerMain()->prepareAndValidateData($requiredAuthFalse);
+            $requireAuth = false;
+            $dataRequest = $this->getControllerMain()->prepareAndValidateData($requireAuth);
             $db = $dataRequest['dataBase'];
             
             $isAnyError = $this->getControllerMain()->getHandlerError()->verifyInsertUser($dataRequest);
@@ -192,13 +195,13 @@
         }
 
         public function updateAccessToken() {
-            $refreshToken = getControllerMain()->getControllerUser()->getNewAccessToken();
+            $refreshToken = getControllerMain()->getHandlerJwt()->getNewAccessToken();
             getControllerMain()->sendJsonResponse(['refreshToken' => $refreshToken]);
         }
 
         public function fetchIsValidResetPassToken() {
-            $requiredAuthFalse = false;
-            $dataRequest = $this->getControllerMain()->prepareAndValidateData($requiredAuthFalse);
+            $requireAuth = false;
+            $dataRequest = $this->getControllerMain()->prepareAndValidateData($requireAuth);
             $db = $dataRequest['dataBase'];
             
             $isAnyError = $this->getControllerMain()->getHandlerError()->verifyIsValidResetPassToken($dataRequest);
@@ -211,8 +214,8 @@
         }
 
         public function FetchSendResetPassToken() {
-            $requiredAuthFalse = false;
-            $dataRequest = $this->getControllerMain()->prepareAndValidateData($requiredAuthFalse);
+            $requireAuth= false;
+            $dataRequest = $this->getControllerMain()->prepareAndValidateData($requireAuth);
             $db = $dataRequest['dataBase'];
             
             $isAnyError = $this->getControllerMain()->getHandlerError()->verifySendResetPassToken($dataRequest);
@@ -393,7 +396,7 @@
         // Prepare pages
         public function authorizePageLogin() {
             $decodedJwt = $this->getControllerMain()->getHandlerJwt()->getJwtFromHeader();
-            $isSessionActive = $this->isSessionActiveByJwt($decodedJwt);
+            $isSessionActive = $this->isSessionActive($decodedJwt);
             $dataPage = [
                 'isSessionActive' => $isSessionActive,
             ]; 
@@ -402,7 +405,7 @@
 
         public function authorizePageForgotPass() {
             $decodedJwt = $this->getControllerMain()->getHandlerJwt()->getJwtFromHeader();
-            $isSessionActive = $this->isSessionActiveByJwt($decodedJwt);
+            $isSessionActive = $this->isSessionActive($decodedJwt);
             $dataPage = [
                 'isSessionActive' => $isSessionActive,
             ]; 
@@ -411,7 +414,7 @@
 
         public function authorizePageRegister() {
             $decodedJwt = $this->getControllerMain()->getHandlerJwt()->getJwtFromHeader();
-            $isSessionActive = $this->isSessionActiveByJwt($decodedJwt);
+            $isSessionActive = $this->isSessionActive($decodedJwt);
             $dataPage = [
                 'isSessionActive' => $isSessionActive,
             ]; 
@@ -420,7 +423,7 @@
 
         public function authorizePageResetPassword() {
             $decodedJwt = $this->getControllerMain()->getHandlerJwt()->getJwtFromHeader();
-            $isSessionActive = $this->isSessionActiveByJwt($decodedJwt);
+            $isSessionActive = $this->isSessionActive($decodedJwt);
             $dataPage = [
                 'isSessionActive' => $isSessionActive,
             ]; 
@@ -429,7 +432,7 @@
 
         public function authorizePageUser() {
             $decodedJwt = $this->getControllerMain()->getHandlerJwt()->getJwtFromHeader();
-            $isSessionActive = $this->isSessionActiveByJwt($decodedJwt);
+            $isSessionActive = $this->isSessionActive($decodedJwt);
             $dataPage = [
                 'isSessionActive' => $isSessionActive,
             ]; 

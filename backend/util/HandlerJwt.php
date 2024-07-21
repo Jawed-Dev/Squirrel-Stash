@@ -15,9 +15,9 @@
         function isValidTokenJwt($decodedJwt);
         function decodeJwt($tokenJwt);
         function getJwtFromHeader();
-        function prepareDataForModel();
         function createRefreshTokenJwt($userId);
         function createCookieByRefreshToken($decodedJwt);
+        function getNewAccessToken();
     }
 
     class HandlerJwt implements I_HandlerJwt {
@@ -54,6 +54,23 @@
                 // log
                 return null;
             }
+        }
+
+        public function getNewAccessToken() {
+            if(!empty($_COOKIE['refreshToken'])) {
+                $currentRefreshToken = $_COOKIE['refreshToken'];
+                $decodedRefreshJwt = $this->getControllerMain()->getHandlerJwt()->decodeJwt($currentRefreshToken);
+                $isValidToken = $this->getControllerMain()->getHandlerJwt()->isValidTokenJwt($decodedRefreshJwt);
+                if(!$isValidToken) return null;
+                $userId = $this->getControllerMain()->getControllerUser()->getUserIdFromJwt($decodedRefreshJwt);
+                $newTokenJwt = $this->getControllerMain()->getHandlerJwt()->createAccessTokenJwt($userId);
+
+                //$tokenJwt = $newTokenJwt;
+                //$newTokenRefreshJwt = $this->getControllerMain()->getHandlerJwt()->createRefreshTokenJwt($userId);
+                //$this->getControllerMain()->getHandlerJwt()->createCookieByRefreshToken($newTokenRefreshJwt);
+                return $newTokenJwt;
+            }
+            return null;
         }
 
         public function createRefreshTokenJwt($userId, $stayConnected = false) {
@@ -104,29 +121,35 @@
             }
         }
 
-        public function prepareDataForModel($requireUserId = true) {
-            $bodyDataJson = $this->getControllerMain()->getRequestBodyJson();
-            $bodyData = json_decode($bodyDataJson, true);
+        // public function prepareDataForModel($requireUserId = true, $requireBodyData = true ) {
+        //     $bodyDataJson = null;
+        //     $bodyData = null;
+        //     if($requireBodyData) {
+        //         $bodyDataJson = $this->getControllerMain()->getRequestBodyJson();
+        //         $bodyData = json_decode($bodyDataJson, true);
+        //         foreach ($bodyData as &$value) {
+        //             if (is_string($value) && $value) $this->getControllerMain()->getHandlerValidFormat()->sanitizeData($value);
+        //         }
+        //     }
 
-            foreach ($bodyData as &$value) {
-                if (is_string($value) && $value) $this->getControllerMain()->getHandlerValidFormat()->sanitizeData($value);
-            }
-            $db = $this->getControllerMain()->getDatabase();
-            $userId = null;
+        //     $db = $this->getControllerMain()->getDatabase();
+        //     $userId = null;
 
-            if($requireUserId) {
-                $decodedJwt = $this->getJwtFromHeader();
-                $isSessionActive = $this->getControllerMain()->getControllerUser()->isSessionActiveByJwt($decodedJwt);
-                if(!$isSessionActive) throw new Exception('Erreur prépare data');
-                $userId = $this->getControllerMain()->getControllerUser()->getUserIdFromJwt($decodedJwt);
-            }
+        //     if($requireUserId) {
+        //         $decodedJwt = $this->getJwtFromHeader();
+        //         $isSessionActive = $this->getControllerMain()->getControllerUser()->isSessionActive($decodedJwt);
+        //         if(!$isSessionActive) throw new Exception('Erreur prépare data');
+        //         $userId = $this->getControllerMain()->getControllerUser()->getUserIdFromJwt($decodedJwt);
+        //     }
 
-            return [
-                'bodyData' => $bodyData,
-                'userId' => $userId,
-                'dataBase' => $db
-            ];
-        }
+        //     return [
+        //         'bodyData' => $bodyData,
+        //         'userId' => $userId,
+        //         'dataBase' => $db
+        //     ];
+        // }
+
+
         public function isValidTokenJwt($decodedJwt) {
             $timeNow = time();
 

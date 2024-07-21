@@ -5,7 +5,7 @@
         // Main Controller 
         function getControllerMain();
         // Verify
-        function verifyDataForModel($data);
+        function verifyMainDataRequired($data);
         function verifyInsertTransaction($data);
         function verifyDeleteTransaction($data);
         function verifyUpdateTransaction($data);
@@ -117,7 +117,7 @@
             if(!$isValid) $this->addError($this->typeError[$nameTypeErr]);
         }
 
-        public function verifyDataForModel($requiredData = []) {
+        public function verifyMainDataRequired($requiredData = []) {
             $localStateErrors = false;
             foreach ($requiredData as $data) {
                 if (empty($data)) {

@@ -182,12 +182,12 @@
         // Prepare Pages
         public function authorizePageDashboard() {
             $decodedJwt = $this->getControllerMain()->getHandlerJwt()->getJwtFromHeader();
-            $isSessionActive = $this->getControllerMain()->getControllerUser()->isSessionActiveByJwt($decodedJwt);
+            $isSessionActive = $this->getControllerMain()->getControllerUser()->isSessionActive($decodedJwt);
             $this->getViewStatistic()->renderPageDashboard(['isSessionActive' => $isSessionActive]);
         }
         public function authorizePageTransactions() {
             $decodedJwt = $this->getControllerMain()->getHandlerJwt()->getJwtFromHeader();
-            $isSessionActive = $this->getControllerMain()->getControllerUser()->isSessionActiveByJwt($decodedJwt);
+            $isSessionActive = $this->getControllerMain()->getControllerUser()->isSessionActive($decodedJwt);
             $this->getViewStatistic()->renderPageDashboard(['isSessionActive' => $isSessionActive]);
         }
     }
