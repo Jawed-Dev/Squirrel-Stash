@@ -16,7 +16,6 @@
         function verifyGetTotalTrsByMonth($data);
         function verifyGetBiggestTrsByMonth($data);
     }
-
     class HandlerError implements I_HandlerError {
         private $ControllerMain; 
         private $stateErrors = [];
@@ -129,11 +128,11 @@
         }
 
         // transactions 
-
         // action
         public function verifyInsertTransaction($data) {
-            $bodyData = $data['bodyData'];
             $this->clearErrors();
+            $bodyData = $data['bodyData'];
+            
             $this->validateFormat('isValidUserId', $data, 'userId');
             $this->validateFormat('isValidTransactionAmount', $bodyData['transactionAmount'] ?? null, 'trsAmount');
             $this->validateFormat('isValidTransactionDate', $bodyData['transactionDate'] ?? null, 'trsDate');
@@ -145,8 +144,9 @@
         }
 
         public function verifyUpdateTransaction($data) {
-            $bodyData = $data['bodyData'];
+            
             $this->clearErrors();
+            $bodyData = $data['bodyData'];
             $this->validateFormat('isValidUserId', $data, 'userId');
             $this->validateFormat('isValidTransactionId', $bodyData['transactionId'] ?? null, 'trsId');
             $this->validateFormat('isValidTransactionAmount', $bodyData['transactionAmount'] ?? null, 'trsAmount');
@@ -228,7 +228,6 @@
         }
 
         // User 
-
         public function verifyHandleSuccessLogin($data) {
             $this->clearErrors();
             $bodyData = $data['bodyData'];

@@ -35,7 +35,7 @@ use App\Mail\EmailSender;
         // Handler Error
         function getHandlerError();
         function getHandlerValidFormat();
-        function validateDataForController($requireUserId = true);
+        function validateDataForController($params);
         //function prepareDataForController($requireUserId = true, $requireBodyData = true );
         // cookies
         function createCookieStayConnected($stayConnect = false);
@@ -142,9 +142,12 @@ use App\Mail\EmailSender;
             return $this->EmailSender;
         }
 
-        public function prepareDataForController($requireUserId = true, $requireBodyData = true ) {
+        public function prepareDataForController($requireAuth= true, $requireBodyData = true,  $requireDatabase = true) {
             $bodyDataJson = null;
             $bodyData = null;
+            $db = null;
+            $userId = null;
+
             if($requireBodyData) {
                 $bodyDataJson = $this->getRequestBodyJson();
                 $bodyData = json_decode($bodyDataJson, true);
@@ -152,14 +155,12 @@ use App\Mail\EmailSender;
                     if (is_string($value) && $value) $this->getHandlerValidFormat()->sanitizeData($value);
                 }
             }
-
-            $db = $this->getDatabase();
-            $userId = null;
-
-            if($requireUserId) {
+            if($requireDatabase) $db = $this->getDatabase();
+            
+            if($requireAuth) {
                 $decodedJwt = $this->getHandlerJwt()->getJwtFromHeader();
                 $isSessionActive = $this->getControllerUser()->isSessionActive($decodedJwt);
-                if(!$isSessionActive) throw new Exception('Erreur prépare data');
+                if(!$isSessionActive) throw new Exception('Erreurs de données.');
                 $userId = $this->getControllerUser()->getUserIdFromJwt($decodedJwt);
             }
 
@@ -170,24 +171,27 @@ use App\Mail\EmailSender;
             ];
         }
 
-        public function validateDataForController($requireUserId = true, $requireBodyData = true) {
-            $dataRequest = $this->prepareDataForController($requireUserId, $requireBodyData);
+        public function validateDataForController($params) {
+            $requireAuth = $params['requireAuth'] ?? true;
+            $requireBodyData = $params['requireBodyData'] ?? true;
+            $requireDatabase = $params['requireDatabase'] ?? true;
+            $functionValidData = $params['functionValidData'] ?? null;
 
-            // $requireUserId = $params['requireUserId'];
-            // $requireBodyData = $params['requireBodyData'];
-            // $requireDb = $params['requireDatabase'];
-
-            $dataRequire[] = $dataRequest['dataBase'];
-            if($requireUserId) $dataRequire[] = $dataRequest['userId'];
+            $dataRequest = $this->prepareDataForController($requireAuth, $requireBodyData, $requireDatabase);
+        
+            if($requireDatabase) $dataRequire[] = $dataRequest['dataBase'];
+            if($requireAuth) $dataRequire[] = $dataRequest['userId'];
             if($requireBodyData) {
                 $dataRequire[] = $dataRequest['bodyData'];
                 if(count($dataRequest['bodyData']) >= MAX_DATA_BODY_REQUEST) return null;
             }
             $isAnyMainDataEmpty = $this->getHandlerError()->verifyIfMainDataExists($dataRequire);
-            if ($isAnyMainDataEmpty) return null;
+            if ($isAnyMainDataEmpty) return throw new Exception('Erreurs dans la requête.');
 
-
-
+            if($functionValidData) {   
+                $isAnyError = $this->getHandlerError()->$functionValidData($dataRequest);
+                if ($isAnyError) return throw new Exception('Erreurs dans la requête.');
+            }
 
             return $dataRequest;
         }

@@ -25,7 +25,6 @@
         function fetchUpdateTransaction();
         // Prepare page
         function authorizePage();
-        //function authorizePageTransactions();
     }
 
     
@@ -58,124 +57,107 @@
             return $this->ViewStatistic;
         }
 
-        // Statistic
-
-        // Set
+        // action data
         public function fetchSaveThreshold() {
-            $dataRequest = $this->getControllerMain()->validateDataForController();
+            $paramsValidation = ['functionValidData' => 'verifySaveThreshold'];
+            $dataRequest = $this->getControllerMain()->validateDataForController($paramsValidation);
 
             $db = $dataRequest['dataBase'];
             $isTresholdExist = $this->getModelStatistic()->isThresholdExistByMonth($db, $dataRequest);
-            $isAnyError = $this->getControllerMain()->getHandlerError()->verifySaveThreshold($dataRequest);
-            $successReq = false;
-            if($isTresholdExist) {
-                if(!$isAnyError) $successReq = $this->getModelStatistic()->updateThresholdByMonth($db, $dataRequest);
-            }
-            else {
-                if(!$isAnyError) $successReq = $this->getModelStatistic()->insertThresholdByMonth($db, $dataRequest);
-            }
-            
+            if($isTresholdExist) $successReq = $this->getModelStatistic()->updateThresholdByMonth($db, $dataRequest);
+            else $successReq = $this->getModelStatistic()->insertThresholdByMonth($db, $dataRequest);
             // log ici ?
             $this->getControllerMain()->sendJsonResponse(['isSuccessRequest' => $successReq]);
         }
 
         public function fetchInsertTransaction() {
-            $dataRequest = $this->getControllerMain()->validateDataForController();
+            $paramsValidation = ['functionValidData' => 'verifyInsertTransaction'];
+            $dataRequest = $this->getControllerMain()->validateDataForController($paramsValidation);
 
-            //var_dump($dataRequest['dataBase']);
             $db = $dataRequest['dataBase'];
-            $isAnyError = $this->getControllerMain()->getHandlerError()->verifyInsertTransaction($dataRequest);
-            $successReq = false;
-            //var_dump($isAnyError);
-            if(!$isAnyError) $successReq = $this->getModelStatistic()->insertTransaction($db, $dataRequest);
-
+            $successReq = $this->getModelStatistic()->insertTransaction($db, $dataRequest);
             // log ici ?
             $this->getControllerMain()->sendJsonResponse(['isSuccessRequest' => $successReq]);
         }
 
         public function fetchDeleteTransaction() {
-            $dataRequest = $this->getControllerMain()->validateDataForController();
+            $paramsValidation = ['functionValidData' => 'verifyDeleteTransaction'];
+            $dataRequest = $this->getControllerMain()->validateDataForController($paramsValidation);
 
             $db = $dataRequest['dataBase'];
-            $isAnyError = $this->getControllerMain()->getHandlerError()->verifyDeleteTransaction($dataRequest);
-            $successReq = false;
-            if(!$isAnyError) $successReq = $this->getModelStatistic()->deleteTransaction($db, $dataRequest);
-
+            $successReq = $this->getModelStatistic()->deleteTransaction($db, $dataRequest);
             // log ici ?
             $this->getControllerMain()->sendJsonResponse(['isSuccessRequest' => $successReq]);
         }
 
         public function fetchUpdateTransaction() {
-            $dataRequest = $this->getControllerMain()->validateDataForController();
+            $paramsValidation = ['functionValidData' => 'verifyUpdateTransaction'];
+            $dataRequest = $this->getControllerMain()->validateDataForController($paramsValidation );
 
             $db = $dataRequest['dataBase'];
-            $isAnyError = $this->getControllerMain()->getHandlerError()->verifyUpdateTransaction($dataRequest);
-            $successReq = false;
-            if(!$isAnyError) $successReq = $this->getModelStatistic()->updateTransaction($db, $dataRequest);
-
+            $successReq = $this->getModelStatistic()->updateTransaction($db, $dataRequest);
             // log ici ?
             $this->getControllerMain()->sendJsonResponse(['isSuccessRequest' => $successReq]);
         }
 
-        // get
+        // get data
         public function fetchDataTrsBySearch() {
-            $dataRequest = $this->getControllerMain()->validateDataForController();
+            $paramsValidation = [''];
+            $dataRequest = $this->getControllerMain()->validateDataForController($paramsValidation );
 
             $db = $dataRequest['dataBase'];
-            $isAnyError = false;//$this->getControllerMain()->getHandlerError()->verifyGetTrsMonthByDay($dataRequest);
-            $data = null;
-            if(!$isAnyError) $data = $this->getModelStatistic()->getDataTrsBySearch($db, $dataRequest);
+            $data = $this->getModelStatistic()->getDataTrsBySearch($db, $dataRequest);
+            // log ici ?
             $this->getControllerMain()->sendJsonResponse(['data' => $data]);
         }
 
         public function fetchTrsMonthByDay() {
-            $dataRequest = $this->getControllerMain()->validateDataForController();
+            $paramsValidation = ['functionValidData' => 'verifyGetTrsMonthByDay'];
+            $dataRequest = $this->getControllerMain()->validateDataForController($paramsValidation);
 
             $db = $dataRequest['dataBase'];
-            $isAnyError = $this->getControllerMain()->getHandlerError()->verifyGetTrsMonthByDay($dataRequest);
-            $data = null;
-            if(!$isAnyError) $data = $this->getModelStatistic()->getTrsMonthByDay($db, $dataRequest);
+            $data = $this->getModelStatistic()->getTrsMonthByDay($db, $dataRequest);
+            // log ici ?
             $this->getControllerMain()->sendJsonResponse(['data' => $data]);
         }
 
         public function fetchThresholdByMonth() {
-            $dataRequest = $this->getControllerMain()->validateDataForController();
-            $db = $dataRequest['dataBase'];
+            $paramsValidation = ['functionValidData' => 'verifyGetThresholdByMonth'];
+            $dataRequest = $this->getControllerMain()->validateDataForController($paramsValidation);
 
-            $isAnyError = $this->getControllerMain()->getHandlerError()->verifyGetThresholdByMonth($dataRequest);
-            $data = null;
-            if(!$isAnyError) $data = $this->getModelStatistic()->getThresholdByMonth($db, $dataRequest);
+            $db = $dataRequest['dataBase'];
+            $data = $this->getModelStatistic()->getThresholdByMonth($db, $dataRequest);
+            // log ici ?
             $this->getControllerMain()->sendJsonResponse(['data' => $data]);
         }
 
         public function fetchNLastTrsByMonth() {
-            $dataRequest = $this->getControllerMain()->validateDataForController();
-            if(!$dataRequest) ('Erreur de donnée'); 
-            $db = $dataRequest['dataBase'];
+            $paramsValidation = ['functionValidData' => 'verifyGetNLastTrsByMonth'];
+            $dataRequest = $this->getControllerMain()->validateDataForController($paramsValidation);
 
-            $isAnyError = $this->getControllerMain()->getHandlerError()->verifyGetNLastTrsByMonth($dataRequest);
-            $data = null;
-            if(!$isAnyError) $data = $this->getModelStatistic()->getNLastTrsByMonth($db, $dataRequest);
+            $db = $dataRequest['dataBase'];
+            $data = $this->getModelStatistic()->getNLastTrsByMonth($db, $dataRequest);
+            // log ici ?
             $this->getControllerMain()->sendJsonResponse(['data' => $data]);
         }
 
         public function fetchTotalTrsByMonth() {
-            $dataRequest = $this->getControllerMain()->validateDataForController();
-            $db = $dataRequest['dataBase'];
+            $paramsValidation = ['functionValidData' => 'verifyGetTotalTrsByMonth'];
+            $dataRequest = $this->getControllerMain()->validateDataForController($paramsValidation);
 
-            $isAnyError = $this->getControllerMain()->getHandlerError()->verifyGetTotalTrsByMonth($dataRequest);
-            $data = null;
-            if(!$isAnyError) $data = $this->getModelStatistic()->getTotalTrsByMonth($db, $dataRequest);
+            $db = $dataRequest['dataBase'];
+            $data = $this->getModelStatistic()->getTotalTrsByMonth($db, $dataRequest);
+            // log ici ?
             $this->getControllerMain()->sendJsonResponse(['data' => $data]);
         }
 
         public function fetchBiggestTrsByMonth() {
-            $dataRequest = $this->getControllerMain()->validateDataForController();
-            $db = $dataRequest['dataBase'];
+            $paramsValidation = ['functionValidData' => 'verifyGetBiggestTrsByMonth'];
+            $dataRequest = $this->getControllerMain()->validateDataForController($paramsValidation);
 
-            $isAnyError = $this->getControllerMain()->getHandlerError()->verifyGetBiggestTrsByMonth($dataRequest);
-            $data = null;
-            if(!$isAnyError) $data = $this->getModelStatistic()->getBiggestTrsByMonth($db, $dataRequest);
+            $db = $dataRequest['dataBase'];
+            $data = $this->getModelStatistic()->getBiggestTrsByMonth($db, $dataRequest);
+            // log ici ?
             $this->getControllerMain()->sendJsonResponse(['data' => $data]);
         }
 
@@ -183,12 +165,8 @@
         public function authorizePage() {
             $decodedJwt = $this->getControllerMain()->getHandlerJwt()->getJwtFromHeader();
             $isSessionActive = $this->getControllerMain()->getControllerUser()->isSessionActive($decodedJwt);
+            // log ici ?
             $this->getViewStatistic()->renderJson(['isSessionActive' => $isSessionActive]);
         }
-        // public function authorizePageTransactions() {
-        //     $decodedJwt = $this->getControllerMain()->getHandlerJwt()->getJwtFromHeader();
-        //     $isSessionActive = $this->getControllerMain()->getControllerUser()->isSessionActive($decodedJwt);
-        //     $this->getViewStatistic()->renderPageDashboard(['isSessionActive' => $isSessionActive]);
-        // }
     }
 ?>
