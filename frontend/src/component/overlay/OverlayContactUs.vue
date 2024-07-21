@@ -79,6 +79,9 @@
             </MainContainerSlot>
         </div>
     </div>
+    <TransitionPopUp duration-in="500" duration-out="500">
+        <OverlaySuccessAction text="Votre mot de passe a été modifié." v-if="isSuccessAction" v-model:overlayActive="isSuccessAction" />
+    </TransitionPopUp>
 </template>
 
     
@@ -92,6 +95,8 @@
     import TextAreaBase from '@/component//input/TextAreaBase.vue';
     import { sendEmailToSupport } from '@/composable/useBackendActionData';
     import { isAnyMandatInputEmpty, isAnyInputError, TYPE_SUBMIT_ERROR, TEXT_SUBMIT_ERROR } from '@/error/useHandleError';
+    import TransitionPopUp from '@/component/transition/TransitionPopUp.vue';
+    const OverlaySuccessAction = defineAsyncComponent(() => import('@/component/overlay/OverlaySuccessAction.vue'));
 
     // props, variables..
     const props = defineProps({
@@ -113,7 +118,7 @@
     });
 
     const submitError = ref(null);
-
+    const isSuccessAction = ref(false);
     const isOverlayActive = defineModel();
 
     // life cycle, functions
@@ -162,6 +167,7 @@
                 }
                 resetInputs();
                 submitError.value = null;
+                isSuccessAction.value = true;
                 break;
             }
             case 'cancel': {

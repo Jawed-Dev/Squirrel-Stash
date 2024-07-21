@@ -12,23 +12,41 @@
                 </div>
             </TransitionOpacity>
     </div>
+    <TransitionOpacity :durationIn="'duration-500'" :durationOut="'duration-500'">
+        <EditTransaction 
+            v-if="isMenuEditActive" 
+            v-model:isSuccessEdit="isSuccessEdit"
+            width="w-[30%]" 
+            :indexMenu="indexMenu" 
+            :infoTransaction="infoTransaction" 
+            v-model:menuActive="isMenuEditActive"
+        />
+        <DeleteTransaction 
+            v-if="isMenuDeleteActive" 
+            v-model:isSuccessDelete="isSuccessDelete"
+            width="w-[30%]" :indexMenu="indexMenu" 
+            :infoTransaction="infoTransaction" 
+            v-model:menuActive="isMenuDeleteActive"
+        /> 
+    </TransitionOpacity>
 
-    <EditTransaction width="w-[30%]" :indexMenu="indexMenu" :infoTransaction="infoTransaction" v-model:menuActive="isMenuEditActive"/>
-    <DeleteTransaction width="w-[30%]" :indexMenu="indexMenu" :infoTransaction="infoTransaction" v-model:menuActive="isMenuDeleteActive"/> 
 </template>
 
 
 <script setup>
 
     // import
-    import { ref, watch } from 'vue';
+    import { ref, watch, defineAsyncComponent } from 'vue';
 
     import IconOptions from '@/component/svgs/IconOptions.vue';
     import TransitionOpacity from '@/component/transition/TransitionOpacity.vue';
     import useClickOutside from '@/composable/useClickOutSide';
-    import DeleteTransaction from '@/component/overlay/DeleteTransaction.vue';
+    //import DeleteTransaction from '@/component/overlay/DeleteTransaction.vue';
     import useEscapeKey from '@/composable/useEscapeKey';
     import EditTransaction from '@/component/overlay/EditTransaction.vue';
+    
+
+    const DeleteTransaction = defineAsyncComponent(() => import('@/component/overlay/DeleteTransaction.vue'));
 
     // variables, props ...
     const elementTransition = ref(null);
@@ -44,11 +62,13 @@
     // functions
     const props = defineProps({
         indexMenu: { default: 0 },
-        infoTransaction: { default: [] }
+        infoTransaction: { default: {} }
     });
 
     const currentMenuEditDeleteTrs = defineModel('currentMenuEditDeleteTrs');
     const isMenuActive = ref(false);
+    const isSuccessEdit = defineModel('isSuccessEdit');
+    const isSuccessDelete = defineModel('isSuccessDelete');
 
     watch(currentMenuEditDeleteTrs, (newVal, oldVald) => {
         isMenuActive.value = newVal === props.indexMenu;

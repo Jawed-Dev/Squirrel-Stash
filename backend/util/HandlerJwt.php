@@ -2,6 +2,7 @@
 
     require_once './controller/ControllerMain.php';
     require_once './key.php';
+    require_once './config.php';
 
     use Firebase\JWT\JWT;
     use Firebase\JWT\Key;
@@ -10,11 +11,13 @@
         // Main Controller lazy loading
         function getControllerMain();
         // Jeton / Session
-        function createTokenJwt($userId);
+        function createAccessTokenJwt($userId);
         function isValidTokenJwt($decodedJwt);
         function decodeJwt($tokenJwt);
         function getJwtFromHeader();
         function prepareDataForModel();
+        function createRefreshTokenJwt($userId);
+        function createCookieByRefreshToken($decodedJwt);
     }
 
     class HandlerJwt implements I_HandlerJwt {
@@ -29,10 +32,11 @@
             return $this->ControllerMain;
         }
         // JWT Functions 
-        public function createTokenJwt($userId) {
+        public function createAccessTokenJwt($userId) {
             $key = JWT_SECRET_KEY; 
             $issuedAt = time();
-            $expirationTime = $issuedAt + TIME_EXPIRE_TIME_JWT;  
+            $timeExpiration = TIME_EXPIRE_TIME_ACCESS_JWT;
+            $expirationTime = $issuedAt + $timeExpiration;  
             $issuer = BASE_URL;
             //$jti = bin2hex(random_bytes(16)); 
             $payload = array(
@@ -51,11 +55,55 @@
                 return null;
             }
         }
-        public function decodeJwt($tokenJwt) {
+
+        public function createRefreshTokenJwt($userId, $stayConnected = false) {
             $key = JWT_SECRET_KEY; 
-            $decodedJwt = JWT::decode($tokenJwt, new Key($key, 'HS256'));
-            return $decodedJwt;
+            $issuedAt = time();
+            if(empty($_COOKIE['stayConnected'])) {
+                $this->getControllerMain()->getControllerUser()->createCookieStayConnected(0);
+            }
+            $timeExpiration = ($_COOKIE['stayConnected']) ? TIME_EXPIRE_TIME_STAY_CONNECTED : TIME_EXPIRE_TIME_REFRESH_JWT;
+            $expirationTime = $issuedAt + $timeExpiration;  
+            $issuer = BASE_URL;
+            //$jti = bin2hex(random_bytes(16)); 
+            $payload = array(
+                'userId' => $userId,
+                'issuedAt' => $issuedAt,
+                'expireTime' => $expirationTime,
+                'issuer' => $issuer,
+                //'jti' => $jti
+            );
+            try {
+                $jwt = JWT::encode($payload, $key, 'HS256');
+                return $jwt;
+            }
+            catch (Exception $e) {
+                // log
+                return null;
+            }
         }
+
+        function createCookieByRefreshToken($tokenJwt) {
+            setcookie('refreshToken', $tokenJwt, [
+                'expires' => time() + TIME_EXPIRE_TIME_STAY_CONNECTED, 
+                'httponly' => true,
+                'secure' => true,
+                'samesite' => 'Strict'
+            ]);
+            $_COOKIE['refreshToken'] = $tokenJwt;
+        }
+
+        public function decodeJwt($tokenJwt) {
+            try {
+                $key = JWT_SECRET_KEY; 
+                $decodedJwt = JWT::decode($tokenJwt, new Key($key, 'HS256'));
+                return $decodedJwt;
+            }
+            catch (Exception $e) {
+                return null;
+            }
+        }
+
         public function prepareDataForModel($requireUserId = true) {
             $bodyDataJson = $this->getControllerMain()->getRequestBodyJson();
             $bodyData = json_decode($bodyDataJson, true);
@@ -63,13 +111,13 @@
             foreach ($bodyData as &$value) {
                 if (is_string($value) && $value) $this->getControllerMain()->getHandlerValidFormat()->sanitizeData($value);
             }
-            //var_dump($bodyData);
-            
             $db = $this->getControllerMain()->getDatabase();
             $userId = null;
 
             if($requireUserId) {
                 $decodedJwt = $this->getJwtFromHeader();
+                $isSessionActive = $this->getControllerMain()->getControllerUser()->isSessionActiveByJwt($decodedJwt);
+                if(!$isSessionActive) throw new Exception('Erreur prépare data');
                 $userId = $this->getControllerMain()->getControllerUser()->getUserIdFromJwt($decodedJwt);
             }
 
@@ -105,6 +153,7 @@
             }
             return false;
         }
+
         function getJwtFromHeader() {
             if (!isset($_SERVER['HTTP_AUTHORIZATION'])) return null;
             if (!preg_match('/Bearer\s(\S+)/', $_SERVER['HTTP_AUTHORIZATION'], $matches)) return null;

@@ -44,6 +44,10 @@
                 <ContainerListTransactions class="w-[calc(50%-10px)]" :title="'Derniers achats'" :componentType="'purchase'"  :svg="svgConfig('restaurant', 'bg-gradient-blue', '6%')" />
                 <ContainerListTransactions class=" w-[calc(50%-10px)]" :title="'Derniers prélèvements'" :componentType="'recurring'" :svg="svgConfig('balance', 'bg-gradient-vanusa', '6%')" />
             </section>
+
+            <!-- <TransitionPopUp duration-in="500" duration-out="500">
+                <OverlaySuccessAction redirect="login" text="Votre compte a bien été créé." v-if="overlayActive" v-model:overlayActive="overlayActive" />
+            </TransitionPopUp> -->
         </div>
     </div>
 </template>
@@ -51,7 +55,7 @@
 
 <script setup>
 
-    import { ref, watch, computed, onMounted } from 'vue'; 
+    import { ref, watch, computed, onMounted, defineAsyncComponent } from 'vue'; 
     import ContainerStatMonth from '@/component/container/ContainerStatMonth.vue';
     import SelectYear from '@/component/select/SelectYear.vue';
     import SelectMonth from '@/component/select/SelectMonth.vue';
@@ -62,6 +66,13 @@
     import { getUserFirstName } from '@/composable/useBackendGetData';
     import { storeThreshold, storeDateSelected, storeStatisticDetails } from '@/storePinia/useStoreDashboard';
     import { updateThresholdByMonth, updateTotalTrsByMonth, updateBalanceEcoByMonth, updateBiggestTrsByMonth } from '@/storePinia/useUpdateStoreByBackend';
+    
+
+    // import TransitionPopUp from '@/component/transition/TransitionPopUp.vue';
+    // const OverlaySuccessAction = defineAsyncComponent(() => import('@/component/overlay/OverlaySuccessAction.vue'));
+
+    // const overlayActive = ref(true);
+    
 
     // stores Pinia
     const threshold = storeThreshold();

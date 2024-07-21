@@ -48,18 +48,24 @@
             </form>
         </div>
     </section>
+    <TransitionPopUp duration-in="500" duration-out="500">
+        <OverlaySuccessAction text="Un email vous a été envoyé pour confirmer votre nouvelle adresse email." v-if="isSuccessAction" v-model:overlayActive="isSuccessAction" />
+    </TransitionPopUp>
 </template>
 
 
 
 <script setup>
-    import { ref, computed, reactive, onMounted } from 'vue';
+    import { ref, computed, reactive, onMounted, defineAsyncComponent } from 'vue';
     import { storeEmailUser } from '@/storePinia/useStoreDashboard';
     import { updateStoreUserEmail } from '@/storePinia/useUpdateStoreByBackend';
     import { sendUpdateMail } from '@/composable/useBackendActionData';
     import InputBase from '@/component/input/InputBase.vue';
     import ContainerTextUnderline from '@/component/container/ContainerTextUnderline.vue'; 
     import { isAnyMandatInputEmpty, isAnyInputError, TYPE_SUBMIT_ERROR, TEXT_SUBMIT_ERROR } from '@/error/useHandleError';
+    import TransitionPopUp from '@/component/transition/TransitionPopUp.vue';
+
+    const OverlaySuccessAction = defineAsyncComponent(() => import('@/component/overlay/OverlaySuccessAction.vue'));
     
     const emailUser = storeEmailUser();
     const inputsMail = reactive({
@@ -69,6 +75,7 @@
 
     const errorInput = ref(false);
     const submitError = ref(null);
+    const isSuccessAction = ref(false);
 
     // life cycle, functions
     const textError = computed(() => {
@@ -116,6 +123,7 @@
         updateEditEmail();
         clearInputsEmail();
         submitError.value = null;
+        isSuccessAction.value = true;
     }
 
     function getStatesErrorInputs() {

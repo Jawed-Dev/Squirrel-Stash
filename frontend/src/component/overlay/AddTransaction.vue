@@ -43,12 +43,17 @@
                 </MainContainerSlot>
             </div>
         </TransitionOpacity>
+
+        <TransitionPopUp duration-in="500" duration-out="500">
+            <OverlaySuccessAction text="Votre transaction a été créée." v-if="isSuccessAction" v-model:overlayActive="isSuccessAction" />
+        </TransitionPopUp>
     </div>
+    
 </template>
 
 <script setup>
     // import
-    import { ref, watch, computed, reactive, defineAsyncComponent  } from 'vue';
+    import { ref, watch, computed, reactive, defineAsyncComponent } from 'vue';
     import { svgConfig } from '@/svg/svgConfig';
     import IconAddPurchase from '@/component/svgs/IconAddPurchase.vue';
     import TransitionOpacity from '@/component/transition/TransitionOpacity.vue';
@@ -61,8 +66,10 @@
     import { formatDateForCurrentDay, formatDateForFirstDay, isCurrentMonth } from '@/composable/useGetDate';
     import { listPurchases, listRecurings } from '@/svg/listTransactionSvgs';
     import { isAnyMandatInputEmpty, isAnyInputError, TYPE_SUBMIT_ERROR, TEXT_SUBMIT_ERROR } from '@/error/useHandleError';
+    import TransitionPopUp from '@/component/transition/TransitionPopUp.vue';
     import { isValidCategory } from '@/error/useValidFormat';
-    
+
+    const OverlaySuccessAction = defineAsyncComponent(() => import('@/component/overlay/OverlaySuccessAction.vue'));
     const ContainerInputs = defineAsyncComponent(() => import('@/component/container/ContainerInputs.vue'));
     const ContainerSelectCategories = defineAsyncComponent(() => import('@/component/container/ContainerSelectCategories.vue'));
 
@@ -91,6 +98,7 @@
     });
 
     const submitError = ref(null);
+    const isSuccessAction = ref(false);
 
     // icons
     const svgCfgIconAdd = svgConfig.mediumSmaller;
@@ -208,6 +216,7 @@
         const year = dateSelected.year;
         updateAllDataTransations(month, year, nameTypeTrs);
         submitError.value = null;
+        isSuccessAction.value = true;
     }
 
     function getStatesErrorInputs() {

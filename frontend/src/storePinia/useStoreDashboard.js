@@ -3,6 +3,11 @@ import { ref, reactive } from 'vue';
 import { getCurrentMonthName, getCurrentYear, getMonthNumber } from '@/composable/useGetDate';
 
 
+export const storeAuthTOken = defineStore('authToken', () => {
+    const token = ref('');
+    return { token };
+});
+
 // Month & Year selected
 export const storeDateSelected = defineStore('dateSelected', () => {
   const currentMonthName = getCurrentMonthName();

@@ -101,8 +101,11 @@ export async function getIconByName(name) {
         case 'Gender' : {
             return await import ('@/component/svgs/IconGender.vue');
         }
-        
-        
+
+        case 'Validation' : {
+            return await import ('@/component/svgs/IconValidation.vue');
+        }
+
         default : {
             return '';
         }

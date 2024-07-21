@@ -4,16 +4,12 @@ import { getLStorageAuthToken, setLStorageAuthToken } from "@/composable/useLoca
 
 async function authRequired() {
     const isSessionActive = await getStateSession();
-    if(!isSessionActive) {
-        redirectLogin();
-    }
+    if(!isSessionActive) redirectLogin();
 }
 
 async function notAuthRequired() {
     const isSessionActive = await getStateSession();
-    if(isSessionActive) {
-        redirectDashboard();
-    }
+    if(isSessionActive) redirectDashboard();
 }
 
 function redirectLogin() {
@@ -24,6 +20,17 @@ function redirectDashboard() {
     window.location.href = '/tableau-de-bord';
 }
 
+export async function getNewAccessToken() {
+    const localToken = getLStorageAuthToken();
+    const response = await useConfigFetchGetData ({
+        request: 'getNewAccessToken',
+        method: 'POST',
+        token: localToken,
+        dataBody: 'none',
+    });
+    const refreshToken = response?.refreshToken;
+    return (refreshToken) ? refreshToken : null;
+}
 
 async function getStateSession() {
     const localToken = getLStorageAuthToken();
@@ -122,11 +129,12 @@ export async function getThresholdByMonth(month, year) {
     return thresholdAmount;
 }
 
-export async function getHandleLogin(email, password) {
-    notAuthRequired();
+export async function getHandleLogin(params) {
+    //notAuthRequired();
     const dataLogin = {
-        'email': String(email),
-        'password': String(password)
+        'email': String(params.email),
+        'password': String(params.password),
+        'stayConnected': Boolean(params.stayConnected),
     }
     const dataHandleLogin = await useConfigFetchGetData ({
         request: 'getHandleLogin', 
@@ -134,9 +142,7 @@ export async function getHandleLogin(email, password) {
         dataBody: dataLogin, 
     });
     const isSuccessLogin = dataHandleLogin?.tokenJwt;
-    if(isSuccessLogin) {
-        setLStorageAuthToken(dataHandleLogin.tokenJwt);
-    }
+    if(isSuccessLogin) setLStorageAuthToken(dataHandleLogin.tokenJwt);
     return isSuccessLogin;
 }
 

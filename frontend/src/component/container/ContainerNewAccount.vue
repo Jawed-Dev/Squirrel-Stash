@@ -96,20 +96,24 @@
                 <router-link to="/" class="text-main-blue font-light">Se connecter</router-link>
             </div>
         </form>
-
-
     </section>
+
+    <TransitionPopUp duration-in="500" duration-out="500">
+        <OverlaySuccessAction redirect="connexion" text="Votre compte a été créé." v-if="isSuccessAction" v-model:overlayActive="isSuccessAction" />
+    </TransitionPopUp>
 </template>
 
 
 <script setup>
-    import { ref, computed, reactive } from 'vue';
+    import { ref, computed, reactive, defineAsyncComponent } from 'vue';
     import { useRouter } from 'vue-router';
     import InputBase from '@/component/input/InputBase.vue';
     import ButtonComponent from '@/component/button/ButtonBasic.vue';
     import { createAccount } from '@/composable/useBackendActionData';
     import InputCheckbox from '../input/InputCheckbox.vue';
     import { isAnyMandatInputEmpty, isAnyInputError, TYPE_SUBMIT_ERROR, TEXT_SUBMIT_ERROR } from '@/error/useHandleError';
+    import TransitionPopUp from '@/component/transition/TransitionPopUp.vue';
+    const OverlaySuccessAction = defineAsyncComponent(() => import('@/component/overlay/OverlaySuccessAction.vue'));
     
     // props, variables ...
     const router = useRouter();
@@ -128,6 +132,7 @@
         confirmPassword: false
     }); 
     const submitError = ref(null);
+    const isSuccessAction = ref(false);
 
     // life cycle / functions
     const textError = computed(() => {
@@ -167,7 +172,8 @@
         }
         //resetInputs();
         submitError.value = null;
-        router.push('/connexion');
+        isSuccessAction.value = true;
+        //router.push('/connexion');
     }
 
     function resetInputsPass() {

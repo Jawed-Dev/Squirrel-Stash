@@ -94,7 +94,11 @@
             submitError.value = TYPE_SUBMIT_ERROR.INPUTS_FORMAT_ERRORS;
             return;
         }
-        const isSuccessLogin = await getHandleLogin(email.value, password.value);
+        const isSuccessLogin = await getHandleLogin({
+            email: email.value, 
+            password: password.value, 
+            stayConnected: confirmCheckbox.value
+        });
         if(!isSuccessLogin) {
             submitError.value = TYPE_SUBMIT_ERROR.NOT_SUCCESS_REQUEST;
             password.value = '';
@@ -105,16 +109,10 @@
         //resetInputs();
     }
     
-    function resetInputs() {
-        email.value = '';
-        password.value = '';
-        confirmCheckbox.value = false;
-    }
-
     function getStatesErrorInputs() {
         return {
             email: errorInput.email,
-            password: errorInput.password
+            password: errorInput.password,
         }
     }
  

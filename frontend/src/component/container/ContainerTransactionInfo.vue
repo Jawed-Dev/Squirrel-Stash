@@ -10,9 +10,13 @@
         <p class="w-[20%] text-[15px]">{{ transactionAmount }}</p>
         <p class="w-[20%] text-[15px]">{{infoTransaction.formatted_date}}</p>
         <p class="w-[15%] text-[15px]">{{ transactionCount }}</p>
-        <EditDeleteTransaction :infoTransaction="infoTransaction" 
-        :indexMenu="props.indexMenu" 
-        v-model:currentMenuEditDeleteTrs="currentMenuEditDeleteTrs" />
+        <EditDeleteTransaction 
+            :infoTransaction="infoTransaction" 
+            :indexMenu="props.indexMenu" 
+            v-model:currentMenuEditDeleteTrs="currentMenuEditDeleteTrs" 
+            v-model:isSuccessEdit="isSuccessEdit"
+            v-model:isSuccessDelete="isSuccessDelete"
+        />
     </div>
     <div v-if="(!props.infoTransaction.transaction_id)" :class="`pl-3 flex items-center py-6 ${borderBottom} border-gray-700 text-white relative`">
         <IconLoader nameIcon="Invisible" :svg="iconConfig" :class="`${iconConfig.color} rounded-full p-[1.5%] shadow-black shadow-custom-main`"/>
@@ -22,7 +26,7 @@
 
 <script setup>
 
-    import { computed } from 'vue';
+    import { computed, ref } from 'vue';
     import IconLoader from '@/composable/useIconLoader.vue';
     import EditDeleteTransaction from '@/component/overlay/EditDeleteTransaction.vue';
     
@@ -34,7 +38,10 @@
     });
 
     const currentMenuEditDeleteTrs = defineModel('currentMenuEditDeleteTrs');
+    const isSuccessEdit = defineModel('isSuccessEdit');
+    const isSuccessDelete = defineModel('isSuccessDelete');
 
+    
     const transactionAmount = computed(() =>{
        return (props.infoTransaction.transaction_id) ? props.infoTransaction.transaction_amount + ' €' : '';
     });

@@ -76,14 +76,19 @@
             </form>
         </div>
     </section>
+    <TransitionPopUp duration-in="500" duration-out="500">
+        <OverlaySuccessAction text="Votre mot de passe a été modifié." v-if="isSuccessAction" v-model:overlayActive="isSuccessAction" />
+    </TransitionPopUp>
 </template>
 
 
 <script setup>
-    import { ref, reactive, computed } from 'vue';
+    import { ref, reactive, computed, defineAsyncComponent } from 'vue';
     import InputBase from '@/component/input/InputBase.vue';
     import { updatePasswordByUserId } from '@/composable/useBackendActionData';
     import { isAnyMandatInputEmpty, isAnyInputError, TYPE_SUBMIT_ERROR, TEXT_SUBMIT_ERROR } from '@/error/useHandleError';
+    import TransitionPopUp from '@/component/transition/TransitionPopUp.vue';
+    const OverlaySuccessAction = defineAsyncComponent(() => import('@/component/overlay/OverlaySuccessAction.vue'));
 
     const inputsPass = reactive({
         oldPass: '',
@@ -98,6 +103,7 @@
     });
 
     const submitError = ref(null);
+    const isSuccessAction = ref(false);
 
     // life cycle, functions
     const textError = computed(() => {
@@ -153,6 +159,7 @@
         }
         clearInputsPass();
         submitError.value = null;
+        isSuccessAction.value = true;
     }
 
     function clearInputsPass() {

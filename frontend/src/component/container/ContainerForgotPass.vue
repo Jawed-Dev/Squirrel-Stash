@@ -19,30 +19,35 @@
                     validFormat="email"
                 />
             </div>
-            <ButtonComponent :extraClass="'shadow-black shadow-custom-main w-full py-[6.5px] mt-[50px]'" :titleButton="'Envoyer'" />
+            <ButtonComponent :extraClass="'shadow-black shadow-custom-main w-full py-[6.5px] mt-[20px]'" :titleButton="'Envoyer'" />
             <div class="flex mt-[20px] gap-9 justify-center">
                 <p class="text-white font-light">Retour à la connexion</p> 
                 <router-link class="text-main-blue font-light" to="/connexion" >Se connecter</router-link>
             </div>
         </form>
     </section>
+    <TransitionPopUp redirection="connexion" duration-in="500" duration-out="500">
+        <OverlaySuccessAction text="Un email vous a été envoyé pour modifier votre mot de passe." v-if="isSuccessAction" v-model:overlayActive="isSuccessAction" />
+    </TransitionPopUp>
 </template>
 
 
 <script setup>
-    import { ref, computed } from 'vue';
+    import { ref, computed, defineAsyncComponent } from 'vue';
     import { useRouter } from 'vue-router';
     import InputBase from '@/component/input/InputBase.vue';
     import ButtonComponent from '@/component/button/ButtonBasic.vue';
     import { sendResetPass } from '@/composable/useBackendActionData';
     import { isAnyMandatInputEmpty, isAnyInputError,TYPE_SUBMIT_ERROR, TEXT_SUBMIT_ERROR } from '@/error/useHandleError';
+    import TransitionPopUp from '@/component/transition/TransitionPopUp.vue';
+    const OverlaySuccessAction = defineAsyncComponent(() => import('@/component/overlay/OverlaySuccessAction.vue'));
 
-    
     // props, variables
     const router = useRouter();
     const email = ref('');
     const errorInput = ref(false);
     const submitError = ref(null);
+    const isSuccessAction = ref(false);
 
     // life cycle, functions
     const textError = computed(() => {
@@ -69,6 +74,7 @@
         }
         resetInputs();
         submitError.value = null;
+        isSuccessAction.value = true;
     }
     function resetInputs() {
         email.value = '';

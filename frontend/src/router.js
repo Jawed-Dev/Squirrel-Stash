@@ -1,6 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import { ref } from 'vue';
-const isConsentCookiesAllowed = ref(true);
 
 const PageLogin = () => import('@/page/PageLogin.vue');
 const PageCreateAcc = () => import('@/page/PageCreateAcc.vue');
@@ -12,8 +11,9 @@ const PageResetPass = () => import('@/page/PageResetPass.vue');
 const PageUser = () => import('@/page/PageUser.vue');
 
 import  useConfigFetchGetPage from "@/composable/useConfigFetchGetPage";
-import { getLStorageAuthToken, getLStorageCookieConsent, setLStorageCookieConsent } from "@/composable/useLocalStorage";
-import { isValidResetPassToken } from "@/composable/useBackendGetData";
+
+import { getLStorageAuthToken, setLStorageAuthToken } from "@/composable/useLocalStorage";
+import { isValidResetPassToken, getNewAccessToken  } from "@/composable/useBackendGetData";
 import { updateEmail } from './composable/useBackendActionData';
 
 const routes = [
@@ -41,6 +41,10 @@ router.beforeEach(async (to, from, next) => {
       return;
     } 
     const localToken = getLStorageAuthToken();
+    if(!localToken) {
+      const refreshToken = await getNewAccessToken();
+      setLStorageAuthToken(refreshToken);
+    }
 
     const dataPage = await useConfigFetchGetPage(currentPage, localToken);
     const isSessionActive = dataPage?.isSessionActive;
@@ -67,8 +71,7 @@ router.beforeEach(async (to, from, next) => {
         const token = to.query.token;
         console.log(token);
         const response = await updateEmail(token);
-        next('/utilisateur');
-        //(isSessionActive) ? next('/tableau-de-bord') : next();
+        if(response?.isSuccessRequest) next('/utilisateur');
         break;
       }
       case 'pageResetPass' : {

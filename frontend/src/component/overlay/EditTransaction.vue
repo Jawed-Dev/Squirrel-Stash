@@ -1,37 +1,33 @@
 <template>
-    <div>
-        <TransitionOpacity :durationIn="'duration-300'" :durationOut="'duration-200'">
-            <div v-if="isOverlayActive" class="fixed inset-0 bg-black bg-opacity-80 z-10"></div>
-        </TransitionOpacity>
+    <div class="fixed inset-0 bg-black bg-opacity-80 z-30">
 
-        <TransitionOpacity :durationIn="'duration-300'" :durationOut="'duration-200'">
-            <div v-if="isOverlayActive" 
-                :class="`fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 text-white rounded-[3px] overflow-hidden 
-                shadow-black shadow-custom-main trigger-edit-transaction bg-main-gradient ${props.width}`">
+        <div 
+            v-if="isOverlayActive" 
+            :class="`fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 text-white rounded-[3px] overflow-hidden 
+            shadow-black shadow-custom-main trigger-edit-transaction bg-main-gradient ${props.width}`">
 
-                <MainContainerSlot 
-                    :textBtn1="'Annuler'" :textBtn2="'Modifier'" :titleContainer="(!typeTransaction) ? 'Modifier achat' : 'Modifier prélèvement'" 
-                    @toggleMenu="toggleMenu" 
-                >
-                    <!-- Errors -->
-                    <div class="relative">
-                        <p class="text-sm font-light p-3 absolute text-red-300">{{ textError }}</p>
-                    </div>
-                    <div>
-                        <!-- inputs  -->
-                        <ContainerInputs 
-                        v-model:errorInputs="errorInputs"
-                        v-model:inputPriceVal="inputPriceVal" 
-                        v-model:inputNoteVal="inputNoteVal" 
-                        v-model:inputDateVal="inputDateVal" 
-                        :infoTransaction="infoTransaction"/>
-                        <!-- liste des catégories -->
-                        <ContainerSelectCategories v-model:currentCategory="currentCategory" 
-                        v-model:typeTransaction="typeTransaction" />              
-                    </div>
-                </MainContainerSlot>
-            </div>
-        </TransitionOpacity>
+            <MainContainerSlot 
+                :textBtn1="'Annuler'" :textBtn2="'Modifier'" :titleContainer="(!typeTransaction) ? 'Modifier achat' : 'Modifier prélèvement'" 
+                @toggleMenu="toggleMenu" 
+            >
+                <!-- Errors -->
+                <div class="relative">
+                    <p class="text-sm font-light p-3 absolute text-red-300">{{ textError }}</p>
+                </div>
+                <div>
+                    <!-- inputs  -->
+                    <ContainerInputs 
+                    v-model:errorInputs="errorInputs"
+                    v-model:inputPriceVal="inputPriceVal" 
+                    v-model:inputNoteVal="inputNoteVal" 
+                    v-model:inputDateVal="inputDateVal" 
+                    :infoTransaction="infoTransaction"/>
+                    <!-- liste des catégories -->
+                    <ContainerSelectCategories v-model:currentCategory="currentCategory" 
+                    v-model:typeTransaction="typeTransaction" />              
+                </div>
+            </MainContainerSlot>
+        </div>
     </div>
 </template>
 
@@ -43,6 +39,7 @@
     import useClickOutside from '@/composable/useClickOutSide';
     import useEscapeKey from '@/composable/useEscapeKey';
 
+    const OverlaySuccessAction = defineAsyncComponent(() => import('@/component/overlay/OverlaySuccessAction.vue'));
     const ContainerInputs = defineAsyncComponent(() => import('@/component/container/ContainerInputs.vue'));
     const ContainerSelectCategories = defineAsyncComponent(() => import('../container/ContainerSelectCategories.vue'));
 
@@ -53,6 +50,7 @@
     import { formatDateForCurrentDay, formatDateForFirstDay, isCurrentMonth } from '@/composable/useGetDate';
     import { listPurchases, listRecurings } from '@/svg/listTransactionSvgs';
     import { isAnyMandatInputEmpty, isAnyInputError, TYPE_SUBMIT_ERROR, TEXT_SUBMIT_ERROR } from '@/error/useHandleError';
+    import TransitionPopUp from '@/component/transition/TransitionPopUp.vue';
     import { isValidCategory } from '@/error/useValidFormat';
 
     // stores Pinia
@@ -81,6 +79,7 @@
         inputDateVal: false
     });
     const submitError = ref(null);
+    const isSuccessEdit = defineModel('isSuccessEdit');
 
     // life cycle / functions
     const textError = computed(() => {
@@ -103,7 +102,7 @@
         if(newVal) loadDataTransaction();
     });
 
-    watch(typeTransaction, (newVal, oldVal) => {
+    watch(typeTransaction, () => {
         currentCategory.value = 0;
     });
 
@@ -132,7 +131,8 @@
                     return;
                 }
                 prepareUpdateTransaction();
-                closeMenu();
+                
+                //closeMenu();
                 break;
             }
             case 'cancel' : {
@@ -157,12 +157,6 @@
     }
     function closeMenu() {
         isOverlayActive.value = false;
-    }
-
-    function resetInputs() {
-        inputNoteVal.value = '';
-        inputPriceVal.value = '';
-        inputDateVal.value = formatDateInput();
     }
 
     function getCurrentNameCategory() {
@@ -197,8 +191,10 @@
         const nameTypeTrs = getCurrentTransactionType();
         const month = dateSelected.month;
         const year = dateSelected.year;
-        updateAllDataTransations(month, year, nameTypeTrs);
+        await updateAllDataTransations(month, year, nameTypeTrs);
         submitError.value = null;
+        isSuccessEdit.value = true;
+        closeMenu();
     }
 
     function getIndexCategory() {

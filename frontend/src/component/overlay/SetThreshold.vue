@@ -1,52 +1,57 @@
 <template>
-    <IconPreferences @click="toggleMenu('openNClose')" class='cursor-pointer' v-show="isIconActive" :svg="svg.verySmallIcon" /> 
-
-    <TransitionOpacity :durationIn="'duration-300'" :durationOut="'duration-200'">
-        <div v-show="isOverlayActive" class="fixed inset-0 bg-black bg-opacity-80 z-30"></div>
-    </TransitionOpacity>
-
-    <TransitionOpacity :durationIn="'duration-300'" :durationOut="'duration-200'">
-        
-        <div 
-            v-show="isOverlayActive" 
-            :class="`bg-main-gradient flex flex-col fixed 
-            shadow-black shadow-custom-main rounded-md top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 trigger-set-treshold
-            z-30 text-white ${width}`"
-        >
-            <MainContainerSlot 
-                :textBtn1="'Annuler'" :textBtn2="'Choisir'" :titleContainer="'Choisir un nouveau seuil'" @toggleMenu="toggleMenu">
-                <!-- Errors -->
-                <div class="relative">
-                    <p class="text-sm font-light pt-3 absolute text-red-300">{{ textError }}</p>
-                </div>
-                <div>
-                    <div class="flex flex-col items-center mt-[60px]">
-                        <div class="text-center w-[40%]">
-                            <label class="font-light" for="input-amount-treshold">Montant du seuil</label>
-                            <InputBase 
-                                iconName="Amount"
-                                v-model="AmountThreshold"
-                                v-model:stateError="errorInput" 
-                                placeholder="Montant"
-                                id="input-amount-treshold"
-                                validFormat="amount"
-                                :hideAnimation="true"
-                                :onlyNumbers="true"
-                            />
+    
+        <IconPreferences @click="toggleMenu('openNClose')" class='cursor-pointer' v-show="isIconActive" :svg="svg.verySmallIcon" /> 
+    
+        <TransitionOpacity :durationIn="'duration-300'" :durationOut="'duration-200'">
+            <div v-show="isOverlayActive" class="fixed inset-0 bg-black bg-opacity-80 z-30"></div>
+        </TransitionOpacity>
+    
+        <TransitionOpacity :durationIn="'duration-300'" :durationOut="'duration-200'">
+            
+            <div 
+                v-show="isOverlayActive" 
+                :class="`bg-main-gradient flex flex-col fixed 
+                shadow-black shadow-custom-main rounded-md top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 trigger-set-treshold
+                z-30 text-white ${width}`"
+            >
+                <MainContainerSlot 
+                    :textBtn1="'Annuler'" :textBtn2="'Choisir'" :titleContainer="'Choisir un nouveau seuil'" @toggleMenu="toggleMenu">
+                    <!-- Errors -->
+                    <div class="relative">
+                        <p class="text-sm font-light pt-3 absolute text-red-300">{{ textError }}</p>
+                    </div>
+                    <div>
+                        <div class="flex flex-col items-center mt-[60px]">
+                            <div class="text-center w-[40%]">
+                                <label class="font-light" for="input-amount-treshold">Montant du seuil</label>
+                                <InputBase 
+                                    iconName="Amount"
+                                    v-model="AmountThreshold"
+                                    v-model:stateError="errorInput" 
+                                    placeholder="Montant"
+                                    id="input-amount-treshold"
+                                    validFormat="amount"
+                                    :hideAnimation="true"
+                                    :onlyNumbers="true"
+                                />
+                            </div>
+                        </div>
+                        <div class="flex justify-center my-[60px]">
+                            <p class="w-[full] text-[15px] font-light text-slate-300">Ce seuil sera effectif pour le mois actuel <span class="block">et les suivants, jusqu'à un nouveau seuil.</span></p>
                         </div>
                     </div>
-                    <div class="flex justify-center my-[60px]">
-                        <p class="w-[full] text-[15px] font-light text-slate-300">Ce seuil sera effectif pour le mois actuel <span class="block">et les suivants, jusqu'à un nouveau seuil.</span></p>
-                    </div>
-                </div>
-            </MainContainerSlot>
-        </div>
-    </TransitionOpacity>
+                </MainContainerSlot>
+            </div>
+        </TransitionOpacity>
+        <TransitionPopUp duration-in="500" duration-out="500">
+            <OverlaySuccessAction text="Votre seuil  à partir de ce mois a été changé." v-if="isSuccessAction" v-model:overlayActive="isSuccessAction" />
+        </TransitionPopUp>
+   
 </template>
 
 <script setup>
     // import
-    import { computed, ref } from 'vue';
+    import { computed, ref, defineAsyncComponent } from 'vue';
     import TransitionOpacity from '@/component/transition/TransitionOpacity.vue';  
     import MainContainerSlot from '@/component//containerSlot/MainContainerSlot.vue';
     import IconPreferences from '@/component//svgs/IconPreferences.vue';
@@ -58,6 +63,9 @@
     import { storeDateSelected } from '@/storePinia/useStoreDashboard';
     import { updateBalanceEcoByMonth, updateThresholdByMonth, updateTotalTrsByMonth } from '@/storePinia/useUpdateStoreByBackend';
     import { isAnyMandatInputEmpty, isAnyInputError, TYPE_SUBMIT_ERROR, TEXT_SUBMIT_ERROR} from '@/error/useHandleError';
+    import TransitionPopUp from '@/component/transition/TransitionPopUp.vue';
+
+    const OverlaySuccessAction = defineAsyncComponent(() => import('@/component/overlay/OverlaySuccessAction.vue'));
 
     // variables, props ...
     const svg = svgConfig;
@@ -70,6 +78,7 @@
 
     const errorInput = ref(false);
     const submitError = ref(null);
+    const isSuccessAction = ref(false);
 
     // life cycle, functions
     const textError = computed(() => {
@@ -83,7 +92,7 @@
 
     useClickOutside('.trigger-set-treshold',  isOverlayActive, () => {
         closeOverlay();
-    },);
+    });
 
     const dateSelected = storeDateSelected();
 
@@ -106,8 +115,8 @@
                     submitError.value = TYPE_SUBMIT_ERROR.INPUTS_FORMAT_ERRORS;
                     return;
                 }
-                const responseFetched = await saveThreshold(dateSelected.month, dateSelected.year, AmountThreshold.value);
-                const isSuccessRequest = responseFetched?.isSuccessRequest;
+                const response = await saveThreshold(dateSelected.month, dateSelected.year, AmountThreshold.value);
+                const isSuccessRequest = response?.isSuccessRequest;
                 if(!isSuccessRequest) {
                     submitError.value = TYPE_SUBMIT_ERROR.NOT_SUCCESS_REQUEST;
                     resetInput();
@@ -119,6 +128,7 @@
                 updateBalanceEcoByMonth(dateSelected.month, dateSelected.year);
                 closeOverlay();
                 submitError.value = null;
+                isSuccessAction.value = true;
                 break;
             }
             case 'cancel': {

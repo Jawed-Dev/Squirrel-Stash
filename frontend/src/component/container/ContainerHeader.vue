@@ -52,9 +52,13 @@
 
 
 <script setup>
-
-    import {ref, onMounted, onUnmounted, computed, defineAsyncComponent, reactive} from 'vue';
     import { useRouter } from 'vue-router';
+    import { storeAuthTOken } from '@/storePinia/useStoreDashboard';
+    import {ref, onMounted, onUnmounted, computed, defineAsyncComponent, reactive} from 'vue';
+    import TransitionOpacity from '@/component/transition/TransitionOpacity.vue';  
+    import { classTransitionHover } from '@/composable/useClassTransitionHover';
+    import { disconnectUser } from '@/composable/useBackendActionData';
+    
 
     // import async icons & dynamic
     const IconDashboard = defineAsyncComponent(() => import('@/component/svgs/IconDashboard.vue'));
@@ -70,13 +74,10 @@
     const OverlayPrivacy = defineAsyncComponent(() => import('@/component/overlay/OverlayPrivacy.vue'));
     const OverlayUserRules = defineAsyncComponent(() => import('@/component/overlay/OverlayUserRules.vue'));
     const OverlayContactUs = defineAsyncComponent(() => import('@/component/overlay/OverlayContactUs.vue'));
-    import TransitionOpacity from '@/component/transition/TransitionOpacity.vue';  
 
-    import { classTransitionHover } from '@/composable/useClassTransitionHover';
+    
     //import OverlayPrivacy from '@/component/overlay/OverlayPrivacy.vue';
     //import OverlayUserRules from '@/component/overlay/OverlayUserRules.vue';
-
-
     // variables, props, ...
 
     // data icons
@@ -156,7 +157,7 @@
         }
     }
 
-    function handleClickHeader(page) {
+    async function handleClickHeader(page) {
         switch (page) {
             case 'tableau-de-bord': {
                 router.push('/tableau-de-bord');
@@ -187,7 +188,9 @@
                 break;
             }
             case 'disconnect' : {
-                localStorage.removeItem('authToken');
+                const authToken = storeAuthTOken();
+                authToken.token = '';
+                await disconnectUser();
                 router.push('/connexion');
                 break;
             }

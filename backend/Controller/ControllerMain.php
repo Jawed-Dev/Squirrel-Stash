@@ -146,12 +146,8 @@ use App\Mail\EmailSender;
             if ($requireUserId) $dataRequire[] = $dataRequest['userId'];
 
             if(count($dataRequest['bodyData']) >= MAX_DATA_BODY_REQUEST) return null;
-        
             $isAnyError = $this->getHandlerError()->verifyDataForModel($dataRequire);
-            if ($isAnyError) {
-                throw new Exception('Erreur: Données invalides.'); 
-                //return null;
-            }
+            if ($isAnyError) return null;
 
             return $dataRequest;
         }

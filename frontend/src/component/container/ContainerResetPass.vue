@@ -1,7 +1,6 @@
 <template>
     <section class="bg-main-gradient flex flex-col items-center font-main-font w-[50%] justify-center shadow-black shadow-custom-main">
         <h1 class="text-[25px] text-white">Changer votre mot de passe</h1>
-        
         <form class="mt-[40px] w-[20vw]" @submit.prevent="handleSubmit()">
             <!-- Errors -->
             <div class="relative">
@@ -41,24 +40,30 @@
                 <router-link class="text-main-blue font-light" to="/connexion" >Se connecter</router-link>
             </div>
         </form>
-        
     </section>
+
+    <TransitionPopUp duration-in="500" duration-out="500">
+        <OverlaySuccessAction redirect="connexion"  text="Votre mot de passe a été modifié." v-if="isSuccessAction" v-model:overlayActive="isSuccessAction" />
+    </TransitionPopUp>
 </template>
 
 
 <script setup>
-    import { ref, reactive } from 'vue';
+    import { ref, reactive, defineAsyncComponent, computed } from 'vue';
     import { useRouter, useRoute } from 'vue-router';
     import InputBase from '@/component/input/InputBase.vue';
     import ButtonComponent from '@/component/button/ButtonBasic.vue';
     import { updatePasswordByToken } from '@/composable/useBackendActionData';
     import { isAnyMandatInputEmpty, isAnyInputError, TYPE_SUBMIT_ERROR, TEXT_SUBMIT_ERROR } from '@/error/useHandleError';
+    import TransitionPopUp from '@/component/transition/TransitionPopUp.vue';
+    const OverlaySuccessAction = defineAsyncComponent(() => import('@/component/overlay/OverlaySuccessAction.vue'));
 
     // props, variables
     const router = useRouter();
     const route = useRoute();
     const password = ref('');
     const confirmPassword = ref('');
+    const isSuccessAction = ref(false);
 
     const errorInput = reactive({
         password: false,
@@ -100,7 +105,8 @@
         }
 
         submitError.value = null;
-        router.push('/connexion');
+        isSuccessAction.value = true;
+        //router.push('/connexion');
     }
 
     function resetInputs() {

@@ -95,17 +95,23 @@
             </form>
         </div>
     </section>
+    <TransitionPopUp duration-in="500" duration-out="500">
+        <OverlaySuccessAction text="Votre profil a été édité." v-if="isSuccessAction" v-model:overlayActive="isSuccessAction" />
+    </TransitionPopUp>
 </template>
 
 
 <script setup>
-    import { ref, reactive, onMounted, computed } from 'vue';
+    import { ref, reactive, onMounted, computed, defineAsyncComponent } from 'vue';
     import ContainerTextUnderline from '@/component/container/ContainerTextUnderline.vue'; 
     import InputBase from '@/component/input/InputBase.vue';
     import { storeProfilUser } from '@/storePinia/useStoreDashboard';
     import { updateStoreUserProfil } from '@/storePinia/useUpdateStoreByBackend';
     import { updateUserProfil } from '@/composable/useBackendActionData';
     import { isAnyMandatInputEmpty, isAnyInputError, TYPE_SUBMIT_ERROR, TEXT_SUBMIT_ERROR } from '@/error/useHandleError';
+    import TransitionPopUp from '@/component/transition/TransitionPopUp.vue';
+
+    const OverlaySuccessAction = defineAsyncComponent(() => import('@/component/overlay/OverlaySuccessAction.vue'));
 
     // Store Pinia
     const dataProfilUser = storeProfilUser();
@@ -126,9 +132,9 @@
     });
 
     const submitError = ref(null);
+    const isSuccessAction = ref(false);
 
     // life cycle, functions
-
     const textError = computed(() => {
         if(submitError.value === TYPE_SUBMIT_ERROR.MANDATORY_EMPTY_INPUTS) return TEXT_SUBMIT_ERROR.MANDATORY_EMPTY_INPUTS;
         else if(submitError.value === TYPE_SUBMIT_ERROR.NOT_SUCCESS_REQUEST) return "La requête a échoué.";
@@ -168,6 +174,7 @@
         await updateStoreUserProfil();
         updateEditProfil();
         submitError.value = null;
+        isSuccessAction.value = true;
     }
 
     function updateEditProfil() {

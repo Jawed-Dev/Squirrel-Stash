@@ -1,9 +1,15 @@
+import { storeAuthTOken } from "@/storePinia/useStoreDashboard"; 
+
 export function getLStorageAuthToken() {
-    return localStorage.getItem('authToken') || '';
+    const authToken = storeAuthTOken();
+    //return localStorage.getItem('authToken') || '';
+    return authToken.token || '';
 }  
 
-export function setLStorageAuthToken(dataToken) {
-    localStorage.setItem('authToken', dataToken);
+export function setLStorageAuthToken(token) {
+    const authToken = storeAuthTOken();
+    authToken.token = token;
+    //localStorage.setItem('authToken', dataToken);
 }
 
 export function setLStorageCookieConsent() {

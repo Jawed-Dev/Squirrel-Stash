@@ -1,5 +1,5 @@
 import useConfigFetchActionData  from "@/composable/useConfigFetchActionData";
-import { getLStorageAuthToken } from "@/composable/useLocalStorage";
+import { getLStorageAuthToken, setLStorageAuthToken } from "@/composable/useLocalStorage";
 import useConfigFetchGetData from "./useConfigFetchGetData";
 
 async function getStateSession() {
@@ -15,17 +15,14 @@ async function getStateSession() {
 }
 
 async function authRequired() {
+    console.log("setThreshold");
     const isSessionActive = await getStateSession();
-    if(!isSessionActive) {
-        redirectLogin();
-    }
+    if(!isSessionActive) redirectLogin();
 }
 
 async function notAuthRequired() {
     const isSessionActive = await getStateSession();
-    if(isSessionActive) {
-        redirectDashboard();
-    }
+    if(isSessionActive) redirectDashboard();
 }
 
 function redirectLogin() {
@@ -35,6 +32,18 @@ function redirectLogin() {
 function redirectDashboard() {
     window.location.href = '/tableau-de-bord';
 }
+
+export async function disconnectUser() {
+    const localToken = getLStorageAuthToken();
+    const response = await useConfigFetchActionData ({
+        request: 'disconnectUser',
+        method: 'POST',
+        dataBody: 'none',
+        token: localToken
+    });
+    return response;
+}
+
 
 export async function updatePasswordByToken(params) {
     notAuthRequired();
@@ -102,7 +111,7 @@ export async function createAccount(params) {
 }
 
 export async function saveThreshold(month, year, amount) {
-    authRequired();
+    await authRequired();
     const localToken = getLStorageAuthToken();
     const body = {
         selectedMonth: Number(month),

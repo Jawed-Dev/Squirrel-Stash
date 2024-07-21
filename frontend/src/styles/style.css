@@ -73,6 +73,25 @@ input[type="date"]:valid::-webkit-datetime-edit-day-field {
   color: white;
 } */
 
+@keyframes swing-in {
+    0% {
+        opacity: 0;
+        transform: translateX(-100px) translateY(0px);
+    }
+    50% {
+        opacity: 0.5;
+        transform: translateX(50px) translateY(-10px);
+    }
+    75% {
+        opacity: 0.75;
+        transform: translateX(-25px) translateY(5px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0px) translateY(0px);
+    }
+}
+
 .gradient-border {
     border: 2px solid; 
     border-image: linear-gradient(to bottom right,#494D62 0%,#131620 80%) 1;

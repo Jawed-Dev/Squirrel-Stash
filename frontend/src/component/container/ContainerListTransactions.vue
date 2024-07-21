@@ -14,8 +14,11 @@
                 <p class="w-[15%]">Itération</p>
             </div>
             <div>
-                <ContainerTransactionInfo v-for="(transaction, index) of filteredTransactions" 
+                <ContainerTransactionInfo 
+                    v-for="(transaction, index) of filteredTransactions" 
                     :key="transaction.transaction_id"
+                    v-model:isSuccessEdit="isSuccessEdit"
+                    v-model:isSuccessDelete="isSuccessDelete"
                     v-model:currentMenuEditDeleteTrs="currentMenuEditDeleteTrs" 
                     :indexMenu="index" 
                     :infoTransaction="transaction"
@@ -23,17 +26,24 @@
                 />
             </div>
         </div>
+
+        <TransitionPopUp duration-in="500" duration-out="500">
+            <OverlaySuccessAction text="Votre transaction a été éditée." v-if="isSuccessEdit" v-model:overlayActive="isSuccessEdit" />
+            <OverlaySuccessAction text="Votre transaction a été supprimée." v-if="isSuccessDelete" v-model:overlayActive="isSuccessDelete" />
+        </TransitionPopUp>
     </div>
 </template>
 
 
 <script setup>
     // import
-    import { ref, watch, computed } from 'vue';
+    import { ref, watch, computed, watchEffect, defineAsyncComponent } from 'vue';
     import ContainerTransactionInfo from '@/component/container/ContainerTransactionInfo.vue';
     import { classTransitionHover } from '@/composable/useClassTransitionHover';
     import { storeLastNTransactions, storeDateSelected } from '@/storePinia/useStoreDashboard';
     import { updateLastNTrsByMonth } from '@/storePinia/useUpdateStoreByBackend';
+    import TransitionPopUp from '@/component/transition/TransitionPopUp.vue';
+    const OverlaySuccessAction = defineAsyncComponent(() => import('@/component/overlay/OverlaySuccessAction.vue'));
 
     // stores Pinia
     const lastNTransactions = storeLastNTransactions();
@@ -47,6 +57,22 @@
         title: { default: '' },
         componentType: {default: 'purchase'}
     });
+
+    const isSuccessDelete = ref(false);
+    const isSuccessEdit = ref(false);
+
+    watch(isSuccessEdit, (newVal, oldVal) => {
+        alert(`Edit status changed from ${oldVal} to ${newVal}`);
+    });
+
+    watch(isSuccessDelete, (newVal, oldVal) => {
+        alert(`Edit status changed from ${oldVal} to ${newVal}`);
+    });
+
+    watchEffect(() => {
+        console.log('isSuccessEdit changed:', isSuccessEdit.value);
+    });
+
 
     // life cycle
     watch( () => [dateSelected.month, dateSelected.year], async ([newMonth, newYear]) => {
