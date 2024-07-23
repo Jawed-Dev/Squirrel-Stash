@@ -29,7 +29,7 @@
         public function insertUser($db, $data) {
             $dataQuery = $data;
             $reqSql = 
-            "INSERT INTO user (user_last_name, user_first_name, user_email, user_password, user_last_ip, user_last_connexion)
+            "INSERT INTO user (user_last_name, user_first_name, user_email, user_password, user_last_ip, user_account_createAt)
             SELECT :lastName, :firstName, :email, :password, :lastIp, NOW()
             FROM DUAL
             WHERE NOT EXISTS (
@@ -132,9 +132,10 @@
 
         public function getUserIdIfValidLogin($db, $data) {
             $userInfo = $this->getUserLogDataByEmail($db, $data);
+            if(empty($userInfo['user_password'])) return null;
             if(empty($data['password'])) return null;
 
-            $userHashedPassword = !empty($userInfo['user_password']) ? $userInfo['user_password'] : null;
+            $userHashedPassword = $userInfo['user_password'];
             $isCorrectPassword =  password_verify($data['password'], $userHashedPassword);
             $isValidUserId = !empty($userInfo['user_id']) ? $userInfo['user_id'] : null;
             $isLoginSuccess = $isValidUserId && $isCorrectPassword;
@@ -184,7 +185,6 @@
             
             //$hashedCurrentPass = password_hash($dataQuery['oldPass'], PASSWORD_BCRYPT);
             $hashedNewPass = password_hash($dataQuery['newPass'], PASSWORD_BCRYPT);
-
             $isCorrectPassword = password_verify($dataQuery['oldPass'], $currentPassDb);
 
             $query = $db->prepare($reqSql);
@@ -281,10 +281,8 @@
             $dataQuery = $data['bodyData'];
 
             $reqSql = "DELETE FROM update_email
-            WHERE update_email_user_id = :userId
-            ";
+            WHERE update_email_user_id = :userId";
             $query = $db->prepare($reqSql);
-            //$query->bindValue(':token', $dataQuery['token'], PDO::PARAM_STR);
             $query->bindValue(':userId', $userId, PDO::PARAM_INT);
             $query->execute();
             $isSuccessRequest = $query->rowCount() > 0;

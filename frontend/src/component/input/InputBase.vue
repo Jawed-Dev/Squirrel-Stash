@@ -44,7 +44,8 @@
         isValidInputNote,
         isValidCategory,
         isValidTrsType,
-        isValidInputDate,
+        isValidDate,
+        isValidTrsDate,
         isValidGender,
         isValidMessage
     } from '@/error/useValidFormat';
@@ -59,7 +60,8 @@
         note: isValidInputNote,
         category: isValidCategory,
         transactionType: isValidTrsType,
-        date: isValidInputDate,
+        date: isValidDate,
+        trsDate: isValidTrsDate,
         gender: isValidGender,
         message: isValidMessage
     };

@@ -67,7 +67,7 @@
             if($isTresholdExist) $successReq = $this->getModelStatistic()->updateThresholdByMonth($db, $dataRequest);
             else $successReq = $this->getModelStatistic()->insertThresholdByMonth($db, $dataRequest);
             // log ici ?
-            $this->getControllerMain()->sendJsonResponse(['isSuccessRequest' => $successReq]);
+            $this->getViewStatistic()->renderJson(['isSuccessRequest' => $successReq]);
         }
 
         public function fetchInsertTransaction() {
@@ -77,7 +77,7 @@
             $db = $dataRequest['dataBase'];
             $successReq = $this->getModelStatistic()->insertTransaction($db, $dataRequest);
             // log ici ?
-            $this->getControllerMain()->sendJsonResponse(['isSuccessRequest' => $successReq]);
+            $this->getViewStatistic()->renderJson(['isSuccessRequest' => $successReq]);
         }
 
         public function fetchDeleteTransaction() {
@@ -87,7 +87,7 @@
             $db = $dataRequest['dataBase'];
             $successReq = $this->getModelStatistic()->deleteTransaction($db, $dataRequest);
             // log ici ?
-            $this->getControllerMain()->sendJsonResponse(['isSuccessRequest' => $successReq]);
+            $this->getViewStatistic()->renderJson(['isSuccessRequest' => $successReq]);
         }
 
         public function fetchUpdateTransaction() {
@@ -97,18 +97,18 @@
             $db = $dataRequest['dataBase'];
             $successReq = $this->getModelStatistic()->updateTransaction($db, $dataRequest);
             // log ici ?
-            $this->getControllerMain()->sendJsonResponse(['isSuccessRequest' => $successReq]);
+            $this->getViewStatistic()->renderJson(['isSuccessRequest' => $successReq]);
         }
 
         // get data
         public function fetchDataTrsBySearch() {
-            $paramsValidation = [''];
+            $paramsValidation = ['functionValidData' => 'verifyGetDataTrsBySearch'];
             $dataRequest = $this->getControllerMain()->validateDataForController($paramsValidation );
 
             $db = $dataRequest['dataBase'];
             $data = $this->getModelStatistic()->getDataTrsBySearch($db, $dataRequest);
             // log ici ?
-            $this->getControllerMain()->sendJsonResponse(['data' => $data]);
+            $this->getViewStatistic()->renderJson(['data' => $data]);
         }
 
         public function fetchTrsMonthByDay() {
@@ -118,7 +118,7 @@
             $db = $dataRequest['dataBase'];
             $data = $this->getModelStatistic()->getTrsMonthByDay($db, $dataRequest);
             // log ici ?
-            $this->getControllerMain()->sendJsonResponse(['data' => $data]);
+            $this->getViewStatistic()->renderJson(['data' => $data]);
         }
 
         public function fetchThresholdByMonth() {
@@ -128,7 +128,7 @@
             $db = $dataRequest['dataBase'];
             $data = $this->getModelStatistic()->getThresholdByMonth($db, $dataRequest);
             // log ici ?
-            $this->getControllerMain()->sendJsonResponse(['data' => $data]);
+            $this->getViewStatistic()->renderJson(['data' => $data]);
         }
 
         public function fetchNLastTrsByMonth() {
@@ -138,7 +138,7 @@
             $db = $dataRequest['dataBase'];
             $data = $this->getModelStatistic()->getNLastTrsByMonth($db, $dataRequest);
             // log ici ?
-            $this->getControllerMain()->sendJsonResponse(['data' => $data]);
+            $this->getViewStatistic()->renderJson(['data' => $data]);
         }
 
         public function fetchTotalTrsByMonth() {
@@ -148,7 +148,7 @@
             $db = $dataRequest['dataBase'];
             $data = $this->getModelStatistic()->getTotalTrsByMonth($db, $dataRequest);
             // log ici ?
-            $this->getControllerMain()->sendJsonResponse(['data' => $data]);
+            $this->getViewStatistic()->renderJson(['data' => $data]);
         }
 
         public function fetchBiggestTrsByMonth() {
@@ -158,7 +158,7 @@
             $db = $dataRequest['dataBase'];
             $data = $this->getModelStatistic()->getBiggestTrsByMonth($db, $dataRequest);
             // log ici ?
-            $this->getControllerMain()->sendJsonResponse(['data' => $data]);
+            $this->getViewStatistic()->renderJson(['data' => $data]);
         }
 
         // Prepare Pages

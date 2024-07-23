@@ -94,7 +94,7 @@ export async function updateBiggestTrsByMonth(month, year, transactionType) {
 }
 
 export async function updateAllDataTransations(month, year, transactionType) {
-    const paramsSearch = storeParamsSearch();
+    
     updateListTrsMonthByDay(month, year, transactionType);
     updateBalanceEcoByMonth(month, year);
     updateTotalTrsByMonth(month, year);
@@ -102,8 +102,13 @@ export async function updateAllDataTransations(month, year, transactionType) {
     updateLastNTrsByMonth(month, year, 'recurring');
     updateBiggestTrsByMonth(month, year, 'purchase');
     updateBiggestTrsByMonth(month, year, 'recurring');
-    console.log('params', paramsSearch.params);
-    updateDataTrsSearch(paramsSearch.params);
+
+    const currentUrl = window.location.href; 
+    const url = new URL(currentUrl);
+    if(url.pathname === '/historique-transactions') {
+        const paramsSearch = storeParamsSearch();
+        updateDataTrsSearch(paramsSearch.params);
+    }
 }
 
 export async function updateDataTrsSearch(params) {

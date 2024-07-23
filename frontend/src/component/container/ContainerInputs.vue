@@ -12,7 +12,7 @@
                         id="input-date"
                         type="date"
                         :borderHidden="true"
-                        validFormat="date"
+                        validFormat="trsDate"
                         :hideAnimation="true"
                         
                     />

@@ -197,13 +197,14 @@
         }
     }
     catch(Exception $error) {
+        getControllerMain()->destroyCookieRefreshToken();
+        http_response_code(401);
         echo json_encode(['debug' => $error]);
         die;
     }
 
     finally {
         //if (empty($ControllerMain)) return null;
-
         $db = getControllerMain()->getDatabase();
         if($db !== null) $db = null;
     }

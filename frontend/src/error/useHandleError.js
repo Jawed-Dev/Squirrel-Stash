@@ -73,6 +73,10 @@ export const typeError = {
     message: {
         code: 11,
         adviceFormat: "Votre message est trop long.", 
+    },
+    date: {
+        code: 12,
+        adviceFormat: "Date invalide.", 
     }
 };
 

@@ -51,7 +51,7 @@
             }
             catch (Exception $e) {
                 // log
-                return null;
+                return throw new Exception('Erreurs de données.');
             }
         }
 
@@ -60,13 +60,15 @@
                 $currentRefreshToken = $_COOKIE['refreshToken'];
                 $decodedRefreshJwt = $this->getControllerMain()->getHandlerJwt()->decodeJwt($currentRefreshToken);
                 $isValidToken = $this->getControllerMain()->getHandlerJwt()->isValidTokenJwt($decodedRefreshJwt);
-                if(!$isValidToken) return null;
+                if(!$isValidToken) return throw new Error('Erreur de donnée');
                 $userId = $this->getControllerMain()->getControllerUser()->getUserIdFromJwt($decodedRefreshJwt);
                 $newTokenJwt = $this->getControllerMain()->getHandlerJwt()->createAccessTokenJwt($userId);
 
                 //$tokenJwt = $newTokenJwt;
                 //$newTokenRefreshJwt = $this->getControllerMain()->getHandlerJwt()->createRefreshTokenJwt($userId);
                 //$this->getControllerMain()->getHandlerJwt()->createCookieByRefreshToken($newTokenRefreshJwt);
+
+                if(!$newTokenJwt) return throw new Error('Erreur de donnée');
                 return $newTokenJwt;
             }
             return null;
@@ -95,7 +97,7 @@
             }
             catch (Exception $e) {
                 // log
-                return null;
+                return throw new Exception('Erreurs de données.');
             }
         }
 
@@ -106,7 +108,7 @@
                 return $decodedJwt;
             }
             catch (Exception $e) {
-                return null;
+                return throw new Exception('Erreurs de données. 12');
             }
         }
 

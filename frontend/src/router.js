@@ -40,13 +40,15 @@ router.beforeEach(async (to, from, next) => {
       next('/connexion');
       return;
     } 
-    const localToken = getLStorageAuthToken();
+    let localToken = getLStorageAuthToken();
     if(!localToken) {
       const refreshToken = await getNewAccessToken();
       setLStorageAuthToken(refreshToken);
+      localToken = refreshToken;
     }
 
     const dataPage = await useConfigFetchGetPage(currentPage, localToken);
+    console.log(dataPage);
     const isSessionActive = dataPage?.isSessionActive;
     console.log(dataPage);
     

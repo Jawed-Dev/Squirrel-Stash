@@ -20,70 +20,6 @@
         private $ControllerMain; 
         private $stateErrors = [];
 
-        private $typeError = [
-            'email' => [
-                'code' => 0,
-                'message' => "Adresse email invalide"
-            ],
-            'trsAmount' => [
-                'code' => 1,
-                'message' => "Montant invalide"
-            ],
-            'trsDate' => [
-                'code' => 2,
-                'message' => "Date invalide"
-            ],
-            'trsNote' => [
-                'code' => 3,
-                'message' => "La note est trop longue"
-            ],
-            'trsCategory' => [
-                'code' => 4,
-                'message' => "Informations invalides"
-            ],
-            'trsType' => [
-                'code' => 5,
-                'message' => "Informations invalides"
-            ],
-            'trsId' => [
-                'code' => 6,
-                'message' => "Informations invalides"
-            ],
-            'thresholdAmount' => [
-                'code' => 7,
-                'message' => "Informations invalides"
-            ],
-            'userId' => [
-                'code' => 8,
-                'message' => "userId invalide"
-            ],
-            'month' => [
-                'code' => 9,
-                'message' => "userId invalide"
-            ],
-            'year' => [
-                'code' => 10,
-                'message' => "userId invalide"
-            ],
-            'password' => [
-                'code' => 11,
-                'message' => "userId invalide"
-            ],
-            'firstName' => [
-                'code' => 12,
-                'message' => "userId invalide"
-            ],
-            'lastName' => [
-                'code' => 12,
-                'message' => "userId invalide"
-            ],
-            'resetPassToken' => [
-                'code' => 13,
-                'message' => "userId invalide"
-            ],
-            
-        ];
-
         // Main Controller 
         /**
         * @return ControllerMain
@@ -105,15 +41,16 @@
             $this->stateErrors[] = $errorData;
         }
 
-        public function validateFormat($validationMethod, $data = null, $nameTypeErr) {
-            $HandlerValidFormat = $this->getControllerMain()->getHandlerValidFormat();
+        public function validateFormat($validationMethod, $data = null) {
 
+            if(is_string($data) && $data) $this->getControllerMain()->getHandlerValidFormat()->sanitizeData($data);
+
+            $HandlerValidFormat = $this->getControllerMain()->getHandlerValidFormat();
             if (!method_exists($HandlerValidFormat, $validationMethod)) {
                 throw new Exception("Erreur de donnée. (type: 3)");
             }
-            
             $isValid = $HandlerValidFormat->$validationMethod($data);
-            if(!$isValid) $this->addError($this->typeError[$nameTypeErr]);
+            if(!$isValid) $this->addError($validationMethod);
         }
 
         public function verifyIfMainDataExists($requiredData = []) {
@@ -132,49 +69,45 @@
         public function verifyInsertTransaction($data) {
             $this->clearErrors();
             $bodyData = $data['bodyData'];
-            
-            $this->validateFormat('isValidUserId', $data, 'userId');
-            $this->validateFormat('isValidTransactionAmount', $bodyData['transactionAmount'] ?? null, 'trsAmount');
-            $this->validateFormat('isValidTransactionDate', $bodyData['transactionDate'] ?? null, 'trsDate');
-            $this->validateFormat('isValidTransactionNote', $bodyData['transactionNote'] ?? null, 'trsNote');
+            $this->validateFormat('isValidUserId', $data);
+            $this->validateFormat('isValidTransactionAmount', $bodyData['transactionAmount'] ?? null);
+            $this->validateFormat('isValidTransactionDate', $bodyData['transactionDate'] ?? null);
+            $this->validateFormat('isValidTransactionNote', $bodyData['transactionNote'] ?? null);
             $this->validateFormat('isValidTransactionCategory', 
-            [ $bodyData['transactionCategory'] ?? null, $bodyData['transactionType'] ] ?? null, 'trsCategory');
-            $this->validateFormat('isValidTransactionType', $bodyData['transactionType'] ?? null, 'trsType');     
+            [ $bodyData['transactionCategory'] ?? null, $bodyData['transactionType'] ] ?? null);
+            $this->validateFormat('isValidTransactionType', $bodyData['transactionType'] ?? null);     
             return $this->getStateErrors();
         }
 
         public function verifyUpdateTransaction($data) {
-            
             $this->clearErrors();
             $bodyData = $data['bodyData'];
-            $this->validateFormat('isValidUserId', $data, 'userId');
-            $this->validateFormat('isValidTransactionId', $bodyData['transactionId'] ?? null, 'trsId');
-            $this->validateFormat('isValidTransactionAmount', $bodyData['transactionAmount'] ?? null, 'trsAmount');
-            $this->validateFormat('isValidTransactionDate', $bodyData['transactionDate'] ?? null, 'trsDate');
-            $this->validateFormat('isValidTransactionNote', $bodyData['transactionNote'] ?? null, 'trsNote');
+            $this->validateFormat('isValidUserId', $data);
+            $this->validateFormat('isValidTransactionId', $bodyData['transactionId'] ?? null);
+            $this->validateFormat('isValidTransactionAmount', $bodyData['transactionAmount'] ?? null);
+            $this->validateFormat('isValidTransactionDate', $bodyData['transactionDate'] ?? null);
+            $this->validateFormat('isValidTransactionNote', $bodyData['transactionNote'] ?? null);
             $this->validateFormat('isValidTransactionCategory', 
-            [$bodyData['transactionCategory'] ?? null, $bodyData['transactionType']] ?? null, 'trsCategory');
-            $this->validateFormat('isValidTransactionType', $bodyData['transactionType'] ?? null, 'trsType');    
+            [$bodyData['transactionCategory'] ?? null, $bodyData['transactionType']] ?? null);
+            $this->validateFormat('isValidTransactionType', $bodyData['transactionType'] ?? null);    
             return $this->getStateErrors();
         }
 
         public function verifyDeleteTransaction($data) {
             $this->clearErrors();
             $bodyData = $data['bodyData'];
-            $this->validateFormat('isValidUserId', $data, 'userId');
-            $this->validateFormat('isValidTransactionId', $bodyData['transactionId'], 'trsId');
+            $this->validateFormat('isValidUserId', $data);
+            $this->validateFormat('isValidTransactionId', $bodyData['transactionId'] ?? null);
             return $this->getStateErrors();
         }
 
         public function verifySaveThreshold($data) {
             $this->clearErrors();
             $bodyData = $data['bodyData'];
-            $this->validateFormat('isValidUserId', $data, 'userId');
-
-            $this->validateFormat('isValidMonth', $bodyData['selectedMonth'] ?? null, 'month');
-            $this->validateFormat('isValidYear', $bodyData['selectedYear'] ?? null, 'year');
-            $this->validateFormat('isValidThresholdAmount', $bodyData['thresholdAmount'] ?? null, 'thresholdAmount'); 
-
+            $this->validateFormat('isValidUserId', $data);
+            $this->validateFormat('isValidMonth', $bodyData['selectedMonth'] ?? null);
+            $this->validateFormat('isValidYear', $bodyData['selectedYear'] ?? null);
+            $this->validateFormat('isValidThresholdAmount', $bodyData['thresholdAmount'] ?? null); 
             return $this->getStateErrors();
         }
 
@@ -182,48 +115,48 @@
         public function verifyGetTrsMonthByDay($data) {
             $this->clearErrors();
             $bodyData = $data['bodyData'];
-            $this->validateFormat('isValidUserId', $data, 'userId');
-            $this->validateFormat('isValidMonth', $bodyData['selectedMonth'] ?? null, 'month');
-            $this->validateFormat('isValidYear', $bodyData['selectedYear'] ?? null, 'year');
-            $this->validateFormat('isValidTransactionType', $bodyData['transactionType'] ?? null, 'trsType');   
+            $this->validateFormat('isValidUserId', $data);
+            $this->validateFormat('isValidMonth', $bodyData['selectedMonth'] ?? null);
+            $this->validateFormat('isValidYear', $bodyData['selectedYear'] ?? null);
+            $this->validateFormat('isValidTransactionType', $bodyData['transactionType'] ?? null);   
             return $this->getStateErrors();
         }
 
         public function verifyGetThresholdByMonth($data) {
             $this->clearErrors();
             $bodyData = $data['bodyData'];
-            $this->validateFormat('isValidUserId', $data, 'userId');
-            $this->validateFormat('isValidMonth', $bodyData['selectedMonth'] ?? null, 'month');
-            $this->validateFormat('isValidYear', $bodyData['selectedYear'] ?? null, 'year');
+            $this->validateFormat('isValidUserId', $data);
+            $this->validateFormat('isValidMonth', $bodyData['selectedMonth'] ?? null);
+            $this->validateFormat('isValidYear', $bodyData['selectedYear'] ?? null);
             return $this->getStateErrors();
         }
 
         public function verifyGetNLastTrsByMonth($data) {
             $this->clearErrors();
             $bodyData = $data['bodyData'];
-            $this->validateFormat('isValidUserId', $data, 'userId');
-            $this->validateFormat('isValidMonth', $bodyData['selectedMonth'] ?? null, 'month');
-            $this->validateFormat('isValidYear', $bodyData['selectedYear'] ?? null, 'year');
-            $this->validateFormat('isValidTransactionType', $bodyData['transactionType'] ?? null, 'trsType');   
+            $this->validateFormat('isValidUserId', $data);
+            $this->validateFormat('isValidMonth', $bodyData['selectedMonth'] ?? null);
+            $this->validateFormat('isValidYear', $bodyData['selectedYear'] ?? null);
+            $this->validateFormat('isValidTransactionType', $bodyData['transactionType'] ?? null);   
             return $this->getStateErrors();
         }
 
         public function verifyGetTotalTrsByMonth($data) {
             $this->clearErrors();
             $bodyData = $data['bodyData'];
-            $this->validateFormat('isValidUserId', $data, 'userId');
-            $this->validateFormat('isValidMonth', $bodyData['selectedMonth'] ?? null, 'month');
-            $this->validateFormat('isValidYear', $bodyData['selectedYear'] ?? null, 'year');
+            $this->validateFormat('isValidUserId', $data);
+            $this->validateFormat('isValidMonth', $bodyData['selectedMonth'] ?? null);
+            $this->validateFormat('isValidYear', $bodyData['selectedYear'] ?? null);
             return $this->getStateErrors();
         }
 
         public function verifyGetBiggestTrsByMonth($data) {
             $this->clearErrors();
             $bodyData = $data['bodyData'];
-            $this->validateFormat('isValidUserId', $data, 'userId');
-            $this->validateFormat('isValidMonth', $bodyData['selectedMonth'] ?? null, 'month');
-            $this->validateFormat('isValidYear', $bodyData['selectedYear'] ?? null, 'year');
-            $this->validateFormat('isValidTransactionType', $bodyData['transactionType'] ?? null, 'trsType');   
+            $this->validateFormat('isValidUserId', $data);
+            $this->validateFormat('isValidMonth', $bodyData['selectedMonth'] ?? null);
+            $this->validateFormat('isValidYear', $bodyData['selectedYear'] ?? null);
+            $this->validateFormat('isValidTransactionType', $bodyData['transactionType'] ?? null);   
             return $this->getStateErrors();
         }
 
@@ -231,45 +164,102 @@
         public function verifyHandleSuccessLogin($data) {
             $this->clearErrors();
             $bodyData = $data['bodyData'];
-            $this->validateFormat('isValidMail', $bodyData['email'] ?? null, 'userId');
-            $this->validateFormat('isValidPass', $bodyData['password'] ?? null, 'userId');
+            $this->validateFormat('isValidMail', $bodyData['email'] ?? null);
+            $this->validateFormat('isValidPass', $bodyData['password'] ?? null);
             return $this->getStateErrors();
         }
 
         public function verifyInsertUser($data) {
             $this->clearErrors();
             $bodyData = $data['bodyData'];
-            $this->validateFormat('isValidMail', $bodyData['email'] ?? null, 'email');
-            $this->validateFormat('isValidPass', $bodyData['password'] ?? null, 'password');
-            $this->validateFormat('isValidFirstName', $bodyData['firstName'] ?? null, 'firstName');
-            $this->validateFormat('isValidLastName', $bodyData['lastName'] ?? null, 'lastName');
+            $this->validateFormat('isValidMail', $bodyData['email'] ?? null);
+            $this->validateFormat('isValidPass', $bodyData['password'] ?? null);
+            $this->validateFormat('isValidFirstName', $bodyData['firstName'] ?? null);
+            $this->validateFormat('isValidLastName', $bodyData['lastName'] ?? null);
             return $this->getStateErrors();
         }
 
         public function verifyIsValidResetPassToken($data) {
             $this->clearErrors();
             $bodyData = $data['bodyData'];
-            $this->validateFormat('isValidHashSha256', $bodyData['resetPassToken'] ?? null, 'resetPassToken');
+            $this->validateFormat('isValidHashSha256', $bodyData['resetPassToken'] ?? null);
             return $this->getStateErrors();
         }
 
         public function verifySendResetPassToken($data) {
             $this->clearErrors();
             $bodyData = $data['bodyData'];
-            //$this->validateFormat('isValidHashSha256', $bodyData['resetPassToken'] ?? null, 'resetPassToken');
-            $this->validateFormat('isValidMail', $bodyData['email'] ?? null, 'resetPassToken');
+            $this->validateFormat('isValidMail', $bodyData['email'] ?? null);
+            return $this->getStateErrors();
+        }
+
+        public function verifyUpdateEmail($data) {
+            $this->clearErrors();
+            $bodyData = $data['bodyData'];
+            $this->validateFormat('isValidHashSha256', $bodyData['token'] ?? null);
+            return $this->getStateErrors();
+        }
+
+        public function verifySendUpdateMail($data) {
+            $this->clearErrors();
+            $bodyData = $data['bodyData'];
+            $this->validateFormat('isValidMail', $bodyData['newEmail'] ?? null);
+            return $this->getStateErrors();
+        }
+
+        public function verifySendEmailToSupport($data) {
+            $this->clearErrors();
+            $bodyData = $data['bodyData'];
+            $this->validateFormat('isValidFirstName', $bodyData['firstName'] ?? null);
+            $this->validateFormat('isValidLastName', $bodyData['lastName'] ?? null);
+            $this->validateFormat('isValidMail', $bodyData['emailSender'] ?? null);
+            $this->validateFormat('isValidMessage', $bodyData['message'] ?? null);
             return $this->getStateErrors();
         }
 
         public function verifyUpdatePasswordByToken($data) {
             $this->clearErrors();
             $bodyData = $data['bodyData'];
-            
-            $this->validateFormat('isValidPass', $bodyData['password'] ?? null, 'password');
-            $this->validateFormat('isValidHashSha256', $bodyData['resetPassToken'] ?? null, 'resetPassToken');
+            $this->validateFormat('isValidHashSha256', $bodyData['resetPassToken'] ?? null);
             return $this->getStateErrors();
         }
-        
 
+        public function verifyUpdatePasswordByUserId($data) {
+            $this->clearErrors();
+            $bodyData = $data['bodyData'];
+            $this->validateFormat('isValidPass', $bodyData['newPass'] ?? null);
+            $this->validateFormat('isValidPass', $bodyData['oldPass'] ?? null);
+            return $this->getStateErrors();
+        }
+
+        public function verifyUpdateUserProfil($data) {
+            $this->clearErrors();
+            $bodyData = $data['bodyData'];
+            $this->validateFormat('isValidFirstName', $bodyData['firstName'] ?? null);
+            $this->validateFormat('isValidLastName', $bodyData['lastName'] ?? null);
+            $this->validateFormat('isValidDateProfil', $bodyData['birthday'] ?? null);
+            $this->validateFormat('isValidGenderProfil', $bodyData['gender'] ?? null);
+            return $this->getStateErrors();
+        }
+
+        public function verifyGetDataTrsBySearch($data) {
+            $this->clearErrors();
+            $bodyData = $data['bodyData'];
+            //var_dump($bodyData);
+
+            if(!empty($bodyData['searchNote'])) $this->validateFormat('isValidTransactionNote', $bodyData['searchNote']);
+            if(!empty($bodyData['searchAmountMin'])) $this->validateFormat('isValidTransactionAmount', $bodyData['searchAmountMin']);
+            if(!empty($bodyData['searchAmountMax'])) $this->validateFormat('isValidTransactionAmount', $bodyData['searchAmountMax']);
+            
+            if(!empty($bodyData['searchDateRangeDateMin'])) $this->validateFormat('isValidTransactionDate', $bodyData['searchDateRangeDateMin']);
+            if(!empty($bodyData['searchDateRangeDateMax'])) $this->validateFormat('isValidTransactionDate', $bodyData['searchDateRangeDateMax']);
+            
+            if(!empty($bodyData['searchCategory'])) $this->validateFormat('isValidTransactionCategoryEx', $bodyData['searchCategory']);
+            $this->validateFormat('isValidBool', $bodyData['orderAsc'] ?? null);
+            $this->validateFormat('isInt', $bodyData['currentOrderSelected'] ?? null);
+            $this->validateFormat('isInt', $bodyData['currentPage'] ?? 1);
+            
+            return $this->getStateErrors();
+        }
     }
 ?>

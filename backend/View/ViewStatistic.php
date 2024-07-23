@@ -6,9 +6,7 @@
 
     class ViewStatistic implements I_ViewStatistic {
         function renderJson($dataPage) {
-            echo json_encode([
-                'isSessionActive' => $dataPage['isSessionActive'],
-            ]);
+            echo json_encode($dataPage);
         }
     }
 ?>

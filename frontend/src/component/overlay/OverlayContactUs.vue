@@ -78,16 +78,17 @@
                 </div>
             </MainContainerSlot>
         </div>
+        <TransitionPopUp duration-in="500" duration-out="500">
+            <OverlaySuccessAction text="Votre email a été envoyé." v-if="isSuccessAction" v-model:overlayActive="isSuccessAction" />
+        </TransitionPopUp>
     </div>
-    <TransitionPopUp duration-in="500" duration-out="500">
-        <OverlaySuccessAction text="Votre mot de passe a été modifié." v-if="isSuccessAction" v-model:overlayActive="isSuccessAction" />
-    </TransitionPopUp>
+    
 </template>
 
     
 
 <script setup>
-    import { reactive, ref, computed, watch } from 'vue';
+    import { reactive, ref, computed, watch, defineAsyncComponent  } from 'vue';
     import MainContainerSlot from '@/component/containerSlot/MainContainerSlot.vue';
     import useClickOutside from '@/composable/useClickOutSide';
     import useEscapeKey from '@/composable/useEscapeKey';

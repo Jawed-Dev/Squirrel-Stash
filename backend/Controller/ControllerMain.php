@@ -1,6 +1,6 @@
 <?php
 
-use App\Mail\EmailSender;
+    use App\Mail\EmailSender;
 
     require_once './config.php';
     require_once './vendor/autoload.php';
@@ -91,13 +91,11 @@ use App\Mail\EmailSender;
             return $this->ModelMain;
         }
 
-
         public function getDatabase() {
             if (!$this->db) $this->db = $this->getModelMain()->getConnection();
             return $this->db;
         }
 
-        
         // Handler Jwt
         /**
         * @return HandlerJwt
@@ -151,17 +149,27 @@ use App\Mail\EmailSender;
             if($requireBodyData) {
                 $bodyDataJson = $this->getRequestBodyJson();
                 $bodyData = json_decode($bodyDataJson, true);
-                foreach ($bodyData as &$value) {
-                    if (is_string($value) && $value) $this->getHandlerValidFormat()->sanitizeData($value);
-                }
+                // foreach ($bodyData as &$value) {
+                //     if(is_string($value) && $value) $this->getHandlerValidFormat()->sanitizeData($value);
+                // }
+                if(!$bodyDataJson) throw new Exception('Erreur de données.');
             }
-            if($requireDatabase) $db = $this->getDatabase();
+            if($requireDatabase) {
+                $db = $this->getDatabase();
+                if(!$db) throw new Exception('Erreurs de données.');
+            }
             
             if($requireAuth) {
                 $decodedJwt = $this->getHandlerJwt()->getJwtFromHeader();
                 $isSessionActive = $this->getControllerUser()->isSessionActive($decodedJwt);
                 if(!$isSessionActive) throw new Exception('Erreurs de données.');
                 $userId = $this->getControllerUser()->getUserIdFromJwt($decodedJwt);
+                if(!$userId) throw new Exception('Erreurs de données.');
+            }
+            else {
+                $decodedJwt = $this->getHandlerJwt()->getJwtFromHeader();
+                $isSessionActive = $this->getControllerUser()->isSessionActive($decodedJwt);
+                if($isSessionActive) throw new Exception('Erreurs de données.');
             }
 
             return [
@@ -186,13 +194,12 @@ use App\Mail\EmailSender;
                 if(count($dataRequest['bodyData']) >= MAX_DATA_BODY_REQUEST) return null;
             }
             $isAnyMainDataEmpty = $this->getHandlerError()->verifyIfMainDataExists($dataRequire);
-            if ($isAnyMainDataEmpty) return throw new Exception('Erreurs dans la requête.');
+            if ($isAnyMainDataEmpty) return throw new Exception('Erreurs dans la requête 1.');
 
             if($functionValidData) {   
                 $isAnyError = $this->getHandlerError()->$functionValidData($dataRequest);
-                if ($isAnyError) return throw new Exception('Erreurs dans la requête.');
+                if ($isAnyError) return throw new Exception('Erreurs dans la requête 2.');
             }
-
             return $dataRequest;
         }
 
@@ -207,7 +214,7 @@ use App\Mail\EmailSender;
             $_COOKIE['stayConnected'] = $stayConnect;
         }
 
-        function createCookieByRefreshToken($tokenJwt) {
+        public function createCookieByRefreshToken($tokenJwt) {
             setcookie('refreshToken', $tokenJwt, [
                 'expires' => time() + TIME_EXPIRE_TIME_STAY_CONNECTED, 
                 'httponly' => true,
@@ -215,6 +222,16 @@ use App\Mail\EmailSender;
                 'samesite' => 'Strict'
             ]);
             $_COOKIE['refreshToken'] = $tokenJwt;
+        }
+
+        public function destroyCookieRefreshToken() {
+            setcookie('refreshToken', '', [
+                'expires' => time() - 1,
+                'secure' => true,         
+                'httponly' => true,         
+                'samesite' => 'Strict'  
+            ]);
+            $_COOKIE['refreshToken'] = '';
         }
 
         public function sendJsonResponse($data) {

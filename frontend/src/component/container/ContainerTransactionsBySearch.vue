@@ -95,7 +95,7 @@
         componentLoaded.value = true;
     });
 
-    watch(  () => currentPage.value, (newPage) => {
+    watch( () => currentPage.value, (newPage) => {
         const params = paramsSearch.params;
         params.currentPage = newPage;
         updateDataTrsSearch(params);

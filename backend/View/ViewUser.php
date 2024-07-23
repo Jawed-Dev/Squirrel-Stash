@@ -6,9 +6,7 @@
 
     class ViewUser implements I_ViewUser {
         function renderJson($dataPage) {
-            echo json_encode([
-                'isSessionActive' => $dataPage['isSessionActive'],
-            ]);
+            echo json_encode($dataPage);
         }
     }
 ?>

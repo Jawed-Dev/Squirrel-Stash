@@ -50,7 +50,6 @@
     import { formatDateForCurrentDay, formatDateForFirstDay, isCurrentMonth } from '@/composable/useGetDate';
     import { listPurchases, listRecurings } from '@/svg/listTransactionSvgs';
     import { isAnyMandatInputEmpty, isAnyInputError, TYPE_SUBMIT_ERROR, TEXT_SUBMIT_ERROR } from '@/error/useHandleError';
-    import TransitionPopUp from '@/component/transition/TransitionPopUp.vue';
     import { isValidCategory } from '@/error/useValidFormat';
 
     // stores Pinia
@@ -65,7 +64,7 @@
 
     // menu
     const isOverlayActive = defineModel('menuActive');    
-    const typeTransaction = ref(false); 
+    const typeTransaction = ref(getTypeTransaction()); 
     const currentCategory = ref(0);
 
     // input ref
@@ -170,7 +169,7 @@
         inputPriceVal.value = props.infoTransaction.transaction_amount;
         inputNoteVal.value = props.infoTransaction.transaction_note;
         inputDateVal.value = props.infoTransaction.transaction_date;
-        typeTransaction.value = (props.infoTransaction.transaction_type === 'purchase') ? false : true;
+        typeTransaction.value = getTypeTransaction();
         currentCategory.value = getIndexCategory();
     }
     async function prepareUpdateTransaction() {
@@ -216,6 +215,10 @@
             amount: inputPriceVal.value,
             category: currentCategory.value,
         }
+    }
+
+    function getTypeTransaction() {
+        return (props.infoTransaction.transaction_type === 'purchase') ? false : true;
     }
 
     function isDateEmpty() {
