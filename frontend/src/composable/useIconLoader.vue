@@ -14,7 +14,7 @@
 
 <script setup>
     // import
-    import { onMounted, ref, shallowRef, watch, computed } from 'vue';
+    import { onMounted, ref, shallowRef, watch } from 'vue';
     import { getIconByName } from '@/svg/getIcon';
     import IconInvisible from '@/component/svgs/IconInvisible.vue';
 
@@ -27,8 +27,6 @@
         extraClass: {default: ''}
     });
     const lastRequestedIcon = ref('');
-    
-
     // life cycle, functions
     async function loadIcon(name) {
         lastRequestedIcon.value = name;
@@ -41,7 +39,6 @@
     onMounted(async () => {
         await loadIcon(props.nameIcon);
     });
-    
     watch(() => props.nameIcon, async (newName) => {
         await loadIcon(newName);
     });

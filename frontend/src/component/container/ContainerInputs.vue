@@ -1,9 +1,9 @@
 <template>
     <div class="flex">
         <!-- dépenses valeur -->
-        <div class="flex items-center flex-col w-full border-b-[1px] border-gray-700 py-[20px]">
-            <div class="flex justify-end w-full pr-3">
-                <div class="flex items-center justify-center mt-[5px]">
+        <div class="flex items-center flex-col w-full border-b-[1px] border-gray-700 gap-3 py-8">
+            <div class="flex justify-end w-full">
+                <div class="w-1/3 mr-1">
                     <InputBase 
                         v-model="inputDateVal" 
                         v-model:stateError="errorInputs.inputDateVal" 
@@ -11,19 +11,18 @@
                         placeholder="Date"
                         id="input-date"
                         type="date"
-                        :borderHidden="true"
                         validFormat="trsDate"
                         :hideAnimation="true"
-                        
+                        extraClass="text-[15px] py-[2px]"
                     />
                 </div>
             </div>
 
-            <div class="w-1/3 mt-3">
+            <div class="w-[45%]">
                 <div class="w-full">
-                    <label for="input-amount-trs" class="flex justify-center font-light">Montant *</label>
+                    <label for="input-amount-trs" class="text-lg flex justify-center font-light">Montant *</label>
                     <InputBase 
-                        extraClass="text-sm"
+                        extraClass="text-[15px] py-[2px]"
                         iconName="Amount"
                         v-model="inputPriceVal" 
                         v-model:stateError="errorInputs.inputPriceVal" 
@@ -33,16 +32,18 @@
                         validFormat="amount"
                         :hideAnimation="true"
                         :onlyNumbers="true"
+                        
+                        
                     />
                 </div>
             </div>
 
-            <div class="w-1/2 flex flex-col mt-7 mb-3">
+            <div class="w-[45%] flex flex-col">
                 <!-- placeholder notes -->
                 <div class="w-full">
-                    <label for="input-note-trs" class="flex justify-center font-light">{{textNote}}</label>
+                    <label for="input-note-trs" class="text-lg flex justify-center font-light">{{textNote}}</label>
                     <InputBase 
-                        extraClass="text-sm"
+                        extraClass="text-[15px] py-[2px]"
                         iconName="Pencil"
                         v-model="inputNoteVal"
                         v-model:stateError="errorInputs.inputNoteVal" 

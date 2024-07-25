@@ -1,7 +1,7 @@
 <template>
-    <div class="mt-1">
+    <div class="">
         <div 
-            :class="`pl-1 flex items-center py-[1px] rounded-sm ${border} transition-all duration-500 ${colorBorder} text-white font-light`">
+            :class="`pl-1 bg-second-bg flex items-center py-[1px] rounded-sm ${border} transition-all duration-500 ${colorBorder} text-white font-light`">
             <div v-show="iconName">
                 <UseIconLoader :nameIcon="iconName" :svg="{width:'20px', fill:'rgba(255, 255, 255, 1)'}"  />
             </div>
@@ -10,7 +10,7 @@
                 @input="onInput"
                 @focus="isInputFocused = true" 
                 @blur="isInputFocused = false"
-                :class="`${props.extraClass} p-1 text-[15px] transition-colors duration-500 ${colorValidationInput} bg-transparent pl-1 focus:outline-none ${width} .webkit-white w-full`"
+                :class="`p-1 text-[15px] ${props.extraClass} transition-colors duration-500 ${colorValidationInput}  pl-1 focus:outline-none ${width} .webkit-white w-full bg-second-bg`"
                 :value="inputValue"
                 :type="type"
                 :placeholder="placeholder"

@@ -1,10 +1,10 @@
-export function classTransitionHover(request, config = null) {
+export function classTransitionHover(request) {
     switch(request) {
         case 'extendHeader' : {
             return 'hover:w-[200px] transition-all duration-500';
         }
         case 'translateY' : {
-            return "transition-transform hover:translate-y-[-2px] duration-500";
+            //return "transition-transform hover:translate-y-[-1px] duration-500 ";
         }
     }
 }

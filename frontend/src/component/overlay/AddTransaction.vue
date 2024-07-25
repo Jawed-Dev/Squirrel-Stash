@@ -1,17 +1,19 @@
 <template>
     <div>
-        <div class="rounded-[3px] overflow-hidden shadow-black shadow-custom-main ">
-            <div class="bg-main-gradient w-[230px] flex justify-around items-center p-1 gradient-border">
-                <p class="text-white px-3 flex ">Ajouter un achat</p>
-                <IconAddPurchase @click="toggleMenu('openNClose')"
-                class="p-1 bg-gradient-blue rounded-md right-[100px] top-[50vh] cursor-pointer 
-                z-10 shadow-black shadow-custom-main trigger-add-purchase" 
-                :svg="svgCfgIconAdd"/>
+        <div class="rounded-[3px] overflow-hidden shadow-black shadow-custom-main">
+            <div class="bg-main-gradient p-1 gradient-border">
+                <div class="flex justify-around items-center">
+                    <p class="text-white px-3 flex ">Ajouter un achat</p>
+                    <IconAddPurchase @click="toggleMenu('openNClose')"
+                    class="p-1 bg-gradient-blue rounded-md right-[100px] top-[50vh] cursor-pointer 
+                    z-10 shadow-black shadow-custom-main trigger-add-purchase" 
+                    :svg="svgCfgIconAdd"/>
+                </div>
             </div>
         </div>
 
         <TransitionOpacity :durationIn="'duration-300'" :durationOut="'duration-200'">
-            <div v-if="isOverlayActive" class="fixed inset-0 bg-black bg-opacity-80 z-10"></div>
+            <div v-if="isOverlayActive" class="fixed inset-0 bg-black bg-opacity-80 z-30"></div>
         </TransitionOpacity>
 
         <TransitionOpacity :durationIn="'duration-300'" :durationOut="'duration-200'">
@@ -23,22 +25,25 @@
                     :textBtn1="'Annuler'" :textBtn2="'Ajouter'" :titleContainer="(!typeTransaction) ? 'Ajouter un achat' : 'Ajouter un prélèvement'" 
                     @toggleMenu="toggleMenu" 
                 >
-                    <!-- Errors -->
-                    <div class="relative">
-                        <p class="text-sm font-light p-3 absolute text-red-300">{{ textError }}</p>
-                    </div>
-                    <div>
-                        <!-- Inputs  -->
-                        <ContainerInputs 
-                            v-model:errorInputs="errorInputs"
-                            v-model:inputPriceVal="inputPriceVal" 
-                            v-model:inputNoteVal="inputNoteVal" 
-                            v-model:inputDateVal="inputDateVal" 
-                            :typeTransaction="typeTransaction" 
-                        />
-                        <!-- Categories -->
-                        <ContainerSelectCategories v-model:currentCategory="currentCategory" 
-                        v-model:typeTransaction="typeTransaction" />              
+                    <div class="max-h-[70vh] overflow-y-auto">
+                        <!-- Errors -->
+                        <div class="relative">
+                            <p class="text-sm font-light p-3 absolute text-red-300">{{ textError }}</p>
+                        </div>
+                        <div>
+                            <!-- Inputs  -->
+                            <ContainerInputs 
+                                v-model:errorInputs="errorInputs"
+                                v-model:inputPriceVal="inputPriceVal" 
+                                v-model:inputNoteVal="inputNoteVal" 
+                                v-model:inputDateVal="inputDateVal" 
+                                :typeTransaction="typeTransaction" 
+                            />
+                            <!-- Categories -->
+                            <ContainerSelectCategories v-model:currentCategory="currentCategory" 
+                            v-model:typeTransaction="typeTransaction" />              
+                        </div>
+
                     </div>
                 </MainContainerSlot>
             </div>

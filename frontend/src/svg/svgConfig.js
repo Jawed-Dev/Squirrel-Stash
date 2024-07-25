@@ -10,3 +10,16 @@ export const svgConfig = {
     verySmallIcon: { width: '20px', height: '20px', fill: 'white'},
     setColorDynamic: (config, color) => ({ ...config, color: color }),
 };
+
+
+export function setSvgConfig(params) {
+    // params.width = '20px';
+    // params.fill = 'white';
+    // params.color = '';
+    return {
+        width: params.width,
+        height: params.width,
+        fill: params.fill,
+        color: params.color
+    }
+}

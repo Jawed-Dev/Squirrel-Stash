@@ -1,7 +1,14 @@
 <template>
-    <div class="flex border-b border-main-color border shadow-black shadow-custom-main rounded-r-md rounded-l-md">
-        <p class="w-[10vw] text-center px-3 py-1 cursor-pointer rounded-l-md" :class="[!typeTransaction ? 'bg-gradient-blue' : '']" @click="handleStateToggle(false)" >{{ text1 }}</p>
-        <p class="w-[10vw] text-center px-3 py-1 cursor-pointer rounded-r-md" :class="[!typeTransaction ? '' : 'bg-gradient-vanusa']" @click="handleStateToggle(true)" >{{ text2 }}</p>
+    <div class="flex justify-center shadow-black shadow-custom-main rounded-r-md rounded-l-md w-full mx-20">
+        <div class="w-[50%]">
+            <p class="w-full text-center px-3 py-1 cursor-pointer rounded-l-md " 
+            :class="[!typeTransaction ? 'bg-gradient-blue' : '']" @click="handleStateToggle(false)" >{{ text1 }}</p>
+        </div>
+
+        <div class="w-[50%]">
+            <p class="w-full text-center px-3 py-1 cursor-pointer rounded-r-md" 
+            :class="[!typeTransaction ? '' : 'bg-gradient-vanusa']" @click="handleStateToggle(true)" >{{ text2 }}</p>
+        </div>
     </div>
 </template>
 

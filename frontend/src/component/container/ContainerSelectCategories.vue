@@ -1,22 +1,26 @@
 <template>
-    <div class="w-full py- px-2">
-        <div class="flex justify-center pt-[20px] ">
-            <ToggleButton class="text-[15px]" v-model:typeTransaction="typeTransaction" :text1="'Achats'" :text2="'Prélèvements'" />
-        </div>
+    <div class="w-full py-8">
 
-        <!-- liste des catégories -->
-        <h2 class="text-center mt-[40px] text-[18px] font-light">Sélectionner la catégorie</h2>
-        <div class="w-full flex flex-wrap pt-[20px] pb-[40px]">
-            <SelectInputCategories :width="'w-[70%]'" 
-                v-model:currentCategory="currentCategory" 
-                :typeTransaction="typeTransaction" 
-                :listSelect="(!typeTransaction) ? listPurchases : listRecurings" 
-            />
+        <div class="flex flex-col items-center">
+            <div class="w-full flex justify-center">
+                <ToggleButton v-model:typeTransaction="typeTransaction" :text1="'Achats'" :text2="'Prélèvements'" />
+            </div>
+    
+            <!-- liste des catégories -->
+            <h2 class="text-center text-lg font-light pt-8">Sélectionner la catégorie</h2>
+ 
+            <div class="w-full flex justify-center">
+                <SelectInputCategories 
+                    v-model:currentCategory="currentCategory" 
+                    :typeTransaction="typeTransaction" 
+                    :listSelect="(!typeTransaction) ? listPurchases : listRecurings" 
+                />
+            </div>
+           
         </div>
     
     </div>
 </template>
-
 
 <script setup>
 

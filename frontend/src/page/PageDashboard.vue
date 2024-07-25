@@ -1,7 +1,7 @@
 <template>
 
-    <div class="font-main-font flex flex-col bg-main-bg w-full">
-        <div class="ml-[calc(20px+70px+20px)] mr-custom-margin-main flex flex-col mt-[20px]">
+    <div class="font-main-font flex flex-col bg-main-bg w-full pb-[calc(50px)] md:pb-0">
+        <div class="mx-1 md:ml-[calc(20px+65px+20px)] md:mr-custom-margin-main flex flex-col mt-[20px]">
             <h1 class="text-[25px] font-light text-white">Économie du mois</h1>
             <p class="font-light text-white mt-2">Bonjour {{ firstNameUser }}, voici votre résumé du mois.</p> 
 
@@ -18,7 +18,7 @@
                     <SelectYear v-model="dateSelected.year" :listSelect="getAvailableYear()" />
                 </div>
                 <div class="flex justify-end">
-                    <AddTransaction width="w-[30%]"/>
+                    <AddTransaction width="sm:w-[25%] sm:min-w-[500px] w-full max-w-[550px]"/>
                 </div>
             </section>
 
