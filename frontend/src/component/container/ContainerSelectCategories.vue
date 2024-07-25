@@ -1,24 +1,20 @@
 <template>
-    <div class="w-full py-8">
-
+    <div class="w-full pt-3">
         <div class="flex flex-col items-center">
-            <div class="w-full flex justify-center">
+            <div class="flex justify-center w-[70%] sm:w-[55%]">
                 <ToggleButton v-model:typeTransaction="typeTransaction" :text1="'Achats'" :text2="'Prélèvements'" />
             </div>
     
             <!-- liste des catégories -->
             <h2 class="text-center text-lg font-light pt-8">Sélectionner la catégorie</h2>
- 
-            <div class="w-full flex justify-center">
+            <div class="w-full flex justify-center pb-8">
                 <SelectInputCategories 
                     v-model:currentCategory="currentCategory" 
                     :typeTransaction="typeTransaction" 
                     :listSelect="(!typeTransaction) ? listPurchases : listRecurings" 
                 />
             </div>
-           
         </div>
-    
     </div>
 </template>
 

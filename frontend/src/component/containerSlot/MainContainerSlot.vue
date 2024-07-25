@@ -6,7 +6,7 @@
         <p v-else class="py-2"></p>
     </div>
     <div :class="`flex flex-col items-center shadow-red ${bgHead} shadow-black shadow-custom-main py-2`">
-        <h2 :class="`${width} flex justify-center text-2xl py-1 font-extralight`">{{titleContainer}}</h2>
+        <h2 :class="`${width} flex justify-center text-xl py-1 font-extralight`">{{titleContainer}}</h2>
     </div>
     
     <slot></slot>

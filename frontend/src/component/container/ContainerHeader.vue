@@ -1,7 +1,4 @@
 <template>
-    <div v-show="isMobile" class="h-20 w-full fixed bottom-[50px]">
-        <OverlayMenuHeaderUser class="absolute right-[190px] bottom-2" v-model="isMenuUserActive" />
-    </div>
     <nav v-show="isValidPage"
         ref="headerRef" 
         :class="`font-main-font flex md:flex-col items-center
@@ -9,39 +6,34 @@
         md:top-top-Header bottom-0 md:left-top-Header fixed 
         bg-header-gradient md:rounded-md 
         shadow-black shadow-custom-main
-        ${extendHeader} z-10 md:max-h-[calc(100vh-(40px))] max-h-none overflow-y-auto`"
+        ${extendHeader} z-10 md:max-h-[calc(100vh-(40px))] max-h-none md:overflow-y-auto`"
             @mouseenter="isHovered = true"
             @mouseleave="isHovered = false"
         >
         
         <div v-show="!isMobile" class="w-[80%] border-[1px] mt-20"></div>
 
-        
-
         <div class="md:mt-3 w-full justify-center flex md:flex-col">
             <div 
-                v-for="(icon, index) of dataIcons" 
-                class="md:w-full items-center justify-center w-[100px] md:items-stretch h-[50px] md:h-fit flex flex-col relative" 
+                v-for="(icon, index) of dataListPage1" 
+                class="flex flex-col relative items-center justify-center w-[100px] md:w-full md:items-stretch h-[50px] md:h-fit " 
             >
                 
-                <div 
-                    :key="index" @click="handleClickHeader(icon.page)" 
-                    :class="`flex relative ${classTranslateY} py-[30px] md:py-2 cursor-pointer ${bordergetCurrentPage(icon.page)}`"
-                >
+                <div :key="index" @click="handleClickHeader(icon.page)" 
+                    :class="`flex relative ${classTranslateY} md:py-2 cursor-pointer py-4
+                    ${bordergetCurrentPage(icon.page)}`">
                     
-                    <div class="flex flex-col items-center relative" @click="openMenuUser(icon.page)">
-                        <div v-if="icon.page === 'utilisateur' && isMobile" class="text-white absolute bottom-7">
-                            <p>&#9650;</p>
-                  
+                        <div class="flex flex-col items-center relative">
+                            <component :is="icon.Component" :svg="iconsStyle" class="w-header-width "/>
                         </div>
-                        <component :is="icon.Component" :svg="svgConfig(icon.page)" class="w-header-width"/>
-                    </div>
-                    
-                    <TransitionOpacity v-if="!isMobile" :durationIn="'duration-300'" :durationOut="'duration-0'">
-                        <router-link :to="icon.link" v-show="isHovered && isTextIconsVisible" 
-                        class="absolute w-[150px] right-[0px] top-[50%] transform -translate-y-1/2 pl-3 flex 
-                        items-center text-[14px] text-white">{{ icon.text }}</router-link>
-                    </TransitionOpacity>
+                        
+                        <TransitionOpacity v-if="!isMobile" :durationIn="'duration-300'" :durationOut="'duration-0'">
+                            <router-link 
+                                :to="icon.link" v-show="isHovered && isTextIconsVisible" 
+                                class="flex items-center absolute w-[150px] right-[0px] top-[50%] transform -translate-y-1/2 
+                                pl-3 text-[14px] text-white">{{ icon.text }}
+                            </router-link>
+                        </TransitionOpacity>
                 </div>
             </div>
         </div>
@@ -49,11 +41,11 @@
         <div v-show="!isMobile" class="w-[80%] border-[1px] mt-3"></div>
 
         <div v-show="!isMobile" class="w-full flex md:flex-col mt-5">
-            <div class="w-full flex flex-col relative" v-for="(icon, index) of dateIcons2">
+            <div class="w-full flex flex-col relative" v-for="(icon, index) of dataListPage2">
                 <div 
                     :key="index" @click="handleClickHeader(icon.page)" 
                     :class="`flex relative ${classTranslateY} py-2 cursor-pointer ${bordergetCurrentPage(icon.page)}`">
-                    <component :is="icon.Component" :svg="svgConfig(icon.page)" class="w-header-width "/>
+                    <component :is="icon.Component" :svg="iconsStyle" class="w-header-width "/>
 
                     <TransitionOpacity v-if="!isMobile" :durationIn="'duration-300'" :durationOut="'duration-0'">
                         <router-link :to="icon.link" v-show="isHovered && isTextIconsVisible" 
@@ -79,7 +71,7 @@
     import TransitionOpacity from '@/component/transition/TransitionOpacity.vue';  
     import { classTransitionHover } from '@/composable/useClassTransitionHover';
     import { disconnectUser } from '@/composable/useBackendActionData';
-    import OverlayMenuHeaderUser from '@/component/overlay/OverlayMenuHeaderUser.vue';
+    import { setSvgConfig } from '@/svg/svgConfig';
     
     // import async icons & dynamic
     const IconDashboard = defineAsyncComponent(() => import('@/component/svgs/IconDashboard.vue'));
@@ -99,17 +91,16 @@
     
     //import OverlayPrivacy from '@/component/overlay/OverlayPrivacy.vue';
     //import OverlayUserRules from '@/component/overlay/OverlayUserRules.vue';
-    // variables, props, ...
 
-    // data icons
-    const dataIcons = [
-    { Component: IconDashboard, link:'/tableau-de-bord', page: 'tableau-de-bord', text: 'Tableau de bord' },
-    { Component: IconPurchases, link:'/historique-transactions',page: 'historique-transactions', text: 'Historique' },
-    { Component: IconGraph, link:'',page: '', text: 'Graphiques' },
-    { Component: IconUser, link:'/utilisateur', page: 'utilisateur', text: 'Utilisateur' },
+    // variables, props, ...
+    const dataListPage1 = [
+        { Component: IconDashboard, link:'/tableau-de-bord', page: 'tableau-de-bord', text: 'Tableau de bord' },
+        { Component: IconPurchases, link:'/historique-transactions',page: 'historique-transactions', text: 'Historique' },
+        { Component: IconGraph, link:'',page: '', text: 'Graphiques' },
+        { Component: IconUser, link:'/utilisateur', page: 'utilisateur', text: 'Utilisateur' },
     ];
 
-    const dateIcons2 = [    
+    const dataListPage2 = [    
     // { Component: IconPrivacy, link:'',page: 'confidentialité', text: 'Confidentialité' },
     // { Component: IconUserRules, link:'',page: 'règles', text: "Règles d'utilisateur" },
     { Component: IconSupport, link:'',page: 'contact', text: 'Support et aide' },
@@ -117,11 +108,11 @@
     { Component: IconLogOut, link:'',page: 'disconnect', text: 'Déconnexion' },
     ];
 
-    // class 
+ 
+    const iconsStyle = setSvgConfig({width:'25px', fill:'white'});
     const classTranslateY = classTransitionHover('translateY');
     const classTranslateWidth = classTransitionHover('extendHeader');
 
-    // conditions / bool
     const isHovered = ref(false);
     const isTextIconsVisible = ref(false);
     const isOverlayActive = reactive({
@@ -129,7 +120,7 @@
         userRules: false,
         contactUs: false
     });
-    
+
     const router = useRouter();
     const width = ref(window.innerWidth);
     const headerRef = ref(null);
@@ -142,15 +133,13 @@
         'reinitialiser-mot-de-passe',
     ];
 
-        
     // life cycle, functions ...
     const isMobile = computed(() => width.value < 768);
-
     const extendHeader = computed(() => {
         return (!isMobile.value) ? classTranslateWidth : '';
     });
-    
     let observer;
+
     onMounted( () => {
         const observer = new ResizeObserver( () => updateTextVisibility());
         if (headerRef.value) observer.observe(headerRef.value);
@@ -181,22 +170,6 @@
     };
 
 
-    function svgConfig() {
-        const sizeSvg = '30px';
-        return {
-            width: sizeSvg,
-            height: sizeSvg,
-            fill: 'white',
-        }
-    }
-
-    function openMenuUser(page) {
-        if(isMobile.value && page === 'utilisateur') {
-            isMenuUserActive.value = true;//!isMenuUserActive.value;
-            alert('test');
-        }
-    }
-
     async function handleClickHeader(page) {
         switch (page) {
             case 'tableau-de-bord': {
@@ -212,7 +185,7 @@
                 break;
             }
             case 'utilisateur' : {
-                if(!isMobile.value) router.push('/utilisateur');
+                router.push('/utilisateur');
                 break;
             }
             // case 'confidentialité' : {

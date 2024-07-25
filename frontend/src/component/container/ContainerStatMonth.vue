@@ -1,6 +1,6 @@
 <template>
     <div :class="`${props.width} rounded-[3px] overflow-hidden mt-5 shadow-black shadow-custom-main`">
-        <div :class="`flex flex-col text-[17px] gradient-border overflow-hidden bg-main-gradient  `">
+        <div :class="`flex flex-col gradient-border overflow-hidden bg-main-gradient`">
             <div class="flex items-center justify-between px-2 py-2 ">
                 <UseIconLoader 
                     :nameIcon="svg.name" :svg="svg" 

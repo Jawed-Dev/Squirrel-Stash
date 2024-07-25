@@ -45,6 +45,10 @@
                         getControllerMain()->getControllerUser()->authorizePage();
                         break;
                     }
+                    case 'pageAccount': {
+                        getControllerMain()->getControllerUser()->authorizePage();
+                        break;
+                    }
                     case 'pageResetPass': {
                         getControllerMain()->getControllerUser()->authorizePage();
                         break;
@@ -54,6 +58,10 @@
                         break;
                     }
                     case 'pageDashboard': {
+                        getControllerMain()->getControllerStatistic()->authorizePage();
+                        break;
+                    }
+                    case 'pageSeeMoreMobile': {
                         getControllerMain()->getControllerStatistic()->authorizePage();
                         break;
                     }

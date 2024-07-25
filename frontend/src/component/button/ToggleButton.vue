@@ -1,12 +1,12 @@
 <template>
-    <div class="flex justify-center shadow-black shadow-custom-main rounded-r-md rounded-l-md w-full mx-20">
-        <div class="w-[50%]">
-            <p class="w-full text-center px-3 py-1 cursor-pointer rounded-l-md " 
+    <div class="flex justify-center shadow-black shadow-custom-main rounded-r-md rounded-l-md w-full">
+        <div class="w-1/2">
+            <p class="w-full text-center px-2 py-[2px] cursor-pointer rounded-l-md text-[15px] font-light overflow-hidden text-ellipsis" 
             :class="[!typeTransaction ? 'bg-gradient-blue' : '']" @click="handleStateToggle(false)" >{{ text1 }}</p>
         </div>
 
-        <div class="w-[50%]">
-            <p class="w-full text-center px-3 py-1 cursor-pointer rounded-r-md" 
+        <div class="w-1/2">
+            <p class="w-full text-center px-2 py-[2px] cursor-pointer rounded-r-md text-[15px] font-light overflow-hidden text-ellipsis" 
             :class="[!typeTransaction ? '' : 'bg-gradient-vanusa']" @click="handleStateToggle(true)" >{{ text2 }}</p>
         </div>
     </div>

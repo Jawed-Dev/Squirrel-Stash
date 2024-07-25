@@ -18,7 +18,7 @@
                     <SelectYear v-model="dateSelected.year" :listSelect="getAvailableYear()" />
                 </div>
                 <div class="flex justify-end">
-                    <AddTransaction width="sm:w-[25%] sm:min-w-[500px] w-full max-w-[550px]"/>
+                    <AddTransaction width="sm:w-[25%] sm:min-w-[450px] w-full max-w-[400px]"/>
                 </div>
             </section>
 

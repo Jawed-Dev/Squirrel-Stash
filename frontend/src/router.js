@@ -8,7 +8,8 @@ const PageHistoryTransactions = () => import('@/page/PageHistoryTransactions.vue
 const PageTemporary = () => import('@/page/PageTemporary.vue');
 const PageForgotPass = () => import('@/page/PageForgotPass.vue');
 const PageResetPass = () => import('@/page/PageResetPass.vue');
-const PageUser = () => import('@/page/PageUser.vue');
+const PageAccount = () => import('@/page/PageAccount.vue');
+const pageUser = () => import('@/page/PageUser.vue');
 
 import  useConfigFetchGetPage from "@/composable/useConfigFetchGetPage";
 
@@ -24,8 +25,9 @@ const routes = [
   { path: '/mot-de-passe-oublie', component: PageForgotPass, meta: { page: 'pageForgotPass' }},
   { path: '/reinitialiser-mot-de-passe', component: PageResetPass, meta: { page: 'pageResetPass' }},
   { path: '/historique-transactions', component: PageHistoryTransactions, meta: { page: 'pageTransactions' }},
-  { path: '/utilisateur', component: PageUser, meta: { page: 'pageUser' }},
+  { path: '/mon-compte', component: PageAccount, meta: { page: 'pageAccount' }},
   { path: '/reinitialiser-email', component: PageTemporary, meta: { page: 'updateEmail' }},
+  { path: '/utilisateur', component: pageUser, meta: { page: 'pageUser' }},
 ];
 
 const router = createRouter({
@@ -73,7 +75,7 @@ router.beforeEach(async (to, from, next) => {
         const token = to.query.token;
         console.log(token);
         const response = await updateEmail(token);
-        if(response?.isSuccessRequest) next('/utilisateur');
+        if(response?.isSuccessRequest) next('/mon-compte');
         break;
       }
       case 'pageResetPass' : {
@@ -81,6 +83,10 @@ router.beforeEach(async (to, from, next) => {
         const isValidToken = await isValidResetPassToken(to.query.token);
         if(!isParamUrlValid || !isValidToken) next('/connexion'); 
         (isSessionActive) ? next('/tableau-de-bord') : next();
+        break;
+      }
+      case 'pageAccount' : {
+        (isSessionActive) ? next() : next('/connexion');
         break;
       }
       case 'pageUser' : {
@@ -95,6 +101,7 @@ router.beforeEach(async (to, from, next) => {
         (isSessionActive) ? next() : next('/connexion');
         break;
       }
+      
       default : {
           // page 404 ?
           next('/connexion');
