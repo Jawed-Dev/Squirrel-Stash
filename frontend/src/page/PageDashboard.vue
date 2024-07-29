@@ -3,46 +3,49 @@
     <div class="font-main-font flex flex-col bg-main-bg w-full pb-[calc(50px)] md:pb-0">
         <div class="mx-1 md:ml-[calc(20px+65px+20px)] md:mr-custom-margin-main flex flex-col mt-[20px]">
             <h1 class="text-[25px] font-light text-white">Économie du mois</h1>
-            <p class="font-light text-white mt-2">Bonjour {{ firstNameUser }}, voici votre résumé du mois.</p> 
+            <p class="font-light text-white mt-2 pr-2">Bonjour {{ firstNameUser }}, voici votre résumé du mois.</p> 
 
             <ContainerStatMonth 
-                :isIconActive="true" :svg="svgConfig('target', 'bg-gradient-blue')" 
+                :isIconActive="true" nameIcon="target" bgIcon="bg-gradient-blue" :svg="svgConfig('target', 'bg-gradient-blue')" 
                 :colorValue="'text-white'" 
                 :amountValue="threshold.amount +' €'" 
                 :nameStat="'Seuil mensuel'" 
-                :width="'w-[30%]'"
+                :width="'md:w-1/4 md:min-w-[calc(197px*2+8px)] sm:w-full'"
             />
-            <section class="flex justify-between pt-5">
-                <div class="flex gap-[20px] w-[30%]">
-                    <SelectMonth v-model="dateSelected.month" :listSelect="monthNames" />
-                    <SelectYear v-model="dateSelected.year" :listSelect="getAvailableYear()" />
+
+            <section class="flex flex-col md:flex-row justify-between pt-5">
+                <div class="flex flex-col gap-5 sm:gap-2 sm:flex-row md:w-1/4 sm:w-full">
+                    <SelectMonth class="min-h-[42px] w-full sm:min-w-[197px]" v-model="dateSelected.month" :listSelect="monthNames" />
+                    <SelectYear class="min-h-[42px] w-full sm:min-w-[197px]" v-model="dateSelected.year" :listSelect="getAvailableYear()" />
                 </div>
-                <div class="flex justify-end">
-                    <AddTransaction width="sm:w-[25%] sm:min-w-[450px] w-full max-w-[400px]"/>
-                </div>
+                <AddTransaction class="" width="sm:w-1/4 sm:min-w-[450px] w-full max-w-[400px]"/>   
             </section>
 
             <section class="w-[100%] mt-custom-margin-main rounded-[3px] overflow-hidden shadow-black shadow-custom-main"> 
                 <ContainerTransactionsMonth />
             </section>
 
-            <section class="flex gap-[20px] justify-around ">
-                <ContainerStatMonth :svg="svgConfig('calculator', 'bg-gradient-orange')" :colorValue="'text-custom-orange'" 
-                :amountValue="statisticDetails.totalTransactions + ' €'" :nameStat="'Total des transactions'" :width="'w-[25%]'" />
+            <section class="flex flex-col sm:flex-row sm:gap-5 justify-around">
 
-                <ContainerStatMonth :svg="svgConfig('balance', 'bg-gradient-green')" :colorValue="'text-custom-green'" 
-                :amountValue="filterTextBalanceEconomy" :nameStat="'Balance d\'économie'" :width="'w-[25%]'" />
+                <div class="flex flex-col w-full justify-around min-[1300px]:flex-row min-[1300px]:gap-5 ">
+                    <ContainerStatMonth nameIcon="calculator" bgIcon="bg-gradient-orange" :colorValue="'text-custom-orange'" 
+                    :amountValue="statisticDetails.totalTransactions + ' €'" :nameStat="'Total des transactions'" :width="'min-[1300px]:w-1/2 w-full'" />
+    
+                    <ContainerStatMonth nameIcon="balance" bgIcon="bg-gradient-green" :colorValue="'text-custom-green'" 
+                    :amountValue="filterTextBalanceEconomy" :nameStat="'Balance d\'économie'" :width="'min-[1300px]:w-1/2 w-full'" />
+                </div>
                 
-                <ContainerStatMonth :svg="svgConfig(iconNamePurchases, 'bg-gradient-blue')" :colorValue="'text-white'" 
-                :amountValue="nameBiggestPurchase" :nameStat="'Plus gros achat / Catégorie'" :width="'w-[25%]'" />
-                
-                <ContainerStatMonth :svg="svgConfig(iconNameRecurrings, 'bg-gradient-vanusa')" :colorValue="'text-white'"  
-                :amountValue="nameBiggestRecurring" :nameStat="'Plus gros prélèvement / Catégorie'" :width="'w-[25%]'" />
+                <div class="flex flex-col w-full justify-around min-[1300px]:flex-row min-[1300px]:gap-5 ">
+                    <ContainerStatMonth :nameIcon="iconNamePurchases" bgIcon="bg-gradient-blue" :colorValue="'text-white'" 
+                    :amountValue="nameBiggestPurchase" :nameStat="'Plus gros achat / Catégorie'" :width="'min-[1300px]:w-1/2 w-full'" />
+                    
+                    <ContainerStatMonth :nameIcon="iconNameRecurrings" bgIcon="bg-gradient-vanusa" :colorValue="'text-white'"  
+                    :amountValue="nameBiggestRecurring" :nameStat="'Plus gros prélèvement / Catégorie'" :width="'min-[1300px]:w-1/2 w-full'" />
+                </div>
             </section>
 
             <section class="flex justify-between ">
-                <ContainerListTransactions class="w-[calc(50%-10px)]" :title="'Derniers achats'" :componentType="'purchase'"  :svg="svgConfig('restaurant', 'bg-gradient-blue', '6%')" />
-                <ContainerListTransactions class=" w-[calc(50%-10px)]" :title="'Derniers prélèvements'" :componentType="'recurring'" :svg="svgConfig('balance', 'bg-gradient-vanusa', '6%')" />
+                <ContainerListTransactions class="w-full" />
             </section>
 
             <!-- <TransitionPopUp duration-in="500" duration-out="500">
@@ -54,8 +57,7 @@
 
 
 <script setup>
-
-    import { ref, watch, computed, onMounted, defineAsyncComponent } from 'vue'; 
+    import { ref, watch, computed, onMounted } from 'vue'; 
     import ContainerStatMonth from '@/component/container/ContainerStatMonth.vue';
     import SelectYear from '@/component/select/SelectYear.vue';
     import SelectMonth from '@/component/select/SelectMonth.vue';
@@ -67,21 +69,12 @@
     import { storeThreshold, storeDateSelected, storeStatisticDetails } from '@/storePinia/useStoreDashboard';
     import { updateThresholdByMonth, updateTotalTrsByMonth, updateBalanceEcoByMonth, updateBiggestTrsByMonth } from '@/storePinia/useUpdateStoreByBackend';
     
-
-    // import TransitionPopUp from '@/component/transition/TransitionPopUp.vue';
-    // const OverlaySuccessAction = defineAsyncComponent(() => import('@/component/overlay/OverlaySuccessAction.vue'));
-
-    // const overlayActive = ref(true);
-    
-
     // stores Pinia
     const threshold = storeThreshold();
     const dateSelected = storeDateSelected();
     const statisticDetails = storeStatisticDetails();
     const firstNameUser = ref('');
 
-    // variables, props, ...
-    
     // life cycle / functions
     onMounted(async () => {
         const response = await getUserFirstName();

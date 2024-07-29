@@ -1,16 +1,14 @@
 <template>
-    <div class="flex justify-end flex-col w-[20%]">
-        <div class="flex flex-col w-full">
-            <label class="text-white font-light" for="input-category">Catégorie</label>
-            <InputBase 
-                iconName="Category"
-                v-model="searchCategory" 
-                placeholder="Ex : Restaurant"
-                id="input-category"
-                type="text"
-                :hideAnimation="true"
-            />
-        </div>
+    <div class="flex flex-col w-1/2 min-w-[250px] lg:min-w-[350px] md:w-1/4">
+        <label class="text-white font-light" for="input-category">Catégorie</label>
+        <InputBase 
+            iconName="Category"
+            v-model="searchCategory" 
+            placeholder="Ex : Restaurant"
+            id="input-category"
+            type="text"
+            :hideAnimation="true"
+        />
     </div>
 </template>
 

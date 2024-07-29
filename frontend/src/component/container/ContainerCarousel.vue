@@ -1,41 +1,8 @@
 <template>
-    <section class="w-[50%] flex flex-col items-center justify-center bg-main-bg text-white">
+    <section class="w-full flex flex-col items-center justify-center bg-gradient-green text-white
+        h-[30vh] lg:w-1/2 lg:h-screen">
 
-        <figure class="w-[300px] overflow-hidden rounded-md">
-            <transition
-                name="fade-slide"
-                mode="out-in"
-                
-                enter-active-class="transition-all duration-[1s] ease-out"
-
-                enter-from-class="opacity-0 translate-x-[50px]"
-                enter-to-class="opacity-100 translate-x-0"
-
-                leave-active-class="transition-all duration-[1s] ease-out"
-                leave-to-class="opacity-0 translate-x-[-50px]"
-            >
-            <img 
-                :key="listImg[currentSlide].id"
-                :src="currentImgSlide(currentSlide)"
-                class="w-full shadow-black shadow-custom-main"
-                alt="Dynamic Image"
-            >
-            </transition>
-        </figure>
-
-        <div class="flex mt-5">
-            <div v-for="(img, index) of listImg" :key="index">
-                <img class="w-[20px]" 
-                :src="currentIconFocus(index)" alt="">
-                <!-- <carrousel /> -->
-            </div>
-        </div>
-        
-
-        <div class="w-[300px] max-h-[100px] min-h-[100px] flex flex-col text-center mt-[20px]">
-            <h2 class="font-medium text-[25px]"> {{currentTitleSlide(currentSlide)}} </h2>
-            <p class="text-[15px] font-light mt-[15px]"> {{currentTextSlide(currentSlide)}} </p>
-        </div>
+        <LogoMain />
 
         
     </section>
@@ -45,6 +12,8 @@
 <script setup>
 
     import { ref, onUnmounted} from 'vue';
+    import LogoMain from '@/component/svgs/LogoMain.vue';
+    
 
     // props, variables
     const currentSlide = ref(0);

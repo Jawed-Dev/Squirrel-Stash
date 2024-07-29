@@ -1,11 +1,13 @@
 <template>
-    <div class="font-main-font flex bg-main-bg min-h-screen w-full">
-        <div class="ml-[calc(20px+70px+20px)] mr-custom-margin-main w-full flex flex-col mt-[20px]">
+    <div class="font-main-font flex flex-col bg-main-bg w-full min-h-screen pb-[calc(50px)] md:pb-0">
+        <div class="mx-1 md:ml-[calc(20px+65px+20px)] md:mr-custom-margin-main flex flex-col mt-[20px]">
             <h1 class="font-light flex justify-start text-[25px] text-white">Historique des transactions</h1>
+            
             <ContainerSearch 
                 :currentOrderSelected="currentOrderSelected"
                 :orderAsc="orderAsc"
             />
+   
             <ContainerTransactionsBySearch title="Historique des transactions"
                 v-model:orderAsc="orderAsc"
                 v-model:currentOrderSelected="currentOrderSelected" 

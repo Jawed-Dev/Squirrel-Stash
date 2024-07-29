@@ -2,9 +2,11 @@
     <div class="pl-3 bg-main-gradient text-white rounded-md gradient-border ">
         <h2 class="py-3 text-[20px] font-extralight">{{(!typeTransaction) ? 'Achats du mois' : 'Transactions du mois'}}</h2>
         <div class="w-full flex justify-center">
-            <ToggleButton v-model:typeTransaction="typeTransaction" :text1="'Achats'" :text2="'Prélèvements'" />
+            <div class="w-1/6 min-w-[250px]">
+                <ToggleButton v-model:typeTransaction="typeTransaction" :text1="'Achats'" :text2="'Prélèvements'" />
+            </div>
         </div>
-        <useGraphBarLoad :colorsGraph="(!typeTransaction) ? colorPurchases : colorReccurings" 
+        <useGraphBar :colorsGraph="(!typeTransaction) ? colorPurchases : colorReccurings" 
         :dataTransaction="(!typeTransaction) ? transactionsMonthByDay.listPurchases : transactionsMonthByDay.listRecurrings" />
     </div>
 </template>
@@ -12,7 +14,7 @@
 <script setup>
     import { ref, watch } from 'vue';
     import ToggleButton from '@/component/button/ToggleButton.vue';
-    import useGraphBarLoad from '@/composable/useGraphBarLoad.vue';
+    import useGraphBar from '@/composable/useGraphBar.vue';
     import { storeTrsMonthByDay, storeDateSelected } from '@/storePinia/useStoreDashboard';
     import { updateListTrsMonthByDay } from '@/storePinia/useUpdateStoreByBackend';
     

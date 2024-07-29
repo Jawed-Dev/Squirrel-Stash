@@ -106,6 +106,14 @@ export async function getIconByName(name) {
             return await import ('@/component/svgs/IconValidation.vue');
         }
 
+        case 'ArrowUp' : {
+            return await import ('@/component/svgs/IconArrowUp.vue');
+        }
+
+        case 'ArrowDown' : {
+            return await import ('@/component/svgs/IconArrowDown.vue');
+        }
+
         default : {
             return '';
         }

@@ -1,7 +1,7 @@
 <template>
     <div v-if="getCurrentPage() !== 1 && showEllipsisAfterFirstPage" class="flex items-center gap-1">
         <div @click="handlePagination(1)" 
-        :class="`${showColorPagination(1)} flex justify-center w-[1.3vw] px-[10px] 
+        :class="`${showColorPagination(1)} flex justify-center w-[22px] px-[10px] 
                 rounded-sm font-medium shadow-black shadow-custom-lower cursor-pointer`">
         {{ 1 }}
         </div>
@@ -11,21 +11,21 @@
     <div v-for="(page, index) in visiblePages" :key="index" class="flex items-center gap-1">
         <div v-if="(page === 1 && !showEllipsisAfterFirstPage && totalItems >= 1)"
             @click="handlePagination(page)"
-            :class="`${showColorPagination(page)} flex justify-center w-[1.3vw] px-[10px] 
+            :class="`${showColorPagination(page)} flex justify-center w-[22px] px-[10px] 
                 rounded-sm font-medium shadow-black shadow-custom-lower cursor-pointer`">
             {{ page }}
         </div>
 
         <div v-if="(page === getTotalPages() && !showEllipsisBeforeLastPage) && getTotalPages() !== 1"
             @click="handlePagination(page)"
-            :class="`${showColorPagination(page)} flex justify-center w-[1.3vw] px-[10px] 
+            :class="`${showColorPagination(page)} flex justify-center w-[22px] px-[10px] 
                 rounded-sm font-medium shadow-black shadow-custom-lower cursor-pointer`">
             {{ page }}
         </div>
         
         <!-- Autres boutons -->
         <div v-if="page !== 1 && page !== getTotalPages()" @click="handlePagination(page)" 
-            :class="`${showColorPagination(page)} flex justify-center w-[1.3vw] px-[10px] 
+            :class="`${showColorPagination(page)} flex justify-center w-[22px] px-[10px] 
                 rounded-sm font-medium shadow-black shadow-custom-lower cursor-pointer`">
             {{ page }}
         </div>
@@ -34,7 +34,7 @@
     <div v-if="getCurrentPage() !== getTotalPages() && showEllipsisBeforeLastPage" class="flex items-center gap-1">
         <p>...</p>
         <div @click="handlePagination(getTotalPages())"
-        :class="`${showColorPagination(getTotalPages())} flex justify-center w-[1.3vw] px-[10px] 
+        :class="`${showColorPagination(getTotalPages())} flex justify-center w-[22px] px-[10px] 
             rounded-sm font-medium shadow-black shadow-custom-lower cursor-pointer`">
         {{ getTotalPages() }}
         </div>

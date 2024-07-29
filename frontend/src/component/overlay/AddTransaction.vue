@@ -1,14 +1,21 @@
 <template>
     <div>
-        <div class="rounded-[3px] overflow-hidden shadow-black shadow-custom-main">
-            <div class="bg-main-gradient p-1 gradient-border">
-                <div class="flex justify-around items-center">
-                    <p class="text-white px-3 flex ">Ajouter un achat</p>
-                    <IconAddPurchase @click="toggleMenu('openNClose')"
-                    class="p-1 bg-gradient-blue rounded-md right-[100px] top-[50vh] cursor-pointer 
-                    z-10 shadow-black shadow-custom-main trigger-add-purchase" 
-                    :svg="svgCfgIconAdd"/>
+        <div class="fixed bottom-[-2px] sm:bottom-[25px] left-1/2 -translate-x-1/2 -translate-y-1/2  
+            md:relative md:translate-x-0 sm:translate-y-0 md:bottom-auto md:left-auto
+            z-20 min-w-[197px] rounded-[3px] overflow-hidden md:shadow-black md:shadow-custom-main ">
+            <div class="bg-transparent md:bg-main-gradient border-none md:border-solid gradient-border">
+                <div class="flex justify-center md:justify-between items-center px-2 min-h-[42px]">
+                    <p v-show="!isMobile" class="text-white flex font-light w-full justify-center">Ajouter un achat</p>
+                    <div class="flex py-[2px]">
+                        <IconAddPurchase 
+                            @click="toggleMenu('openNClose')"
+                            class="p-[1px] bg-gradient-blue rounded-full md:rounded-md right-[100px] top-[50vh] cursor-pointer 
+                            z-10 shadow-black shadow-custom-main trigger-add-purchase" 
+                            :svg="handleStyleIcon"
+                        />
+                    </div>
                 </div>
+
             </div>
         </div>
 
@@ -58,8 +65,8 @@
 
 <script setup>
     // import
-    import { ref, watch, computed, reactive, defineAsyncComponent } from 'vue';
-    import { svgConfig } from '@/svg/svgConfig';
+    import { ref, watch, computed, reactive, defineAsyncComponent, onMounted, onUnmounted } from 'vue';
+    import { setSvgConfig, svgConfig } from '@/svg/svgConfig';
     import IconAddPurchase from '@/component/svgs/IconAddPurchase.vue';
     import TransitionOpacity from '@/component/transition/TransitionOpacity.vue';
     import useClickOutside from '@/composable/useClickOutSide';
@@ -104,11 +111,24 @@
 
     const submitError = ref(null);
     const isSuccessAction = ref(false);
+    const styleIconMd = setSvgConfig({width:'32px', fill:'white', });
+    const styleIconBase = setSvgConfig({width:'50px', fill:'white', });
 
-    // icons
-    const svgCfgIconAdd = svgConfig.mediumSmaller;
+    const width = ref(window.innerWidth);
 
     // life cycle / functions
+    onMounted( () => {
+        window.addEventListener('resize', handleResize);
+    });
+
+    onUnmounted(() => {
+        window.removeEventListener('resize', handleResize);
+    });
+
+    const handleStyleIcon = computed(() => (isMobile.value) ? styleIconBase : styleIconMd );
+
+    const isMobile = computed(() => width.value < 768);
+
     const textError = computed(() => {
         if(submitError.value === TYPE_SUBMIT_ERROR.MANDATORY_EMPTY_INPUTS) return TEXT_SUBMIT_ERROR.MANDATORY_EMPTY_INPUTS;
         else if(submitError.value === TYPE_SUBMIT_ERROR.NOT_SUCCESS_REQUEST) return "La requête a échoué.";
@@ -172,6 +192,10 @@
                 break;
             }
         }
+    }
+
+    function handleResize() {
+        width.value = window.innerWidth;
     }
     
     function getCurrentTransactionType() {

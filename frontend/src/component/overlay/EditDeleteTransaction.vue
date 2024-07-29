@@ -1,10 +1,10 @@
 <template>
-    <div class="flex justify-end relative">
+    <div class="flex justify-center pr-1 relative md:w-[5%]">
             <IconOptions @click="toggleMenu()" class="cursor-pointer trigger-menu-editdelete" :svg="iconOptions"/>
 
             <TransitionOpacity ref="elementTransition" :durationIn="'duration-500'" :durationOut="'duration-500'">
                 <div v-if="isMenuActive" 
-                    class="flex flex-col items-center absolute top-[-20px] left-[2vw] z-10 trigger-menu-editdelete
+                    class="flex flex-col items-center absolute top-1/2 -translate-y-1/2 sm:-translate-y-[120%] right-8 sm:left-1/2 sm:-translate-x-1/2 z-10 trigger-menu-editdelete
                     bg-main-gradient w-[100px] rounded-md overflow-hidden
                     shadow-black shadow-custom-main">
                     <p @click="handleMenu('edit')" class="hover:bg-custom-blue w-[100%] text-center cursor-pointer p-1 ">Modifier</p>

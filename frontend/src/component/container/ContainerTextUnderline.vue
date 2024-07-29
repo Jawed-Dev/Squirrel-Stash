@@ -1,5 +1,5 @@
 <template>
-    <div :class="`border transition-all duration-500 ${colorBorder} pl-1 flex items-center w-full mt-1 py-[1px]
+    <div :class="`border transition-all duration-500 ${colorBorder} pl-1 flex items-center w-full py-[1px]
         text-white font-light`">
         <div v-show="iconName">
             <!-- <span>{{ unicode }}</span> -->

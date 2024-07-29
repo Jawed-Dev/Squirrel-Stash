@@ -1,6 +1,5 @@
 <template>
- 
-    <div class="flex flex-col w-[20%]">
+    <div class="flex flex-col w-1/2 min-w-[250px] lg:min-w-[350px] md:w-1/4">
         <label class="text-white font-light" for="input-amount-min">Montant minimum</label>
         <InputBase 
             iconName="Amount"
@@ -13,7 +12,7 @@
         />
     </div>
 
-    <div class="flex flex-col w-[20%]">
+    <div class="flex flex-col w-1/2 min-w-[250px] lg:min-w-[350px] md:w-1/4">
         <label class="text-white font-light" for="input-amount-max">Montant maximum</label>
         <InputBase 
             iconName="Amount"
@@ -25,8 +24,6 @@
             :onlyNumbers="true"
         />
     </div>
-
- 
 </template>
 
 <script setup>

@@ -1,21 +1,28 @@
 <template>
     <div class="rounded-[3px] overflow-hidden my-custom-margin-main shadow-black shadow-custom-main">
         <div class="gradient-border text-white overflow-hidden
-            bg-main-gradient w-full">     
+            bg-main-gradient w-full"> 
     
             <div class="flex items-center justify-between">
-                <h2 class="pl-3 py-3 text-[20px] font-extralight pr-8">{{ props.title}}</h2>
+                <h2 class="pl-3 py-3 text-[20px] font-extralight pr-8">{{ textTitle }}</h2>
                 <router-link to="/historique-transactions" :class="`font-light cursor-pointer pr-3 ${translateY}`">Voir plus ></router-link>
             </div>
-            <div class="flex py-2 pl-3 mt-3 bg-gradient-x-blue shadow-black shadow-custom-main">
-                <p class="ml-[2.5vw] pl-[15px] w-[20%]">Catégorie</p>
-                <p class="w-[20%]">Montant</p>
-                <p class="w-[20%]">Date</p>
-                <p class="w-[15%]">Itération</p>
+
+            <div class="w-full flex justify-center">
+                <div class="w-1/6 min-w-[250px]">
+                    <ToggleButton v-model:typeTransaction="typeTransaction" :text1="'Achats'" :text2="'Prélèvements'" />
+                </div>
+            </div>
+
+            <div class="flex py-2 pl-[2px] sm:pl-3 mt-3 bg-gradient-x-blue shadow-black shadow-custom-main">
+                <p class="ml-[40px] pl-[5px] md:pl-[15px] w-[25%] overflow-hidden text-ellipsis">Catégorie</p>
+                <p class="w-[20%] sm:text-left text-center">Montant</p>
+                <p class="w-[25%] sm:text-left text-center">Date</p>
+                <p class="grow sm:text-left text-center">Itération</p>
             </div>
             <div>
                 <ContainerTransactionInfo 
-                    v-for="(transaction, index) of filteredTransactions" 
+                    v-for="(transaction, index) of listTransactions" 
                     :key="transaction.transaction_id"
                     v-model:isSuccessEdit="isSuccessEdit"
                     v-model:isSuccessDelete="isSuccessDelete"
@@ -43,6 +50,9 @@
     import { storeLastNTransactions, storeDateSelected } from '@/storePinia/useStoreDashboard';
     import { updateLastNTrsByMonth } from '@/storePinia/useUpdateStoreByBackend';
     import TransitionPopUp from '@/component/transition/TransitionPopUp.vue';
+    import ToggleButton from '@/component/button/ToggleButton.vue';
+    
+
     const OverlaySuccessAction = defineAsyncComponent(() => import('@/component/overlay/OverlaySuccessAction.vue'));
 
     // stores Pinia
@@ -52,14 +62,10 @@
     // variables, props...
     const currentMenuEditDeleteTrs = ref(-1);
     const translateY = classTransitionHover('translateY');
-    const props = defineProps({
-        svg: { default: {} }, 
-        title: { default: '' },
-        componentType: {default: 'purchase'}
-    });
 
     const isSuccessDelete = ref(false);
     const isSuccessEdit = ref(false);
+    const typeTransaction = ref(false);
 
     // life cycle
     watch( () => [dateSelected.month, dateSelected.year], async ([newMonth, newYear]) => {
@@ -67,8 +73,17 @@
         updateLastNTrsByMonth(newMonth, newYear, 'recurring');
     }, {  immediate:true, deep:true });
 
-    const filteredTransactions = computed(() => {
-        const listTransaction = (props.componentType === 'purchase') ? lastNTransactions.listPurchases : lastNTransactions.listRecurrings;
+    const listTransactions = computed(() => {
+        const listTransaction = (!typeTransaction.value) ? lastNTransactions.listPurchases : lastNTransactions.listRecurrings;
         return listTransaction;
+    });
+
+    const filteredTransactions = computed(() => {
+        const listTransaction = (!typeTransaction.value) ? lastNTransactions.listPurchases : lastNTransactions.listRecurrings;
+        return listTransaction;
+    });
+
+    const textTitle = computed(() => {
+        return (!typeTransaction.value) ? 'Derniers achats' : 'Derniers prélèvements';
     });
 </script>

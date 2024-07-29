@@ -1,50 +1,60 @@
 <template>
     <section class="relative rounded-[3px] w-full text-white overflow-hidden bg-main-gradient  
     shadow-black shadow-custom-main mt-[20px]">
-    <h2 class="absolute w-full mt-5 shadow-black shadow-custom-main bg-gradient-x-blue p-2 
-    font-light flex justify-start text-[18px] text-white">Édition d'email</h2>
-    
-        <div class="gradient-border overflow-hidden">
-            <form class="mt-24 flex flex-col" @submit.prevent="handleSubmit()">
-                <!-- Errors -->
-                <div class="relative pl-5 pb-5">
-                    <p class="text-sm font-light absolute text-red-300">{{ textError }}</p>
-                </div>
+        <div 
+            @click="toggleParamsSearch"    
+            class="absolute w-full mt-5 shadow-black shadow-custom-main bg-gradient-x-blue py-2 pl-3
+                font-light flex justify-start gap-2 text-[18px] text-white 
+                hover:shadow-main-blue cursor-pointer">
+            <h1>Gestion d'email</h1>
+            <UseIconLoader :svg=iconConfig :nameIcon="typeIconShowParams"  />
+        </div>
 
-                <div class="flex justify-start w-full gap-24 pl-52">
-                    <div class="flex flex-col justify-center w-1/4">
-                        <label class="text-white font-light" for="input-current-mail">Email</label>
-                        <ContainerTextUnderline 
-                            iconName="Email"
-                            :text="inputsMail.currentMail" 
-                            extraClass="text-[16px]"
-                            id="input-current-mail"
-                        />
+        <div :class="`gradient-border overflow-hidden ${paddingForMenuOpen}`">
+            <form class="mt-16 flex flex-col" @submit.prevent="handleSubmit()">
+                <TransitionAxeY>
+                    <div v-show="toggleShowParams">
+                        <!-- Errors -->
+                        <div class="relative pl-5 pb-5">
+                            <p class="text-sm font-light absolute text-red-300">{{ textError }}</p>
+                        </div>
+        
+                        <div class="flex flex-col justify-center items-center gap-3
+                            md:gap-20 lg:gap-32 xl:gap-48 md:flex-row">
+                            <div class="flex flex-col w-1/2 min-w-[250px] lg:min-w-[350px] md:w-1/4">
+                                <label class="text-white font-light" for="input-current-mail">Email</label>
+                                <ContainerTextUnderline 
+                                    iconName="Email"
+                                    :text="inputsMail.currentMail" 
+                                    extraClass="text-[16px]"
+                                    id="input-current-mail"
+                                />
+                            </div>
+                            <div class="flex flex-col w-1/2 min-w-[250px] lg:min-w-[350px] md:w-1/4">
+                                <label class="text-white font-light" for="input-new-mail">Nouvel email</label>
+                                <InputBase 
+                                    iconName="Email"
+                                    id="input-new-mail" 
+                                    v-model="inputsMail.newMail" 
+                                    v-model:stateError="errorInput"
+                                    extraClass="" 
+                                    placeholder="Non défini"
+                                    type="mail"
+                                    validFormat="email"
+                                    :hideAnimation="true"
+                                />
+                            </div>
+                        </div>
+                        
+        
+                        <div class="w-full flex justify-center mt-8 my-3">
+                            <div class="shadow-black shadow-custom-main min-w-[200px] w-1/4 md:w-1/5 overflow-x-hidden text-ellipsis">
+                                <button class="w-full rounded-sm py-2 bg-gradient-blue rounded-br-[3px] font-light">Éditer
+                                </button>
+                            </div>
+                        </div>
                     </div>
-                    <div class="flex flex-col w-1/4">
-                        <label class="text-white font-light" for="input-new-mail">Nouvel email</label>
-                        <InputBase 
-                            iconName="Email"
-                            id="input-new-mail" 
-                            v-model="inputsMail.newMail" 
-                            v-model:stateError="errorInput"
-                            extraClass="" 
-                            placeholder="Non défini"
-                            type="mail"
-                            validFormat="email"
-                            :hideAnimation="true"
-                        />
-                    </div>
-                </div>
-               
-
-                <div class="w-full flex justify-center mt-8 my-3">
-                    <div class=" shadow-black shadow-custom-main w-1/5">
-                        <button class="text-[17px] w-full rounded-sm py-2 bg-gradient-blue 
-                            rounded-br-[3px] font-light">Éditer
-                        </button>
-                    </div>
-                </div>
+                </TransitionAxeY>
             </form>
         </div>
     </section>
@@ -64,6 +74,9 @@
     import ContainerTextUnderline from '@/component/container/ContainerTextUnderline.vue'; 
     import { isAnyMandatInputEmpty, isAnyInputError, TYPE_SUBMIT_ERROR, TEXT_SUBMIT_ERROR } from '@/error/useHandleError';
     import TransitionPopUp from '@/component/transition/TransitionPopUp.vue';
+    import TransitionAxeY from '@/component/transition/TransitionAxeY.vue';
+    import UseIconLoader from '@/composable/useIconLoader.vue';
+    import { setSvgConfig } from '@/svg/svgConfig';
 
     const OverlaySuccessAction = defineAsyncComponent(() => import('@/component/overlay/OverlaySuccessAction.vue'));
     
@@ -76,6 +89,8 @@
     const errorInput = ref(false);
     const submitError = ref(null);
     const isSuccessAction = ref(false);
+    const toggleShowParams= ref(false);
+    const iconConfig = setSvgConfig({width:'30px', fill:'white' });
 
     // life cycle, functions
     const textError = computed(() => {
@@ -87,6 +102,14 @@
     onMounted(async () => {
         await updateStoreUserEmail();
         updateEditEmail();
+    });
+
+    const typeIconShowParams = computed(() => {
+        return (toggleShowParams.value) ? 'ArrowUp' : 'ArrowDown';
+    });
+
+    const paddingForMenuOpen = computed(() => {
+        return (toggleShowParams.value) ? '' : 'pb-5';
     });
 
     function updateEditEmail() {
@@ -141,5 +164,9 @@
         const newMail = inputsMail.newMail.trim();
         if(inputsMail.currentMail.length <= 0 || inputsMail.newMail.length <= 0) return false;
         return inputsMail.currentMail === newMail;
+    }
+
+    function toggleParamsSearch() {
+        toggleShowParams.value = !toggleShowParams.value;
     }
 </script>

@@ -3,9 +3,9 @@
         <div v-if="!isEmptyListTransaction" class="rounded-[3px] overflow-hidden my-custom-margin-main shadow-black shadow-custom-main">
             <div class="gradient-border text-white overflow-hidden
                 bg-main-gradient w-full">     
-                <div class="flex items-center relative">
-                    <h2 class="pl-3 py-3 text-[20px] font-extralight pr-8">{{ props.title}}</h2>
-                    <div class="flex gap-1 absolute left-1/2 transform -translate-x-1/2 ">
+                <div class="flex flex-col justify-center relative pt-3">
+                    <h2 class="pl-3  pb-2 lg:pb-0 text-[20px] font-extralight pr-8 text-center lg:text-left">{{ props.title}}</h2>
+                    <div class="flex grow justify-center lg:grow-0 lg:justify-stretch gap-1 lg:absolute lg:left-1/2 transform lg:-translate-x-1/2">
                         <ContainerPagination
                             v-model:currentPage="currentPage"
                             v-model:totalItems="totalItems"
@@ -13,28 +13,30 @@
                         />
                     </div>
                 </div>
-                <div class="flex py-2 pl-3 mt-3  bg-gradient-x-blue shadow-black shadow-custom-main">
-                    <div class="ml-[2.5vw] pl-[15px] w-[20%]">
+                <div class="flex py-2 pl-[2px] sm:pl-3 mt-5 bg-gradient-x-blue shadow-black shadow-custom-main">
+
+                    <div class="ml-[40px] pl-[5px] md:pl-[15px] w-[25%] overflow-hidden text-ellipsis">
                         <p @click="toggleOrder(ORDER_STATE.CATEGORY)" 
                         :class="`${colorForOrderSelected(ORDER_STATE.CATEGORY)} w-fit cursor-pointer`" 
                         v-html="'Catégorie' + renderStateOrder(ORDER_STATE.CATEGORY)"></p>
                     </div>
-                    <div class="w-[20%]">
+                    <div class="w-[20%] sm:justify-stretch flex justify-center">
                         <p 
                             @click="toggleOrder(ORDER_STATE.AMOUNT)" 
                             :class="`${colorForOrderSelected(ORDER_STATE.AMOUNT)} w-fit cursor-pointer`"  
                             v-html="'Montant' + renderStateOrder(ORDER_STATE.AMOUNT) ">
                         </p>
                     </div>
-                    <div class="w-[20%]">
+                    <div class="w-[25%] sm:justify-stretch flex justify-center">
                         <p @click="toggleOrder(ORDER_STATE.DATE)" :class="` ${colorForOrderSelected(ORDER_STATE.DATE)} w-fit cursor-pointer`"  
                         v-html="'Date' + renderStateOrder(ORDER_STATE.DATE)"></p>
                     </div>
-                    <div class="w-[15%]">
+                    <div class="grow sm:justify-stretch flex justify-center">
                         <p @click="toggleOrder(ORDER_STATE.ITERATION)" :class="`${colorForOrderSelected(ORDER_STATE.ITERATION)} w-fit cursor-pointer`"  
                         v-html="'Itération' + renderStateOrder(ORDER_STATE.ITERATION)"></p>
                     </div>
                 </div>
+                
                 <div class="">
                     <ContainerTransactionInfo v-for="(transaction, index) of filteredTransactions" 
                         :key="transaction.transaction_id" v-model:currentMenuEditDeleteTrs="currentMenuEditDeleteTrs" 

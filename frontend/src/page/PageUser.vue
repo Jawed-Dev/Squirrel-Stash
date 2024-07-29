@@ -7,11 +7,13 @@
             <div class="rounded-[3px] overflow-hidden mt-5">
                 <div :class="`text-[17px] overflow-hidden text-white`">
                     <div class="flex justify-center">
-                        <div class="flex gap-5 flex-wrap my-3">
+                        <div class="flex gap-8 justify-center flex-wrap my-3">
                             <div v-for="(page, index) of dataPages"
                                 :key="index"
                                 @click="handlePages(page.page)"
-                                class="flex flex-col items-center justify-center gap-1 w-[calc(33.333333%-20px)] md:hover:shadow-main-blue md:hover:shadow-custom-main
+                                class="flex flex-col items-center justify-center gap-1 w-[calc(33.333333%-20px)] 
+                                min-w-[200px]
+                                md:hover:shadow-main-blue md:hover:shadow-custom-main
                                 md:w-full md:cursor-pointer shadow-black shadow-custom-main
                                  bg-main-gradient rounded-md p-2">
                                 <component :is="page.Component" :svg="styleIcons"/>
@@ -23,9 +25,9 @@
             </div>
         </div>
         <TransitionOpacity durationIn="duration-300" durationOut="duration-200" >
-            <OverlayPrivacy v-if="isOverlayActive.privacy" v-model="isOverlayActive.privacy" width="w-[50%]" />
-            <OverlayUserRules v-if="isOverlayActive.userRules" v-model="isOverlayActive.userRules" width="w-[50%]" />
-            <OverlayContactUs v-if="isOverlayActive.contactUs" v-model="isOverlayActive.contactUs" width="w-[50%]" />
+            <OverlayPrivacy v-if="isOverlayActive.privacy" v-model="isOverlayActive.privacy" width="w-1/2" />
+            <OverlayUserRules v-if="isOverlayActive.userRules" v-model="isOverlayActive.userRules" width="w-1/2" />
+            <OverlayContactUs v-if="isOverlayActive.contactUs" v-model="isOverlayActive.contactUs" width="w-1/2" />
         </TransitionOpacity>       
     </div>
 </template>

@@ -1,6 +1,6 @@
 <template>
     
-        <IconPreferences @click="toggleMenu('openNClose')" class='cursor-pointer' v-show="isIconActive" :svg="svg.verySmallIcon" /> 
+        <IconPreferences @click="toggleMenu('openNClose')" class='cursor-pointer' v-show="isIconActive" :svg="iconThreshold" /> 
     
         <TransitionOpacity :durationIn="'duration-300'" :durationOut="'duration-200'">
             <div v-show="isOverlayActive" class="fixed inset-0 bg-black bg-opacity-80 z-30"></div>
@@ -55,7 +55,7 @@
     import TransitionOpacity from '@/component/transition/TransitionOpacity.vue';  
     import MainContainerSlot from '@/component//containerSlot/MainContainerSlot.vue';
     import IconPreferences from '@/component//svgs/IconPreferences.vue';
-    import { svgConfig } from '@/svg/svgConfig';
+    import { setSvgConfig, svgConfig } from '@/svg/svgConfig';
     import useClickOutside from '@/composable/useClickOutSide';
     import useEscapeKey from '@/composable/useEscapeKey';
     import InputBase from '@/component//input/InputBase.vue';
@@ -68,7 +68,8 @@
     const OverlaySuccessAction = defineAsyncComponent(() => import('@/component/overlay/OverlaySuccessAction.vue'));
 
     // variables, props ...
-    const svg = svgConfig;
+    const iconThreshold = setSvgConfig({width:'18px', fill:'white'});
+
     const props = defineProps({
         isIconActive: { default: false},
         width: {default:''}

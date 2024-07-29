@@ -57,9 +57,9 @@
         </div>
     </nav>
     <TransitionOpacity durationIn="duration-300" durationOut="duration-200" >
-        <OverlayPrivacy v-if="isOverlayActive.privacy" v-model="isOverlayActive.privacy" width="w-[50%]" />
-        <OverlayUserRules v-if="isOverlayActive.userRules" v-model="isOverlayActive.userRules" width="w-[50%]" />
-        <OverlayContactUs v-if="isOverlayActive.contactUs" v-model="isOverlayActive.contactUs" width="w-[50%]" />
+        <OverlayPrivacy v-if="isOverlayActive.privacy" v-model="isOverlayActive.privacy" width="w-1/2" />
+        <OverlayUserRules v-if="isOverlayActive.userRules" v-model="isOverlayActive.userRules" width="w-1/2" />
+        <OverlayContactUs v-if="isOverlayActive.contactUs" v-model="isOverlayActive.contactUs" width="w-1/2" />
     </TransitionOpacity>        
 </template>
 
@@ -79,18 +79,12 @@
     const IconGraph = defineAsyncComponent(() => import('@/component/svgs/IconGraph.vue'));
     const IconUser = defineAsyncComponent(() => import('@/component/svgs/IconUser.vue'));
     const IconLogOut = defineAsyncComponent(() => import('@/component/svgs/IconLogOut.vue'));
-    const IconPrivacy = defineAsyncComponent(() => import('@/component/svgs/IconPrivacy.vue'));
-    const IconUserRules = defineAsyncComponent(() => import('@/component/svgs/IconUserRules.vue'));
     const IconSupport = defineAsyncComponent(() => import('@/component/svgs/IconSupport.vue'));
     const IconInfo = defineAsyncComponent(() => import('@/component/svgs/IconInfo.vue'));
 
     const OverlayPrivacy = defineAsyncComponent(() => import('@/component/overlay/OverlayPrivacy.vue'));
     const OverlayUserRules = defineAsyncComponent(() => import('@/component/overlay/OverlayUserRules.vue'));
     const OverlayContactUs = defineAsyncComponent(() => import('@/component/overlay/OverlayContactUs.vue'));
-
-    
-    //import OverlayPrivacy from '@/component/overlay/OverlayPrivacy.vue';
-    //import OverlayUserRules from '@/component/overlay/OverlayUserRules.vue';
 
     // variables, props, ...
     const dataListPage1 = [
@@ -101,8 +95,6 @@
     ];
 
     const dataListPage2 = [    
-    // { Component: IconPrivacy, link:'',page: 'confidentialité', text: 'Confidentialité' },
-    // { Component: IconUserRules, link:'',page: 'règles', text: "Règles d'utilisateur" },
     { Component: IconSupport, link:'',page: 'contact', text: 'Support et aide' },
     { Component: IconInfo, link:'',page: '', text: 'Version 1.0' },
     { Component: IconLogOut, link:'',page: 'disconnect', text: 'Déconnexion' },
@@ -123,8 +115,7 @@
 
     const router = useRouter();
     const width = ref(window.innerWidth);
-    const headerRef = ref(null);
-    const isMenuUserActive = ref(false);
+    const headerRef = ref(null);     
 
     const notAllowedPages = [
         'connexion',
@@ -188,14 +179,6 @@
                 router.push('/utilisateur');
                 break;
             }
-            // case 'confidentialité' : {
-            //     isOverlayActive.privacy = true;
-            //     break;
-            // }
-            // case 'règles' : {
-            //     isOverlayActive.userRules = true;
-            //     break;
-            // }
             case 'contact' : {
                 isOverlayActive.contactUs = true;
                 break;

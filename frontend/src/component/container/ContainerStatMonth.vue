@@ -3,8 +3,8 @@
         <div :class="`flex flex-col gradient-border overflow-hidden bg-main-gradient`">
             <div class="flex items-center justify-between px-2 py-2 ">
                 <UseIconLoader 
-                    :nameIcon="svg.name" :svg="svg" 
-                    :class="`${svg.color} p-[0.7vw] rounded-lg shadow-black shadow-custom-main`"
+                    :nameIcon="nameIcon" :svg="styleIcon" 
+                    :class="`${bgIcon} p-3 rounded-lg shadow-black shadow-custom-main`"
                 />
                 <div class="flex flex-col items-end gap-3">
                     <SetThreshold width="w-[30vw]" :isIconActive="isIconActive" />
@@ -23,14 +23,18 @@
 
     import SetThreshold from '@/component/overlay/SetThreshold.vue';
     import UseIconLoader from '@/composable/useIconLoader.vue';
+    import { setSvgConfig } from '@/svg/svgConfig';
     
     // variables, props...
     const props = defineProps({
-        svg : { default: {} },
         nameStat : { default: '' },
         amountValue : { default: 0 },
         colorValue : { default: '' },
         width: {default: ''},
-        isIconActive: {default: false}
+        isIconActive: {default: false},
+        nameIcon: { default: '' },
+        bgIcon: { default: '' },
     });
+
+    const styleIcon = setSvgConfig({width:'50px', fill:'white' })
 </script>

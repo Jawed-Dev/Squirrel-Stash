@@ -1,5 +1,5 @@
 <template>
-    <main class="flex h-[100vh]">
+    <main class="flex h-screen flex-col lg:flex-row">
         <ContainerCarousel />
         <ContainerLogin />
     </main>

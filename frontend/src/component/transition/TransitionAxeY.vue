@@ -1,11 +1,11 @@
 <template>
     <Transition
-        :enter-active-class="`transition-transform ${durationIn}`"
-        enter-from-class="transform translate-y-full"
-        enter-to-class="transform translate-y-0"
-        :leave-active-class="`transition-transform ${durationOut}`"
-        leave-from-class="transform translate-y-0"
-        leave-to-class="transform translate-y-full"
+        :enter-active-class="`transition-all ${durationIn} ease-in`"
+        enter-from-class="max-h-0"
+        enter-to-class="max-h-screen"
+        :leave-active-class="`transition-all ${durationIn} ease-out`"
+        leave-from-class="max-h-screen"
+        leave-to-class="max-h-0"
     >
     <slot></slot>
     </Transition>
