@@ -10,34 +10,37 @@
             
             <div 
                 v-show="isOverlayActive" 
-                :class="`bg-main-gradient flex flex-col fixed 
-                shadow-black shadow-custom-main rounded-md top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 trigger-set-treshold
-                z-30 text-white ${width}`"
+                :class="`fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-30 text-white rounded-[3px]
+                shadow-black shadow-custom-main trigger-set-treshold bg-main-gradient
+                max-[500px]:w-full sm:w-1/4 min-[500px]:min-w-[500px]`"
             >
                 <MainContainerSlot 
                     :textBtn1="'Annuler'" :textBtn2="'Choisir'" :titleContainer="'Choisir un nouveau seuil'" @toggleMenu="toggleMenu">
-                    <!-- Errors -->
-                    <div class="relative">
-                        <p class="text-sm font-light pt-3 absolute text-red-300">{{ textError }}</p>
-                    </div>
-                    <div>
-                        <div class="flex flex-col items-center mt-[60px]">
-                            <div class="text-center w-[40%]">
-                                <label class="font-light" for="input-amount-treshold">Montant du seuil</label>
-                                <InputBase 
-                                    iconName="Amount"
-                                    v-model="AmountThreshold"
-                                    v-model:stateError="errorInput" 
-                                    placeholder="Montant"
-                                    id="input-amount-treshold"
-                                    validFormat="amount"
-                                    :hideAnimation="true"
-                                    :onlyNumbers="true"
-                                />
-                            </div>
+
+                    <div class="max-h-[65vh] overflow-y-auto">
+                        <!-- Errors -->
+                        <div class="relative">
+                            <p class="text-sm font-light pt-3 absolute text-red-300">{{ textError }}</p>
                         </div>
-                        <div class="flex justify-center my-[60px]">
-                            <p class="w-[full] text-[15px] font-light text-slate-300">Ce seuil sera effectif pour le mois actuel <span class="block">et les suivants, jusqu'à un nouveau seuil.</span></p>
+                        <div>
+                            <div class="flex flex-col items-center mt-12">
+                                <div>
+                                    <label class="pl-2 text-lg font-light" for="input-amount-treshold">Montant du seuil</label>
+                                    <InputBase 
+                                        iconName="Amount"
+                                        v-model="AmountThreshold"
+                                        v-model:stateError="errorInput" 
+                                        placeholder="Montant"
+                                        id="input-amount-treshold"
+                                        validFormat="amount"
+                                        :hideAnimation="true"
+                                        :onlyNumbers="true"
+                                    />
+                                </div>
+                            </div>
+                            <div class="flex justify-center my-12">
+                                <p class="font-light text-white">Ce seuil sera effectif pour le mois actuel <span class="block">et les suivants, jusqu'à un nouveau seuil.</span></p>
+                            </div>
                         </div>
                     </div>
                 </MainContainerSlot>

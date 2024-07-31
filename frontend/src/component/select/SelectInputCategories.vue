@@ -1,5 +1,5 @@
 <template>
-    <div class="flex justify-center items-center w-[80%] gap-3">
+    <div class="flex justify-center items-center w-[65%] gap-2">
         <useIconLoader class="rounded-full p-2 shadow-black shadow-custom-main w-fit" 
             :svg="(!typeTransaction) ? svgPurchases : svgReccurings" 
             :nameIcon="nameIcon" 
@@ -27,8 +27,6 @@
     });
 
     const currentCategory = defineModel('currentCategory');
-    // const svgPurchases = svgConfig.setColorDynamic(svgConfig.mediumSmaller, 'bg-gradient-blue');   
-    // const svgReccurings = svgConfig.setColorDynamic(svgConfig.mediumSmaller, 'bg-gradient-vanusa');
     const svgPurchases = setSvgConfig({
         width: '35px',
         fill: 'white',

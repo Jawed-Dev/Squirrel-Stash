@@ -1,10 +1,10 @@
 <template>
     <div class="rounded-[3px] overflow-hidden my-custom-margin-main shadow-black shadow-custom-main">
-        <div class="gradient-border text-white overflow-hidden
+        <div class="gradient-border text-white
             bg-main-gradient w-full"> 
     
             <div class="flex items-center justify-between">
-                <h2 class="pl-3 py-3 text-[20px] font-extralight pr-8">{{ textTitle }}</h2>
+                <h2 class="pl-3 pb-2 pt-3 text-xl font-extralight pr-8 sm:pb-0">{{ textTitle }}</h2>
                 <router-link to="/historique-transactions" :class="`font-light cursor-pointer pr-3 ${translateY}`">Voir plus ></router-link>
             </div>
 

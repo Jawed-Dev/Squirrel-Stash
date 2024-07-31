@@ -6,6 +6,10 @@ export default {
   ],
   theme: {
     extend: {
+      clipPath: {
+        'polygon-bottom': 'polygon(50% 0%, 100% 0, 100% 100%, 0 100%, 0 50%)',
+        'polygon-top': 'polygon(50% 0%, 100% 0, 100% 50%, 0 50%, 0 100%, 50% 100%)',
+      },
       fontFamily: {
         'main-font': ['Poppins', 'sans-serif']
       },
@@ -25,7 +29,8 @@ export default {
         
         'second-bg' : '#1b1e3390',
         'main-bg': "#121422",
-        'main-color': "#121422"
+        'main-color': "#121422",
+        'second-color' : '#3c78e3'
       },
       spacing: {
         'header-width' : '65px',
@@ -34,7 +39,7 @@ export default {
       },
       backgroundImage: {
         'main-gradient': "linear-gradient(to top left, #1b1e33 40%, #536976 250%)",
-        //'main-gradient' : "linear-gradient(to top left, #83858f 40%, #24428a 100%)",
+        'information-gradient': "linear-gradient(90deg, #0b274d, #0e2242, #0f1e38, #0f192e, #0f1524, #0c0f1b, #060810, #000000);",
         'header-gradient': "linear-gradient(0deg,#3358f4,#1d8cf8)",
 
         'gradient': "linear-gradient(to top left, #101010 70%, #ffffff 450%)",
@@ -53,29 +58,15 @@ export default {
         'gradient-namn' : "linear-gradient(0deg,#7a2828,#a73737)",
         'gradient-gray' : "linear-gradient(180deg, #2c3e50, #111)",
 
-
-        'gradient-x-blue' : "linear-gradient(240deg, #174285, #3c78e3)",
-
-        
-        // 'gradient-grey' : "linear-gradient(0deg,#2c3e50,#bdc3c7)",
-        
-        // 'gradient-orca' : "linear-gradient(0deg,#093637,#44A08D)",
-        // 'gradient-pinot' : "linear-gradient(0deg,#182848,#4b6cb7)",
-        // 'gradient-copper' : "linear-gradient(0deg,#94716B,#B79891)",
-        // 'gradient-behongo' : "linear-gradient(0deg,#061700,#52c234)",
-        // 'gradient-royal' : "linear-gradient(0deg,#243B55,#141E30)",
-        
-        // 'gradient-clearsky' : "linear-gradient(0deg,#363795,#005C97)"
-        
+        'gradient-x-blue' : "linear-gradient(240deg, #174285, #3c78e3)",  
       },
       boxShadow: {
         'custom-main': '1px 1px 5px #38393b',
         'custom-lower': '1px 1px 3px #38393b',
+        'custom-hover': '3px 3px 5px white',
       }
     },
   },
   plugins: []
 }
 
-
-// 'custom-main': '0 0 5px #38393b',

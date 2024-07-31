@@ -2,14 +2,15 @@
     <div class="fixed inset-0 bg-black bg-opacity-80 z-30">
         <div 
             v-if="isOverlayActive" 
-            :class="`fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-30 text-white rounded-[3px] overflow-hidden 
-            shadow-black shadow-custom-main trigger-edit-transaction bg-main-gradient ${props.width}`">
+            :class="`fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-30 text-white rounded-[3px] 
+                shadow-black shadow-custom-main trigger-edit-transaction bg-main-gradient
+                max-[500px]:w-full sm:w-1/4 min-[500px]:min-w-[500px]`">
 
             <MainContainerSlot 
                 :textBtn1="'Annuler'" :textBtn2="'Modifier'" :titleContainer="(!typeTransaction) ? 'Modifier achat' : 'Modifier prélèvement'" 
                 @toggleMenu="toggleMenu" 
             >
-                <div class="max-h-[70vh] overflow-y-auto">
+                <div class="max-h-[72vh] overflow-y-auto">
                     <!-- Errors -->
                     <div class="relative">
                         <p class="text-sm font-light p-3 absolute text-red-300">{{ textError }}</p>
@@ -42,7 +43,7 @@
 
     const OverlaySuccessAction = defineAsyncComponent(() => import('@/component/overlay/OverlaySuccessAction.vue'));
     const ContainerInputs = defineAsyncComponent(() => import('@/component/container/ContainerInputs.vue'));
-    const ContainerSelectCategories = defineAsyncComponent(() => import('../container/ContainerSelectCategories.vue'));
+    const ContainerSelectCategories = defineAsyncComponent(() => import('@/component/container/ContainerSelectCategories.vue'));
 
     import MainContainerSlot from '@/component/containerSlot/MainContainerSlot.vue';
     import { storeDateSelected } from '@/storePinia/useStoreDashboard';
@@ -58,7 +59,6 @@
 
     // variables, props...
     const props = defineProps({
-        width: { default:'' },
         indexMenu: {default: 0},
         infoTransaction: { default: {} }
     });

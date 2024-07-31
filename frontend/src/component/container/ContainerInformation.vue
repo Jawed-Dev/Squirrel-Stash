@@ -1,18 +1,26 @@
 <template>
-    <section class="bg-main-bg w-[50%] flex flex-col items-center justify-center text-white">
+    <section :class="`hidden lg:flex flex-col items-center justify-center 
+        bg-main-bg text-white lg:w-1/2 lg:h-screen ${heightMin} font-main-font`">
 
-        <div class="w-[300px] px-0 flex flex-col text-center mt-[20px]">
-            <h2 class="font-medium text-[25px]">Information</h2>
-
-            <p class="mt-[100px] text-[13px] font-light ">
-                Lorem ipsum dolor sit amet consectetur. Aliquam augue malesuada habitant mi nulla. Purus risus in sed imperdiet tellus viverra ut. 
-                Turpis lobortis in suspendisse felis sem feugiat erat. Cras faucibus molestie morbi hendrerit ac in mus pharetra.
+        <div class="flex flex-col items-center gap-10 justify-between w-full mt-5">
+            <component :is="image" :svg="styleIcon" />
+            <p class="w-[350px] font-light">
+                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Aspernatur sit beatae totam quibusdam rerum mollitia eaque minus vel explicabo consequatur incidunt !
             </p>
         </div>
+        
     </section>
 </template>
 
 
-<script setup>
+<script setup>    
+    import { setSvgConfig } from '@/svg/svgConfig';
+       
+    // props, variables
+    const props = defineProps({
+        heightMin: {default:'min-h-[600px]'},
+        image: {default: ''}
+    });
 
+    const styleIcon = setSvgConfig({width:'350px'})
 </script>

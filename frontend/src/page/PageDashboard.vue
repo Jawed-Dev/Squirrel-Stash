@@ -1,7 +1,7 @@
 <template>
 
     <div class="font-main-font flex flex-col bg-main-bg w-full pb-[calc(50px)] md:pb-0">
-        <div class="mx-1 md:ml-[calc(20px+65px+20px)] md:mr-custom-margin-main flex flex-col mt-[20px]">
+        <div class="mx-1 md:ml-[calc(20px+65px+20px)] md:mr-custom-margin-main flex flex-col mt-5">
             <h1 class="text-[25px] font-light text-white">Économie du mois</h1>
             <p class="font-light text-white mt-2 pr-2">Bonjour {{ firstNameUser }}, voici votre résumé du mois.</p> 
 
@@ -10,18 +10,18 @@
                 :colorValue="'text-white'" 
                 :amountValue="threshold.amount +' €'" 
                 :nameStat="'Seuil mensuel'" 
-                :width="'md:w-1/4 md:min-w-[calc(197px*2+8px)] sm:w-full'"
+                :width="'lg:w-1/4 md:min-w-[calc(197px*2+8px)] sm:w-full'"
             />
 
-            <section class="flex flex-col md:flex-row justify-between pt-5">
-                <div class="flex flex-col gap-5 sm:gap-2 sm:flex-row md:w-1/4 sm:w-full">
+            <section class="flex flex-col lg:flex-row justify-between pt-5">
+                <div class="flex flex-col gap-5 mb-5 sm:gap-2 sm:flex-row lg:w-1/4 sm:w-full lg:mb-0">
                     <SelectMonth class="min-h-[42px] w-full sm:min-w-[197px]" v-model="dateSelected.month" :listSelect="monthNames" />
                     <SelectYear class="min-h-[42px] w-full sm:min-w-[197px]" v-model="dateSelected.year" :listSelect="getAvailableYear()" />
                 </div>
-                <AddTransaction class="" width="sm:w-1/4 sm:min-w-[450px] w-full max-w-[400px]"/>   
+                <AddTransaction/>   
             </section>
 
-            <section class="w-[100%] mt-custom-margin-main rounded-[3px] overflow-hidden shadow-black shadow-custom-main"> 
+            <section class="w-full mt-custom-margin-main rounded-[3px] overflow-hidden shadow-black shadow-custom-main"> 
                 <ContainerTransactionsMonth />
             </section>
 

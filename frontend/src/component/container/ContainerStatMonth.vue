@@ -7,7 +7,7 @@
                     :class="`${bgIcon} p-3 rounded-lg shadow-black shadow-custom-main`"
                 />
                 <div class="flex flex-col items-end gap-3">
-                    <SetThreshold width="w-[30vw]" :isIconActive="isIconActive" />
+                    <SetThreshold :isIconActive="isIconActive" />
                     <p :class="`pl-[12px] ${colorValue} text-[18px] font-light`">{{ amountValue }}</p>
                 </div>
             </div>

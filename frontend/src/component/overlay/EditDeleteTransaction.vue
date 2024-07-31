@@ -16,7 +16,6 @@
         <EditTransaction 
             v-if="isMenuEditActive" 
             v-model:isSuccessEdit="isSuccessEdit"
-            width="sm:w-[25%] sm:min-w-[500px] w-full max-w-[550px]" 
             :indexMenu="indexMenu" 
             :infoTransaction="infoTransaction" 
             v-model:menuActive="isMenuEditActive"
@@ -24,7 +23,7 @@
         <DeleteTransaction 
             v-if="isMenuDeleteActive" 
             v-model:isSuccessDelete="isSuccessDelete"
-            width="w-[30%]" :indexMenu="indexMenu" 
+            :indexMenu="indexMenu" 
             :infoTransaction="infoTransaction" 
             v-model:menuActive="isMenuDeleteActive"
         /> 

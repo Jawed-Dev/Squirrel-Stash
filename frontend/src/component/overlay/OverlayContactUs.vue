@@ -1,77 +1,80 @@
 <template>
     <div class="fixed inset-0 bg-black bg-opacity-80 z-30">
-        <div :class="`bg-main-gradient flex flex-col fixed 
-        shadow-black shadow-custom-main rounded-md top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 trigger-overlay-contact
-        z-30 text-white max-h-[85vh] overflow-y-auto ${width}`">
+        <div :class="`fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-30 text-white rounded-[3px] 
+                shadow-black shadow-custom-main trigger-overlay-contact bg-main-gradient
+                max-[850px]:w-full min-[850px]:min-w-[850px] font-main-font`">
     
             <MainContainerSlot :bgMainBtn="'bg-gradient-blue'" width='w-full'
             :textBtn1="'Fermer'" :textBtn2="'Envoyer'" titleContainer="Support et Aide" @toggleMenu="toggleMenu">
-                
-                <!-- Errors -->
-                <div class="relative pl-2">
-                    <p class="font-light absolute text-red-300">{{ textError }}</p>
-                </div>
-                <div class="flex flex-col justify-center items-center w-full rounded-[3px] my-[40px]">
-                    <div class="flex flex-col w-full items-center px-10">
-                        <div class="flex flex-col gap-16">
-                            <div class="w-full px-5">
-                                <p class="font-light text-xl">Nous sommes là pour vous aider ! 
-                                <span class="block"></span>N'hésitez pas à nous contacter en précisant comment nous pouvons vous assister.</p>
-                            </div>
+                <div class="max-h-[76vh] overflow-y-auto">
+                    <!-- Errors -->
+                    <div class="relative pl-2">
+                        <p class="font-light absolute text-red-300">{{ textError }}</p>
+                    </div>
+                    <div class="flex flex-col justify-center items-center w-full rounded-[3px] my-[40px]">
+                        <div class="flex flex-col w-[90%] sm:w-full items-center px-10">
+                            <div class="flex flex-col gap-7">
 
-                            <div class="flex gap-10 px-5">
-                                <div class="w-1/2">
-                                    <label class="text-white font-light" for="input-firstname">Prénom</label>
+                                <div class="w-full flex flex-col items-center justify-center">
+                                    <p class="w-[92%] font-light text-lg">Nous sommes là pour vous aider ! 
+                                    <span class="block"></span>N'hésitez pas à nous contacter en précisant comment nous pouvons vous assister.</p>
+                                </div>
+    
+                                <div class="flex flex-col sm:flex-row gap-5 px-5">
+                                    <div class="w-full sm:w-1/2">
+                                        <label class="pl-2 text-white font-light" for="input-firstname">Prénom</label>
+                                        <InputBase 
+                                            iconName = 'Name'
+                                            id="input-firstname" 
+                                            v-model="input.firstName" 
+                                            v-model:stateError="errorInputs.firstName"
+                                            :placeholder="`Non défini`"
+                                            type="text"
+                                            validFormat="firstName"
+                                            :hideAnimation="true"
+                                        />
+                                    </div>
+                                    <div class="w-full sm:w-1/2">
+                                        <label class="pl-2 text-white font-light" for="input-lastname">Nom</label>
+                                        <InputBase 
+                                            iconName = 'Name'
+                                            id="input-lastname" 
+                                            v-model="input.lastName" 
+                                            v-model:stateError="errorInputs.lastName"
+                                            :placeholder="`Non défini`"
+                                            type="text"
+                                            validFormat="lastName"
+                                            :hideAnimation="true"
+                                        />
+                                    </div>
+                                </div>
+        
+                                <div class="flex flex-col w-full sm:w-1/2 px-5">
+                                    <label class="pl-2 text-white font-light" for="input-email">Email</label>
                                     <InputBase 
-                                        iconName = 'Name'
-                                        id="input-firstname" 
-                                        v-model="input.firstName" 
-                                        v-model:stateError="errorInputs.firstName"
+                                        iconName = 'Email'
+                                        
+                                        id="input-email" 
+                                        v-model="input.email" 
+                                        v-model:stateError="errorInputs.email"
                                         :placeholder="`Non défini`"
-                                        type="text"
-                                        validFormat="firstName"
+                                        type="email"
+                                        validFormat="email"
                                         :hideAnimation="true"
                                     />
                                 </div>
-                                <div class="w-1/2">
-                                    <label class="text-white font-light" for="input-lastname">Nom</label>
-                                    <InputBase 
-                                        iconName = 'Name'
-                                        id="input-lastname" 
-                                        v-model="input.lastName" 
-                                        v-model:stateError="errorInputs.lastName"
-                                        :placeholder="`Non défini`"
-                                        type="text"
-                                        validFormat="lastName"
+        
+                                <div class="flex flex-col px-5">
+                                    <label class="pl-2 text-white font-light" for="content-email">Message</label>
+                                    <TextAreaBase 
+                                        id="content-email" 
+                                        v-model="input.contentEmail" 
+                                        v-model:stateError="errorInputs.contentEmail"
+                                        :placeholder="`...`"
+                                        validFormat="message"
                                         :hideAnimation="true"
                                     />
                                 </div>
-                            </div>
-    
-                            <div class="flex flex-col w-1/2 px-5">
-                                <label class="text-white font-light" for="input-email">Email</label>
-                                <InputBase 
-                                    iconName = 'Email'
-                                    id="input-email" 
-                                    v-model="input.email" 
-                                    v-model:stateError="errorInputs.email"
-                                    :placeholder="`Non défini`"
-                                    type="email"
-                                    validFormat="email"
-                                    :hideAnimation="true"
-                                />
-                            </div>
-    
-                            <div class="flex flex-col px-5">
-                                <label class="text-white font-light" for="content-email">Message</label>
-                                <TextAreaBase 
-                                    id="content-email" 
-                                    v-model="input.contentEmail" 
-                                    v-model:stateError="errorInputs.contentEmail"
-                                    :placeholder="`...`"
-                                    validFormat="message"
-                                    :hideAnimation="true"
-                                />
                             </div>
                         </div>
                     </div>

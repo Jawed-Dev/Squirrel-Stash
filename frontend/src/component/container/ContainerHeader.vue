@@ -11,27 +11,44 @@
             @mouseleave="isHovered = false"
         >
         
-        <div v-show="!isMobile" class="w-[80%] border-[1px] mt-20"></div>
+        
+        <div 
+            v-show="!isMobile" 
+            class="flex relative w-full h-[50px] md:h-fit py-2">
+                <div class="flex w-[60px] justify-center ">
+                    <LogoMainPicOnly class="bg-main-gradient shadow-black shadow-custom-main rounded-full" :svg="logoStyle" />
+                </div>
+                <div>
+                    <TransitionOpacity v-if="!isMobile" :durationIn="'duration-300'" :durationOut="'duration-0'">
+                        <p class="flex absolute w-[140px] right-[0px] top-[50%] transform -translate-y-1/2 
+                                pl-3 text-white font-light" v-if="isHovered && isTextIconsVisible">Squirrel Stash</p>
+                    </TransitionOpacity>
+                </div>
+        
+        </div>
 
-        <div class="md:mt-3 w-full justify-center flex md:flex-col">
+
+        <div v-show="!isMobile" class="w-[80%] border-[1px] mt-1"></div>
+
+        <div class="md:mt-3 w-full justify-center flex md:flex-col overflow-hidden">
             <div 
                 v-for="(icon, index) of dataListPage1" 
-                class="flex flex-col relative items-center justify-center w-[100px] md:w-full md:items-stretch h-[50px] md:h-fit " 
+                class="flex flex-col relative items-center justify-center w-[100px] md:w-full md:items-stretch h-[50px] md:h-fit" 
             >
                 
                 <div :key="index" @click="handleClickHeader(icon.page)" 
                     :class="`flex relative ${classTranslateY} md:py-2 cursor-pointer py-4
-                    ${bordergetCurrentPage(icon.page)}`">
+                    ${borderCurrentPage(icon.page)}`">
                     
                         <div class="flex flex-col items-center relative">
-                            <component :is="icon.Component" :svg="iconsStyle" class="w-header-width "/>
+                            <component :is="icon.Component" :svg="iconsStyle" class="w-header-width"/>
                         </div>
                         
                         <TransitionOpacity v-if="!isMobile" :durationIn="'duration-300'" :durationOut="'duration-0'">
                             <router-link 
                                 :to="icon.link" v-show="isHovered && isTextIconsVisible" 
                                 class="flex items-center absolute w-[150px] right-[0px] top-[50%] transform -translate-y-1/2 
-                                pl-3 text-[14px] text-white">{{ icon.text }}
+                                pl-3 text-[14px] text-white font-light">{{ icon.text }}
                             </router-link>
                         </TransitionOpacity>
                 </div>
@@ -40,11 +57,11 @@
 
         <div v-show="!isMobile" class="w-[80%] border-[1px] mt-3"></div>
 
-        <div v-show="!isMobile" class="w-full flex md:flex-col mt-5">
+        <div v-show="!isMobile" class="w-full flex md:flex-col mt-3">
             <div class="w-full flex flex-col relative" v-for="(icon, index) of dataListPage2">
                 <div 
                     :key="index" @click="handleClickHeader(icon.page)" 
-                    :class="`flex relative ${classTranslateY} py-2 cursor-pointer ${bordergetCurrentPage(icon.page)}`">
+                    :class="`flex relative ${classTranslateY} py-2 cursor-pointer ${borderCurrentPage(icon.page)}`">
                     <component :is="icon.Component" :svg="iconsStyle" class="w-header-width "/>
 
                     <TransitionOpacity v-if="!isMobile" :durationIn="'duration-300'" :durationOut="'duration-0'">
@@ -57,21 +74,24 @@
         </div>
     </nav>
     <TransitionOpacity durationIn="duration-300" durationOut="duration-200" >
-        <OverlayPrivacy v-if="isOverlayActive.privacy" v-model="isOverlayActive.privacy" width="w-1/2" />
-        <OverlayUserRules v-if="isOverlayActive.userRules" v-model="isOverlayActive.userRules" width="w-1/2" />
-        <OverlayContactUs v-if="isOverlayActive.contactUs" v-model="isOverlayActive.contactUs" width="w-1/2" />
+        <OverlayPrivacy v-if="isOverlayActive.privacy" v-model="isOverlayActive.privacy"/>
+        <OverlayUserRules v-if="isOverlayActive.userRules" v-model="isOverlayActive.userRules"/>
+        <OverlayContactUs v-if="isOverlayActive.contactUs" v-model="isOverlayActive.contactUs"/>
     </TransitionOpacity>        
 </template>
 
 
 <script setup>
+    import {ref, onMounted, onUnmounted, computed, defineAsyncComponent, reactive} from 'vue';
     import { useRouter } from 'vue-router';
     import { storeAuthTOken } from '@/storePinia/useStoreDashboard';
-    import {ref, onMounted, onUnmounted, computed, defineAsyncComponent, reactive} from 'vue';
     import TransitionOpacity from '@/component/transition/TransitionOpacity.vue';  
     import { classTransitionHover } from '@/composable/useClassTransitionHover';
     import { disconnectUser } from '@/composable/useBackendActionData';
     import { setSvgConfig } from '@/svg/svgConfig';
+    import LogoMain from '@/component/svgs/LogoMain.vue';
+    import LogoMainPicOnly from '@/component/svgs/LogoMainPicOnly.vue';
+    
     
     // import async icons & dynamic
     const IconDashboard = defineAsyncComponent(() => import('@/component/svgs/IconDashboard.vue'));
@@ -100,11 +120,12 @@
     { Component: IconLogOut, link:'',page: 'disconnect', text: 'Déconnexion' },
     ];
 
- 
     const iconsStyle = setSvgConfig({width:'25px', fill:'white'});
+    
+    const logoStyle = setSvgConfig({width:'50px', fill:'white'});
+
     const classTranslateY = classTransitionHover('translateY');
     const classTranslateWidth = classTransitionHover('extendHeader');
-
     const isHovered = ref(false);
     const isTextIconsVisible = ref(false);
     const isOverlayActive = reactive({
@@ -142,24 +163,25 @@
         window.removeEventListener('resize', handleResize);
     });
 
+    const currentLogo = computed(() => {
+        return (isTextIconsVisible.value) ? LogoMain : LogoMainPicOnly;
+    });
+
     const isValidPage = computed(() => {
         const currentPath = router.currentRoute.value.path.substring(1);
         return !notAllowedPages.includes(currentPath) && currentPath;
     });
 
-    const bordergetCurrentPage = computed(() => {
+    const borderCurrentPage = computed(() => {
         return (page) => {
-            return  page === router.currentRoute.value.path.substring(1) ? 'bg-[#121422A0]' : '';
+            return  page === router.currentRoute.value.path.substring(1) ? 'bg-main-gradient shadow-black shadow-custom-main' : '';
         }
     });
 
-    function handleResize() {
-        width.value = window.innerWidth;
-    }
+    const handleResize = ()  => { width.value = window.innerWidth; }
     const updateTextVisibility = () => {
         if(headerRef.value) isTextIconsVisible.value = headerRef.value.clientWidth > 160;
     };
-
 
     async function handleClickHeader(page) {
         switch (page) {

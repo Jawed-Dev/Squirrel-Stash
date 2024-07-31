@@ -67,7 +67,6 @@
     };
     
     const props = defineProps({
-        //modelValue: { default:''},
         extraClass: { default:'' },
         id: {default:''},
         type: {default: 'text'},

@@ -1,10 +1,12 @@
 <template>
     <div class="flex">
         <!-- dépenses valeur -->
-        <div class="flex items-center flex-col w-full border-b-[1px] border-gray-700 gap-3 py-8">
-            <div class="flex justify-center sm:justify-end w-full">
-                <div class="w-[55%] sm:w-1/3 mr-1">
+        <div class="flex items-center flex-col w-full border-b-[1px] border-gray-700">
+
+            <div class="flex justify-center mt-6 min-[500px]:justify-end w-full min-[500px]:mt-2">
+                <div class="w-1/2 min-[500px]:w-[35%] mr-1">
                     <InputBase 
+                        extraClass="text-[14px] py-[1px]"
                         v-model="inputDateVal" 
                         v-model:stateError="errorInputs.inputDateVal" 
                         width="w-full"
@@ -13,14 +15,13 @@
                         type="date"
                         validFormat="trsDate"
                         :hideAnimation="true"
-                        extraClass="text-[14px] py-[2px]"
                     />
                 </div>
             </div>
 
-            <div class="w-[55%] sm:w-[45%]">
+            <div class="w-1/2 mt-4 min-[500px]:mt-0">
                 <div class="w-full">
-                    <label for="input-amount-trs" class="text-lg flex justify-center font-light">Montant *</label>
+                    <label for="input-amount-trs" class="pl-2 text-[16px] font-light">Montant</label>
                     <InputBase 
                         extraClass="text-[14px] py-[2px]"
                         iconName="Amount"
@@ -36,10 +37,10 @@
                 </div>
             </div>
 
-            <div class="w-[55%] sm:w-[45%] flex flex-col">
+            <div class="w-1/2 flex flex-col mt-4 mb-6">
                 <!-- placeholder note -->
                 <div class="w-full">
-                    <label for="input-note-trs" class="px-2 text-lg flex justify-center font-light overflow-x-hidden text-ellipsis">{{textNote}}</label>
+                    <label for="input-note-trs" class="pl-2 text-[16px] font-light">Note</label>
                     <InputBase 
                         extraClass="text-[14px] py-[2px]"
                         iconName="Pencil"
@@ -67,27 +68,27 @@
         infoTransaction: { default: []},
         typeTransaction: { default: false}
     })
-    const textNote = computed(() => {
-        if(props.infoTransaction) {
-            const isPurchase = props.typeTransaction === false;
-            return (isPurchase) ? "Note" : "Note";
-        }
-        else {
-            const isPurchase = props.infoTransaction?.transaction_type === 'purchase';
-            return (isPurchase) ? "Note" : "Note";
-        }
-    });
+    // const textNote = computed(() => {
+    //     if(props.infoTransaction) {
+    //         const isPurchase = props.typeTransaction === false;
+    //         return (isPurchase) ? "Note" : "Note";
+    //     }
+    //     else {
+    //         const isPurchase = props.infoTransaction?.transaction_type === 'purchase';
+    //         return (isPurchase) ? "Note" : "Note";
+    //     }
+    // });
 
-    const textAmount = computed(() => {
-        if(props.infoTransaction) {
-            const isPurchase = props.typeTransaction === false;
-            return (isPurchase) ? "Montant (€)" : "Montant de prélèvement (€)";
-        }
-        else {
-            const isPurchase = props.infoTransaction?.transaction_type === 'purchase';
-            return (isPurchase) ? "Montant (€)" : "Montant de prélèvement (€)";
-        }
-    });
+    // const textAmount = computed(() => {
+    //     if(props.infoTransaction) {
+    //         const isPurchase = props.typeTransaction === false;
+    //         return (isPurchase) ? "Montant (€)" : "Montant de prélèvement (€)";
+    //     }
+    //     else {
+    //         const isPurchase = props.infoTransaction?.transaction_type === 'purchase';
+    //         return (isPurchase) ? "Montant (€)" : "Montant de prélèvement (€)";
+    //     }
+    // });
     
     const inputNoteVal = defineModel('inputNoteVal');
     const inputPriceVal = defineModel('inputPriceVal');

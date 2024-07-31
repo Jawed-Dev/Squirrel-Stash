@@ -1,23 +1,26 @@
 <template>
     <div class="font-main-font flex flex-col bg-main-bg w-full min-h-screen pb-[calc(50px)]">
 
-        <div class="mx-1 md:ml-[calc(20px+65px+20px)] md:mr-custom-margin-main flex flex-col mt-[20px]">
-            <h1 class="text-[25px] font-light text-white text-center">Espace utilisateur</h1>
+        <div class="mx-1 md:ml-[calc(20px+65px+20px)] md:mr-custom-margin-main flex flex-col mt-5">
+            <h1 class="text-2xl font-light text-white text-center">Espace utilisateur</h1>
 
             <div class="rounded-[3px] overflow-hidden mt-5">
-                <div :class="`text-[17px] overflow-hidden text-white`">
+                <div :class="`text-lg overflow-hidden text-white`">
                     <div class="flex justify-center">
-                        <div class="flex gap-8 justify-center flex-wrap my-3">
+                        <div class="flex gap-6 md:gap-8 justify-center flex-wrap my-3 w-full md:w-1/2">
                             <div v-for="(page, index) of dataPages"
                                 :key="index"
                                 @click="handlePages(page.page)"
                                 class="flex flex-col items-center justify-center gap-1 w-[calc(33.333333%-20px)] 
                                 min-w-[200px]
-                                md:hover:shadow-main-blue md:hover:shadow-custom-main
-                                md:w-full md:cursor-pointer shadow-black shadow-custom-main
-                                 bg-main-gradient rounded-md p-2">
-                                <component :is="page.Component" :svg="styleIcons"/>
-                                <p class="text-sm">{{page.text}}</p>
+                                md:hover:shadow-second-color md:hover:shadow-custom-hover
+                                md:w-full lg:cursor-pointer shadow-black shadow-custom-main
+                                 bg-main-gradient rounded-md overflow-hidden">
+                                 
+                                <div class="p-1">
+                                    <component :is="page.Component" :svg="styleIcons"/>
+                                </div>
+                                <p class="text-center text-sm bg-gradient-x-blue opacity-90 w-full py-[1px]">{{page.text}}</p>
                             </div>
                         </div>
                     </div> 
@@ -25,9 +28,9 @@
             </div>
         </div>
         <TransitionOpacity durationIn="duration-300" durationOut="duration-200" >
-            <OverlayPrivacy v-if="isOverlayActive.privacy" v-model="isOverlayActive.privacy" width="w-1/2" />
-            <OverlayUserRules v-if="isOverlayActive.userRules" v-model="isOverlayActive.userRules" width="w-1/2" />
-            <OverlayContactUs v-if="isOverlayActive.contactUs" v-model="isOverlayActive.contactUs" width="w-1/2" />
+            <OverlayPrivacy v-if="isOverlayActive.privacy" v-model="isOverlayActive.privacy"/>
+            <OverlayUserRules v-if="isOverlayActive.userRules" v-model="isOverlayActive.userRules"/>
+            <OverlayContactUs v-if="isOverlayActive.contactUs" v-model="isOverlayActive.contactUs"/>
         </TransitionOpacity>       
     </div>
 </template>
@@ -63,7 +66,7 @@
         { Component: IconUser, link:'/mon-compte', page: 'mon-compte', text: 'Mon compte' },
         { Component: IconSupport, link:'', page: 'support et aide', text: 'Support et aide' },
         { Component: IconPrivacy, link:'',page: 'confidentialité', text: 'Confidentialité' },
-        { Component: IconUserRules, link:'',page: "règles d'utilisateur", text: "Règles d'utilisateur" },
+        { Component: IconUserRules, link:'',page: "règles d'utilisation", text: "Règles d'utilisation" },
         { Component: IconInfo, link:'',page: "", text: "Version 1.0" },
         { Component: IconLogOut, link:'', page: 'déconnexion', text: 'Déconnexion' },
     ];
@@ -82,7 +85,7 @@
                 isOverlayActive.privacy = true;
                 break;
             }
-            case "règles d'utilisateur" : {
+            case "règles d'utilisation" : {
                 isOverlayActive.userRules = true;
                 break;
             }

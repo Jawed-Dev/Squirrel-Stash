@@ -2,14 +2,14 @@
     <div>
         <div class="fixed bottom-[-2px] sm:bottom-[25px] left-1/2 -translate-x-1/2 -translate-y-1/2  
             md:relative md:translate-x-0 sm:translate-y-0 md:bottom-auto md:left-auto
-            z-20 min-w-[197px] rounded-[3px] overflow-hidden md:shadow-black md:shadow-custom-main ">
+            z-20 min-w-[197px] rounded-[3px] md:shadow-black md:shadow-custom-main ">
             <div class="bg-transparent md:bg-main-gradient border-none md:border-solid gradient-border">
-                <div class="flex justify-center md:justify-between items-center px-2 min-h-[42px]">
-                    <p v-show="!isMobile" class="text-white flex font-light w-full justify-center">Ajouter un achat</p>
+                <div class="flex justify-center md:justify-between items-center px-2 min-h-[42px] min-w-[214px]">
+                    <p v-show="!isMobile" class="text-white flex font-light w-full justify-center cursor-pointer " 
+                    @click="toggleMenu('openNClose')">Ajouter un achat</p>
                     <div class="flex py-[2px]">
                         <IconAddPurchase 
-                            @click="toggleMenu('openNClose')"
-                            class="p-[1px] bg-gradient-blue rounded-full md:rounded-md right-[100px] top-[50vh] cursor-pointer 
+                            class="p-[1px] bg-gradient-blue rounded-full md:rounded-md right-[100px] top-[50vh]
                             z-10 shadow-black shadow-custom-main trigger-add-purchase" 
                             :svg="handleStyleIcon"
                         />
@@ -26,13 +26,14 @@
         <TransitionOpacity :durationIn="'duration-300'" :durationOut="'duration-200'">
             <div v-if="isOverlayActive" 
                 :class="`fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-30 text-white rounded-[3px] overflow-hidden 
-                shadow-black shadow-custom-main trigger-add-purchase bg-main-gradient ${props.width}`">
+                shadow-black shadow-custom-main trigger-add-purchase bg-main-gradient
+                max-[500px]:w-full sm:w-1/4 min-[500px]:min-w-[500px]`">
 
                 <MainContainerSlot 
                     :textBtn1="'Annuler'" :textBtn2="'Ajouter'" :titleContainer="(!typeTransaction) ? 'Ajouter un achat' : 'Ajouter un prélèvement'" 
                     @toggleMenu="toggleMenu" 
                 >
-                    <div class="max-h-[70vh] overflow-y-auto">
+                    <div class="max-h-[72vh] overflow-y-auto">
                         <!-- Errors -->
                         <div class="relative">
                             <p class="text-sm font-light p-3 absolute text-red-300">{{ textError }}</p>
@@ -89,10 +90,6 @@
     const dateSelected = storeDateSelected();
 
     // variables, props...
-    const props = defineProps({
-        width: { default: '' }
-    });
-
     // menu
     const isOverlayActive = ref(false); 
     const typeTransaction = ref (false); 

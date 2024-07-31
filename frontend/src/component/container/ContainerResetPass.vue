@@ -1,45 +1,60 @@
 <template>
-    <section class="bg-main-gradient flex flex-col items-center font-main-font w-[50%] justify-center shadow-black shadow-custom-main">
-        <h1 class="text-[25px] text-white">Changer votre mot de passe</h1>
-        <form class="mt-[40px] w-[20vw]" @submit.prevent="handleSubmit()">
-            <!-- Errors -->
-            <div class="relative">
-                <p class="text-sm font-light pt-3 absolute text-red-300">{{ textError }}</p>
+    <section class="w-full h-screen flex flex-col items-center justify-center bg-main-gradient 
+        font-main-font shadow-black shadow-custom-main overflow-y-auto min-h-[600px] lg:w-1/2">
+
+        
+        <div class="w-full flex flex-col items-center justify-center">
+            <div class="min-w-[200px] min-h-[200px]">
+                <LogoMain :svg="styleLogo" />
             </div>
 
-            <div class="mt-[30px] w-">
-                <label class="text-white font-light" for="input-pass">Nouveau mot de passe</label>
-                <InputBase 
-                    iconName = 'Password'
-                    id="input-pass" 
-                    v-model="password" 
-                    v-model:stateError="errorInput.password"
-                    extraClass="" 
-                    placeholder="Mot de passe"
-                    type="password"
-                    validFormat="password"
-                />
-            </div>
-            <div class="mt-[30px]">
-                <label class="text-white font-light" for="input-confirm-pass">Confirmer le mot de passe</label>
-                <InputBase 
-                    iconName = 'Password'
-                    id="input-confirm-pass" 
-                    v-model="confirmPassword"
-                    v-model:stateError="errorInput.confirmPassword" 
-                    placeholder="Mot de passe"
-                    type="password"
-                    validFormat="password"
-                />
-            </div>
+            <form class="overflow-x-auto min-w-[350px] md:w-[45%] lg:w-[60%] xl:w-1/3 xl:min-w-[390px] 2xl:min-w-[420px]" @submit.prevent="handleSubmit()">
+
+                <h1 class="text-2xl text-center text-white">Changer votre mot de passe</h1>
+
+                <!-- Errors -->
+                <div class="relative">
+                    <p class="text-sm font-light pt-3 text-red-300">{{ textError }}</p>
+                </div>
+
+                <div class="mt-5">
+                    <label class="text-white font-light" for="input-pass">Nouveau mot de passe</label>
+                    <InputBase 
+                        iconName = 'Password'
+                        id="input-pass" 
+                        v-model="password" 
+                        v-model:stateError="errorInput.password"
+                        extraClass="" 
+                        placeholder="Mot de passe"
+                        type="password"
+                        validFormat="password"
+                    />
+                </div>
+                <div class="mt-5">
+                    <label class="text-white font-light" for="input-confirm-pass">Confirmer le mot de passe</label>
+                    <InputBase 
+                        iconName = 'Password'
+                        id="input-confirm-pass" 
+                        v-model="confirmPassword"
+                        v-model:stateError="errorInput.confirmPassword" 
+                        placeholder="Mot de passe"
+                        type="password"
+                        validFormat="password"
+                    />
+                </div>
+                    
+                <div>
+                    <button :class="`bg-main-blue shadow-black shadow-custom-main 
+                        w-full py-2 rounded-lg text-white mt-5`">Modifier
+                    </button>
+                </div>
                 
-            <ButtonComponent :extraClass="'shadow-black shadow-custom-main w-full py-[6.5px] mt-[40px]'" :titleButton="'Modifier'" />
-            
-            <div class="flex mt-[20px] gap-9 justify-center">
-                <p class="text-white font-light">Retour à la connexion</p> 
-                <router-link class="text-main-blue font-light" to="/connexion" >Se connecter</router-link>
-            </div>
-        </form>
+                <div class="flex mt-[20px] gap-9 justify-center">
+                    <p class="text-white font-light">Retour à la connexion</p> 
+                    <router-link class="text-main-blue font-light" to="/connexion" >Se connecter</router-link>
+                </div>
+            </form>
+        </div>
     </section>
 
     <TransitionPopUp duration-in="500" duration-out="500">
@@ -56,6 +71,8 @@
     import { updatePasswordByToken } from '@/composable/useBackendActionData';
     import { isAnyMandatInputEmpty, isAnyInputError, TYPE_SUBMIT_ERROR, TEXT_SUBMIT_ERROR } from '@/error/useHandleError';
     import TransitionPopUp from '@/component/transition/TransitionPopUp.vue';
+    import LogoMain from '@/component/svgs/LogoMain.vue';
+    import { setSvgConfig } from '@/svg/svgConfig';
     const OverlaySuccessAction = defineAsyncComponent(() => import('@/component/overlay/OverlaySuccessAction.vue'));
 
     // props, variables
@@ -64,6 +81,7 @@
     const password = ref('');
     const confirmPassword = ref('');
     const isSuccessAction = ref(false);
+    const styleLogo = setSvgConfig({width:'200px'})
 
     const errorInput = reactive({
         password: false,

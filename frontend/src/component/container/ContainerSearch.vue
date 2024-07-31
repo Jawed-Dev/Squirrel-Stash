@@ -15,7 +15,7 @@
 
                 <form class="mt-16" @submit.prevent="handleSubmit()">
                     <TransitionAxeY>
-                        <div v-show="toggleShowParams" class="overflow-hidden">
+                        <div v-show="toggleShowParams">
 
                             <div class="mt-5 w-full flex justify-center">
                                 <div class="flex flex-col justify-center items-center gap-3 mt-3
