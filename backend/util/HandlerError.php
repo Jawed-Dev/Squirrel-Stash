@@ -15,6 +15,12 @@
         function verifyGetNLastTrsByMonth($data);
         function verifyGetTotalTrsByMonth($data);
         function verifyGetBiggestTrsByMonth($data);
+        function verifyGetYearListTrsByMonth($data);
+        function verifyGetTotalTrsByYear($data);
+        function verifyGetBiggestTrsByYear($data);
+        function verifyGetBiggestMonthByYear($data);
+        function verifyGetYearListTrsByCategories($data);
+        function verifyGetTopYearCategories($data);
     }
     class HandlerError implements I_HandlerError {
         private $ControllerMain; 
@@ -245,21 +251,69 @@
         public function verifyGetDataTrsBySearch($data) {
             $this->clearErrors();
             $bodyData = $data['bodyData'];
-            //var_dump($bodyData);
-
             if(!empty($bodyData['searchNote'])) $this->validateFormat('isValidTransactionNote', $bodyData['searchNote']);
             if(!empty($bodyData['searchAmountMin'])) $this->validateFormat('isValidTransactionAmount', $bodyData['searchAmountMin']);
             if(!empty($bodyData['searchAmountMax'])) $this->validateFormat('isValidTransactionAmount', $bodyData['searchAmountMax']);
-            
             if(!empty($bodyData['searchDateRangeDateMin'])) $this->validateFormat('isValidTransactionDate', $bodyData['searchDateRangeDateMin']);
             if(!empty($bodyData['searchDateRangeDateMax'])) $this->validateFormat('isValidTransactionDate', $bodyData['searchDateRangeDateMax']);
-            
             if(!empty($bodyData['searchCategory'])) $this->validateFormat('isValidTransactionCategoryEx', $bodyData['searchCategory']);
             $this->validateFormat('isValidBool', $bodyData['orderAsc'] ?? null);
             $this->validateFormat('isInt', $bodyData['currentOrderSelected'] ?? null);
             $this->validateFormat('isInt', $bodyData['currentPage'] ?? 1);
-            
             return $this->getStateErrors();
         }
+
+        public function verifyGetYearListTrsByMonth($data) {
+            $this->clearErrors();
+            $bodyData = $data['bodyData'];
+            $this->validateFormat('isValidUserId', $data);
+            $this->validateFormat('isValidYear', $bodyData['selectedYear'] ?? null);
+            $this->validateFormat('isValidTransactionType', $bodyData['transactionType'] ?? null);   
+            return $this->getStateErrors();
+        }
+
+        public function verifyGetTotalTrsByYear($data) {
+            $this->clearErrors();
+            $bodyData = $data['bodyData'];
+            $this->validateFormat('isValidUserId', $data);
+            $this->validateFormat('isValidYear', $bodyData['selectedYear'] ?? null);
+            return $this->getStateErrors();
+        }
+
+        public function verifyGetBiggestTrsByYear($data) {
+            $this->clearErrors();
+            $bodyData = $data['bodyData'];
+            $this->validateFormat('isValidUserId', $data);
+            $this->validateFormat('isValidYear', $bodyData['selectedYear'] ?? null);
+            $this->validateFormat('isValidTransactionType', $bodyData['transactionType'] ?? null);   
+            return $this->getStateErrors();
+        }
+
+        public function verifyGetBiggestMonthByYear($data) {
+            $this->clearErrors();
+            $bodyData = $data['bodyData'];
+            $this->validateFormat('isValidUserId', $data);
+            $this->validateFormat('isValidYear', $bodyData['selectedYear'] ?? null);
+            return $this->getStateErrors();
+        }
+
+        public function verifyGetYearListTrsByCategories($data) {
+            $this->clearErrors();
+            $bodyData = $data['bodyData'];
+            $this->validateFormat('isValidUserId', $data);
+            $this->validateFormat('isValidYear', $bodyData['selectedYear'] ?? null);
+            $this->validateFormat('isValidTransactionType', $bodyData['transactionType'] ?? null);   
+            return $this->getStateErrors();
+        }
+
+        public function verifyGetTopYearCategories($data) {
+            $this->clearErrors();
+            $bodyData = $data['bodyData'];
+            $this->validateFormat('isValidUserId', $data);
+            $this->validateFormat('isValidYear', $bodyData['selectedYear'] ?? null);
+            $this->validateFormat('isValidTransactionType', $bodyData['transactionType'] ?? null);   
+            return $this->getStateErrors();
+        }
+
     }
 ?>

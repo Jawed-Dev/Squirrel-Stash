@@ -9,7 +9,8 @@ const PageTemporary = () => import('@/page/PageTemporary.vue');
 const PageForgotPass = () => import('@/page/PageForgotPass.vue');
 const PageResetPass = () => import('@/page/PageResetPass.vue');
 const PageAccount = () => import('@/page/PageAccount.vue');
-const pageUser = () => import('@/page/PageUser.vue');
+const PageUser = () => import('@/page/PageUser.vue');
+const PageAnnualSummary = () => import('@/page/PageAnnualSummary.vue');
 
 import  useConfigFetchGetPage from "@/composable/useConfigFetchGetPage";
 
@@ -27,7 +28,8 @@ const routes = [
   { path: '/historique-transactions', component: PageHistoryTransactions, meta: { page: 'pageTransactions' }},
   { path: '/mon-compte', component: PageAccount, meta: { page: 'pageAccount' }},
   { path: '/reinitialiser-email', component: PageTemporary, meta: { page: 'updateEmail' }},
-  { path: '/utilisateur', component: pageUser, meta: { page: 'pageUser' }},
+  { path: '/utilisateur', component: PageUser, meta: { page: 'pageUser' }},
+  { path: '/recap-annuel', component: PageAnnualSummary, meta: { page: 'pageAnnualSummary' }},
 ];
 
 const router = createRouter({
@@ -98,6 +100,10 @@ router.beforeEach(async (to, from, next) => {
         break;
       }
       case 'pageTransactions' : {
+        (isSessionActive) ? next() : next('/connexion');
+        break;
+      }
+      case 'pageAnnualSummary' : {
         (isSessionActive) ? next() : next('/connexion');
         break;
       }

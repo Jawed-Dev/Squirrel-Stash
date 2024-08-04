@@ -1,14 +1,13 @@
 <template>
     <div class="rounded-[3px] overflow-hidden my-custom-margin-main shadow-black shadow-custom-main">
-        <div class="gradient-border text-white
-            bg-main-gradient w-full"> 
+        <div class="bg-main-gradient w-full gradient-border text-white"> 
     
             <div class="flex items-center justify-between">
                 <h2 class="pl-3 pb-2 pt-3 text-xl font-extralight pr-8 sm:pb-0">{{ textTitle }}</h2>
-                <router-link to="/historique-transactions" :class="`font-light cursor-pointer pr-3 ${translateY}`">Voir plus ></router-link>
+                <router-link to="/historique-transactions" :class="`pt-3  font-light cursor-pointer pr-3 ${translateY}`">Voir plus ></router-link>
             </div>
 
-            <div class="w-full flex justify-center">
+            <div class="flex w-full xl:hidden justify-center ">
                 <div class="w-1/6 min-w-[250px]">
                     <ToggleButton v-model:typeTransaction="typeTransaction" :text1="'Achats'" :text2="'Prélèvements'" />
                 </div>
@@ -65,7 +64,7 @@
 
     const isSuccessDelete = ref(false);
     const isSuccessEdit = ref(false);
-    const typeTransaction = ref(false);
+    const typeTransaction = defineModel();
 
     // life cycle
     watch( () => [dateSelected.month, dateSelected.year], async ([newMonth, newYear]) => {

@@ -2,7 +2,7 @@
     <div v-if="getCurrentPage() !== 1 && showEllipsisAfterFirstPage" class="flex items-center gap-1">
         <div @click="handlePagination(1)" 
         :class="`${showColorPagination(1)} flex justify-center w-[22px] px-[10px] 
-                rounded-sm font-medium shadow-black shadow-custom-lower cursor-pointer`">
+                rounded-sm font-medium shadow-black shadow-custom-main cursor-pointer`">
         {{ 1 }}
         </div>
         <p>...</p>
@@ -12,21 +12,21 @@
         <div v-if="(page === 1 && !showEllipsisAfterFirstPage && totalItems >= 1)"
             @click="handlePagination(page)"
             :class="`${showColorPagination(page)} flex justify-center w-[22px] px-[10px] 
-                rounded-sm font-medium shadow-black shadow-custom-lower cursor-pointer`">
+                rounded-sm font-medium shadow-black shadow-custom-main cursor-pointer`">
             {{ page }}
         </div>
 
         <div v-if="(page === getTotalPages() && !showEllipsisBeforeLastPage) && getTotalPages() !== 1"
             @click="handlePagination(page)"
             :class="`${showColorPagination(page)} flex justify-center w-[22px] px-[10px] 
-                rounded-sm font-medium shadow-black shadow-custom-lower cursor-pointer`">
+                rounded-sm font-medium shadow-black shadow-custom-main cursor-pointer`">
             {{ page }}
         </div>
         
         <!-- Autres boutons -->
         <div v-if="page !== 1 && page !== getTotalPages()" @click="handlePagination(page)" 
             :class="`${showColorPagination(page)} flex justify-center w-[22px] px-[10px] 
-                rounded-sm font-medium shadow-black shadow-custom-lower cursor-pointer`">
+                rounded-sm font-medium shadow-black shadow-custom-main cursor-pointer`">
             {{ page }}
         </div>
     </div>
@@ -35,7 +35,7 @@
         <p>...</p>
         <div @click="handlePagination(getTotalPages())"
         :class="`${showColorPagination(getTotalPages())} flex justify-center w-[22px] px-[10px] 
-            rounded-sm font-medium shadow-black shadow-custom-lower cursor-pointer`">
+            rounded-sm font-medium shadow-black shadow-custom-main cursor-pointer`">
         {{ getTotalPages() }}
         </div>
     </div>
@@ -83,7 +83,7 @@
     });
 
     function showColorPagination(index) {
-        return (getCurrentPage() === index) ? 'bg-main-bg' : 'bg-main-blue';
+        return (getCurrentPage() === index) ? 'bg-main-blue' : 'bg-slate-800';
     }
     const getCurrentPage = () => currentPage.value;
     const getMaxBtns = () => maxButtons;

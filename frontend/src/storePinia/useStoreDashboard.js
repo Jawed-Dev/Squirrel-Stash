@@ -94,3 +94,36 @@ export const storePassUser = defineStore('dataPassUser', () => {
   return { data };
 });
 
+export const storeYearListTrsByMonth = defineStore('yearListTrsByMonth', () => {
+  const data = ref([]);
+  return { data };
+});
+
+export const storeTextStatsByYear = defineStore('textStatsByYear', () => {
+  const totalTransactions = ref(0);
+  const biggestMonth = ref('');
+  const biggestPurchase = ref('');
+  const biggestRecurring = ref('');
+  
+  return {
+    totalTransactions,
+    biggestMonth,
+    biggestPurchase,
+    biggestRecurring
+  };
+});
+
+export const storeYearListTrsByCategories = defineStore('yearListTrsByCategories', () => {
+  const data = ref([]);
+  return { data };
+});
+
+export const storeTopYearCategories = defineStore('topYearCategories', () => {
+  const listPurchases = ref([]);
+  const listRecurrings= ref([]);
+  return { listPurchases, listRecurrings };
+});
+
+
+
+

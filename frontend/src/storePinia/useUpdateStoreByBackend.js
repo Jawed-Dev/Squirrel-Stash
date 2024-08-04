@@ -1,15 +1,17 @@
-import 
-    { 
+import {   
         getBiggestTrsByMonth, getThresholdByMonth, getTotalTrsByMonth, 
         getListTrsMonthByDay, getLastNTransactions, getDataTrsBySearch,
-        getDataUserProfil, getUserEmail
-    } from '@/composable/useBackendGetData';
+        getDataUserProfil, getUserEmail, getYearListTrsByMonth, getTotalTrsByYear,
+        getBiggestTrsByYear, getBiggestMonthByYear, getYearListTrsByCategories,
+        getTopYearCategories
+} from '@/composable/useBackendGetData';
+
 import { 
         storeParamsSearch, storeThreshold, storeStatisticDetails, 
         storeTrsMonthByDay, storeLastNTransactions, storeDataTrsSearch,
-        storeProfilUser,
-        storeEmailUser
-    } from '@/storePinia/useStoreDashboard';
+        storeProfilUser, storeEmailUser, storeYearListTrsByMonth, storeTextStatsByYear, 
+        storeYearListTrsByCategories, storeTopYearCategories
+} from '@/storePinia/useStoreDashboard';
 
 
 // list transactions month By Day
@@ -94,7 +96,6 @@ export async function updateBiggestTrsByMonth(month, year, transactionType) {
 }
 
 export async function updateAllDataTransations(month, year, transactionType) {
-    
     updateListTrsMonthByDay(month, year, transactionType);
     updateBalanceEcoByMonth(month, year);
     updateTotalTrsByMonth(month, year);
@@ -132,13 +133,59 @@ export async function updateStoreUserProfil() {
     dataStore.data.roleLevel = roleLevel;
 }
 
-
 export async function updateStoreUserEmail() {
     const dataStore = storeEmailUser();
     const response = await getUserEmail();
     const email = response.data;
-    dataStore.currentEmail = email;
-    
+    dataStore.currentEmail = email;   
 }
 
+export async function updateStoreYearListTrsByMonth(year, transactionType) {
+    const totalYearTrsByMonth = storeYearListTrsByMonth();
+    const response = await getYearListTrsByMonth(year, transactionType);
+    const listTransactions = response?.data;
+    totalYearTrsByMonth.data = listTransactions;
+}
 
+export async function updateStoreTotalTrsByYear(year) {
+    const textStatsByYear = storeTextStatsByYear();
+    const response = await getTotalTrsByYear(year);
+    const totalTransactions = response?.data.total_transactions;
+    textStatsByYear.totalTransactions = (totalTransactions) ? totalTransactions + ' €' : 0 + ' €';
+}
+
+export async function updateBiggestTrsByYear(year, transactionType) {
+    const textStatsByYear = storeTextStatsByYear();
+    const responsive = await getBiggestTrsByYear(year, transactionType);
+    const biggestTransactions = responsive?.data?.transaction_category;
+
+    if(transactionType === 'purchase') {
+        textStatsByYear.biggestPurchase = (biggestTransactions) ? biggestTransactions : '';
+    }
+    else if(transactionType === 'recurring') {
+        textStatsByYear.biggestRecurring = (biggestTransactions) ? biggestTransactions : '';
+    }
+}
+
+export async function updateStoreBiggestMonthByYear(year) {
+    const textStatsByYear = storeTextStatsByYear();
+    const response = await getBiggestMonthByYear(year);
+    const biggestMonth = response?.data?.month;
+    textStatsByYear.biggestMonth = (biggestMonth) ? biggestMonth : 'Aucune donnée';
+}
+
+export async function updateStoreYearListTrsByCategories(year, transactionType) {
+    const listTrsByCategories = storeYearListTrsByCategories();
+    const response = await getYearListTrsByCategories(year, transactionType);
+    const listTransactions = response?.data;
+    listTrsByCategories.data = listTransactions;
+}
+
+export async function updateStoreTopYearCategories(year, transactionType) {
+    const topCategories = storeTopYearCategories();
+    const response = await getTopYearCategories(year, transactionType);
+    const listCategories = response?.data;
+    console.log('updateStoreTopYearCategories', listCategories)
+    if(transactionType === 'purchase') topCategories.listPurchases = listCategories;
+    else if(transactionType === 'recurring') topCategories.listRecurrings = listCategories;
+}

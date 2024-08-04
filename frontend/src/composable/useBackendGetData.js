@@ -244,3 +244,105 @@ export async function getUserEmail() {
     return response;
 }
 
+export async function getYearListTrsByMonth(year, transactionType) {
+    authRequired();
+    const localToken = getLStorageAuthToken();
+    const data = {
+        selectedYear: Number(year),
+        transactionType: String(transactionType),
+    };
+    const response = await useConfigFetchGetData ({
+        request: 'getYearListTrsByMonth', 
+        method: 'POST', 
+        dataBody: data, 
+        token: localToken
+    });
+    return response;
+}
+
+export async function getTotalTrsByYear(year) {
+    authRequired();
+    const localToken = getLStorageAuthToken();
+    const data = {
+        selectedYear: Number(year),
+    };
+    const response = await useConfigFetchGetData ({
+        request: 'getTotalTrsByYear', 
+        method: 'POST', 
+        dataBody: data, 
+        token: localToken
+    });
+    return response;
+}   
+
+export async function getBiggestTrsByYear(year, transactionType) {
+    authRequired();
+    const localToken = getLStorageAuthToken();
+    const data = {
+        selectedYear: Number(year),
+        transactionType: String(transactionType),
+    };
+    const response = await useConfigFetchGetData ({
+        request: 'getBiggestTrsByYear', 
+        method: 'POST', 
+        dataBody: data, 
+        token: localToken
+    });
+    return response;
+}   
+
+export async function getBiggestMonthByYear(year) {
+    authRequired();
+    const localToken = getLStorageAuthToken();
+    const data = {
+        selectedYear: Number(year),
+    };
+    const response = await useConfigFetchGetData ({
+        request: 'getBiggestMonthByYear', 
+        method: 'POST', 
+        dataBody: data, 
+        token: localToken
+    });
+    return response;
+}  
+
+
+export async function getYearListTrsByCategories(year, transactionType) {
+    authRequired();
+    const localToken = getLStorageAuthToken();
+    const data = {
+        selectedYear: Number(year),
+        transactionType: String(transactionType),
+    };
+    const response = await useConfigFetchGetData ({
+        request: 'getYearListTrsByCategories', 
+        method: 'POST', 
+        dataBody: data, 
+        token: localToken
+    });
+    return response;
+}   
+
+export async function getTopYearCategories(year, transactionType) {
+    authRequired();
+    const localToken = getLStorageAuthToken();
+    const data = {
+        selectedYear: Number(year),
+        transactionType: String(transactionType),
+    };
+    const response = await useConfigFetchGetData ({
+        request: 'getTopYearCategories', 
+        method: 'POST', 
+        dataBody: data, 
+        token: localToken
+    });
+    return response;
+}   
+
+
+
+
+
+
+
+

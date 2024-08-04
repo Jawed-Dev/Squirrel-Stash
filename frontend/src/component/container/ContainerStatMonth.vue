@@ -13,7 +13,7 @@
             </div>
     
             <div class="pl-[13px] border-t py-1 pr-2 flex items-center justify-end font-extralight text-[15px] border-gray-700 ">
-                <p class=" text-white"> {{ nameStat }}</p>
+                <p class="text-white"> {{ nameStat }}</p>
             </div>
         </div>
     </div>

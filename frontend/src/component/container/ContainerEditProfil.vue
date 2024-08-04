@@ -1,105 +1,125 @@
 <template>
-    <section class="relative rounded-[3px] w-[100%] text-white overflow-hidden bg-main-gradient 
+    <section class="relative rounded-[3px] w-full text-white overflow-hidden bg-main-gradient 
         shadow-black shadow-custom-main mt-[10px]">
         <div 
             @click="toggleParamsSearch"    
             class="absolute w-full mt-5 shadow-black shadow-custom-main bg-gradient-x-blue py-2 pl-3
                 font-light flex justify-start gap-2 text-[18px] text-white 
                 hover:shadow-main-blue cursor-pointer">
-            <h1>Gestion de profil</h1>
+
             <UseIconLoader :svg=iconConfig :nameIcon="typeIconShowParams"  />
+            <h1>Gestion de profil</h1>
+            
         </div>
 
-        <div :class="`gradient-border overflow-hidden ${paddingForMenuOpen}`">
+        <div :class="`w-full gradient-border overflow-hidden ${paddingForMenuOpen}`">
             
             <form class="mt-16" @submit.prevent="handleSubmit"> 
                 <TransitionAxeY>
                     <div v-show="toggleShowParams">
-                        <!-- Errors -->
-                        <div class="relative pb-5">
-                            <p class="text-sm font-light absolute text-red-300">{{ textError }}</p>
-                        </div>
-        
-                        <div class="flex flex-col justify-center items-center gap-3
-                            md:gap-20 lg:gap-32 xl:gap-48 md:flex-row">
-                            <div class="flex flex-col w-1/2 min-w-[250px] lg:min-w-[350px] md:w-1/4">
-                                <label class="text-white font-light" for="input-firstname">Prénom *</label>
-                                <InputBase 
-                                    iconName="Name"
-                                    id="input-firstname" 
-                                    v-model="inputsProfil.firstName"
-                                    v-model:stateError="errorInputs.firstName"
-                                    extraClass="" 
-                                    :placeholder="`Prénom`"
-                                    type="text"
-                                    validFormat="firstName"
-                                    :hideAnimation="true"
-        
-                                />
+                        <div class="xl:flex w-full">
+
+                            <div class="xl:w-[40%] 2xl:w-[45%] flex justify-center">
+                                <ImageForgotPass class="w-full" :svg="imageConfig" />
                             </div>
-                            <div class="flex flex-col w-1/2 min-w-[250px] lg:min-w-[350px] md:w-1/4">
-                                <label class="text-white font-light" for="input-lastname">Nom *</label>
-                                <InputBase 
-                                    iconName="Name"
-                                    id="input-lastname" 
-                                    v-model="inputsProfil.lastName" 
-                                    v-model:stateError="errorInputs.lastName"
-                                    extraClass="" 
-                                    placeholder="Nom"
-                                    type="text"
-                                    validFormat="lastName"
-                                    :hideAnimation="true"
-                                />
+
+                            <div class="grow flex flex-col justify-center">
+                                <!-- Errors -->
+                                <div class="relative pb-5">
+                                    <p class="text-sm font-light absolute text-red-300">{{ textError }}</p>
+                                </div>
+                
+                                <div class="xl:mt-5 w-full flex">
+                                    <div class="w-full flex flex-col justify-center xl:justify-center 2xl:justify-evenly 
+                                            items-center mt-3 gap-2 sm:gap-5 2xl:gap-0 sm:flex-row">
+    
+                                        <div class="flex flex-col w-1/3 min-w-[280px] lg:min-w-[300px] 2xl:min-w-[300px] md:w-1/4">
+                                            <label class="pl-2 text-white font-light" for="input-firstname">Prénom *</label>
+                                            <InputBase 
+                                                iconName="Name"
+                                                id="input-firstname" 
+                                                v-model="inputsProfil.firstName"
+                                                v-model:stateError="errorInputs.firstName"
+                                                extraClass="" 
+                                                :placeholder="`Prénom`"
+                                                type="text"
+                                                validFormat="firstName"
+                                                :hideAnimation="true"
+                    
+                                            />
+                                        </div>
+                                        <div class="flex flex-col w-1/3 min-w-[280px] lg:min-w-[300px] 2xl:min-w-[300px] md:w-1/4">
+                                            <label class="pl-2 text-white font-light" for="input-lastname">Nom *</label>
+                                            <InputBase 
+                                                iconName="Name"
+                                                id="input-lastname" 
+                                                v-model="inputsProfil.lastName" 
+                                                v-model:stateError="errorInputs.lastName"
+                                                extraClass="" 
+                                                placeholder="Nom"
+                                                type="text"
+                                                validFormat="lastName"
+                                                :hideAnimation="true"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                
+                                <div class="mt-5 w-full flex">
+                                    <div class="w-full flex flex-col justify-center xl:justify-center 2xl:justify-evenly 
+                                            items-center mt-3 gap-2 sm:gap-5 2xl:gap-0 sm:flex-row">
+
+                                        <div class="flex flex-col w-1/3 min-w-[280px] lg:min-w-[300px] 2xl:min-w-[300px] md:w-1/4">
+                                            <label class="pl-2 text-white font-light" for="input-gender">Genre</label>
+                                            <InputBase 
+                                                iconName="Gender"
+                                                id="input-gender" 
+                                                v-model="inputsProfil.gender" 
+                                                v-model:stateError="errorInputs.gender"
+                                                extraClass="" 
+                                                placeholder="Votre genre"
+                                                type="text"
+                                                validFormat="gender"
+                                                :hideAnimation="true"
+                                            />
+                                        </div>
+                                        <div class="flex flex-col w-1/3 min-w-[280px] lg:min-w-[300px] 2xl:min-w-[300px] md:w-1/4">
+                                            <label class="pl-2 text-white font-light" for="input-pass">Rôle</label>
+                                            <ContainerTextUnderline 
+                                                iconName="Crown"
+                                                :text="textUserLevel" 
+                                                id="input-current-mail"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                
+                                <div class="mt-5 w-full flex">
+                                    <div class="w-full flex flex-col justify-center xl:justify-center 2xl:justify-evenly 
+                                            items-center mt-3 gap-2 sm:gap-5 2xl:gap-0 sm:flex-row">
+                                            
+                                        <div class="flex flex-col w-1/3 min-w-[280px] lg:min-w-[300px] 2xl:min-w-[300px] md:w-1/4">
+                                            <label class="pl-2 text-white font-light" for="input-birthday">Date de naissance</label>
+                                            <InputBase 
+                                                id="input-birthday" 
+                                                v-model="inputsProfil.birthday" 
+                                                v-model:stateError="errorInputs.birthday"
+                                                extraClass="" 
+                                                placeholder="Mot de passe"
+                                                type="date"
+                                                validFormat="date"
+                                                :hideAnimation="true"
+                                            />
+                                        </div>
+                                        <div class=" flex flex-col w-1/3 min-w-[280px] lg:min-w-[300px] 2xl:min-w-[300px] md:w-1/4"></div>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-        
-                        <div class="flex flex-col justify-center items-center gap-3 mt-3
-                            md:gap-20 lg:gap-32 xl:gap-48 md:flex-row">
-                            <div class="flex flex-col w-1/2 min-w-[250px] lg:min-w-[350px] md:w-1/4">
-                                <label class="text-white font-light" for="input-gender">Genre</label>
-                                <InputBase 
-                                    iconName="Gender"
-                                    id="input-gender" 
-                                    v-model="inputsProfil.gender" 
-                                    v-model:stateError="errorInputs.gender"
-                                    extraClass="" 
-                                    placeholder="Votre genre"
-                                    type="text"
-                                    validFormat="gender"
-                                    :hideAnimation="true"
-                                />
-                            </div>
-                            <div class="flex flex-col w-1/2 min-w-[250px] lg:min-w-[350px] md:w-1/4">
-                                <label class="text-white font-light" for="input-pass">Rôle</label>
-                                <ContainerTextUnderline 
-                                    iconName="Crown"
-                                    :text="textUserLevel" 
-                                    id="input-current-mail"
-                                />
-                            </div>
-                        </div>
-        
-                        <div class="flex flex-col justify-center items-center gap-3 mt-3
-                            md:gap-20 lg:gap-32 xl:gap-48 md:flex-row">
-                            <div class="flex flex-col w-1/2 min-w-[250px] lg:min-w-[350px] md:w-1/4">
-                                <label class="text-white font-light" for="input-birthday">Date de naissance</label>
-                                <InputBase 
-                                    id="input-birthday" 
-                                    v-model="inputsProfil.birthday" 
-                                    v-model:stateError="errorInputs.birthday"
-                                    extraClass="" 
-                                    placeholder="Mot de passe"
-                                    type="date"
-                                    validFormat="date"
-                                    :hideAnimation="true"
-                                />
-                            </div>
-                            <div class="hidden md:flex flex-col w-1/2 min-w-[250px] lg:min-w-[350px] md:w-1/4"></div>
                         </div>
                         
-                        <div class="w-full flex justify-center mt-8 my-3">
+                        <div class="w-full flex justify-center mt-12 my-3">
                             <div class="shadow-black shadow-custom-main min-w-[200px] w-1/4 md:w-1/5 overflow-x-hidden text-ellipsis">
-                                <button class="w-full rounded-sm py-2 bg-gradient-blue rounded-br-[3px] font-light">Éditer
+                                <button class="w-full rounded-sm py-2 bg-gradient-blue rounded-br-[3px] font-light">Editer
                                 </button>
                             </div>
                         </div>
@@ -125,9 +145,9 @@
     import TransitionPopUp from '@/component/transition/TransitionPopUp.vue';
     import TransitionAxeY from '@/component/transition/TransitionAxeY.vue';
     import UseIconLoader from '@/composable/useIconLoader.vue';
+    import ImageForgotPass from '@/component//svgs/ImageForgotPass.vue';
     import { setSvgConfig } from '@/svg/svgConfig';
-
-
+    
     const OverlaySuccessAction = defineAsyncComponent(() => import('@/component/overlay/OverlaySuccessAction.vue'));
 
     // Store Pinia
@@ -152,6 +172,7 @@
     const isSuccessAction = ref(false);
     const toggleShowParams= ref(false);
     const iconConfig = setSvgConfig({width:'30px', fill:'white' });
+    const imageConfig = setSvgConfig({width:'300px', fill:'white' });
 
     // life cycle, functions
     const textError = computed(() => {

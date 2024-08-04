@@ -20,6 +20,6 @@ export function setSvgConfig(params) {
         width: params.width,
         height: params.width,
         fill: params.fill,
-        color: params.color
+        color: params.color,
     }
 }

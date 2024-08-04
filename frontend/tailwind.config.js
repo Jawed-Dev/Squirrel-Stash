@@ -33,7 +33,7 @@ export default {
         'second-color' : '#3c78e3'
       },
       spacing: {
-        'header-width' : '65px',
+        'header-width' : '75px',
         'top-Header' : '20px',
         'custom-margin-main' : '20px'
       },
@@ -64,6 +64,7 @@ export default {
         'custom-main': '1px 1px 5px #38393b',
         'custom-lower': '1px 1px 3px #38393b',
         'custom-hover': '3px 3px 5px white',
+        'custom-very-low': '1px 1px 1px white',
       }
     },
   },

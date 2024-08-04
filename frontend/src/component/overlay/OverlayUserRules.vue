@@ -16,7 +16,7 @@
         
                         <div class="flex flex-col gap-5 w-full">
                             <h2 class="text-xl">1. Conditions d'Utilisation</h2>
-                            <p class="opacity-0 font-light text">Chez Squirrel Stash, nous nous engageons à fournir un service de qualité tout en respectant les droits de nos utilisateurs. 
+                            <p class="opacity-90 font-light text">Chez Squirrel Stash, nous nous engageons à fournir un service de qualité tout en respectant les droits de nos utilisateurs. 
                                 Ces conditions régissent votre utilisation de notre application et en utilisant notre service, vous acceptez ces termes.</p>
                         </div>
     

@@ -4,7 +4,7 @@
             <div class="gradient-border text-white overflow-hidden
                 bg-main-gradient w-full">     
                 <div class="flex flex-col justify-center relative pt-3">
-                    <h2 class="pl-3  pb-2 lg:pb-0 text-[20px] font-extralight pr-8 text-center lg:text-left">{{ props.title}}</h2>
+                    <h2 class="pl-3  pb-2 lg:pb-0 text-xl font-extralight pr-8 ">{{ props.title}}</h2>
                     <div class="flex grow justify-center lg:grow-0 lg:justify-stretch gap-1 lg:absolute lg:left-1/2 transform lg:-translate-x-1/2">
                         <ContainerPagination
                             v-model:currentPage="currentPage"

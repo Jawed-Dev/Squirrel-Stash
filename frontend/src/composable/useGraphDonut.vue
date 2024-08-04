@@ -1,52 +1,63 @@
 <template>
-    <div style="position: relative; height:350px; width:100%">
-        <canvas class="mt-5" ref="canvas"></canvas>
+    <div style="position: relative; height:350px; width:100%;" >
+        <canvas class=" mt-5" ref="canvas">
+
+        </canvas>
     </div>
 </template>
 
 <script setup>
-import { ref, onMounted, watch } from 'vue';
-import Chart from 'chart.js/auto';
+import { ref, onMounted, watch,computed } from 'vue';
+import Chart, { Colors } from 'chart.js/auto';
 
-// props, variables
 const props = defineProps({
     dataTransaction: { default: []},
     colorsGraph: { default: () => {}},
-    limitWidth: {default: undefined}
+    typeTransaction: {default: false}
 });
 
-const dataLoaded = ref(false);
+const colorsDonut = computed(() => {
+    return (props.typeTransaction) ? [
+            '#EF5A6F', 
+            '#FFEADD', 
+            '#D4BDAC', 
+            '#536493',  
+            '#D4BDAC', 
+        ] 
+            : 
+        [
+            '#E68369', 
+            '#03346E', 
+            '#D4BDAC', 
+            '#E2E2B6',  
+            '#6EACDA', 
+        ];
+});
 
 const canvas = ref(null);
 let chartInstance = null;
 
-// life cycle, fonctions
 onMounted(() => {
-    const gradient = canvas.value.getContext('2d').createLinearGradient(0, 0, 0, 400);
+    const gradient = canvas.value.getContext('2d').createLinearGradient(0, 0, 0, 300);
     gradient.addColorStop(0, props.colorsGraph.color1);
     gradient.addColorStop(1, props.colorsGraph.color2);
-
+    
     chartInstance = new Chart(canvas.value, {
-        type: 'bar',
+        type: 'doughnut',
         data: {
-            labels: [],
             datasets: [{
-                backgroundColor: gradient,
-                borderColor: props.colorsGraph.borderColor,
                 borderWidth: 1.5,
                 fill: true,
                 label: 'Graphique',
                 data: [],
-                tension: 0.3,
-                barThickness: props.limitWidth
+                tension: 0.3
             }],
         },
         options: getChartOptions()
     });
 
-    dataLoaded.value = true;
+    
 });
-
 
 watch(() => props.dataTransaction, (newData) => {
     updateChartData(chartInstance, newData);
@@ -57,14 +68,13 @@ function updateChartData(chart, newData) {
     if (!chartInstance) return;  
 
     const ctx = canvas.value.getContext('2d');
-    const gradient = ctx.createLinearGradient(0, 0, 0, 400);
+    const gradient = ctx.createLinearGradient(0, 0, 0, 300);
     gradient.addColorStop(0, props.colorsGraph.color1);
     gradient.addColorStop(1, props.colorsGraph.color2);
 
     chartInstance.data.datasets.forEach((dataset) => {
         dataset.borderColor = 'white';
-        //dataset.borderColor = props.colorsGraph.borderColor;
-        dataset.backgroundColor = gradient;
+        dataset.backgroundColor = colorsDonut.value;
     });
     
     chart.data.labels = newData.map(row => row.labels);
@@ -80,11 +90,23 @@ function getChartOptions() {
         responsive: true,
         maintainAspectRatio: false,
         plugins: {
-            legend: { display: false },
+            legend: {
+                display: true,
+                position: 'left',
+                labels: {
+                    boxWidth: 50, 
+                    padding: 30, 
+                    color: 'white',
+                    borderWidth: 1,
+                    font: {
+                        size: 15,
+                    },
+                },
+            },
             tooltip: {
                 displayColors: false,
                 callbacks: {
-                    label: function(tooltipItem) {
+                    label: function(tooltipItem) {  
                         return "Montant: " + tooltipItem.raw + ' €';
                     }
                 }
@@ -92,16 +114,16 @@ function getChartOptions() {
         },
         scales: {
             x: {
+                display: false,
                 grid: { display: true, color: '' },
                 ticks: { stepSize: 5, color: 'white' },
             },
             y: {
                 beginAtZero: true,
-                
                 ticks: {
                     stepSize: 0,
                     color: 'white',
-                    callback: value => `${value} €`
+                    callback: value => ``
                 },
                 grid: {
                     display: true,

@@ -8,12 +8,8 @@
     --headerWidth: 60px; 
 }
 
-.apexcharts-yaxis-label {
-    transform: translateX(-10px); /* Déplace tous les labels de l'axe Y vers la gauche */
-}
-
-.apexcharts-menu {
-    color: #ff4560; /* Couleur du texte */
+.canvas {
+    color: white !important;
 }
 
 /* Pour gérer les autocomplétion de texte qui changent de couleurs */

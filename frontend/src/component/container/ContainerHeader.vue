@@ -3,14 +3,13 @@
         ref="headerRef" 
         :class="`font-main-font flex md:flex-col items-center
         w-full md:w-header-width md:h-[calc(100vh-(40px))] h-[50px]
-        md:top-top-Header bottom-0 md:left-top-Header fixed 
+        md:top-top-Header bottom-0 md:left-[20px] xl:left-[30px] fixed 
         bg-header-gradient md:rounded-md 
         shadow-black shadow-custom-main
         ${extendHeader} z-10 md:max-h-[calc(100vh-(40px))] max-h-none md:overflow-y-auto`"
             @mouseenter="isHovered = true"
             @mouseleave="isHovered = false"
         >
-        
         
         <div 
             v-show="!isMobile" 
@@ -20,8 +19,12 @@
                 </div>
                 <div>
                     <TransitionOpacity v-if="!isMobile" :durationIn="'duration-300'" :durationOut="'duration-0'">
-                        <p class="flex absolute w-[140px] right-[0px] top-[50%] transform -translate-y-1/2 
-                                pl-3 text-white font-light" v-if="isHovered && isTextIconsVisible">Squirrel Stash</p>
+                        <p 
+                            v-if="isHovered && isTextIconsVisible"
+                            class="flex absolute w-[140px] right-[0px] top-[50%] transform -translate-y-1/2 
+                            pl-3 text-white font-light" 
+                        >
+                        Squirrel Stash</p>
                     </TransitionOpacity>
                 </div>
         
@@ -108,9 +111,9 @@
 
     // variables, props, ...
     const dataListPage1 = [
-        { Component: IconDashboard, link:'/tableau-de-bord', page: 'tableau-de-bord', text: 'Tableau de bord' },
-        { Component: IconPurchases, link:'/historique-transactions',page: 'historique-transactions', text: 'Historique' },
-        { Component: IconGraph, link:'',page: '', text: 'Graphiques' },
+        { Component: IconDashboard, link:'/tableau-de-bord', page: 'tableau-de-bord', text:'Tableau de bord'},
+        { Component: IconGraph, link:'/recap-annuel',page:'recap-annuel',text: 'Recap Annuel' },
+        { Component: IconPurchases, link:'/historique-transactions',page:'historique-transactions', text:'Historique'},
         { Component: IconUser, link:'/utilisateur', page: 'utilisateur', text: 'Utilisateur' },
     ];
 
@@ -121,8 +124,7 @@
     ];
 
     const iconsStyle = setSvgConfig({width:'25px', fill:'white'});
-    
-    const logoStyle = setSvgConfig({width:'50px', fill:'white'});
+    const logoStyle = setSvgConfig({width:'45px', fill:'white'});
 
     const classTranslateY = classTransitionHover('translateY');
     const classTranslateWidth = classTransitionHover('extendHeader');
@@ -193,8 +195,8 @@
                 router.push('/historique-transactions');
                 break;
             }
-            case 'historique-transactions' : {
-                router.push('/historique-transactions');
+            case 'recap-annuel' : {
+                router.push('/recap-annuel');
                 break;
             }
             case 'utilisateur' : {

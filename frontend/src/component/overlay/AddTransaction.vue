@@ -2,15 +2,17 @@
     <div>
         <div class="fixed bottom-[-2px] sm:bottom-[25px] left-1/2 -translate-x-1/2 -translate-y-1/2  
             md:relative md:translate-x-0 sm:translate-y-0 md:bottom-auto md:left-auto
-            z-20 min-w-[197px] rounded-[3px] md:shadow-black md:shadow-custom-main ">
+            z-20 min-w-[197px] rounded-[3px] md:shadow-black md:shadow-custom-main">
+
             <div class="bg-transparent md:bg-main-gradient border-none md:border-solid gradient-border">
                 <div class="flex justify-center md:justify-between items-center px-2 min-h-[42px] min-w-[214px]">
-                    <p v-show="!isMobile" class="text-white flex font-light w-full justify-center cursor-pointer " 
-                    @click="toggleMenu('openNClose')">Ajouter un achat</p>
+                    <p v-show="!isMobile" class="text-white flex font-light w-full justify-center cursor-pointer" 
+                    @click="toggleMenu('openOverlay')">Ajouter un achat</p>
                     <div class="flex py-[2px]">
                         <IconAddPurchase 
+                            @click="toggleMenu('openOverlay')"
                             class="p-[1px] bg-gradient-blue rounded-full md:rounded-md right-[100px] top-[50vh]
-                            z-10 shadow-black shadow-custom-main trigger-add-purchase" 
+                            z-10 shadow-black shadow-custom-main trigger-add-purchase cursor-pointer" 
                             :svg="handleStyleIcon"
                         />
                     </div>
@@ -151,7 +153,7 @@
 
     async function toggleMenu(request) {
         switch(request) {
-            case 'openNClose' : {
+            case 'openOverlay' : {
                 submitError.value = null;
                 typeTransaction.value = false;
                 resetInputs();

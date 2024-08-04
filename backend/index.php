@@ -65,7 +65,10 @@
                         getControllerMain()->getControllerStatistic()->authorizePage();
                         break;
                     }
-                    
+                    case 'pageAnnualSummary': {
+                        getControllerMain()->getControllerStatistic()->authorizePage();
+                        break;
+                    }
                     default: {
                         getControllerMain()->sendJsonResponse(['message' => 'Page not found', 'status' => 404]);
                         break;
@@ -133,7 +136,31 @@
                         getControllerMain()->getControllerUser()->fetchIsValidResetPassToken();
                         break;
                     }
-                   
+                    case 'getYearListTrsByMonth' : {
+                        getControllerMain()->getControllerStatistic()->getYearListTrsByMonth();
+                        break;
+                    }
+                    case 'getTotalTrsByYear' : {
+                        getControllerMain()->getControllerStatistic()->getTotalTrsByYear();
+                        break;
+                    }
+                    case 'getBiggestTrsByYear' : {
+                        getControllerMain()->getControllerStatistic()->getBiggestTrsByYear();
+                        break;
+                    }
+                    case 'getBiggestMonthByYear' : {
+                        getControllerMain()->getControllerStatistic()->getBiggestMonthByYear();
+                        break;
+                    }
+                    case 'getYearListTrsByCategories' : {
+                        getControllerMain()->getControllerStatistic()->getYearListTrsByCategories();
+                        break;
+                    }
+                    case 'getTopYearCategories' : {
+                        getControllerMain()->getControllerStatistic()->getTopYearCategories();
+                        break;
+                    }
+
                 }
             }
         }

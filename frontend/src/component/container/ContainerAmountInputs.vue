@@ -1,6 +1,6 @@
 <template>
-    <div class="flex flex-col w-1/2 min-w-[250px] lg:min-w-[350px] md:w-1/4">
-        <label class="text-white font-light" for="input-amount-min">Montant minimum</label>
+    <div class="flex flex-col w-1/3 min-w-[280px] lg:min-w-[300px] 2xl:min-w-[300px] md:w-1/4">
+        <label class="pl-2 text-white font-light" for="input-amount-min">Montant minimum</label>
         <InputBase 
             iconName="Amount"
             v-model="searchAmountMin" 
@@ -12,8 +12,8 @@
         />
     </div>
 
-    <div class="flex flex-col w-1/2 min-w-[250px] lg:min-w-[350px] md:w-1/4">
-        <label class="text-white font-light" for="input-amount-max">Montant maximum</label>
+    <div class="flex flex-col w-1/3 min-w-[280px] lg:min-w-[300px] 2xl:min-w-[300px] md:w-1/4">
+        <label class="pl-2 text-white font-light" for="input-amount-max">Montant maximum</label>
         <InputBase 
             iconName="Amount"
             v-model="searchAmountMax" 

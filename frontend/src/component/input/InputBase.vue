@@ -1,25 +1,25 @@
 <template>
-    <div class="bg-second-bg z-10">
-        <div 
-            :class="`pl-1 flex items-center py-[1px] rounded-sm ${border} transition-all duration-500 ${colorBorder} text-white font-light`">
-            <div v-show="iconName"> 
-                <UseIconLoader :nameIcon="iconName" :svg="{width:'20px', fill:'rgba(255, 255, 255, 1)'}"  />
-            </div>
+    <div 
+        :class="`bg-second-bg z-10 px-2 flex border-2 items-center py-[1px] rounded-lg mt-[2px]
+        ${border} transition-all duration-500 ${colorBorder} text-white font-light`">
+        <div v-show="iconName"> 
+            <UseIconLoader :nameIcon="iconName" :svg="{width:'20px', fill:'rgba(255, 255, 255, 1)'}"  />
+        </div>
 
-            <input
-                @input="onInput"
-                @focus="isInputFocused = true" 
-                @blur="isInputFocused = false"
-                :class="`p-1 pl-1 bg-second-bg text-[15px] ${props.extraClass} transition-colors duration-500 ${colorValidationInput} focus:outline-none ${width} .webkit-white w-full `"
-                :value="inputValue"
-                :type="type"
-                :placeholder="placeholder"
-                :id="props.id"
-            >
-       
-            <div :class="`transition-colors duration-500 ${colorValidationInput} mx-1 `">
-                {{ iconValidationInput }}
-            </div>
+        <input
+            @input="onInput"
+            @focus="isInputFocused = true" 
+            @blur="isInputFocused = false"
+            :class="`p-1 pl-1 bg-second-bg text-[15px] ${props.extraClass} transition-colors 
+            duration-500 ${colorValidationInput} focus:outline-none ${width} .webkit-white w-full `"
+            :value="inputValue"
+            :type="type"
+            :placeholder="placeholder"
+            :id="props.id"
+        >
+    
+        <div :class="`transition-colors duration-500 ${colorValidationInput} mx-1 `">
+            {{ iconValidationInput }}
         </div>
     </div>
     <TransitionOpacity duration-in="duration-150" duration-out="duration-0">
@@ -98,7 +98,7 @@
             }
             return "border-custom-blue";
         }
-        return (isInputFocused.value) ? "border-custom-blue" : "hover:border-custom-blue border-custom-gray-2";
+        return (isInputFocused.value) ? "border-custom-blue" : "hover:border-custom-blue border-slate-600";
     });
 
     const colorValidationInput = computed(() => {

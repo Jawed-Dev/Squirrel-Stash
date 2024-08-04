@@ -1,6 +1,6 @@
 <template>
-    <div class="flex flex-col w-1/2 min-w-[250px] lg:min-w-[350px] md:w-1/4">
-        <label class="text-white font-light" for="input-category">Catégorie</label>
+    <div class="flex flex-col w-1/3 min-w-[280px] lg:min-w-[300px] 2xl:min-w-[300px] md:w-1/4">
+        <label class="pl-2 text-white font-light" for="input-category">Catégorie</label>
         <InputBase 
             iconName="Category"
             v-model="searchCategory" 

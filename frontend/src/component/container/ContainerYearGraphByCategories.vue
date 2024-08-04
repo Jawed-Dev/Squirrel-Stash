@@ -1,26 +1,20 @@
 <template>
-    <div class="pl-3 bg-main-gradient text-white rounded-md gradient-border relative">
-        <h2 class="pb-2 pt-3 text-xl font-extralight pr-8 sm:pb-0">{{(!typeTransaction) ? 'Achats du mois' : 'Prélèvements du mois'}}</h2>
+    <div class="pl-3 bg-main-gradient text-white rounded-md gradient-border ">
+        <h2 class="pb-2 pt-3 text-xl font-extralight pr-8 sm:pb-0">{{(!typeTransaction) ? 'Achats du mois' : 'Transactions du mois'}}</h2>
         <div class="w-full flex justify-center">
             <div class="w-1/6 min-w-[250px]">
                 <ToggleButton v-model:typeTransaction="typeTransaction" :text1="'Achats'" :text2="'Prélèvements'" />
             </div>
         </div>
-        <useGraphBar :colorsGraph="(!typeTransaction) ? colorPurchases : colorReccurings" 
-        :dataTransaction="listTransactions" />
-        <!-- <div 
-            v-show="isDataEmpty" 
-            class="absolute text-white opacity-80 top-1/2 left-1/2 transform translate-x-1/2 translate-y-1/2">
-            <p class=" text-xl w-full">Aucune donnée</p>
-        </div> -->        
+        <useGraphLine :colorsGraph="(!typeTransaction) ? colorPurchases : colorReccurings" 
+        :dataTransaction="(!typeTransaction) ? transactionsMonthByDay.listPurchases : transactionsMonthByDay.listRecurrings" />
     </div>
-
 </template>
 
 <script setup>
-    import { ref, watch, computed } from 'vue';
+    import { ref, watch } from 'vue';
     import ToggleButton from '@/component/button/ToggleButton.vue';
-    import useGraphBar from '@/composable/useGraphBar.vue';
+    import useGraphLine from '@/composable/useGraphLine.vue';
     import { storeTrsMonthByDay, storeDateSelected } from '@/storePinia/useStoreDashboard';
     import { updateListTrsMonthByDay } from '@/storePinia/useUpdateStoreByBackend';
     
@@ -42,17 +36,6 @@
         borderColor: '#ec250d'
     }
     // life cycle / functions
-    const isDataEmpty = computed(() => {
-        let isAllDataEmpty = true;
-        listTransactions.value.forEach(data => {
-            if (data.total_amount > 0) isAllDataEmpty = false;
-        });
-        return isAllDataEmpty;
-    });
-
-    const listTransactions = computed(() => {
-        return (!typeTransaction.value) ? transactionsMonthByDay.listPurchases : transactionsMonthByDay.listRecurrings;
-    })
 
     watch( () => [dateSelected.month, dateSelected.year], async ([newMonth, newYear]) => {
         updateListTrsMonthByDay(newMonth, newYear, 'purchase');
