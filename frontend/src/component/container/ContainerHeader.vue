@@ -95,7 +95,7 @@
     import { storeAuthTOken } from '@/storePinia/useStoreDashboard';
     import TransitionOpacity from '@/component/transition/TransitionOpacity.vue';  
     import { classTransitionHover } from '@/composable/useClassTransitionHover';
-    import { disconnectUser } from '@/composable/useBackendActionData';
+    //import { disconnectUser } from '@/composable/useBackendActionData';
     import { setSvgConfig } from '@/svg/svgConfig';
     import LogoMain from '@/component/svgs/LogoMain.vue';
     import LogoMainPicOnly from '@/component/svgs/LogoMainPicOnly.vue';
@@ -214,7 +214,8 @@
             case 'disconnect' : {
                 const authToken = storeAuthTOken();
                 authToken.token = '';
-                await disconnectUser();
+                localStorage.removeItem('authToken');
+                //await disconnectUser();
                 router.push('/connexion');
                 break;
             }

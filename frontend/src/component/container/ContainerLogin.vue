@@ -19,6 +19,7 @@
                 <div>
                     <label class="text-white font-light" for="login-mail">Adresse email</label>
                     <InputBase 
+                        autocomplete="email"
                         id="login-mail" 
                         iconName="Email"
                         v-model="email" 

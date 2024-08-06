@@ -40,7 +40,7 @@
     import { defineAsyncComponent, reactive } from 'vue';
     import { useRouter } from 'vue-router';
     import { storeAuthTOken } from '@/storePinia/useStoreDashboard';
-    import { disconnectUser } from '@/composable/useBackendActionData';
+    //import { disconnectUser } from '@/composable/useBackendActionData';
     import { setSvgConfig } from '@/svg/svgConfig';
     import TransitionOpacity from '@/component/transition/TransitionOpacity.vue';
 
@@ -92,7 +92,7 @@
             case 'déconnexion' : {
                 const authToken = storeAuthTOken();
                 authToken.token = '';
-                await disconnectUser();
+                //await disconnectUser();
                 router.push('/connexion');
                 break;
             }

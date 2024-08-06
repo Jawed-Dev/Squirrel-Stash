@@ -87,10 +87,6 @@
                         break;
                     }
                     // user
-                    case 'getNewAccessToken': {
-                        $refreshToken = getControllerMain()->getControllerUser()->updateAccessToken();
-                        break;
-                    }
                     case 'getStateSession' : {
                         getControllerMain()->getControllerUser()->getStateSession();
                         break;
@@ -170,10 +166,10 @@
             if(!empty($_GET['actionData'])) {
                 switch($_GET['actionData']) {
 
-                    case 'disconnectUser': {
-                        getControllerMain()->getControllerUser()->disconnectUser();
-                        break;
-                    }
+                    // case 'disconnectUser': {
+                    //     getControllerMain()->getControllerUser()->disconnectUser();
+                    //     break;
+                    // }
                     case 'createAccount': {
                         getControllerMain()->getControllerUser()->fetchInsertUser();
                         break;

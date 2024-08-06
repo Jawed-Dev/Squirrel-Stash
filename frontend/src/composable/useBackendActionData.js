@@ -33,17 +33,16 @@ function redirectDashboard() {
     window.location.href = '/tableau-de-bord';
 }
 
-export async function disconnectUser() {
-    const localToken = getLStorageAuthToken();
-    const response = await useConfigFetchActionData ({
-        request: 'disconnectUser',
-        method: 'POST',
-        dataBody: 'none',
-        token: localToken
-    });
-    return response;
-}
-
+// export async function disconnectUser() {
+//     const localToken = getLStorageAuthToken();
+//     const response = await useConfigFetchActionData ({
+//         request: 'disconnectUser',
+//         method: 'POST',
+//         dataBody: 'none',
+//         token: localToken
+//     });
+//     return response;
+// }
 
 export async function updatePasswordByToken(params) {
     notAuthRequired();

@@ -32,8 +32,6 @@
         function sendUpdateMail();
         function updateEmail();
         function sendEmailToSupport();
-        function disconnectUser();
-        function updateAccessToken();
         
         // Prepare pages
         function authorizePage();
@@ -78,11 +76,6 @@
             return FRONT_BASE_URL."/reinitialiser-email?token=".$token;
         }
 
-        public function disconnectUser() {
-            $isSuccessRequest = $this->getControllerMain()->destroyCookieRefreshToken();
-            $this->getViewUser()->renderJson(['successRequest' => $isSuccessRequest]);
-        }
-
         public function getStateSession() {
             $decodedJwt = $this->getControllerMain()->getHandlerJwt()->getJwtFromHeader();
             $isSessionActive = $this->isSessionActive($decodedJwt);
@@ -92,15 +85,7 @@
         public function isSessionActive($decodedJwt) {
             if(!$decodedJwt) return false;
             $isValidDecodedJwt = $this->getControllerMain()->getHandlerJwt()->isValidTokenJwt($decodedJwt);
-            $tokenRefresh = null;
-
-            if(!$isValidDecodedJwt) {
-                $tokenRefresh = $this->getControllerMain()->getHandlerJwt()->getNewAccessToken();
-                if(!$tokenRefresh) return false;
-
-                $decodedTokenRefresh = $this->getControllerMain()->getHandlerJwt()->decodeJwt($tokenRefresh);
-                $decodedJwt = $decodedTokenRefresh;
-            }
+            if(!$isValidDecodedJwt) return false;
 
             $userId = $this->getUserIdFromJwt($decodedJwt);
             $db = $this->getControllerMain()->getDatabase();
@@ -117,13 +102,8 @@
             $db = $dataRequest['dataBase'];
             $userId = $this->getModelUser()->getUserIdIfValidLogin($db, $dataRequest['bodyData']);
             if(!$userId) return $this->getViewUser()->renderJson(['tokenJwt' => null]);
-            $choiceStayConnected = $dataRequest['bodyData']['stayConnected'];
-            $this->getControllerMain()->createStayConnectCookie($choiceStayConnected);
-
-            $tokenJwt = $this->getControllerMain()->getHandlerJwt()->createTokenJwt($userId);
-            $tokenRefreshJwt = $this->getControllerMain()->getHandlerJwt()->createTokenJwt($userId);
-            
-            $this->getControllerMain()->createRefreshTokenCookie($tokenRefreshJwt);
+            $choiceStayConnect = $dataRequest['bodyData']['stayConnected'];
+            $tokenJwt = $this->getControllerMain()->getHandlerJwt()->createTokenJwt($userId, $choiceStayConnect);
             $this->getViewUser()->renderJson(['tokenJwt' => $tokenJwt]);
         }
 
@@ -148,11 +128,6 @@
             $successReq = $this->getModelUser()->insertUser($db, $dataRequest['bodyData']);
             // log ici ?
             $this->getViewUser()->renderJson(['isSuccessRequest' => $successReq]);
-        }
-
-        public function updateAccessToken() {
-            $refreshToken = getControllerMain()->getHandlerJwt()->getNewAccessToken();
-            getControllerMain()->sendJsonResponse(['refreshToken' => $refreshToken]);
         }
 
         public function fetchIsValidResetPassToken() {

@@ -35,12 +35,7 @@
         // Handler Error
         function getHandlerError();
         function getHandlerValidFormat();
-        function validateDataForController($params);
-        //function prepareDataForController($requireUserId = true, $requireBodyData = true );
-        // cookies
-        function createStayConnectCookie($stayConnect = false);
-        function createRefreshTokenCookie($tokenJwt);
-        
+        function validateDataForController($params);        
         // Prepare pages
         function authorizePage();
     }
@@ -201,37 +196,6 @@
                 if ($isAnyError) return throw new Exception('Erreurs dans la requête 2.');
             }
             return $dataRequest;
-        }
-
-        public function createStayConnectCookie($stayConnect = false) {
-            $valueCookie = ($stayConnect) ? 1 : 0;
-            setcookie('stayConnected', $valueCookie, [
-                'expires' => time() + TIME_EXPIRE_TIME_STAY_CONNECTED, 
-                'httponly' => true,
-                'secure' => true,
-                'samesite' => 'Strict'
-            ]);
-            $_COOKIE['stayConnected'] = $stayConnect;
-        }
-
-        public function createRefreshTokenCookie($tokenJwt) {
-            setcookie('refreshToken', $tokenJwt, [
-                'expires' => time() + TIME_EXPIRE_TIME_STAY_CONNECTED, 
-                'httponly' => true,
-                'secure' => true,
-                'samesite' => 'Strict'
-            ]);
-            $_COOKIE['refreshToken'] = $tokenJwt;
-        }
-
-        public function destroyCookieRefreshToken() {
-            setcookie('refreshToken', '', [
-                'expires' => time() - 1,
-                'secure' => true,         
-                'httponly' => true,         
-                'samesite' => 'Strict'  
-            ]);
-            $_COOKIE['refreshToken'] = '';
         }
 
         public function sendJsonResponse($data) {

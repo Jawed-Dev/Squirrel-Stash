@@ -46,9 +46,7 @@ router.beforeEach(async (to, from, next) => {
     } 
     let localToken = getLStorageAuthToken();
     if(!localToken) {
-      const refreshToken = await getNewAccessToken();
-      setLStorageAuthToken(refreshToken);
-      localToken = refreshToken;
+      console.log('test1');
     }
 
     const dataPage = await useConfigFetchGetPage(currentPage, localToken);

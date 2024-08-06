@@ -15,7 +15,6 @@
         function isValidTokenJwt($decodedJwt);
         function decodeJwt($tokenJwt);
         function getJwtFromHeader();
-        function getNewAccessToken();
     }
 
     class HandlerJwt implements I_HandlerJwt {
@@ -29,13 +28,15 @@
             if (!$this->ControllerMain) $this->ControllerMain = new ControllerMain();
             return $this->ControllerMain;
         }
+
         // JWT Functions 
-        public function createTokenJwt($userId) {
+        public function createTokenJwt($userId, $stayConnect = false) {
             $key = JWT_SECRET_KEY; 
             $issuedAt = time();
-            $timeExpiration = TIME_EXPIRE_TIME_ACCESS_JWT;
+            $timeExpiration = ($stayConnect) ? TIME_EXPIRE_TIME_STAY_CONNECT : TIME_EXPIRE_TIME_REFRESH_JWT;
             $expirationTime = $issuedAt + $timeExpiration;  
             $issuer = BASE_URL;
+
             //$jti = bin2hex(random_bytes(16)); 
             $payload = array(
                 'userId' => $userId,
@@ -52,25 +53,6 @@
                 // log
                 return throw new Exception('Erreurs de données.');
             }
-        }
-
-        public function getNewAccessToken() {
-            if(!empty($_COOKIE['refreshToken'])) {
-                $currentRefreshToken = $_COOKIE['refreshToken'];
-                $decodedRefreshJwt = $this->getControllerMain()->getHandlerJwt()->decodeJwt($currentRefreshToken);
-                $isValidToken = $this->getControllerMain()->getHandlerJwt()->isValidTokenJwt($decodedRefreshJwt);
-                if(!$isValidToken) return throw new Error('Erreur de donnée');
-                $userId = $this->getControllerMain()->getControllerUser()->getUserIdFromJwt($decodedRefreshJwt);
-                $newTokenJwt = $this->getControllerMain()->getHandlerJwt()->createTokenJwt($userId);
-
-                //$tokenJwt = $newTokenJwt;
-                //$newTokenRefreshJwt = $this->getControllerMain()->getHandlerJwt()->createRefreshTokenJwt($userId);
-                //$this->getControllerMain()->getHandlerJwt()->createRefreshTokenCookie($newTokenRefreshJwt);
-
-                if(!$newTokenJwt) return throw new Error('Erreur de donnée');
-                return $newTokenJwt;
-            }
-            return null;
         }
 
         public function decodeJwt($tokenJwt) {
