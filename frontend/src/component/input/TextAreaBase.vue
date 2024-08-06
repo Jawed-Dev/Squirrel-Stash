@@ -1,5 +1,6 @@
 <template>
-    <div :class="` ${colorBorder} bg-second-bg  transition-all duration-500 flex items-center w-full p-1 border rounded-sm text-white font-light`">
+    <div :class="` ${colorBorder} bg-second-bg transition-all duration-500 flex 
+    items-center w-full p-1 border-2 rounded-lg text-white font-light`">
         <textarea 
             @input="onInput" 
             :class="`${props.extraClass} bg-transparent pb-28 pl-1 focus:outline-none w-full ${width}`"
@@ -31,7 +32,7 @@ const model = defineModel();
 
 const colorBorder = computed(() => {
     if(props.borderHidden) return '';
-    return (props.modelValue) ? "border-custom-blue" : "hover:border-custom-blue border-custom-gray-2";
+    return (props.modelValue) ? "border-custom-blue" : "hover:border-custom-blue border-slate-600";
 });
 
 function onInput(event) {

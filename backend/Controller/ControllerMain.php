@@ -38,8 +38,8 @@
         function validateDataForController($params);
         //function prepareDataForController($requireUserId = true, $requireBodyData = true );
         // cookies
-        function createCookieStayConnected($stayConnect = false);
-        function createCookieByRefreshToken($tokenJwt);
+        function createStayConnectCookie($stayConnect = false);
+        function createRefreshTokenCookie($tokenJwt);
         
         // Prepare pages
         function authorizePage();
@@ -203,7 +203,7 @@
             return $dataRequest;
         }
 
-        public function createCookieStayConnected($stayConnect = false) {
+        public function createStayConnectCookie($stayConnect = false) {
             $valueCookie = ($stayConnect) ? 1 : 0;
             setcookie('stayConnected', $valueCookie, [
                 'expires' => time() + TIME_EXPIRE_TIME_STAY_CONNECTED, 
@@ -214,7 +214,7 @@
             $_COOKIE['stayConnected'] = $stayConnect;
         }
 
-        public function createCookieByRefreshToken($tokenJwt) {
+        public function createRefreshTokenCookie($tokenJwt) {
             setcookie('refreshToken', $tokenJwt, [
                 'expires' => time() + TIME_EXPIRE_TIME_STAY_CONNECTED, 
                 'httponly' => true,

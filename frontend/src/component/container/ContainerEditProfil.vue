@@ -5,27 +5,26 @@
             @click="toggleParamsSearch"    
             class="absolute w-full mt-5 shadow-black shadow-custom-main bg-gradient-x-blue py-2 pl-3
                 font-light flex justify-start gap-2 text-[18px] text-white 
-                hover:shadow-main-blue cursor-pointer">
+                hover:shadow-slate-500 cursor-pointer">
 
             <UseIconLoader :svg=iconConfig :nameIcon="typeIconShowParams"  />
             <h1>Gestion de profil</h1>
-            
         </div>
 
-        <div :class="`w-full gradient-border overflow-hidden ${paddingForMenuOpen}`">
+        <div :class="`gradient-border overflow-hidden ${paddingForMenuOpen}`">
             
             <form class="mt-16" @submit.prevent="handleSubmit"> 
                 <TransitionAxeY>
                     <div v-show="toggleShowParams">
                         <div class="xl:flex w-full">
 
-                            <div class="xl:w-[40%] 2xl:w-[45%] flex justify-center">
-                                <ImageForgotPass class="w-full" :svg="imageConfig" />
+                            <div class="xl:w-[40%] 2xl:w-[45%] flex justify-center items-center">
+                                <ImageEditProfil class="pt-5 w-full" :svg="imageConfig" />
                             </div>
 
                             <div class="grow flex flex-col justify-center">
                                 <!-- Errors -->
-                                <div class="relative pb-5">
+                                <div class="relative">
                                     <p class="text-sm font-light absolute text-red-300">{{ textError }}</p>
                                 </div>
                 
@@ -111,16 +110,15 @@
                                                 :hideAnimation="true"
                                             />
                                         </div>
-                                        <div class=" flex flex-col w-1/3 min-w-[280px] lg:min-w-[300px] 2xl:min-w-[300px] md:w-1/4"></div>
+                                        <div class="flex flex-col w-1/3 min-w-[280px] lg:min-w-[300px] 2xl:min-w-[300px] md:w-1/4"></div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         
                         <div class="w-full flex justify-center mt-12 my-3">
-                            <div class="shadow-black shadow-custom-main min-w-[200px] w-1/4 md:w-1/5 overflow-x-hidden text-ellipsis">
-                                <button class="w-full rounded-sm py-2 bg-gradient-blue rounded-br-[3px] font-light">Editer
-                                </button>
+                            <div class="shadow-black shadow-custom-main min-w-[250px] w-1/4 md:w-1/5 overflow-x-hidden text-ellipsis">
+                                <button class="w-full rounded-sm py-2 bg-gradient-blue rounded-br-[3px] font-light">Editer</button>
                             </div>
                         </div>
                     </div>
@@ -145,8 +143,9 @@
     import TransitionPopUp from '@/component/transition/TransitionPopUp.vue';
     import TransitionAxeY from '@/component/transition/TransitionAxeY.vue';
     import UseIconLoader from '@/composable/useIconLoader.vue';
-    import ImageForgotPass from '@/component//svgs/ImageForgotPass.vue';
+    import ImageEditProfil from '@/component/svgs/ImageEditProfil.vue';
     import { setSvgConfig } from '@/svg/svgConfig';
+
     
     const OverlaySuccessAction = defineAsyncComponent(() => import('@/component/overlay/OverlaySuccessAction.vue'));
 

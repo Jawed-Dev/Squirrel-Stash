@@ -1,24 +1,28 @@
 <template>
     <div class="font-main-font flex flex-col bg-main-bg w-full pb-[calc(50px)] md:pb-0">
-        <div class="mx-1 md:ml-[calc(20px+75px+20px)] xl:ml-[calc(30px+75px+30px)] md:mr-[20px] xl:mr-[30px] flex flex-col mt-5">
+        <div class="mx-1 md:ml-[calc(20px+65px+20px)] xl:ml-[calc(30px+75px+30px)] md:mr-[20px] xl:mr-[30px] flex flex-col mt-5">
             <h1 class="text-2xl font-light text-white">Économie du mois</h1>
             <p class="font-light text-white mt-2 pr-2">Bonjour {{ firstNameUser }}, voici votre résumé du mois.</p> 
 
-            <ContainerStatMonth 
-                :isIconActive="true" nameIcon="target" bgIcon="bg-gradient-blue" :svg="svgConfig('target', 'bg-gradient-blue')" 
-                :colorValue="'text-white'" 
-                :amountValue="threshold.amount +' €'" 
-                :nameStat="'Seuil mensuel'" 
-                :width="'lg:w-1/4 md:min-w-[calc(197px*2+8px)] sm:w-full'"
-            />
+            <div class="flex gap-5 flex-col lg:flex-row lg:justify-between items-center w-full">
+                <section class="flex w-full flex-col justify-between lg:mt-5 order-2 lg:order-1">
+                    <div class="flex flex-col gap-5 sm:gap-2 sm:flex-row sm:w-full lg:w-1/4 lg:mb-0">
+                        <SelectMonth class="min-h-[42px] w-full md:min-w-[200px]" v-model="dateSelected.month" :listSelect="monthNames" />
+                        <SelectYear class="min-h-[42px] w-full sm:min-w-[200px]" v-model="dateSelected.year" :listSelect="getAvailableYear()" />
+                    </div>
+                    <AddTransaction/>   
+                </section>
 
-            <section class="flex flex-col lg:flex-row justify-between pt-5">
-                <div class="flex flex-col gap-5 md:mb-5 sm:gap-2 sm:flex-row lg:w-1/4 sm:w-full lg:mb-0">
-                    <SelectMonth class="min-h-[42px] w-full sm:min-w-[197px]" v-model="dateSelected.month" :listSelect="monthNames" />
-                    <SelectYear class="min-h-[42px] w-full sm:min-w-[197px]" v-model="dateSelected.year" :listSelect="getAvailableYear()" />
-                </div>
-                <AddTransaction/>   
-            </section>
+                <ContainerStatMonth 
+                    class="order-1 lg:order-2"
+                    :isIconActive="true" nameIcon="target" bgIcon="bg-gradient-blue" 
+                    :colorValue="'text-white'" 
+                    :amountValue="threshold.amount +' €'" 
+                    :nameStat="'Seuil mensuel'" 
+                    :width="'mt-5 w-full lg:min-w-[calc(200px*2+8px)] lg:w-1/4'"
+                />
+    
+            </div>
 
             <section class="w-full mt-custom-margin-main rounded-[3px] overflow-hidden shadow-black shadow-custom-main"> 
                 <ContainerTransactionsMonth />
@@ -43,9 +47,9 @@
                 </div>
             </section>
 
-            <section class="flex xl:gap-5 flex-col xl:flex-row justify-between">
-                <ContainerListTransactions v-model="topTransactions.typeTrsPurchases" class="w-full" />
-                <ContainerListTransactions v-model="topTransactions.typeTrsRecurrings" class="w-full hidden xl:flex" />
+            <section class="flex xl:gap-5 flex-col xl:flex-row justify-between ">
+                <ContainerListTransactions v-model="topTransactions.typeTrsPurchases" class="w-full h-fit" />
+                <ContainerListTransactions v-model="topTransactions.typeTrsRecurrings" class="w-full hidden xl:flex h-fit" />
             </section>
         </div>
     </div>
@@ -122,16 +126,4 @@
         const nameBiggestPurch = statisticDetails?.biggestRecurring?.transaction_category;
         return (nameBiggestPurch) ? nameBiggestPurch : 'Aucune donnée';
     });
-
-    // functions
-    function svgConfig(nameSvg, color, width = '3vw') {
-        return {
-            name: nameSvg,
-            color: color,
-            width: width,
-            height: width,
-            fill: 'white'
-        }
-    }
-
 </script>

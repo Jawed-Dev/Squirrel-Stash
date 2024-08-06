@@ -4,7 +4,7 @@
             v-if="isOverlayActive" 
             :class="`fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-30 text-white rounded-[3px] 
                 shadow-black shadow-custom-main trigger-edit-transaction bg-main-gradient
-                max-[500px]:w-full sm:w-1/4 min-[500px]:min-w-[500px]`">
+                max-[600px]:w-full sm:w-1/4 min-[600px]:min-w-[600px]`">
 
             <MainContainerSlot 
                 :textBtn1="'Annuler'" :textBtn2="'Modifier'" :titleContainer="(!typeTransaction) ? 'Modifier achat' : 'Modifier prélèvement'" 

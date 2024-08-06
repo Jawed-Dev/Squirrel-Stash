@@ -3,8 +3,8 @@
         <!-- dépenses valeur -->
         <div class="flex items-center flex-col w-full border-b-[1px] border-gray-700">
 
-            <div class="flex justify-center mt-6 min-[500px]:justify-end w-full min-[500px]:mt-2">
-                <div class="w-1/2 min-[500px]:w-[35%] mr-1">
+            <div class="flex justify-center mt-6 min-[620px]:justify-end w-full min-[620px]:mt-5">
+                <div class="w-1/2 min-[620px]:w-[35%] mr-1">
                     <InputBase 
                         extraClass="text-[14px] py-[1px]"
                         v-model="inputDateVal" 
@@ -19,7 +19,7 @@
                 </div>
             </div>
 
-            <div class="w-1/2 mt-4 min-[500px]:mt-0">
+            <div class="w-1/2 mt-4 min-[600px]:mt-3">
                 <div class="w-full">
                     <label for="input-amount-trs" class="pl-2 text-[16px] font-light">Montant</label>
                     <InputBase 
@@ -37,7 +37,7 @@
                 </div>
             </div>
 
-            <div class="w-1/2 flex flex-col mt-4 mb-6">
+            <div class="w-1/2 flex flex-col mt-4 mb-10">
                 <!-- placeholder note -->
                 <div class="w-full">
                     <label for="input-note-trs" class="pl-2 text-[16px] font-light">Note</label>

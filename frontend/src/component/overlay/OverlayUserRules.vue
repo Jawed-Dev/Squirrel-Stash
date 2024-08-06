@@ -7,7 +7,7 @@
             <MainContainerSlot :bgMainBtn="'bg-gradient-blue'" width='w-full'
             :onlyOneBtn="true" :textBtn1="'Fermer'" titleContainer="Conditions d'utilisation de Squirrel Stash" @toggleMenu="toggleMenu">
                 
-            <div class=" max-h-[75vh] overflow-y-auto mt-2">
+            <div class=" max-h-[75vh] overflow-y-auto my-2">
 
                 <div class="px-3 md:px-12 w-full flex justify-center">
     
@@ -15,34 +15,34 @@
                             flex flex-col w-full rounded-[3px] py-5 gap-20">
         
                         <div class="flex flex-col gap-5 w-full">
-                            <h2 class="text-xl">1. Conditions d'Utilisation</h2>
-                            <p class="opacity-90 font-light text">Chez Squirrel Stash, nous nous engageons à fournir un service de qualité tout en respectant les droits de nos utilisateurs. 
+                            <h2 class="text-custom-blue text-xl">1. Conditions d'Utilisation</h2>
+                            <p class="opacity-95 font-light text">Chez Squirrel Stash, nous nous engageons à fournir un service de qualité tout en respectant les droits de nos utilisateurs. 
                                 Ces conditions régissent votre utilisation de notre application et en utilisant notre service, vous acceptez ces termes.</p>
                         </div>
     
                         <div class="flex flex-col gap-5 w-full">
-                            <h2 class="text-xl">2. Accès et utilisation du service</h2>
-                            <p class="opacity-90 font-light text">Vous êtes autorisé à utiliser notre service uniquement conformément à ces conditions et à toute loi applicable. Toute utilisation abusive ou non autorisée est strictement interdite.</p>
+                            <h2 class="text-custom-blue text-xl">2. Accès et utilisation du service</h2>
+                            <p class="opacity-95 font-light text">Vous êtes autorisé à utiliser notre service uniquement conformément à ces conditions et à toute loi applicable. Toute utilisation abusive ou non autorisée est strictement interdite.</p>
                         </div>
     
                         <div class="flex flex-col gap-5 w-full">
-                            <h2 class="text-xl">3. Droits de propriété intellectuelle</h2>
-                            <p class="opacity-90 font-light text">Tous les contenus présents sur l'application, y compris les textes, graphiques, logos, images, ainsi que leur sélection et disposition, sont la propriété de Squirrel Stash ou de ses fournisseurs de contenu et sont protégés par les lois sur la propriété intellectuelle.</p>
+                            <h2 class="text-custom-blue text-xl">3. Droits de propriété intellectuelle</h2>
+                            <p class="opacity-95 font-light text">Tous les contenus présents sur l'application, y compris les textes, graphiques, logos, images, ainsi que leur sélection et disposition, sont la propriété de Squirrel Stash ou de ses fournisseurs de contenu et sont protégés par les lois sur la propriété intellectuelle.</p>
                         </div>
     
                         <div class="flex flex-col gap-5">
-                            <h2 class="text-xl">4. Limitation de responsabilité</h2>
-                            <p class="opacity-90 font-light text">Squirrel Stash ne sera pas responsable des dommages indirects résultant de l'utilisation ou de l'impossibilité d'utiliser notre service.</p>
+                            <h2 class="text-custom-blue text-xl">4. Limitation de responsabilité</h2>
+                            <p class="opacity-95 font-light text">Squirrel Stash ne sera pas responsable des dommages indirects résultant de l'utilisation ou de l'impossibilité d'utiliser notre service.</p>
                         </div>
     
                         <div class="flex flex-col gap-5 w-full">
-                            <h2 class="text-xl">5. Modifications des termes</h2>
-                            <p class="opacity-90 font-light text">Nous nous réservons le droit de modifier ces conditions à tout moment. Votre utilisation continue du service après de telles modifications constitue votre acceptation des nouvelles conditions.</p>
+                            <h2 class="text-custom-blue text-xl">5. Modifications des termes</h2>
+                            <p class="opacity-95 font-light text">Nous nous réservons le droit de modifier ces conditions à tout moment. Votre utilisation continue du service après de telles modifications constitue votre acceptation des nouvelles conditions.</p>
                         </div>
     
                         <div class="flex flex-col gap-5 w-full">
-                            <h2 class="text-xl">6. Contact</h2>
-                            <p class="opacity-90 font-light text">Pour toute question concernant ces conditions, veuillez contacter notre support via la rubrique Support et Aide de l'application.</p>
+                            <h2 class="text-custom-blue text-xl">6. Contact</h2>
+                            <p class="opacity-95 font-light text">Pour toute question concernant ces conditions, veuillez contacter notre support via la rubrique Support et Aide de l'application.</p>
                         </div>
                     
                     </div>

@@ -12,7 +12,7 @@
                 v-show="isOverlayActive" 
                 :class="`fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-30 text-white rounded-[3px]
                 shadow-black shadow-custom-main trigger-set-treshold bg-main-gradient
-                max-[500px]:w-full sm:w-1/4 min-[500px]:min-w-[500px]`"
+                max-[600px]:w-full sm:w-1/4 min-[600px]:min-w-[600px]`"
             >
                 <MainContainerSlot 
                     :textBtn1="'Annuler'" :textBtn2="'Choisir'" :titleContainer="'Choisir un nouveau seuil'" @toggleMenu="toggleMenu">
@@ -23,10 +23,12 @@
                             <p class="text-sm font-light pt-3 absolute text-red-300">{{ textError }}</p>
                         </div>
                         <div>
-                            <div class="flex flex-col items-center mt-12">
-                                <div>
-                                    <label class="pl-2 text-lg font-light" for="input-amount-treshold">Montant du seuil</label>
+                            <div class="flex flex-col items-center mt-20">
+                                <div class="w-1/2">
+                                    <label class="pl-2 text-lg  font-light" 
+                                    for="input-amount-treshold">Montant du seuil</label>
                                     <InputBase 
+                                        
                                         iconName="Amount"
                                         v-model="AmountThreshold"
                                         v-model:stateError="errorInput" 
@@ -38,8 +40,10 @@
                                     />
                                 </div>
                             </div>
-                            <div class="flex justify-center my-12">
-                                <p class="font-light text-white">Ce seuil sera effectif pour le mois actuel <span class="block">et les suivants, jusqu'à un nouveau seuil.</span></p>
+                            <div class="flex justify-center my-16">
+                                <p class="w-[70%] font-light text-white text-[17px] opacity-90">
+                                    Ce seuil sera appliqué pour le mois en cours 
+                                    <span class="block">et restera en vigueur jusqu'à l'établissement d'un nouveau seuil..</span></p>
                             </div>
                         </div>
                     </div>
@@ -71,7 +75,7 @@
     const OverlaySuccessAction = defineAsyncComponent(() => import('@/component/overlay/OverlaySuccessAction.vue'));
 
     // variables, props ...
-    const iconThreshold = setSvgConfig({width:'18px', fill:'white'});
+    const iconThreshold = setSvgConfig({width:'19px', fill:'white'});
 
     const props = defineProps({
         isIconActive: { default: false},

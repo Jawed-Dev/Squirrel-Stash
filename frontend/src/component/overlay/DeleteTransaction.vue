@@ -2,13 +2,13 @@
     <div class="fixed inset-0 bg-black bg-opacity-80 z-30">
         <div :class="`fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-30 text-white rounded-[3px] overflow-hidden 
                 shadow-black shadow-custom-main trigger-menu-delete bg-main-gradient
-                max-[500px]:w-full sm:w-1/4 min-[500px]:min-w-[500px]`">
+                max-[600px]:w-full sm:w-1/4 min-[600px]:min-w-[600px]`">
             <MainContainerSlot :bgMainBtn="'bg-gradient-vanusa'" :width="'w-full'" @toggleMenu="toggleMenu"
             :textBtn1="'Annuler'" :textBtn2="'Supprimer'" :titleContainer="textTitleComponent">
 
                 <div class="max-h-[60vh] overflow-y-auto">
-                    <div class="flex flex-col rounded-[3px] items-center my-20">
-                        <p class="text-[16px] font-light">{{ textBodyComponent }}</p>
+                    <div class="flex flex-col rounded-[3px] items-center my-28">
+                        <p class="font-light text-lg opacity-90">{{ textBodyComponent }}</p>
                     </div>
                 </div>
             </MainContainerSlot>

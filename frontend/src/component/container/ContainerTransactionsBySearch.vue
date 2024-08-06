@@ -13,25 +13,24 @@
                         />
                     </div>
                 </div>
-                <div class="flex py-2 pl-[2px] sm:pl-3 mt-5 bg-gradient-x-blue shadow-black shadow-custom-main">
-
-                    <div class="ml-[40px] pl-[5px] md:pl-[15px] w-[25%] overflow-hidden text-ellipsis">
+                <div class="flex py-2 pl-0 sm:pl-4 md:pl-3 mt-5 bg-gradient-x-blue shadow-black shadow-custom-main">
+                    <div class="text-[15px] sm:text-base ml-[20px] sm:ml-[40px] md:pl-[20px] w-[25%] overflow-hidden text-ellipsis">
                         <p @click="toggleOrder(ORDER_STATE.CATEGORY)" 
                         :class="`${colorForOrderSelected(ORDER_STATE.CATEGORY)} w-fit cursor-pointer`" 
                         v-html="'Catégorie' + renderStateOrder(ORDER_STATE.CATEGORY)"></p>
                     </div>
-                    <div class="w-[20%] sm:justify-stretch flex justify-center">
+                    <div class="text-[15px] sm:text-base w-[22%] pl-5 sm:pl-0 sm:justify-stretch flex justify-center">
                         <p 
                             @click="toggleOrder(ORDER_STATE.AMOUNT)" 
                             :class="`${colorForOrderSelected(ORDER_STATE.AMOUNT)} w-fit cursor-pointer`"  
                             v-html="'Montant' + renderStateOrder(ORDER_STATE.AMOUNT) ">
                         </p>
                     </div>
-                    <div class="w-[25%] sm:justify-stretch flex justify-center">
+                    <div class="text-[15px] sm:text-base w-[22%] sm:justify-stretch flex justify-center">
                         <p @click="toggleOrder(ORDER_STATE.DATE)" :class="` ${colorForOrderSelected(ORDER_STATE.DATE)} w-fit cursor-pointer`"  
                         v-html="'Date' + renderStateOrder(ORDER_STATE.DATE)"></p>
                     </div>
-                    <div class="grow sm:justify-stretch flex justify-center">
+                    <div class="text-[15px] sm:text-base grow sm:justify-stretch flex justify-center">
                         <p @click="toggleOrder(ORDER_STATE.ITERATION)" :class="`${colorForOrderSelected(ORDER_STATE.ITERATION)} w-fit cursor-pointer`"  
                         v-html="'Itération' + renderStateOrder(ORDER_STATE.ITERATION)"></p>
                     </div>

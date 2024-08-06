@@ -117,13 +117,13 @@
             $db = $dataRequest['dataBase'];
             $userId = $this->getModelUser()->getUserIdIfValidLogin($db, $dataRequest['bodyData']);
             if(!$userId) return $this->getViewUser()->renderJson(['tokenJwt' => null]);
-
             $choiceStayConnected = $dataRequest['bodyData']['stayConnected'];
-            $this->getControllerMain()->createCookieStayConnected($choiceStayConnected);
-            $tokenJwt = $this->getControllerMain()->getHandlerJwt()->createAccessTokenJwt($userId);
-            $tokenRefreshJwt = $this->getControllerMain()->getHandlerJwt()->createRefreshTokenJwt($userId);
+            $this->getControllerMain()->createStayConnectCookie($choiceStayConnected);
 
-            $this->getControllerMain()->createCookieByRefreshToken($tokenRefreshJwt);
+            $tokenJwt = $this->getControllerMain()->getHandlerJwt()->createTokenJwt($userId);
+            $tokenRefreshJwt = $this->getControllerMain()->getHandlerJwt()->createTokenJwt($userId);
+            
+            $this->getControllerMain()->createRefreshTokenCookie($tokenRefreshJwt);
             $this->getViewUser()->renderJson(['tokenJwt' => $tokenJwt]);
         }
 

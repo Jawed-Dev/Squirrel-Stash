@@ -11,11 +11,10 @@
         // Main Controller lazy loading
         function getControllerMain();
         // Jeton / Session
-        function createAccessTokenJwt($userId);
+        function createTokenJwt($userId);
         function isValidTokenJwt($decodedJwt);
         function decodeJwt($tokenJwt);
         function getJwtFromHeader();
-        function createRefreshTokenJwt($userId);
         function getNewAccessToken();
     }
 
@@ -31,7 +30,7 @@
             return $this->ControllerMain;
         }
         // JWT Functions 
-        public function createAccessTokenJwt($userId) {
+        public function createTokenJwt($userId) {
             $key = JWT_SECRET_KEY; 
             $issuedAt = time();
             $timeExpiration = TIME_EXPIRE_TIME_ACCESS_JWT;
@@ -62,43 +61,16 @@
                 $isValidToken = $this->getControllerMain()->getHandlerJwt()->isValidTokenJwt($decodedRefreshJwt);
                 if(!$isValidToken) return throw new Error('Erreur de donnée');
                 $userId = $this->getControllerMain()->getControllerUser()->getUserIdFromJwt($decodedRefreshJwt);
-                $newTokenJwt = $this->getControllerMain()->getHandlerJwt()->createAccessTokenJwt($userId);
+                $newTokenJwt = $this->getControllerMain()->getHandlerJwt()->createTokenJwt($userId);
 
                 //$tokenJwt = $newTokenJwt;
                 //$newTokenRefreshJwt = $this->getControllerMain()->getHandlerJwt()->createRefreshTokenJwt($userId);
-                //$this->getControllerMain()->getHandlerJwt()->createCookieByRefreshToken($newTokenRefreshJwt);
+                //$this->getControllerMain()->getHandlerJwt()->createRefreshTokenCookie($newTokenRefreshJwt);
 
                 if(!$newTokenJwt) return throw new Error('Erreur de donnée');
                 return $newTokenJwt;
             }
             return null;
-        }
-
-        public function createRefreshTokenJwt($userId, $stayConnected = false) {
-            $key = JWT_SECRET_KEY; 
-            $issuedAt = time();
-            if(empty($_COOKIE['stayConnected'])) {
-                $this->getControllerMain()->createCookieStayConnected(0);
-            }
-            $timeExpiration = ($_COOKIE['stayConnected']) ? TIME_EXPIRE_TIME_STAY_CONNECTED : TIME_EXPIRE_TIME_REFRESH_JWT;
-            $expirationTime = $issuedAt + $timeExpiration;  
-            $issuer = BASE_URL;
-            //$jti = bin2hex(random_bytes(16)); 
-            $payload = array(
-                'userId' => $userId,
-                'issuedAt' => $issuedAt,
-                'expireTime' => $expirationTime,
-                'issuer' => $issuer,
-                //'jti' => $jti
-            );
-            try {
-                $jwt = JWT::encode($payload, $key, 'HS256');
-                return $jwt;
-            }
-            catch (Exception $e) {
-                // log
-                return throw new Exception('Erreurs de données.');
-            }
         }
 
         public function decodeJwt($tokenJwt) {

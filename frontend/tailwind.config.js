@@ -11,7 +11,8 @@ export default {
         'polygon-top': 'polygon(50% 0%, 100% 0, 100% 50%, 0 50%, 0 100%, 50% 100%)',
       },
       fontFamily: {
-        'main-font': ['Poppins', 'sans-serif']
+        'main-font': ['Poppins', 'sans-serif'],
+        'font-logo': ['Quicksand', 'sans-serif']
       },
       colors: {
         'custom-gray': '#B4B4B4',
@@ -34,11 +35,13 @@ export default {
       },
       spacing: {
         'header-width' : '75px',
+        'header-tablet-width' : '65px',
         'top-Header' : '20px',
         'custom-margin-main' : '20px'
       },
       backgroundImage: {
         'main-gradient': "linear-gradient(to top left, #1b1e33 40%, #536976 250%)",
+        'main-second': "linear-gradient(to top left, #1b1e33 40%, #1b1e3390 140%)",
         'information-gradient': "linear-gradient(90deg, #0b274d, #0e2242, #0f1e38, #0f192e, #0f1524, #0c0f1b, #060810, #000000);",
         'header-gradient': "linear-gradient(0deg,#3358f4,#1d8cf8)",
 
@@ -63,7 +66,7 @@ export default {
       boxShadow: {
         'custom-main': '1px 1px 5px #38393b',
         'custom-lower': '1px 1px 3px #38393b',
-        'custom-hover': '3px 3px 5px white',
+        'custom-hover': '2px 2px 2px #38393',
         'custom-very-low': '1px 1px 1px white',
       }
     },

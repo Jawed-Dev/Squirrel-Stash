@@ -4,8 +4,8 @@
             <div 
                 @click="toggleParamsSearch" 
                 class="absolute w-full mt-5 shadow-black shadow-custom-main bg-gradient-x-blue py-2 pl-3
-                font-light flex justify-start gap-2 text-xl text-white 
-                hover:shadow-main-blue cursor-pointer">
+                font-light flex justify-start gap-2 text-[18px] text-white 
+                hover:shadow-slate-500 cursor-pointer">
                 <UseIconLoader :svg=iconConfig :nameIcon="typeIconShowParams"  />
                 <h1>Paramètres de recherche</h1>
             </div>
@@ -16,7 +16,7 @@
                             <div class="xl:flex w-full">
                                 
                                 <div class="xl:w-[40%] 2xl:w-[45%] flex justify-center">
-                                    <ImageForgotPass class="w-full" :svg="imageConfig" />
+                                    <ImageSearch class="pt-5 w-full" :svg="imageConfig" />
                                 </div>
 
                                 <div class="grow flex flex-col justify-center">
@@ -56,8 +56,8 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="w-full flex justify-center mt-12 my-3">
-                                <div class="shadow-black shadow-custom-main min-w-[200px] w-1/4 md:w-1/5 overflow-x-hidden text-ellipsis">
+                            <div class="w-full flex justify-center mt-8 sm:mt-12 my-3">
+                                <div class="shadow-black shadow-custom-main min-w-[250px] w-1/4 md:w-1/5 overflow-x-hidden text-ellipsis">
                                     <button class="w-full rounded-sm py-2 bg-gradient-blue rounded-br-[3px] font-light">Rechercher
                                     </button>
                                 </div>
@@ -84,7 +84,7 @@
     import TransitionAxeY from '@/component/transition/TransitionAxeY.vue';
     import UseIconLoader from '@/composable/useIconLoader.vue';
     import { setSvgConfig } from '@/svg/svgConfig';
-    import ImageForgotPass from '@/component//svgs/ImageForgotPass.vue';
+    import ImageSearch from '@/component//svgs/ImageSearch.vue';
     
     
     // variables, props

@@ -13,11 +13,11 @@
                 </div>
             </div>
 
-            <div class="flex py-2 pl-[2px] sm:pl-3 mt-3 bg-gradient-x-blue shadow-black shadow-custom-main">
-                <p class="ml-[40px] pl-[5px] md:pl-[15px] w-[25%] overflow-hidden text-ellipsis">Catégorie</p>
-                <p class="w-[20%] sm:text-left text-center">Montant</p>
-                <p class="w-[25%] sm:text-left text-center">Date</p>
-                <p class="grow sm:text-left text-center">Itération</p>
+            <div class="flex py-2 pl-0 sm:pl-4 md:pl-3 mt-5 bg-gradient-x-blue shadow-black shadow-custom-main">
+                <p class="text-[15px] sm:text-base ml-[20px] sm:ml-[40px] md:pl-[20px] w-[25%] overflow-hidden text-ellipsis">Catégorie</p>
+                <p class="text-[15px] sm:text-base w-[22%] pl-5 sm:pl-0 sm:justify-stretch flex justify-center">Montant</p>
+                <p class="text-[15px] sm:text-base w-[22%] sm:justify-stretch flex justify-center">Date</p>
+                <p class="text-[15px] sm:text-base grow sm:justify-stretch flex justify-center">Itération</p>
             </div>
             <div>
                 <ContainerTransactionInfo 

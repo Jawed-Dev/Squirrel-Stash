@@ -2,7 +2,7 @@
     <nav v-show="isValidPage"
         ref="headerRef" 
         :class="`font-main-font flex md:flex-col items-center
-        w-full md:w-header-width md:h-[calc(100vh-(40px))] h-[50px]
+        w-full md:w-header-tablet-width xl:w-header-width md:h-[calc(100vh-(40px))] h-[50px]
         md:top-top-Header bottom-0 md:left-[20px] xl:left-[30px] fixed 
         bg-header-gradient md:rounded-md 
         shadow-black shadow-custom-main
@@ -12,22 +12,22 @@
         >
         
         <div 
-            v-show="!isMobile" 
-            class="flex relative w-full h-[50px] md:h-fit py-2">
-                <div class="flex w-[60px] justify-center ">
-                    <LogoMainPicOnly class="bg-main-gradient shadow-black shadow-custom-main rounded-full" :svg="logoStyle" />
-                </div>
-                <div>
-                    <TransitionOpacity v-if="!isMobile" :durationIn="'duration-300'" :durationOut="'duration-0'">
-                        <p 
-                            v-if="isHovered && isTextIconsVisible"
-                            class="flex absolute w-[140px] right-[0px] top-[50%] transform -translate-y-1/2 
-                            pl-3 text-white font-light" 
-                        >
-                        Squirrel Stash</p>
-                    </TransitionOpacity>
-                </div>
-        
+        v-show="!isMobile" 
+        class="flex relative w-full h-[50px] md:h-fit py-2"
+        >
+            <div class="flex md:w-header-tablet-width xl:w-header-width justify-center p-[8px] xl:p-[12px]">
+                <LogoMainPicOnly class=" bg-main-gradient shadow-black shadow-custom-hover rounded-xl" :svg="logoStyle" />
+            </div>
+            <div>
+                <TransitionOpacity v-if="!isMobile" :durationIn="'duration-300'" :durationOut="'duration-0'">
+                    <p 
+                        v-if="isHovered && isTextIconsVisible"
+                        class=" text font-light flex absolute w-[140px] right-[0px] top-[50%] transform -translate-y-1/2
+                        pl-3 lg:pl-5 text-white " 
+                    >
+                    Squirrel Stash</p>
+                </TransitionOpacity>
+            </div>
         </div>
 
 
@@ -44,7 +44,8 @@
                     ${borderCurrentPage(icon.page)}`">
                     
                         <div class="flex flex-col items-center relative">
-                            <component :is="icon.Component" :svg="iconsStyle" class="w-header-width"/>
+                            <component :is="icon.Component" :svg="iconsStyle" 
+                            class="w-header-width md:w-header-tablet-width xl:w-header-width"/>
                         </div>
                         
                         <TransitionOpacity v-if="!isMobile" :durationIn="'duration-300'" :durationOut="'duration-0'">
@@ -64,13 +65,17 @@
             <div class="w-full flex flex-col relative" v-for="(icon, index) of dataListPage2">
                 <div 
                     :key="index" @click="handleClickHeader(icon.page)" 
-                    :class="`flex relative ${classTranslateY} py-2 cursor-pointer ${borderCurrentPage(icon.page)}`">
-                    <component :is="icon.Component" :svg="iconsStyle" class="w-header-width "/>
+                    :class="`flex relative ${classTranslateY} py-2 cursor-pointer 
+                    ${borderCurrentPage(icon.page)}`"
+                >
+                    <component :is="icon.Component" :svg="iconsStyle" class="md:w-header-tablet-width xl:w-header-width "/>
 
                     <TransitionOpacity v-if="!isMobile" :durationIn="'duration-300'" :durationOut="'duration-0'">
-                        <router-link :to="icon.link" v-show="isHovered && isTextIconsVisible" 
-                        class="absolute w-[150px] right-[0px] top-[50%] transform -translate-y-1/2 pl-3 flex 
-                        items-center text-[14px] text-white">{{ icon.text }}</router-link>
+                        <router-link 
+                            :to="icon.link" v-show="isHovered && isTextIconsVisible" 
+                            class="absolute w-[150px] right-[0px] top-[50%] transform -translate-y-1/2 pl-3 flex 
+                            items-center text-[14px] text-white">{{ icon.text }}
+                        </router-link>
                     </TransitionOpacity>
                 </div>
             </div>
@@ -124,7 +129,7 @@
     ];
 
     const iconsStyle = setSvgConfig({width:'25px', fill:'white'});
-    const logoStyle = setSvgConfig({width:'45px', fill:'white'});
+    const logoStyle = setSvgConfig({fill:'white'});
 
     const classTranslateY = classTransitionHover('translateY');
     const classTranslateWidth = classTransitionHover('extendHeader');
@@ -165,10 +170,6 @@
         window.removeEventListener('resize', handleResize);
     });
 
-    const currentLogo = computed(() => {
-        return (isTextIconsVisible.value) ? LogoMain : LogoMainPicOnly;
-    });
-
     const isValidPage = computed(() => {
         const currentPath = router.currentRoute.value.path.substring(1);
         return !notAllowedPages.includes(currentPath) && currentPath;
@@ -176,7 +177,10 @@
 
     const borderCurrentPage = computed(() => {
         return (page) => {
-            return  page === router.currentRoute.value.path.substring(1) ? 'bg-main-gradient shadow-black shadow-custom-main' : '';
+            if(router.currentRoute.value.path.substring(1) === 'mon-compte') {
+                if(page === 'utilisateur') return 'bg-main-gradient shadow-black shadow-custom-main';
+            }
+            return page === router.currentRoute.value.path.substring(1) ? 'bg-main-gradient' : '';
         }
     });
 

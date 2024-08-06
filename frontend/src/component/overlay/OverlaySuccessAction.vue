@@ -6,7 +6,8 @@
             <MainContainerSlot 
             :hideCross="true"
             :onlyOneBtn="true"
-            :textBtn1="'Ok'" :titleContainer="'Action Réussie'" 
+            :textBtn1="'Ok'" 
+            :titleContainer="'Action Réussie'" 
             @toggleMenu="toggleMenu" 
             >
                 <div class="my-12">

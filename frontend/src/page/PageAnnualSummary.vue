@@ -1,12 +1,12 @@
 <template>
     <div class="font-main-font flex flex-col min-h-screen bg-main-bg w-full pb-[50px] md:pb-0">
-        <div class="mx-1 md:ml-[calc(20px+75px+20px)] xl:ml-[calc(30px+75px+30px)] md:mr-[20px] xl:mr-[30px] flex flex-col my-5">
+        <div class="mx-1 md:ml-[calc(20px+65px+20px)] xl:ml-[calc(30px+75px+30px)] md:mr-[20px] xl:mr-[30px] flex flex-col my-5">
 
             <h1 class="text-2xl font-light text-white">Récapitulatif de l'année</h1>
 
             <div class="mt-5 sm:w-full lg:w-1/6">
                 <SelectYear 
-                    class="min-h-[42px] w-full sm:min-w-[300px]" 
+                    class="min-h-[42px] w-full sm:min-w-[250px]" 
                     v-model="yearSelected" 
                     :listSelect="getAvailableYear()"
                 />

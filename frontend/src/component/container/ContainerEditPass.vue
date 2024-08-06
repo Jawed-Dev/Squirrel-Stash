@@ -6,71 +6,91 @@
             @click="toggleParamsSearch"    
             class="absolute w-full mt-5 shadow-black shadow-custom-main bg-gradient-x-blue py-2 pl-3
                 font-light flex justify-start gap-2 text-[18px] text-white 
-                hover:shadow-main-blue cursor-pointer">
-            <h1>Gestion de mot de passe</h1>
+                hover:shadow-slate-500 cursor-pointer">
+            
             <UseIconLoader :svg=iconConfig :nameIcon="typeIconShowParams"  />
+            <h1>Gestion de mot de passe</h1>
         </div>
         
-        <div :class="`gradient-border overflow-hidden ${paddingForMenuOpen}`">
+        <div :class="`w-full gradient-border overflow-hidden ${paddingForMenuOpen}`">
             <form class="mt-16" @submit.prevent="handleSubmit()">
                 <TransitionAxeY>
                     <div v-show="toggleShowParams">
-                        <!-- Errors -->
-                        <div class="relative pl-5 pb-5">
-                            <p class="text-sm font-light absolute text-red-300">{{ textError }}</p>
+
+                        <div class="xl:flex w-full">
+
+                            <div class="xl:w-[40%] 2xl:w-[45%] flex justify-center">
+                                <ImageEditPass class="pt-5 w-full" :svg="imageConfig" />
+                            </div>
+
+                            <div class="grow flex flex-col justify-center">
+    
+                                <!-- Errors -->
+                                <div class="relative">
+                                    <p class="text-sm font-light absolute text-red-300">{{ textError }}</p>
+                                </div>
+                                
+                                <div class="xl:mt-5 w-full flex">
+                                    <div class="w-full flex flex-col justify-center xl:justify-center 2xl:justify-evenly 
+                                            items-center mt-3 gap-2 sm:gap-5 2xl:gap-0 sm:flex-row"> 
+
+                                        <div class="flex flex-col w-1/3 min-w-[280px] lg:min-w-[300px] 2xl:min-w-[300px] md:w-1/4">
+                                            <label class="pl-2 text-white font-light" for="input-old-pass">Mot de passe actuel</label>
+                                            <InputBase 
+                                                iconName="Password"
+                                                id="input-old-pass" 
+                                                v-model="inputsPass.oldPass" 
+                                                v-model:stateError="errorInputs.oldPass"
+                                                placeholder="Non défini"
+                                                type="password"
+                                                validFormat="password"
+                                                :hideAnimation="true"
+                                            />
+                                        </div>
+                                        <div class="hidden sm:flex flex-col w-1/3 min-w-[280px] lg:min-w-[300px] 2xl:min-w-[300px] md:w-1/4"></div>
+                                    </div>
+                                </div>
+
+                                <div class="mt-3 w-full flex">
+
+                                    <div class="w-full flex flex-col justify-center xl:justify-center 2xl:justify-evenly 
+                                            items-center mt-3 gap-5 2xl:gap-0 sm:flex-row">
+                                        <div class="flex flex-col w-1/3 min-w-[280px] lg:min-w-[300px] 2xl:min-w-[300px] md:w-1/4">
+                                            <label class="pl-2 text-white font-light" for="input-confirm-pass">Nouveau mot de passe</label>
+                                            <InputBase 
+                                                iconName="Password"
+                                                id="input-confirm-pass" 
+                                                v-model="inputsPass.confirmNewPass" 
+                                                v-model:stateError="errorInputs.confirmNewPass"
+                                                placeholder="Non défini"
+                                                type="password"
+                                                validFormat="password"
+                                                :hideAnimation="true"
+                                            />
+                                        </div>
+                                        <div class="flex flex-col w-1/3 min-w-[280px] lg:min-w-[300px] 2xl:min-w-[300px] md:w-1/4">
+                                            <label class="pl-2 text-white font-light" for="input-confirm-newpass">Confirmation du mot de passe</label>
+                                            <InputBase 
+                                                iconName="Password"
+                                                id="input-confirm-newpass" 
+                                                v-model="inputsPass.newPass" 
+                                                v-model:stateError="errorInputs.newPass"
+                                                placeholder="Non défini"
+                                                type="password"
+                                                validFormat="password"
+                                                :hideAnimation="true"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                         </div>
+
         
-                        <div class="flex flex-col justify-center items-center gap-3 mt-3
-                            md:gap-20 lg:gap-32 xl:gap-48 md:flex-row"> 
-                            <div class="flex flex-col w-1/2 min-w-[250px] lg:min-w-[350px] md:w-1/4">
-                                <label class="text-white font-light" for="input-old-pass">Mot de passe actuel</label>
-                                <InputBase 
-                                    iconName="Password"
-                                    id="input-old-pass" 
-                                    v-model="inputsPass.oldPass" 
-                                    v-model:stateError="errorInputs.oldPass"
-                                    placeholder="Non défini"
-                                    type="password"
-                                    validFormat="password"
-                                    :hideAnimation="true"
-                                />
-                            </div>
-                            <div class="hidden md:flex flex-col w-1/2 min-w-[250px] lg:min-w-[350px] md:w-1/4"></div>
-                        </div>
-                        <div class="flex flex-col justify-center items-center gap-3 mt-3
-                            md:gap-20 lg:gap-32 xl:gap-48 md:flex-row">
-                            <div class="flex flex-col w-1/2 min-w-[250px] lg:min-w-[350px] md:w-1/4">
-                                <label class="text-white font-light" for="input-confirm-pass">Nouveau mot de passe</label>
-                                <InputBase 
-                                    iconName="Password"
-                                    id="input-confirm-pass" 
-                                    v-model="inputsPass.confirmNewPass" 
-                                    v-model:stateError="errorInputs.confirmNewPass"
-                                    placeholder="Non défini"
-                                    type="password"
-                                    validFormat="password"
-                                    :hideAnimation="true"
-                                />
-                            </div>
-                            <div class="flex flex-col w-1/2 min-w-[250px] lg:min-w-[350px] md:w-1/4">
-                                <label class="text-white font-light" for="input-confirm-newpass">Confirmation du mot de passe</label>
-                                <InputBase 
-                                    iconName="Password"
-                                    id="input-confirm-newpass" 
-                                    v-model="inputsPass.newPass" 
-                                    v-model:stateError="errorInputs.newPass"
-                                    placeholder="Non défini"
-                                    type="password"
-                                    validFormat="password"
-                                    :hideAnimation="true"
-                                />
-                            </div>
-                        </div>
-        
-                        <div class="w-full flex justify-center mt-8 my-3">
-                            <div class="shadow-black shadow-custom-main min-w-[200px] w-1/4 md:w-1/5 overflow-x-hidden text-ellipsis">
-                                <button class="w-full rounded-sm py-2 bg-gradient-blue rounded-br-[3px] font-light">Éditer
-                                </button>
+                        <div class="w-full flex justify-center sm:mt-12 my-3">
+                            <div class="shadow-black shadow-custom-main min-w-[250px] w-1/4 md:w-1/5 overflow-x-hidden text-ellipsis">
+                                <button class="w-full rounded-sm py-2 bg-gradient-blue rounded-br-[3px] font-light">Editer</button>
                             </div>
                         </div>
                     </div>
@@ -92,6 +112,7 @@
     import TransitionPopUp from '@/component/transition/TransitionPopUp.vue';
     import TransitionAxeY from '@/component/transition/TransitionAxeY.vue';
     import UseIconLoader from '@/composable/useIconLoader.vue';
+    import ImageEditPass from '@/component//svgs/ImageEditPass.vue';
     import { setSvgConfig } from '@/svg/svgConfig';
     const OverlaySuccessAction = defineAsyncComponent(() => import('@/component/overlay/OverlaySuccessAction.vue'));
 
@@ -111,6 +132,7 @@
     const isSuccessAction = ref(false);
     const toggleShowParams= ref(false);
     const iconConfig = setSvgConfig({width:'30px', fill:'white' });
+    const imageConfig = setSvgConfig({width:'300px', fill:'white' });
 
     // life cycle, functions
 

@@ -36,5 +36,5 @@
         bgIcon: { default: '' },
     });
 
-    const styleIcon = setSvgConfig({width:'50px', fill:'white' })
+    const styleIcon = setSvgConfig({width:'50px', fill:'white'})
 </script>
