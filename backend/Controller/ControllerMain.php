@@ -86,6 +86,7 @@
             return $this->ModelMain;
         }
 
+        // Database 
         public function getDatabase() {
             if (!$this->db) $this->db = $this->getModelMain()->getConnection();
             return $this->db;
@@ -175,25 +176,31 @@
         }
 
         public function validateDataForController($params) {
+            // Optionals Params with default value
             $requireAuth = $params['requireAuth'] ?? true;
             $requireBodyData = $params['requireBodyData'] ?? true;
             $requireDatabase = $params['requireDatabase'] ?? true;
             $functionValidData = $params['functionValidData'] ?? null;
 
+            // get Data for a Controller
             $dataRequest = $this->prepareDataForController($requireAuth, $requireBodyData, $requireDatabase);
         
+            // option database
             if($requireDatabase) $dataRequire[] = $dataRequest['dataBase'];
+            // params userId
             if($requireAuth) $dataRequire[] = $dataRequest['userId'];
+            // params bodydata
             if($requireBodyData) {
                 $dataRequire[] = $dataRequest['bodyData'];
-                if(count($dataRequest['bodyData']) >= MAX_DATA_BODY_REQUEST) return null;
             }
+            // Verify the presence of essential data
             $isAnyMainDataEmpty = $this->getHandlerError()->verifyIfMainDataExists($dataRequire);
-            if ($isAnyMainDataEmpty) return throw new Exception('Erreurs dans la requête 1.');
+            if ($isAnyMainDataEmpty) return throw new Exception('Erreurs dans la requête.');
 
+            // Verify the expected format of data 
             if($functionValidData) {   
                 $isAnyError = $this->getHandlerError()->$functionValidData($dataRequest);
-                if ($isAnyError) return throw new Exception('Erreurs dans la requête 2.');
+                if ($isAnyError) return throw new Exception('Erreurs dans la requête.');
             }
             return $dataRequest;
         }

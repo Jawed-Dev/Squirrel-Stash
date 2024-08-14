@@ -1,6 +1,8 @@
 <template>
+    
     <div style="position: relative; height:350px; width:100%">
         <canvas class="mt-5" ref="canvas"></canvas>
+        <button class="absolute right-3 top-[-80px] font-light" @click="downloadChart">Télécharger</button>
     </div>
 </template>
 
@@ -72,6 +74,15 @@ function updateChartData(chart, newData) {
         dataset.data = newData.map(row => row.total_amount);
     });
     chart.update();
+}
+
+function downloadChart() {
+    if (canvas.value) {
+        const link = document.createElement('a');
+        link.href = canvas.value.toDataURL('image/png');
+        link.download = 'graphique.png';
+        link.click();
+    }
 }
 
 

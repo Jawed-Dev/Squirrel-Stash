@@ -59,7 +59,7 @@ export function useText(initialValue = '') {
 
 
 <template>
-    <section class="flex flex-col items-center font-main-font">
+    <section class="flex flex-col items-center font-main">
         <h1 class="text-black text-[25px]">Bienvenue !</h1>
         <p class="text-custom-gray  text-[14px]">dazaazdadaazaz</p>
 

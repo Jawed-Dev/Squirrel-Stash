@@ -3,7 +3,7 @@
         <div 
             v-if="isOverlayActive" 
             :class="`fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-30 text-white rounded-[3px] 
-                shadow-black shadow-custom-main trigger-edit-transaction bg-main-gradient
+                 shadow-main trigger-edit-transaction bg-main-gradient
                 max-[600px]:w-full sm:w-1/4 min-[600px]:min-w-[600px]`">
 
             <MainContainerSlot 
@@ -51,7 +51,7 @@
     import { updateAllDataTransations} from '@/storePinia/useUpdateStoreByBackend';
     import { formatDateForCurrentDay, formatDateForFirstDay, isCurrentMonth } from '@/composable/useGetDate';
     import { listPurchases, listRecurings } from '@/svg/listTransactionSvgs';
-    import { isAnyMandatInputEmpty, isAnyInputError, TYPE_SUBMIT_ERROR, TEXT_SUBMIT_ERROR } from '@/error/useHandleError';
+    import { isAnyMandatoryInputEmpty, isAnyInputError, TYPE_SUBMIT_ERROR, TEXT_SUBMIT_ERROR } from '@/error/useHandleError';
     import { isValidCategory } from '@/error/useValidFormat';
 
     // stores Pinia
@@ -118,7 +118,7 @@
                     submitError.value = TYPE_SUBMIT_ERROR.DATE_EMPTY;
                     return;
                 }
-                else if(isAnyMandatInputEmpty(allMandatoryValInputs)) {
+                else if(isAnyMandatoryInputEmpty(allMandatoryValInputs)) {
                     submitError.value = TYPE_SUBMIT_ERROR.MANDATORY_EMPTY_INPUTS;
                     return;
                 }

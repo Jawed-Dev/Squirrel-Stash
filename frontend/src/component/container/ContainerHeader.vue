@@ -1,11 +1,11 @@
 <template>
     <nav v-show="isValidPage"
         ref="headerRef" 
-        :class="`font-main-font flex md:flex-col items-center
+        :class="`font-main flex md:flex-col items-center
         w-full md:w-header-tablet-width xl:w-header-width md:h-[calc(100vh-(40px))] h-[50px]
         md:top-top-Header bottom-0 md:left-[20px] xl:left-[30px] fixed 
         bg-header-gradient md:rounded-md 
-        shadow-black shadow-custom-main
+         shadow-main
         ${extendHeader} z-10 md:max-h-[calc(100vh-(40px))] max-h-none md:overflow-y-auto`"
             @mouseenter="isHovered = true"
             @mouseleave="isHovered = false"
@@ -16,14 +16,14 @@
         class="flex relative w-full h-[50px] md:h-fit py-2"
         >
             <div class="flex md:w-header-tablet-width xl:w-header-width justify-center p-[8px] xl:p-[12px]">
-                <LogoMainPicOnly class=" bg-main-gradient shadow-black shadow-custom-hover rounded-xl" :svg="logoStyle" />
+                <LogoMainPicOnly class=" bg-main-gradient  shadow-custom-hover rounded-xl" :svg="logoStyle" />
             </div>
             <div>
                 <TransitionOpacity v-if="!isMobile" :durationIn="'duration-300'" :durationOut="'duration-0'">
                     <p 
                         v-if="isHovered && isTextIconsVisible"
                         class=" text font-light flex absolute w-[140px] right-[0px] top-[50%] transform -translate-y-1/2
-                        pl-3 lg:pl-5 text-white " 
+                        pl-3 lg:pl-4 text-white " 
                     >
                     Squirrel Stash</p>
                 </TransitionOpacity>
@@ -178,7 +178,7 @@
     const borderCurrentPage = computed(() => {
         return (page) => {
             if(router.currentRoute.value.path.substring(1) === 'mon-compte') {
-                if(page === 'utilisateur') return 'bg-main-gradient shadow-black shadow-custom-main';
+                if(page === 'utilisateur') return 'bg-main-gradient  shadow-main';
             }
             return page === router.currentRoute.value.path.substring(1) ? 'bg-main-gradient' : '';
         }

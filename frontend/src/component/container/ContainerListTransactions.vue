@@ -1,5 +1,5 @@
 <template>
-    <div class="rounded-[3px] overflow-hidden my-custom-margin-main shadow-black shadow-custom-main">
+    <div class="rounded-[3px] overflow-hidden my-custom-margin-main  shadow-main">
         <div class="bg-main-gradient w-full gradient-border text-white"> 
     
             <div class="flex items-center justify-between">
@@ -13,7 +13,7 @@
                 </div>
             </div>
 
-            <div class="flex py-2 pl-0 sm:pl-4 md:pl-3 mt-5 bg-gradient-x-blue shadow-black shadow-custom-main">
+            <div class="flex py-2 pl-0 sm:pl-4 md:pl-3 mt-5 bg-gradient-x-blue  shadow-main">
                 <p class="text-[15px] sm:text-base ml-[20px] sm:ml-[40px] md:pl-[20px] w-[25%] overflow-hidden text-ellipsis">Catégorie</p>
                 <p class="text-[15px] sm:text-base w-[22%] pl-5 sm:pl-0 sm:justify-stretch flex justify-center">Montant</p>
                 <p class="text-[15px] sm:text-base w-[22%] sm:justify-stretch flex justify-center">Date</p>

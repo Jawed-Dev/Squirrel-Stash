@@ -84,7 +84,7 @@ export function isAnyInputError(inputs) {
     return Object.values(inputs).some(value => value);
 }
 
-export function isAnyMandatInputEmpty(inputs) {
+export function isAnyMandatoryInputEmpty(inputs) {
     return Object.values(inputs).some(value => value === '' || value === false);
 }
 

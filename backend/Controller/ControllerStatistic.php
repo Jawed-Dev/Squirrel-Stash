@@ -84,7 +84,7 @@
 
             $db = $dataRequest['dataBase'];
             $successReq = $this->getModelStatistic()->insertTransaction($db, $dataRequest);
-            // log ici ?
+            
             $this->getViewStatistic()->renderJson(['isSuccessRequest' => $successReq]);
         }
 

@@ -1,6 +1,6 @@
 <template>
     <section class="w-full h-screen flex flex-col items-center justify-center bg-main-gradient 
-        font-main-font shadow-black shadow-custom-main overflow-y-auto min-h-[600px] lg:w-1/2">
+        font-main  shadow-main overflow-y-auto min-h-[600px] lg:w-1/2">
 
         
         <div class="w-full flex flex-col items-center justify-center">
@@ -44,7 +44,7 @@
                 </div>
                     
                 <div>
-                    <button :class="`bg-main-blue shadow-black shadow-custom-main 
+                    <button :class="`bg-main-blue  shadow-main 
                         w-full py-2 rounded-lg text-white mt-5`">Modifier
                     </button>
                 </div>
@@ -69,7 +69,7 @@
     import InputBase from '@/component/input/InputBase.vue';
     import ButtonComponent from '@/component/button/ButtonBasic.vue';
     import { updatePasswordByToken } from '@/composable/useBackendActionData';
-    import { isAnyMandatInputEmpty, isAnyInputError, TYPE_SUBMIT_ERROR, TEXT_SUBMIT_ERROR } from '@/error/useHandleError';
+    import { isAnyMandatoryInputEmpty, isAnyInputError, TYPE_SUBMIT_ERROR, TEXT_SUBMIT_ERROR } from '@/error/useHandleError';
     import TransitionPopUp from '@/component/transition/TransitionPopUp.vue';
     import LogoMain from '@/component/svgs/LogoMain.vue';
     import { setSvgConfig } from '@/svg/svgConfig';
@@ -99,7 +99,7 @@
     async function handleSubmit() {
         const allErrorsInputs = getStatesErrorInputs();
         const allMandatoryValInputs = getValuesMandantInputs();
-        if(isAnyMandatInputEmpty(allMandatoryValInputs)) {
+        if(isAnyMandatoryInputEmpty(allMandatoryValInputs)) {
             submitError.value = TYPE_SUBMIT_ERROR.MANDATORY_EMPTY_INPUTS;
             return;
         }

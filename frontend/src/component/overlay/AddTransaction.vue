@@ -2,7 +2,7 @@
     <div>
         <div class="fixed bottom-[-2px] sm:bottom-[25px] left-1/2 -translate-x-1/2 -translate-y-1/2  
             md:relative md:translate-x-0 sm:translate-y-0 md:bottom-auto md:left-auto
-            z-20 md:z-10 mt-5 w-full lg:min-w-[calc(200px*2+8px)] lg:w-1/4 rounded-[3px] md:shadow-black md:shadow-custom-main
+            z-20 md:z-10 mt-5 w-full lg:min-w-[calc(200px*2+8px)] lg:w-1/4 rounded-[3px] md: md:shadow-main
             hover:shadow-slate-500">
 
             <div class="bg-transparent md:bg-main-gradient border-none md:border-solid gradient-border">
@@ -11,13 +11,13 @@
                     <p 
                         v-show="!isMobile" class="w-full text-white flex justify-center font-light cursor-pointer" 
                         @click="toggleMenu('openOverlay')"
-                    >Ajouter un achat</p>
+                    >Ajouter une transaction</p>
 
                     <div class="grow flex justify-center py-[2px]">
                         <IconAddPurchase 
                             @click="toggleMenu('openOverlay')"
                             class="p-[1px] bg-gradient-blue rounded-full md:rounded-md right-[100px] top-[50vh]
-                            z-10 shadow-black shadow-custom-main trigger-add-purchase cursor-pointer" 
+                            z-10  shadow-main trigger-add-purchase cursor-pointer" 
                             :svg="styleIcon"
                         />
                     </div>
@@ -33,7 +33,7 @@
         <TransitionOpacity :durationIn="'duration-300'" :durationOut="'duration-200'">
             <div v-if="isOverlayActive" 
                 :class="`fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-30 text-white rounded-[3px] overflow-hidden 
-                shadow-black shadow-custom-main trigger-add-purchase bg-main-gradient
+                 shadow-main trigger-add-purchase bg-main-gradient
                 max-[600px]:w-full sm:w-1/4 min-[600px]:min-w-[600px]`">
 
                 <MainContainerSlot 
@@ -86,7 +86,7 @@
     import { updateAllDataTransations} from '@/storePinia/useUpdateStoreByBackend';
     import { formatDateForCurrentDay, formatDateForFirstDay, isCurrentMonth } from '@/composable/useGetDate';
     import { listPurchases, listRecurings } from '@/svg/listTransactionSvgs';
-    import { isAnyMandatInputEmpty, isAnyInputError, TYPE_SUBMIT_ERROR, TEXT_SUBMIT_ERROR } from '@/error/useHandleError';
+    import { isAnyMandatoryInputEmpty, isAnyInputError, TYPE_SUBMIT_ERROR, TEXT_SUBMIT_ERROR } from '@/error/useHandleError';
     import TransitionPopUp from '@/component/transition/TransitionPopUp.vue';
     import { isValidCategory } from '@/error/useValidFormat';
 
@@ -176,7 +176,7 @@
                     submitError.value = TYPE_SUBMIT_ERROR.DATE_EMPTY;
                     return;
                 }
-                else if(isAnyMandatInputEmpty(allMandatoryValInputs)) {
+                else if(isAnyMandatoryInputEmpty(allMandatoryValInputs)) {
                     submitError.value = TYPE_SUBMIT_ERROR.MANDATORY_EMPTY_INPUTS;
                     return;
                 }

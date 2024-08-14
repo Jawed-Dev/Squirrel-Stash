@@ -2,7 +2,7 @@
     <div class="fixed inset-0 bg-black bg-opacity-80 z-30">
         <div v-if="isOverlayActive" 
         :class="`fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-30 text-white rounded-[3px] overflow-hidden 
-        shadow-black shadow-custom-main trigger-action-success bg-main-gradient w-[40%]`">
+         shadow-main trigger-action-success bg-main-gradient w-[40%]`">
             <MainContainerSlot 
             :hideCross="true"
             :onlyOneBtn="true"

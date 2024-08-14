@@ -6,24 +6,27 @@
             </div>
             <p v-else class="py-2"></p>
         </div>
-        <div :class="`flex flex-col items-center shadow-red text-center ${bgHead} shadow-black shadow-custom-main py-2`">
+        <div :class="`flex flex-col items-center shadow-red text-center ${bgHead}  shadow-main py-2`">
             <h2 :class="`${width} flex justify-center text-2xl py-1 font-extralight`">{{titleContainer}}</h2>
         </div>
         
         <slot></slot>
     
         <div>
-            <div v-if="!onlyOneBtn" class="flex shadow-black shadow-custom-main">
+            <div v-if="!onlyOneBtn" class="flex shadow-main">
                 <div class="w-1/2">
-                    <button @click="$emit('toggleMenu','cancel')" class="w-full bg-[#1e3c72] py-[8px] rounded-bl-[3px] font-light">{{textBtn1}}</button>
+                    <button 
+                        @click="$emit('toggleMenu','cancel')" 
+                        class="w-full bg-[#1e3c72] py-[8px] rounded-bl-[3px] font-light hover:opacity-90">{{textBtn1}}
+                    </button>
                 </div>
                 <div class="w-1/2">
-                    <button @click="$emit('toggleMenu','valid')" :class="`w-full ${bgMainBtn}  py-[8px] rounded-br-[3px] font-light`">{{textBtn2}}</button>
+                    <button @click="$emit('toggleMenu','valid')" :class="`w-full ${bgMainBtn} py-[8px] rounded-br-[3px] font-light  hover:opacity-90`">{{textBtn2}}</button>
                 </div>
             </div>
             <div v-else>
                 <div class="w-full flex justify-center pb-3">
-                    <button @click="$emit('toggleMenu','cancel')" :class="`w-1/3 ${bgMainBtn} p-[8px] rounded-br-[3px] shadow-black shadow-custom-main`">{{textBtn1}}</button>
+                    <button @click="$emit('toggleMenu','cancel')" :class="`w-1/3 ${bgMainBtn} p-[8px] rounded-br-[3px] shadow-main hover:opacity-90`">{{textBtn1}}</button>
                 </div>
             </div>
         </div>

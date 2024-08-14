@@ -48,12 +48,11 @@
         }
 
         public function validateFormat($validationMethod, $data = null) {
-
             if(is_string($data) && $data) $this->getControllerMain()->getHandlerValidFormat()->sanitizeData($data);
 
             $HandlerValidFormat = $this->getControllerMain()->getHandlerValidFormat();
             if (!method_exists($HandlerValidFormat, $validationMethod)) {
-                throw new Exception("Erreur de donnée. (type: 3)");
+                throw new Exception("Erreur de donnée.");
             }
             $isValid = $HandlerValidFormat->$validationMethod($data);
             if(!$isValid) $this->addError($validationMethod);
@@ -71,7 +70,8 @@
         }
 
         // transactions 
-        // action
+        // actions
+
         public function verifyInsertTransaction($data) {
             $this->clearErrors();
             $bodyData = $data['bodyData'];

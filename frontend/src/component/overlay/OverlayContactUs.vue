@@ -1,8 +1,8 @@
 <template>
     <div class="fixed inset-0 bg-black bg-opacity-80 z-30">
         <div :class="`fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-30 text-white rounded-[3px] 
-                shadow-black shadow-custom-main trigger-overlay-contact bg-main-gradient
-                max-[600px]:w-full min-[600px]:min-w-[600px] font-main-font`">
+                 shadow-main trigger-overlay-contact bg-main-gradient
+                max-[600px]:w-full min-[600px]:min-w-[600px] font-main`">
     
             <MainContainerSlot :bgMainBtn="'bg-gradient-blue'" width='w-full'
             :textBtn1="'Fermer'" :textBtn2="'Envoyer'" titleContainer="Support et Aide" @toggleMenu="toggleMenu">
@@ -98,7 +98,7 @@
     import InputBase from '@/component//input/InputBase.vue';
     import TextAreaBase from '@/component//input/TextAreaBase.vue';
     import { sendEmailToSupport } from '@/composable/useBackendActionData';
-    import { isAnyMandatInputEmpty, isAnyInputError, TYPE_SUBMIT_ERROR, TEXT_SUBMIT_ERROR } from '@/error/useHandleError';
+    import { isAnyMandatoryInputEmpty, isAnyInputError, TYPE_SUBMIT_ERROR, TEXT_SUBMIT_ERROR } from '@/error/useHandleError';
     import TransitionPopUp from '@/component/transition/TransitionPopUp.vue';
     const OverlaySuccessAction = defineAsyncComponent(() => import('@/component/overlay/OverlaySuccessAction.vue'));
 
@@ -150,7 +150,7 @@
                 if(!isOverlayActive.value) return;
                 const allErrorsInputs = getStatesErrorInputs();
                 const allMandatoryValInputs = getValuesMandantInputs();
-                if(isAnyMandatInputEmpty(allMandatoryValInputs)) {
+                if(isAnyMandatoryInputEmpty(allMandatoryValInputs)) {
                     submitError.value = TYPE_SUBMIT_ERROR.MANDATORY_EMPTY_INPUTS;
                     return;
                 }

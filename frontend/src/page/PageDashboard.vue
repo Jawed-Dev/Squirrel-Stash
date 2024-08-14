@@ -1,5 +1,5 @@
 <template>
-    <div class="font-main-font flex flex-col bg-main-bg w-full pb-[calc(50px)] md:pb-0">
+    <div class="font-main flex flex-col bg-main-bg w-full pb-[calc(50px)] md:pb-0">
         <div class="mx-1 md:ml-[calc(20px+65px+20px)] xl:ml-[calc(30px+75px+30px)] md:mr-[20px] xl:mr-[30px] flex flex-col mt-5">
             <h1 class="text-2xl font-light text-white">Économie du mois</h1>
             <p class="font-light text-white mt-2 pr-2">Bonjour {{ firstNameUser }}, voici votre résumé du mois.</p> 
@@ -24,7 +24,7 @@
     
             </div>
 
-            <section class="w-full mt-custom-margin-main rounded-[3px] overflow-hidden shadow-black shadow-custom-main"> 
+            <section class="w-full mt-custom-margin-main rounded-[3px] overflow-hidden  shadow-main"> 
                 <ContainerTransactionsMonth />
             </section>
 

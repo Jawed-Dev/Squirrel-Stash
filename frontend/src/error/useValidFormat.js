@@ -45,11 +45,10 @@ export function isValidInputAmount(amount) {
 }
 
 export function isValidInputNote(note) {
-    return note.trim().length <= 30;
-}   
+    return typeof note === 'string' && note.trim().length <= 30;
+}
 
 export function isValidCategory(category) {
-    console.log('errorCatego', category);
     const isPurchase = listPurchases.some(item => item.text.toLowerCase() === category.toLowerCase());
     const isRecurring = listRecurings.some(item => item.text.toLowerCase() === category.toLowerCase());
     return (isPurchase || isRecurring);

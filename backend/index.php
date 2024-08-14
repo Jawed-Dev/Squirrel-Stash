@@ -5,7 +5,7 @@
 
         $allowedOrigin = FRONT_BASE_URL;
         $origin = isset($_SERVER['HTTP_X_CUSTOM_ORIGIN']) ? $_SERVER['HTTP_X_CUSTOM_ORIGIN'] : '';
-        //if ($origin !== $allowedOrigin) throw new Exception('Erreur CORS'); A REACRIVER
+        if ($origin !== $allowedOrigin) throw new Exception('Erreur CORS'); 
 
         header("Access-Control-Allow-Origin: ".FRONT_BASE_URL);
         header("Access-Control-Allow-Methods: GET, POST");
@@ -15,7 +15,6 @@
         /**
         * @return ControllerMain
         */
-        // Model ControllerMain 
         function getControllerMain() {
             $ControllerMain = new ControllerMain();
             return $ControllerMain;
@@ -161,15 +160,10 @@
             }
         }
 
-        // Request actionData
+        // Router request actionData
         if ($_SERVER['REQUEST_METHOD'] === 'POST') { 
             if(!empty($_GET['actionData'])) {
                 switch($_GET['actionData']) {
-
-                    // case 'disconnectUser': {
-                    //     getControllerMain()->getControllerUser()->disconnectUser();
-                    //     break;
-                    // }
                     case 'createAccount': {
                         getControllerMain()->getControllerUser()->fetchInsertUser();
                         break;
@@ -234,7 +228,6 @@
     }
 
     finally {
-        //if (empty($ControllerMain)) return null;
         $db = getControllerMain()->getDatabase();
         if($db !== null) $db = null;
     }

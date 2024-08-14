@@ -1,7 +1,10 @@
 <template>
-    <div class="font-main-font flex flex-col bg-main-bg w-full min-h-screen pb-50px">
+    <div class="font-main flex flex-col bg-main-bg w-full min-h-screen pb-50px">
 
-        <div class="mx-1 md:ml-[calc(20px+65px+20px)] xl:ml-[calc(30px+75px+30px)] md:mr-[20px] xl:mr-[30px] flex flex-col my-5">
+        <div class="mx-1 flex flex-col my-5
+            md:ml-[calc(20px+65px+20px)] xl:ml-[calc(30px+75px+30px)] 
+            md:mr-[20px] xl:mr-[30px]">
+            
             <h1 class="text-2xl font-light text-white text-center">Espace utilisateur</h1>
 
             <div class="rounded-[3px] overflow-hidden mt-5">
@@ -13,9 +16,9 @@
                                 @click="handlePages(page.page)"
                                 class="flex flex-col items-center justify-center gap-1 w-[calc(33.333333%-20px)] 
                                 min-w-[200px]
-                                md:hover:shadow-slate-500 md:hover:shadow-custom-main
-                                 lg:cursor-pointer shadow-black shadow-custom-main
-                                 bg-main-gradient rounded-md overflow-hidden">
+                                md:hover:shadow-gray-600
+                                 lg:cursor-pointer 
+                                 bg-main-gradient rounded-md overflow-hidden shadow-main">
                                  
                                 <div class="p-2">
                                     <component :is="page.Component" :svg="styleIcons"/>
@@ -92,7 +95,7 @@
             case 'déconnexion' : {
                 const authToken = storeAuthTOken();
                 authToken.token = '';
-                //await disconnectUser();
+                localStorage.removeItem('authToken');
                 router.push('/connexion');
                 break;
             }

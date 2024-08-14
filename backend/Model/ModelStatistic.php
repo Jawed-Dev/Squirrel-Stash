@@ -36,9 +36,15 @@
 
             $reqSql = 
             "INSERT INTO transaction
-            (transaction_user_id , transaction_amount, transaction_category, transaction_type, transaction_date, transaction_note)
-            VALUES (:userId, :amount, :trsCategory, :trsType, :trsDate, :note)
-            ";
+            (   
+                transaction_user_id, 
+                transaction_amount, 
+                transaction_category, 
+                transaction_type, 
+                transaction_date, 
+                transaction_note
+            )
+            VALUES (:userId, :amount, :trsCategory, :trsType, :trsDate, :note)";
             $query = $db->prepare($reqSql);
             $query->bindValue(':userId',  $userId, PDO::PARAM_INT);
             $query->bindValue(':amount',  $dataQuery['transactionAmount'], PDO::PARAM_INT);

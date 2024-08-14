@@ -6,7 +6,7 @@
                 class="flex flex-col items-center absolute z-10 trigger-menu-editdelete
                 -translate-y-0 -translate-x-20
                 bg-main-gradient w-[100px] rounded-md overflow-hidden
-                shadow-black shadow-custom-main">
+                 shadow-main">
                 <p 
                     @click="handleMenu('edit')" 
                     class="hover:bg-custom-blue w-full text-center cursor-pointer p-1 border-b border-slate-700">Modifier

@@ -1,6 +1,5 @@
 export async function getIconByName(name) {
     switch(name) {
-
         case 'Restaurant' : {
             return await import('@/component/svgs/Restaurant.vue');
         }

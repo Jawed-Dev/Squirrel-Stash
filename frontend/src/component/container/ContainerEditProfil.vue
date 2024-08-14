@@ -1,9 +1,9 @@
 <template>
     <section class="relative rounded-[3px] w-full text-white overflow-hidden bg-main-gradient 
-        shadow-black shadow-custom-main mt-[10px]">
+         shadow-main mt-[10px]">
         <div 
             @click="toggleParamsSearch"    
-            class="absolute w-full mt-5 shadow-black shadow-custom-main bg-gradient-x-blue py-2 pl-3
+            class="absolute w-full mt-5  shadow-main bg-gradient-x-blue py-2 pl-3
                 font-light flex justify-start gap-2 text-[18px] text-white 
                 hover:shadow-slate-500 cursor-pointer">
 
@@ -117,7 +117,7 @@
                         </div>
                         
                         <div class="w-full flex justify-center mt-12 my-3">
-                            <div class="shadow-black shadow-custom-main min-w-[250px] w-1/4 md:w-1/5 overflow-x-hidden text-ellipsis">
+                            <div class=" shadow-main min-w-[250px] w-1/4 md:w-1/5 overflow-x-hidden text-ellipsis">
                                 <button class="w-full rounded-sm py-2 bg-gradient-blue rounded-br-[3px] font-light">Editer</button>
                             </div>
                         </div>
@@ -139,7 +139,7 @@
     import { storeProfilUser } from '@/storePinia/useStoreDashboard';
     import { updateStoreUserProfil } from '@/storePinia/useUpdateStoreByBackend';
     import { updateUserProfil } from '@/composable/useBackendActionData';
-    import { isAnyMandatInputEmpty, isAnyInputError, TYPE_SUBMIT_ERROR, TEXT_SUBMIT_ERROR } from '@/error/useHandleError';
+    import { isAnyMandatoryInputEmpty, isAnyInputError, TYPE_SUBMIT_ERROR, TEXT_SUBMIT_ERROR } from '@/error/useHandleError';
     import TransitionPopUp from '@/component/transition/TransitionPopUp.vue';
     import TransitionAxeY from '@/component/transition/TransitionAxeY.vue';
     import UseIconLoader from '@/composable/useIconLoader.vue';
@@ -199,7 +199,7 @@
     async function handleSubmit() {
         const allErrorsInputs = getStatesErrorInputs();
         const allMandatoryValInputs = getValuesMandantInputs();
-        if(isAnyMandatInputEmpty(allMandatoryValInputs)) {
+        if(isAnyMandatoryInputEmpty(allMandatoryValInputs)) {
             submitError.value = TYPE_SUBMIT_ERROR.MANDATORY_EMPTY_INPUTS;
             return;
         }

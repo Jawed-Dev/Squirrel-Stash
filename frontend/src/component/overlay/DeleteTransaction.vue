@@ -1,7 +1,7 @@
 <template>
     <div class="fixed inset-0 bg-black bg-opacity-80 z-30">
         <div :class="`fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-30 text-white rounded-[3px] overflow-hidden 
-                shadow-black shadow-custom-main trigger-menu-delete bg-main-gradient
+                 shadow-main trigger-menu-delete bg-main-gradient
                 max-[600px]:w-full sm:w-1/4 min-[600px]:min-w-[600px]`">
             <MainContainerSlot :bgMainBtn="'bg-gradient-vanusa'" :width="'w-full'" @toggleMenu="toggleMenu"
             :textBtn1="'Annuler'" :textBtn2="'Supprimer'" :titleContainer="textTitleComponent">

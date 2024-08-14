@@ -1,6 +1,6 @@
 <template>
     <div v-if="componentLoaded">
-        <div v-if="!isEmptyListTransaction" class="rounded-[3px] overflow-hidden my-custom-margin-main shadow-black shadow-custom-main">
+        <div v-if="!isEmptyListTransaction" class="rounded-[3px] overflow-hidden my-custom-margin-main  shadow-main">
             <div class="gradient-border text-white overflow-hidden
                 bg-main-gradient w-full">     
                 <div class="flex flex-col justify-center relative pt-3">
@@ -13,7 +13,7 @@
                         />
                     </div>
                 </div>
-                <div class="flex py-2 pl-0 sm:pl-4 md:pl-3 mt-5 bg-gradient-x-blue shadow-black shadow-custom-main">
+                <div class="flex py-2 pl-0 sm:pl-4 md:pl-3 mt-5 bg-gradient-x-blue  shadow-main">
                     <div class="text-[15px] sm:text-base ml-[20px] sm:ml-[40px] md:pl-[20px] w-[25%] overflow-hidden text-ellipsis">
                         <p @click="toggleOrder(ORDER_STATE.CATEGORY)" 
                         :class="`${colorForOrderSelected(ORDER_STATE.CATEGORY)} w-fit cursor-pointer`" 

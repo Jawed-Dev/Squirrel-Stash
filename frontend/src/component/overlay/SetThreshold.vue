@@ -11,7 +11,7 @@
             <div 
                 v-show="isOverlayActive" 
                 :class="`fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-30 text-white rounded-[3px]
-                shadow-black shadow-custom-main trigger-set-treshold bg-main-gradient
+                 shadow-main trigger-set-treshold bg-main-gradient
                 max-[600px]:w-full sm:w-1/4 min-[600px]:min-w-[600px]`"
             >
                 <MainContainerSlot 
@@ -69,7 +69,7 @@
     import { saveThreshold } from '@/composable/useBackendActionData';
     import { storeDateSelected } from '@/storePinia/useStoreDashboard';
     import { updateBalanceEcoByMonth, updateThresholdByMonth, updateTotalTrsByMonth } from '@/storePinia/useUpdateStoreByBackend';
-    import { isAnyMandatInputEmpty, isAnyInputError, TYPE_SUBMIT_ERROR, TEXT_SUBMIT_ERROR} from '@/error/useHandleError';
+    import { isAnyMandatoryInputEmpty, isAnyInputError, TYPE_SUBMIT_ERROR, TEXT_SUBMIT_ERROR} from '@/error/useHandleError';
     import TransitionPopUp from '@/component/transition/TransitionPopUp.vue';
 
     const OverlaySuccessAction = defineAsyncComponent(() => import('@/component/overlay/OverlaySuccessAction.vue'));
@@ -115,7 +115,7 @@
             case 'valid': {
                 const allErrorsInputs = getStatesErrorInputs();
                 const allMandatoryValInputs = getValuesMandantInputs();
-                if(isAnyMandatInputEmpty(allMandatoryValInputs)) {
+                if(isAnyMandatoryInputEmpty(allMandatoryValInputs)) {
                     submitError.value = TYPE_SUBMIT_ERROR.MANDATORY_EMPTY_INPUTS;
                     return;
                 }

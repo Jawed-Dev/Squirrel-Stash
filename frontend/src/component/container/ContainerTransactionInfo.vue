@@ -6,7 +6,7 @@
                 <IconLoader 
                     :nameIcon="infoTransaction.transaction_category" 
                     :svg="iconConfig" 
-                    :class="`${iconConfig.color} rounded-full p-[10px] shadow-black shadow-custom-main`"
+                    :class="`${iconConfig.color} rounded-full p-[10px]  shadow-main`"
                 />
         
                 <p class="w-[25%] text-[15px] pl-[5px] md:pl-[20px] sm:text-left 
@@ -35,10 +35,10 @@
             <TransitionOpacity duration-out="duration-300">
                 <div v-if="isShowingDetails" class="relative flex items-center trigger-info-note">
                     <p v-if="infoTransaction.transaction_note" 
-                        class="pl-4 py-1 absolute w-full bg-main-gradient font-light top-1 shadow-black shadow-custom-main" >
+                        class="pl-4 py-1 absolute w-full bg-main-gradient font-light top-1  shadow-main" >
                         Note : {{ infoTransaction.transaction_note }}
                     </p>
-                    <p  v-else class="text-center pl-4 py-1 absolute w-full bg-main-gradient font-light top-1 shadow-black shadow-custom-main">
+                    <p  v-else class="text-center pl-4 py-1 absolute w-full bg-main-gradient font-light top-1  shadow-main">
                         Aucune note
                     </p>
                 </div>
@@ -51,7 +51,7 @@
             v-if="(!props.infoTransaction.transaction_id)" 
             :class="`min-h-[105px] sm:pl-4 md:pl-3 flex items-center py-6 ${borderBottom} border-gray-700 text-white relative`">
             <IconLoader nameIcon="Invisible" :svg="iconConfig" 
-            :class="`${iconConfig.color} rounded-full p-[10px] shadow-black shadow-custom-main`"/>
+            :class="`${iconConfig.color} rounded-full p-[10px]  shadow-main`"/>
             <p class="absolute w-full text-[15px] text-center font-light">Aucune donnée</p>
         </div>
     </div>

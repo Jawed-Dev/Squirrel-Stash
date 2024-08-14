@@ -1,9 +1,9 @@
 <template>
-    <div class="flex justify-center rounded-[3px] mt-[10px] bg-main-gradient overflow-hidden shadow-black shadow-custom-main">
+    <div class="flex justify-center rounded-[3px] mt-[10px] bg-main-gradient overflow-hidden  shadow-main">
         <div :class='`text-white w-full relative`'>   
             <div 
                 @click="toggleParamsSearch" 
-                class="absolute w-full mt-5 shadow-black shadow-custom-main bg-gradient-x-blue py-2 pl-3
+                class="absolute w-full mt-5  shadow-main bg-gradient-x-blue py-2 pl-3
                 font-light flex justify-start gap-2 text-[18px] text-white 
                 hover:shadow-slate-500 cursor-pointer">
                 <UseIconLoader :svg=iconConfig :nameIcon="typeIconShowParams"  />
@@ -57,7 +57,7 @@
                                 </div>
                             </div>
                             <div class="w-full flex justify-center mt-8 sm:mt-12 my-3">
-                                <div class="shadow-black shadow-custom-main min-w-[250px] w-1/4 md:w-1/5 overflow-x-hidden text-ellipsis">
+                                <div class=" shadow-main min-w-[250px] w-1/4 md:w-1/5 overflow-x-hidden text-ellipsis">
                                     <button class="w-full rounded-sm py-2 bg-gradient-blue rounded-br-[3px] font-light">Rechercher
                                     </button>
                                 </div>

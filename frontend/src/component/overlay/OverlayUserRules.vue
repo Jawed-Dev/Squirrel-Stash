@@ -1,8 +1,8 @@
 <template>
     <div class="fixed inset-0 bg-black bg-opacity-80 z-30">
         <div :class="`fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-30 text-white rounded-[3px]
-                shadow-black shadow-custom-main bg-main-gradient
-                max-[850px]:w-full min-[850px]:min-w-[850px] font-main-font`">
+                 shadow-main bg-main-gradient
+                max-[850px]:w-full min-[850px]:min-w-[850px] font-main`">
     
             <MainContainerSlot :bgMainBtn="'bg-gradient-blue'" width='w-full'
             :onlyOneBtn="true" :textBtn1="'Fermer'" titleContainer="Conditions d'utilisation de Squirrel Stash" @toggleMenu="toggleMenu">

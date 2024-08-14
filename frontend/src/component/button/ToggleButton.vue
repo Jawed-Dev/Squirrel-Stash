@@ -1,5 +1,5 @@
 <template>
-    <div class="flex justify-center shadow-black shadow-custom-main rounded-r-md rounded-l-md w-full">
+    <div class="flex justify-center  shadow-main rounded-r-md rounded-l-md w-full">
         <div class="w-1/2">
             <p class="w-full text-center px-2 py-[2px] cursor-pointer rounded-l-md text-[15px] font-light overflow-hidden text-ellipsis" 
             :class="[!typeTransaction ? 'bg-gradient-blue' : '']" @click="handleStateToggle(false)" >{{ text1 }}</p>

@@ -1,8 +1,9 @@
 <?php
     //namespace model;
+    require_once './config.php';
     use PDO;
     use PDOException;
-
+    
     interface I_ModelMain {
         static function getConnection();
         function createRandomHashSha256();
@@ -13,15 +14,14 @@
         public static function getConnection() {
             if(!self::$connection) {
                 $servername = "localhost";
-                $username = "root";
-                $password = "";
-                $dbname = "eco_projet";
+                $username = "user_squirrel_stash";
+                $password = USER_DB_KEY;
+                $dbname = "squirrel_stash";
                 $connexion = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
                 $connexion->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
                 return $connexion;
             }
             return self::$connection;
-
         }
 
         public function createRandomHashSha256() {

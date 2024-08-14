@@ -1,5 +1,5 @@
 <template>
-    <div class="overflow-hidden shadow-black shadow-custom-main rounded-[3px]">
+    <div class="overflow-hidden  shadow-main rounded-[3px]">
         <div class="pl-3 bg-main-gradient text-white rounded-md gradient-border ">
             <h2 class="pb-2 pt-3 text-xl font-extralight pr-8">{{(!typeTransaction) ? title1 : title2 }}</h2>
             <div class="w-full flex justify-center">

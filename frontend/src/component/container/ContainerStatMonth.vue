@@ -1,10 +1,10 @@
 <template>
-    <div :class="`${props.width} rounded-[3px] overflow-hidden mt-5 shadow-black shadow-custom-main`">
+    <div :class="`${props.width} rounded-[3px] overflow-hidden mt-5  shadow-main`">
         <div :class="`flex flex-col gradient-border overflow-hidden bg-main-gradient`">
             <div class="flex items-center justify-between px-2 py-2 ">
                 <UseIconLoader 
                     :nameIcon="nameIcon" :svg="styleIcon" 
-                    :class="`${bgIcon} p-3 rounded-lg shadow-black shadow-custom-main`"
+                    :class="`${bgIcon} p-3 rounded-lg  shadow-main`"
                 />
                 <div class="flex flex-col items-end gap-3">
                     <SetThreshold :isIconActive="isIconActive" />

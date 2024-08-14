@@ -1,6 +1,3 @@
-import { createRouter, createWebHistory } from 'vue-router';
-import { ref } from 'vue';
-
 const PageLogin = () => import('@/page/PageLogin.vue');
 const PageCreateAcc = () => import('@/page/PageCreateAcc.vue');
 const PageDashboard = () => import('@/page/PageDashboard.vue');
@@ -13,10 +10,10 @@ const PageUser = () => import('@/page/PageUser.vue');
 const PageAnnualSummary = () => import('@/page/PageAnnualSummary.vue');
 
 import  useConfigFetchGetPage from "@/composable/useConfigFetchGetPage";
-
-import { getLStorageAuthToken, setLStorageAuthToken } from "@/composable/useLocalStorage";
-import { isValidResetPassToken, getNewAccessToken  } from "@/composable/useBackendGetData";
-import { updateEmail } from './composable/useBackendActionData';
+import { createRouter, createWebHistory } from 'vue-router';
+import { getLStorageAuthToken } from "@/composable/useLocalStorage";
+import { isValidResetPassToken  } from "@/composable/useBackendGetData";
+import { updateEmail } from '@/composable/useBackendActionData';
 
 const routes = [
   { path: '/', component: PageTemporary, meta: { page: 'pageIndex'}},
@@ -38,21 +35,17 @@ const router = createRouter({
 });
 
 router.beforeEach(async (to, from, next) => {
-    const currentPage = to.meta.page;  
+    const currentPage = to.meta.page;
+    // redirect not allowed page  
     if(!currentPage) {
-      // 404 ?
       next('/connexion');
       return;
     } 
+    // token JWT
     let localToken = getLStorageAuthToken();
-    if(!localToken) {
-      console.log('test1');
-    }
 
     const dataPage = await useConfigFetchGetPage(currentPage, localToken);
-    console.log(dataPage);
     const isSessionActive = dataPage?.isSessionActive;
-    console.log(dataPage);
     
     switch(currentPage) {
       case 'pageIndex' : {
@@ -73,7 +66,6 @@ router.beforeEach(async (to, from, next) => {
       }
       case 'updateEmail' : {
         const token = to.query.token;
-        console.log(token);
         const response = await updateEmail(token);
         if(response?.isSuccessRequest) next('/mon-compte');
         break;
