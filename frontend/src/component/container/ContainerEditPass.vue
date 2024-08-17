@@ -23,13 +23,7 @@
                                 <ImageEditPass class="pt-5 w-full" :svg="imageConfig" />
                             </div>
 
-                            <div class="grow flex flex-col justify-center">
-    
-                                <!-- Errors -->
-                                <div class="relative">
-                                    <p class="text-sm font-light absolute text-red-300">{{ textError }}</p>
-                                </div>
-                                
+                            <div class="grow flex flex-col justify-center">                            
                                 <div class="xl:mt-5 w-full flex">
                                     <div class="w-full flex flex-col justify-center xl:justify-center 2xl:justify-evenly 
                                             items-center mt-3 gap-2 sm:gap-5 2xl:gap-0 sm:flex-row"> 
@@ -41,6 +35,7 @@
                                                 id="input-old-pass" 
                                                 v-model="inputsPass.oldPass" 
                                                 v-model:stateError="errorInputs.oldPass"
+                                                v-model:mandatoryInput="mandatoryInputs.oldPass"
                                                 placeholder="Non défini"
                                                 type="password"
                                                 validFormat="password"
@@ -62,6 +57,7 @@
                                                 id="input-confirm-pass" 
                                                 v-model="inputsPass.confirmNewPass" 
                                                 v-model:stateError="errorInputs.confirmNewPass"
+                                                v-model:mandatoryInput="mandatoryInputs.confirmNewPass"
                                                 placeholder="Non défini"
                                                 type="password"
                                                 validFormat="password"
@@ -75,6 +71,7 @@
                                                 id="input-confirm-newpass" 
                                                 v-model="inputsPass.newPass" 
                                                 v-model:stateError="errorInputs.newPass"
+                                                v-model:mandatoryInput="mandatoryInputs.newPass"
                                                 placeholder="Non défini"
                                                 type="password"
                                                 validFormat="password"
@@ -84,10 +81,7 @@
                                     </div>
                                 </div>
                             </div>
-
                         </div>
-
-        
                         <div class="w-full flex justify-center sm:mt-12 my-3">
                             <div class=" shadow-main min-w-[250px] w-1/4 md:w-1/5 overflow-x-hidden text-ellipsis">
                                 <button class="w-full rounded-sm py-2 bg-gradient-blue rounded-br-[3px] font-light">Editer</button>
@@ -98,23 +92,19 @@
             </form>
         </div>
     </section>
-    <TransitionPopUp duration-in="500" duration-out="500">
-        <OverlaySuccessAction text="Votre mot de passe a été modifié." v-if="isSuccessAction" v-model:overlayActive="isSuccessAction" />
-    </TransitionPopUp>
 </template>
 
 
 <script setup>
-    import { ref, reactive, computed, defineAsyncComponent } from 'vue';
+    import { ref, reactive, computed } from 'vue';
     import InputBase from '@/component/input/InputBase.vue';
     import { updatePasswordByUserId } from '@/composable/useBackendActionData';
     import { isAnyMandatoryInputEmpty, isAnyInputError, TYPE_SUBMIT_ERROR, TEXT_SUBMIT_ERROR } from '@/error/useHandleError';
-    import TransitionPopUp from '@/component/transition/TransitionPopUp.vue';
     import TransitionAxeY from '@/component/transition/TransitionAxeY.vue';
     import UseIconLoader from '@/composable/useIconLoader.vue';
     import ImageEditPass from '@/component//svgs/ImageEditPass.vue';
     import { setSvgConfig } from '@/svg/svgConfig';
-    const OverlaySuccessAction = defineAsyncComponent(() => import('@/component/overlay/OverlaySuccessAction.vue'));
+    import { createToast } from '@/composable/useToastNotification';
 
     const inputsPass = reactive({
         oldPass: '',
@@ -128,14 +118,16 @@
         confirmNewPass: false,
     });
 
-    const submitError = ref(null);
-    const isSuccessAction = ref(false);
+    const mandatoryInputs = reactive({
+        oldPass: false,
+        newPass: false,
+        confirmNewPass: false,
+    });
     const toggleShowParams= ref(false);
     const iconConfig = setSvgConfig({width:'30px', fill:'white' });
     const imageConfig = setSvgConfig({width:'300px', fill:'white' });
 
     // life cycle, functions
-
     const typeIconShowParams = computed(() => {
         return (toggleShowParams.value) ? 'ArrowUp' : 'ArrowDown';
     });
@@ -144,60 +136,29 @@
         return (toggleShowParams.value) ? '' : 'pb-5';
     });
 
-    const textError = computed(() => {
-        if(submitError.value === TYPE_SUBMIT_ERROR.MANDATORY_EMPTY_INPUTS) return TEXT_SUBMIT_ERROR.ALL_INPUTS_MANDATORY;
-        else if(submitError.value === TYPE_SUBMIT_ERROR.NOT_SUCCESS_REQUEST) return "La requête a échoué.";
-        else if(submitError.value === TYPE_SUBMIT_ERROR.CONFIRM_PASS_ERROR) return TEXT_SUBMIT_ERROR.CONFIRM_PASS_ERROR;
-    });
-
-    const strengthLevelPass = computed(() => {
-        let levelPass = 0;
-        if(inputsPass.newPass.length >= 4) levelPass++;
-        if (/[A-Z]/.test(inputsPass.newPass) && /\d/.test(inputsPass.newPass)) levelPass++;
-        if (/[^A-Za-z0-9]/.test(inputsPass.newPass)) levelPass++;
-        return levelPass;
-    });
-
-    const colorBorderLevelPass = computed(() => {
-        if(strengthLevelPass.value === 0) return "border-white";
-        else if(strengthLevelPass.value === 1) return "border-red-600";
-        else if(strengthLevelPass.value === 2) return "border-orange-400";
-        else if(strengthLevelPass.value === 3) return "border-green-600";
-    });
-
-    const textLevelPass = computed(() => {
-        if(strengthLevelPass.value === 0) return "Mauvais";
-        else if(strengthLevelPass.value === 1) return "Mauvais";
-        else if(strengthLevelPass.value === 2) return "Bon";
-        else if(strengthLevelPass.value === 3) return "Excellent";
-    });
-
-
     async function handleSubmit() {
         const allErrorsInputs = getStatesErrorInputs();
         const allMandatoryValInputs = getValuesMandantInputs();
         if(isAnyMandatoryInputEmpty(allMandatoryValInputs)) {
-            submitError.value = TYPE_SUBMIT_ERROR.MANDATORY_EMPTY_INPUTS;
+            activeErrorForMandatInputsEmpty();
+            createToast(TEXT_SUBMIT_ERROR.MANDATORY_EMPTY_INPUTS, 'error');
             return;
         }
         else if(isAnyInputError(allErrorsInputs)) {
-            submitError.value = TYPE_SUBMIT_ERROR.INPUTS_FORMAT_ERRORS;
             return;
         }
         else if(isPasswordsAreDifferent()) {
-            submitError.value = TYPE_SUBMIT_ERROR.CONFIRM_PASS_ERROR;
-            resetInputs();
+            createToast(TEXT_SUBMIT_ERROR.CONFIRM_PASS_ERROR, 'error');
+            clearInputsPass();
             return;
         }
         const response = await updatePasswordByUserId({ oldPass: inputsPass.oldPass, newPass: inputsPass.newPass });
         const isSuccessRequest = response?.isSuccessRequest;
         if(!isSuccessRequest) {
-            submitError.value = TYPE_SUBMIT_ERROR.NOT_SUCCESS_REQUEST;
             return;
         }
         clearInputsPass();
-        submitError.value = null;
-        isSuccessAction.value = true;
+        createToast('Votre mot de passe a été édité.', 'success');
     }
 
     function clearInputsPass() {
@@ -213,13 +174,19 @@
             newPass: errorInputs.newPass
         }
     }
-    
+
     function getValuesMandantInputs() {
         return {
             oldpass: inputsPass.oldPass,
             confirmNewPass: inputsPass.confirmNewPass,
             newPass: inputsPass.newPass
         }
+    }
+
+    function activeErrorForMandatInputsEmpty() {
+        if (!inputsPass.oldPass) mandatoryInputs.oldPass = true;
+        if (!inputsPass.newPass) mandatoryInputs.newPass = true;
+        if (!inputsPass.confirmNewPass) mandatoryInputs.confirmNewPass = true;
     }
 
     function isPasswordsAreDifferent() {

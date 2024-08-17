@@ -24,6 +24,7 @@
         if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             if(!empty($_GET['page'])) {
                 switch($_GET['page']) {
+                    
                     case 'pageIndex': {
                         getControllerMain()->authorizePage();
                         break;
@@ -68,6 +69,12 @@
                         getControllerMain()->getControllerStatistic()->authorizePage();
                         break;
                     }
+
+                    // case 'page404': {
+                    //     getControllerMain()->authorizePage();
+                    //     break;
+                    // }
+
                     default: {
                         getControllerMain()->sendJsonResponse(['message' => 'Page not found', 'status' => 404]);
                         break;

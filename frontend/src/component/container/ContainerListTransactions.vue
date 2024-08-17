@@ -1,5 +1,5 @@
 <template>
-    <div class="rounded-[3px] overflow-hidden my-custom-margin-main  shadow-main">
+    <div class="rounded-[3px] overflow-hidden my-custom-margin-main shadow-main relative">
         <div class="bg-main-gradient w-full gradient-border text-white"> 
     
             <div class="flex items-center justify-between">
@@ -13,18 +13,16 @@
                 </div>
             </div>
 
-            <div class="flex py-2 pl-0 sm:pl-4 md:pl-3 mt-5 bg-gradient-x-blue  shadow-main">
+            <div class="absolute left-0 w-full flex py-2 pl-0 sm:pl-4 md:pl-3 mt-5 bg-gradient-x-blue shadow-main">
                 <p class="text-[15px] sm:text-base ml-[20px] sm:ml-[40px] md:pl-[20px] w-[25%] overflow-hidden text-ellipsis">Catégorie</p>
                 <p class="text-[15px] sm:text-base w-[22%] pl-5 sm:pl-0 sm:justify-stretch flex justify-center">Montant</p>
                 <p class="text-[15px] sm:text-base w-[22%] sm:justify-stretch flex justify-center">Date</p>
                 <p class="text-[15px] sm:text-base grow sm:justify-stretch flex justify-center">Itération</p>
             </div>
-            <div>
+            <div class="mt-[calc(105px-45px)]">
                 <ContainerTransactionInfo 
                     v-for="(transaction, index) of listTransactions" 
                     :key="transaction.transaction_id"
-                    v-model:isSuccessEdit="isSuccessEdit"
-                    v-model:isSuccessDelete="isSuccessDelete"
                     v-model:currentMenuEditDeleteTrs="currentMenuEditDeleteTrs" 
                     :indexMenu="index" 
                     :infoTransaction="transaction"
@@ -32,18 +30,13 @@
                 />
             </div>
         </div>
-
-        <TransitionPopUp duration-in="500" duration-out="500">
-            <OverlaySuccessAction text="Votre transaction a été éditée." v-if="isSuccessEdit" v-model:overlayActive="isSuccessEdit" />
-            <OverlaySuccessAction text="Votre transaction a été supprimée." v-if="isSuccessDelete" v-model:overlayActive="isSuccessDelete" />
-        </TransitionPopUp>
     </div>
 </template>
 
 
 <script setup>
     // import
-    import { ref, watch, computed, watchEffect, defineAsyncComponent } from 'vue';
+    import { ref, watch, computed, defineAsyncComponent } from 'vue';
     import ContainerTransactionInfo from '@/component/container/ContainerTransactionInfo.vue';
     import { classTransitionHover } from '@/composable/useClassTransitionHover';
     import { storeLastNTransactions, storeDateSelected } from '@/storePinia/useStoreDashboard';
@@ -61,9 +54,6 @@
     // variables, props...
     const currentMenuEditDeleteTrs = ref(-1);
     const translateY = classTransitionHover('translateY');
-
-    const isSuccessDelete = ref(false);
-    const isSuccessEdit = ref(false);
     const typeTransaction = defineModel();
 
     // life cycle

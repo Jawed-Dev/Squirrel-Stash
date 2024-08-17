@@ -11,12 +11,6 @@
             <form class="overflow-x-auto min-w-[350px] md:w-[45%] lg:w-[60%] xl:w-1/3 xl:min-w-[390px] 2xl:min-w-[420px]" @submit.prevent="handleSubmit()">
 
                 <h1 class="text-2xl text-center text-white">Changer votre mot de passe</h1>
-
-                <!-- Errors -->
-                <div class="relative">
-                    <p class="text-sm font-light pt-3 text-red-300">{{ textError }}</p>
-                </div>
-
                 <div class="mt-5">
                     <label class="text-white font-light" for="input-pass">Nouveau mot de passe</label>
                     <InputBase 
@@ -24,6 +18,7 @@
                         id="input-pass" 
                         v-model="password" 
                         v-model:stateError="errorInput.password"
+                        v-model:mandatoryInput="mandatoryInputs.password"
                         extraClass="" 
                         placeholder="Mot de passe"
                         type="password"
@@ -37,6 +32,7 @@
                         id="input-confirm-pass" 
                         v-model="confirmPassword"
                         v-model:stateError="errorInput.confirmPassword" 
+                        v-model:mandatoryInput="mandatoryInputs.confirmPassword"
                         placeholder="Mot de passe"
                         type="password"
                         validFormat="password"
@@ -56,59 +52,49 @@
             </form>
         </div>
     </section>
-
-    <TransitionPopUp duration-in="500" duration-out="500">
-        <OverlaySuccessAction redirect="connexion"  text="Votre mot de passe a été modifié." v-if="isSuccessAction" v-model:overlayActive="isSuccessAction" />
-    </TransitionPopUp>
 </template>
 
 
 <script setup>
-    import { ref, reactive, defineAsyncComponent, computed } from 'vue';
+    import { ref, reactive } from 'vue';
     import { useRouter, useRoute } from 'vue-router';
     import InputBase from '@/component/input/InputBase.vue';
-    import ButtonComponent from '@/component/button/ButtonBasic.vue';
     import { updatePasswordByToken } from '@/composable/useBackendActionData';
     import { isAnyMandatoryInputEmpty, isAnyInputError, TYPE_SUBMIT_ERROR, TEXT_SUBMIT_ERROR } from '@/error/useHandleError';
-    import TransitionPopUp from '@/component/transition/TransitionPopUp.vue';
     import LogoMain from '@/component/svgs/LogoMain.vue';
     import { setSvgConfig } from '@/svg/svgConfig';
-    const OverlaySuccessAction = defineAsyncComponent(() => import('@/component/overlay/OverlaySuccessAction.vue'));
+    import { createToast } from '@/composable/useToastNotification';
 
     // props, variables
     const router = useRouter();
     const route = useRoute();
     const password = ref('');
     const confirmPassword = ref('');
-    const isSuccessAction = ref(false);
     const styleLogo = setSvgConfig({width:'200px'})
 
     const errorInput = reactive({
         password: false,
         confirmPassword: false
     }); 
-    const submitError = ref(null);
-
-    // life cycle, functions
-    const textError = computed(() => {
-        if(submitError.value === TYPE_SUBMIT_ERROR.MANDATORY_EMPTY_INPUTS) return TEXT_SUBMIT_ERROR.ALL_INPUTS_MANDATORY;
-        else if(submitError.value === TYPE_SUBMIT_ERROR.NOT_SUCCESS_REQUEST) return "La requête a échoué.";
-        else if(submitError.value === TYPE_SUBMIT_ERROR.CONFIRM_PASS_ERROR) return TEXT_SUBMIT_ERROR.CONFIRM_PASS_ERROR;
+    const mandatoryInputs = reactive({
+        password: false,
+        confirmPassword: false
     });
 
+    // life cycle, functions
     async function handleSubmit() {
         const allErrorsInputs = getStatesErrorInputs();
         const allMandatoryValInputs = getValuesMandantInputs();
         if(isAnyMandatoryInputEmpty(allMandatoryValInputs)) {
-            submitError.value = TYPE_SUBMIT_ERROR.MANDATORY_EMPTY_INPUTS;
+            activeErrorForMandatInputsEmpty();
+            createToast(TEXT_SUBMIT_ERROR.MANDATORY_EMPTY_INPUTS, 'error');
             return;
         }
         else if(isAnyInputError(allErrorsInputs)) {
-            submitError.value = TYPE_SUBMIT_ERROR.INPUTS_FORMAT_ERRORS;
             return;
         }
         else if(isPasswordsAreDifferent()) {
-            submitError.value = TYPE_SUBMIT_ERROR.CONFIRM_PASS_ERROR;
+            createToast(TEXT_SUBMIT_ERROR.CONFIRM_PASS_ERROR, 'error');
             resetInputs();
             return;
         }
@@ -117,14 +103,11 @@
             password: password.value
         });
         if(!isSuccessRequest) {
-            submitError.value = TYPE_SUBMIT_ERROR.NOT_SUCCESS_REQUEST;
             resetInputs();
             return;
         }
-
-        submitError.value = null;
-        isSuccessAction.value = true;
-        //router.push('/connexion');
+        createToast("Votre mot de passe a été modifié.", 'success');
+        router.push('/connexion');
     }
 
     function resetInputs() {
@@ -146,8 +129,12 @@
     function getValuesMandantInputs() {
         return {
             password: password.value,
-            confirmPassword: password.value
+            confirmPassword: confirmPassword.value
         }
+    }
+    function activeErrorForMandatInputsEmpty() {
+        if (!password.value) mandatoryInputs.password = true;
+        if (!confirmPassword.value) mandatoryInputs.confirmPassword = true;
     }
 
     function isPasswordsAreDifferent() {

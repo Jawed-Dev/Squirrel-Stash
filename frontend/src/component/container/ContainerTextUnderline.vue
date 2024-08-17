@@ -7,7 +7,7 @@
         </div>
         <p 
         :id="id" 
-        :class="`text-[15px] p-1 ${extraClass}`"> {{ text }}
+        :class="`text-[15px] p-1  pl-2 ${extraClass}`"> {{ text }}
         </p>
     </div>
 </template>
@@ -27,6 +27,6 @@
 
     const colorBorder = computed(() => {
         if(props.borderHidden) return '';
-        return (props.text) ? "border-custom-blue" : "hover:border-custom-blue border-custom-gray-2";
+        return (props.text) ? "border-custom-green" : "hover:border-custom-blue border-custom-gray-2";
     });
 </script>

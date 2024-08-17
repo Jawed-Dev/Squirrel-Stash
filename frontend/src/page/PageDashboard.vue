@@ -1,6 +1,6 @@
 <template>
-    <div class="font-main flex flex-col bg-main-bg w-full pb-[calc(50px)] md:pb-0">
-        <div class="mx-1 md:ml-[calc(20px+65px+20px)] xl:ml-[calc(30px+75px+30px)] md:mr-[20px] xl:mr-[30px] flex flex-col mt-5">
+    <div class="font-main flex flex-col bg-main-bg w-full min-h-screen pb-[calc(50px)] md:pb-0">
+        <div v-show="isLoadedData"  class="mx-1 md:ml-[calc(20px+65px+20px)] xl:ml-[calc(30px+75px+30px)] md:mr-[20px] xl:mr-[30px] flex flex-col mt-5">
             <h1 class="text-2xl font-light text-white">Économie du mois</h1>
             <p class="font-light text-white mt-2 pr-2">Bonjour {{ firstNameUser }}, voici votre résumé du mois.</p> 
 
@@ -12,7 +12,6 @@
                     </div>
                     <AddTransaction/>   
                 </section>
-
                 <ContainerStatMonth 
                     class="order-1 lg:order-2"
                     :isIconActive="true" nameIcon="target" bgIcon="bg-gradient-blue" 
@@ -21,11 +20,10 @@
                     :nameStat="'Seuil mensuel'" 
                     :width="'mt-5 w-full lg:min-w-[calc(200px*2+8px)] lg:w-1/4'"
                 />
-    
             </div>
 
             <section class="w-full mt-custom-margin-main rounded-[3px] overflow-hidden  shadow-main"> 
-                <ContainerTransactionsMonth />
+                <ContainerTransactionsMonth v-if="isLoadedData"/>
             </section>
 
             <section class="flex flex-col sm:flex-row sm:gap-5 justify-around">
@@ -34,8 +32,8 @@
                     <ContainerStatMonth nameIcon="calculator" bgIcon="bg-gradient-orange" :colorValue="'text-custom-orange'" 
                     :amountValue="statisticDetails.totalTransactions + ' €'" :nameStat="'Total des transactions'" :width="'min-[1340px]:w-1/2 w-full'" />
     
-                    <ContainerStatMonth nameIcon="balance" bgIcon="bg-gradient-green" :colorValue="'text-custom-green'" 
-                    :amountValue="filterTextBalanceEconomy" :nameStat="'Balance d\'économie'" :width="'min-[1340px]:w-1/2 w-full'" />
+                    <ContainerStatMonth nameIcon="balance" bgIcon="bg-gradient-green" :colorValue="colorTextBalanceEconomy" 
+                    :amountValue="textBalanceEconomy" :nameStat="'Balance d\'économie'" :width="'min-[1340px]:w-1/2 w-full'" />
                 </div>
                 
                 <div class="flex flex-col w-full justify-around min-[1340px]:flex-row min-[1340px]:gap-5">
@@ -52,7 +50,11 @@
                 <ContainerListTransactions v-model="topTransactions.typeTrsRecurrings" class="w-full hidden xl:flex h-fit" />
             </section>
         </div>
+        <div v-show="!isLoadedData">
+            <ContainerSpinner />
+        </div>
     </div>
+    
 </template>
 
 
@@ -66,13 +68,14 @@
     import AddTransaction from '@/component/overlay/AddTransaction.vue';
     import { monthNames, getAvailableYear, getCurrentMonthName, getCurrentYear, getMonthNumber } from '@/composable/useGetDate';
     import { getUserFirstName } from '@/composable/useBackendGetData';
-    import { storeThreshold, storeDateSelected, storeStatisticDetails } from '@/storePinia/useStoreDashboard';
+    import { storeTrsMonthByDay, storeThreshold, storeDateSelected, storeStatisticDetails } from '@/storePinia/useStoreDashboard';
     import { updateThresholdByMonth, updateTotalTrsByMonth, updateBalanceEcoByMonth, updateBiggestTrsByMonth } from '@/storePinia/useUpdateStoreByBackend';
+    import ContainerSpinner from '@/component/container/ContainerSpinner.vue';
     
-
-
     // stores Pinia
     const threshold = storeThreshold();
+    // props, variables, ...
+    const isLoadedData = ref(false);
     const dateSelected = storeDateSelected();
     const statisticDetails = storeStatisticDetails();
     const firstNameUser = ref('');
@@ -87,27 +90,35 @@
         const response = await getUserFirstName();
         const userFirstName = response?.data?.user_first_name;
         firstNameUser.value = userFirstName;
-
         const currentMonthName = getCurrentMonthName();
         const currentYear = getCurrentYear();
         const currentMonthNumber = getMonthNumber(currentMonthName);
         dateSelected.month = currentMonthNumber;
-        dateSelected.year = currentYear;
+        dateSelected.year = currentYear; 
     });
 
     watch( () => [dateSelected.month, dateSelected.year], async ([newMonth, newYear]) => {
-        updateThresholdByMonth(newMonth, newYear);
-        updateTotalTrsByMonth(newMonth, newYear);
-        updateBalanceEcoByMonth(newMonth, newYear);
-        updateBiggestTrsByMonth(newMonth, newYear, 'purchase');
-        updateBiggestTrsByMonth(newMonth, newYear, 'recurring');
+        await updateThresholdByMonth(newMonth, newYear);
+        await updateTotalTrsByMonth(newMonth, newYear);
+        await updateBalanceEcoByMonth(newMonth, newYear);
+        await updateBiggestTrsByMonth(newMonth, newYear, 'purchase');
+        await updateBiggestTrsByMonth(newMonth, newYear, 'recurring');
+        isLoadedData.value  = true;
     }, {  immediate:true, deep:true });
 
     // computed
-    const filterTextBalanceEconomy = computed(() => {
-        if((statisticDetails.economyBalance === 0)) return '0 €';
+    const textBalanceEconomy = computed(() => {
+        if(statisticDetails.economyBalance === threshold.amount) return 'Aucune donnée';
+        if(statisticDetails.economyBalance === 0) return 'Limite atteinte';
         else if((statisticDetails.economyBalance > 0)) return '+'+ statisticDetails.economyBalance + ' €';
-        else return statisticDetails.economyBalance +' €';
+        return statisticDetails.economyBalance +' €';
+    });
+    const colorTextBalanceEconomy = computed(() => {
+        const balanceEconomyValue = statisticDetails.economyBalance;
+        if(statisticDetails.economyBalance === threshold.amount) return 'text-white';
+        if(balanceEconomyValue > 0) return 'text-custom-green';
+        else if(balanceEconomyValue < 0) return 'text-custom-red';
+        return 'text-white';
     });
 
     const iconNamePurchases = computed(() => {
@@ -126,4 +137,5 @@
         const nameBiggestPurch = statisticDetails?.biggestRecurring?.transaction_category;
         return (nameBiggestPurch) ? nameBiggestPurch : 'Aucune donnée';
     });
+    
 </script>

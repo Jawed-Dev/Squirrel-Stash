@@ -29,9 +29,8 @@ export default {
         'custom-turquoise' : '#00f2c3',
         
         'second-bg' : '#1b1e3390',
-        'main-bg': "#121422",
-        'main-color': "#121422",
-        'second-color' : '#3c78e3'
+        'main-bg': "#141414",
+        //'main-bg': "#141414",
       },
       spacing: {
         'header-width' : '75px',
@@ -40,9 +39,9 @@ export default {
         'custom-margin-main' : '20px'
       },
       backgroundImage: {
-        'main-gradient': "linear-gradient(to top left, #1b1e33 40%, #536976 250%)",
+       'main-gradient': "linear-gradient(to top left, #1b1e33 40%, #536976 250%)",
     
-        // 'main-gradient': "linear-gradient(to top left, #1b1e33 40%, #536976 250%)",
+        // 'main-gradient': "linear-gradient(to top left, #1b1e33 40%, #536976 250%)",,
         'main-second': "linear-gradient(to top left, #1b1e33 40%, #1b1e3390 140%)",
         'information-gradient': "linear-gradient(90deg, #0b274d, #0e2242, #0f1e38, #0f192e, #0f1524, #0c0f1b, #060810, #000000);",
         'header-gradient': "linear-gradient(0deg,#3358f4,#1d8cf8)",

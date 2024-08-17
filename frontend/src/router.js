@@ -1,3 +1,4 @@
+// lazy loading
 const PageLogin = () => import('@/page/PageLogin.vue');
 const PageCreateAcc = () => import('@/page/PageCreateAcc.vue');
 const PageDashboard = () => import('@/page/PageDashboard.vue');
@@ -8,6 +9,8 @@ const PageResetPass = () => import('@/page/PageResetPass.vue');
 const PageAccount = () => import('@/page/PageAccount.vue');
 const PageUser = () => import('@/page/PageUser.vue');
 const PageAnnualSummary = () => import('@/page/PageAnnualSummary.vue');
+const Page404 = () => import('@/page/Page404.vue');
+
 
 import  useConfigFetchGetPage from "@/composable/useConfigFetchGetPage";
 import { createRouter, createWebHistory } from 'vue-router';
@@ -16,17 +19,18 @@ import { isValidResetPassToken  } from "@/composable/useBackendGetData";
 import { updateEmail } from '@/composable/useBackendActionData';
 
 const routes = [
-  { path: '/', component: PageTemporary, meta: { page: 'pageIndex'}},
-  { path: '/connexion', component: PageLogin, meta: { page: 'pageLogin'}},
-  { path: '/inscription', component: PageCreateAcc, meta: { page: 'pageRegister' }},
-  { path: '/tableau-de-bord', component: PageDashboard, meta: { page: 'pageDashboard' }},
-  { path: '/mot-de-passe-oublie', component: PageForgotPass, meta: { page: 'pageForgotPass' }},
-  { path: '/reinitialiser-mot-de-passe', component: PageResetPass, meta: { page: 'pageResetPass' }},
-  { path: '/historique-transactions', component: PageHistoryTransactions, meta: { page: 'pageTransactions' }},
-  { path: '/mon-compte', component: PageAccount, meta: { page: 'pageAccount' }},
-  { path: '/reinitialiser-email', component: PageTemporary, meta: { page: 'updateEmail' }},
-  { path: '/utilisateur', component: PageUser, meta: { page: 'pageUser' }},
-  { path: '/recap-annuel', component: PageAnnualSummary, meta: { page: 'pageAnnualSummary' }},
+  { path: '/', component: PageTemporary, meta: { page:'Squirrel Stash', request: 'pageIndex'}},
+  { path: '/connexion', component: PageLogin, meta: { page:'Connexion', request: 'pageLogin'}},
+  { path: '/inscription', component: PageCreateAcc, meta: { page:'Inscription', request: 'pageRegister' }},
+  { path: '/tableau-de-bord', component: PageDashboard, meta: { page:'Tableau de bord', request: 'pageDashboard' }},
+  { path: '/mot-de-passe-oublie', component: PageForgotPass, meta: { page:'Mot de passe oublié', request: 'pageForgotPass' }},
+  { path: '/reinitialiser-mot-de-passe', component: PageResetPass, meta: { page:'Réinitialiser mot de passe', request: 'pageResetPass' }},
+  { path: '/historique-transactions', component: PageHistoryTransactions, meta: { page:'Historique', request: 'pageTransactions' }},
+  { path: '/mon-compte', component: PageAccount, meta: { page:'Mon compte', request: 'pageAccount' }},
+  { path: '/reinitialiser-email', component: PageTemporary, meta: { page:'Réinitialiser email', request: 'updateEmail' }},
+  { path: '/utilisateur', component: PageUser, meta: { page:'Utilisateur', request: 'pageUser' }},
+  { path: '/recap-annuel', component: PageAnnualSummary, meta: { page:'Récapitulatif annuel', request: 'pageAnnualSummary' }},
+  { path: '/404', component: Page404, meta: { page:'Page introuvable', request: 'page404' }},
 ];
 
 const router = createRouter({
@@ -35,19 +39,20 @@ const router = createRouter({
 });
 
 router.beforeEach(async (to, from, next) => {
-    const currentPage = to.meta.page;
-    // redirect not allowed page  
-    if(!currentPage) {
-      next('/connexion');
+    const currentRequest = to.meta.request;
+    // redirect not allowed pages  
+    if(!currentRequest) {
+      next('/404');
       return;
     } 
     // token JWT
     let localToken = getLStorageAuthToken();
-
-    const dataPage = await useConfigFetchGetPage(currentPage, localToken);
+    const dataPage = await useConfigFetchGetPage(currentRequest, localToken);
     const isSessionActive = dataPage?.isSessionActive;
+
+    document.title = to.meta.page;
     
-    switch(currentPage) {
+    switch(currentRequest) {
       case 'pageIndex' : {
         (isSessionActive) ? next('/tableau-de-bord') : next('/connexion');
         break;
@@ -99,8 +104,7 @@ router.beforeEach(async (to, from, next) => {
       }
       
       default : {
-          // page 404 ?
-          next('/connexion');
+          next();
           break;
       }
     }    

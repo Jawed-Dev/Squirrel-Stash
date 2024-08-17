@@ -7,13 +7,7 @@
                 <LogoMain :svg="styleLogo" />
             </div>
 
-            <form class="overflow-x-auto min-w-[420px] lg:w-[60%] xl:w-1/2 2xl:min-w-[420px]" @submit.prevent="handleSubmit()">
-                <!-- <h1 class="text-white text-[25px] text-center">Inscription</h1> -->
-                <!-- Errors -->
-                <div class="relative w-full">
-                    <p class="text-sm font-light pt-3 text-red-300">{{ textError }}</p>
-                </div>
-    
+            <form class="overflow-x-auto min-w-[420px] lg:w-[60%] xl:w-1/2 2xl:min-w-[420px]" @submit.prevent="handleSubmit()">    
                 <div class="flex flex-col gap-5 sm:gap-0 sm:flex-row justify-center w-full mt-5">
                     <div class="px-2 w-full sm:w-1/2">
                         <label class="text-white font-light" for="input-fname-crt-acc">Votre prénom</label>
@@ -21,6 +15,7 @@
                             iconName="Name"
                             v-model="firstName"
                             v-model:stateError="errorInput.firstName"
+                            v-model:mandatoryInput="mandatoryInputs.firstName"
                             id="input-fname-crt-acc"
                             placeholder="Prénom"
                             validFormat="firstName"
@@ -33,6 +28,7 @@
                             iconName="Name"
                             v-model="lastName"
                             v-model:stateError="errorInput.lastName"
+                            v-model:mandatoryInput="mandatoryInputs.lastName"
                             id="input-lname-crt-acc"
                             placeholder="Nom"
                             validFormat="lastName"
@@ -48,6 +44,7 @@
                         iconName="Email"
                         v-model="email" 
                         v-model:stateError="errorInput.email"
+                        v-model:mandatoryInput="mandatoryInputs.email"
                         id="input-email-crt-acc"
                         type="email"
                         placeholder="exemple.domaine.com"
@@ -62,6 +59,7 @@
                         iconName="Password"
                         v-model="password"
                         v-model:stateError="errorInput.password"
+                        v-model:mandatoryInput="mandatoryInputs.password"
                         id="input-pass-crt-acc"
                         placeholder="Mot de passe"
                         type="password"
@@ -75,6 +73,7 @@
                         iconName="Password"
                         v-model="confirmPassword"
                         v-model:stateError="errorInput.confirmPassword"
+                        v-model:mandatoryInput="mandatoryInputs.confirmPassword"
                         id="input-cpass-crt-acc"
                         placeholder="Mot de passe"
                         type="password"
@@ -114,10 +113,6 @@
             </TransitionOpacity>       
         </div>
     </section>
-
-    <TransitionPopUp duration-in="500" duration-out="500">
-        <OverlaySuccessAction redirect="connexion" text="Votre compte a été créé." v-if="isSuccessAction" v-model:overlayActive="isSuccessAction" />
-    </TransitionPopUp>
 </template>
 
 
@@ -127,13 +122,12 @@
     import InputBase from '@/component/input/InputBase.vue';
     import { createAccount } from '@/composable/useBackendActionData';
     import InputCheckbox from '@/component/input/InputCheckbox.vue';
-    import TransitionPopUp from '@/component/transition/TransitionPopUp.vue';
     import { isAnyMandatoryInputEmpty, isAnyInputError, TYPE_SUBMIT_ERROR, TEXT_SUBMIT_ERROR } from '@/error/useHandleError';
     import LogoMain from '@/component/svgs/LogoMain.vue';
     import { setSvgConfig } from '@/svg/svgConfig';
     import TransitionOpacity from '@/component/transition/TransitionOpacity.vue';
+    import { createToast } from '@/composable/useToastNotification';
 
-    const OverlaySuccessAction = defineAsyncComponent(() => import('@/component/overlay/OverlaySuccessAction.vue'));
     const OverlayPrivacy = defineAsyncComponent(() => import('@/component/overlay/OverlayPrivacy.vue'));
     const OverlayUserRules = defineAsyncComponent(() => import('@/component/overlay/OverlayUserRules.vue'));
     
@@ -154,8 +148,13 @@
         password: false,
         confirmPassword: false
     }); 
-    const submitError = ref(null);
-    const isSuccessAction = ref(false);
+    const mandatoryInputs = reactive({
+        firstName: false,
+        lastName: false,
+        email: false,
+        password: false,
+        confirmPassword: false
+    });
     const isOverlayActive = reactive({
         privacy: false,
         userRules: false,
@@ -164,25 +163,18 @@
 
 
     // life cycle / functions
-    const textError = computed(() => {
-        if(submitError.value === TYPE_SUBMIT_ERROR.MANDATORY_EMPTY_INPUTS) return TEXT_SUBMIT_ERROR.ALL_INPUTS_MANDATORY;
-        else if(submitError.value === TYPE_SUBMIT_ERROR.NOT_SUCCESS_REQUEST) return "La requête a échoué.";
-        else if(submitError.value === TYPE_SUBMIT_ERROR.CONFIRM_PASS_ERROR) return TEXT_SUBMIT_ERROR.CONFIRM_PASS_ERROR;
-    });
-
     async function handleSubmit() {
         const allErrorsInputs = getStatesErrorInputs();
         const allMandatoryValInputs = getValuesMandantInputs();
         if(isAnyMandatoryInputEmpty(allMandatoryValInputs)) {
-            submitError.value = TYPE_SUBMIT_ERROR.MANDATORY_EMPTY_INPUTS;
+            activeErrorForMandatInputsEmpty();
+            createToast(TEXT_SUBMIT_ERROR.MANDATORY_EMPTY_INPUTS, 'error');
             return;
         }
         else if(isAnyInputError(allErrorsInputs)) {
-            submitError.value = TYPE_SUBMIT_ERROR.INPUTS_FORMAT_ERRORS;
             return;
         }
         else if(isPasswordsAreDifferent()) {
-            submitError.value = TYPE_SUBMIT_ERROR.CONFIRM_PASS_ERROR;
             resetInputsPass();
             return;
         }
@@ -195,14 +187,12 @@
         });
         const isSuccessRequest = requestFetched?.isSuccessRequest;
         if(!isSuccessRequest) {
-            submitError.value = TYPE_SUBMIT_ERROR.NOT_SUCCESS_REQUEST;
             resetInputsPass();
             return;
         }
         //resetInputs();
-        submitError.value = null;
-        isSuccessAction.value = true;
-        //router.push('/connexion');
+        createToast("Votre compte a été créé.", 'success');
+        router.push('/connexion');
     }
 
     function resetInputsPass() {
@@ -229,6 +219,13 @@
             lastName: lastName.value,
             confirmCheckbox: confirmCheckbox.value
         }
+    }
+    function activeErrorForMandatInputsEmpty() {
+        if (!firstName.value) mandatoryInputs.firstName = true;
+        if (!lastName.value) mandatoryInputs.lastName = true;
+        if (!email.value) mandatoryInputs.email = true;
+        if (!password.value) mandatoryInputs.password = true;
+        if (!confirmPassword.value) mandatoryInputs.confirmPassword = true;
     }
 
     function isPasswordsAreDifferent() {

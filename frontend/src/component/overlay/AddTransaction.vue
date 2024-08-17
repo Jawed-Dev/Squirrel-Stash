@@ -1,23 +1,22 @@
 <template>
     <div>
-        <div class="fixed bottom-[-2px] sm:bottom-[25px] left-1/2 -translate-x-1/2 -translate-y-1/2  
+        <div class="fixed bottom-[-2px] sm:bottom-[25px] left-[calc(50%+1px)] transform -translate-x-1/2 -translate-y-1/2
             md:relative md:translate-x-0 sm:translate-y-0 md:bottom-auto md:left-auto
-            z-20 md:z-10 mt-5 w-full lg:min-w-[calc(200px*2+8px)] lg:w-1/4 rounded-[3px] md: md:shadow-main
+            z-20 md:z-10 mt-5 w-full lg:min-w-[calc(200px*2+7px)] lg:w-1/4 rounded-[3px] md:shadow-main
             hover:shadow-slate-500">
 
-            <div class="bg-transparent md:bg-main-gradient border-none md:border-solid gradient-border">
-                <div class="flex justify-center md:justify-between items-center px-2 min-h-[42px] min-w-[214px]">
+            <div @click="toggleMenu('openOverlay')" 
+            class="bg-transparent md:bg-main-gradient border-none md:border-solid gradient-border trigger-add-purchase cursor-pointer">
+                <div class="flex justify-center md:justify-between items-center md:px-2 min-h-[42px] min-w-[214px]">
 
-                    <p 
-                        v-show="!isMobile" class="w-full text-white flex justify-center font-light cursor-pointer" 
-                        @click="toggleMenu('openOverlay')"
+                    <p v-show="!isMobile" 
+                    class="w-full text-white flex justify-center font-light" 
                     >Ajouter une transaction</p>
 
                     <div class="grow flex justify-center py-[2px]">
                         <IconAddPurchase 
-                            @click="toggleMenu('openOverlay')"
                             class="p-[1px] bg-gradient-blue rounded-full md:rounded-md right-[100px] top-[50vh]
-                            z-10  shadow-main trigger-add-purchase cursor-pointer" 
+                            z-10 shadow-main" 
                             :svg="styleIcon"
                         />
                     </div>
@@ -32,8 +31,8 @@
 
         <TransitionOpacity :durationIn="'duration-300'" :durationOut="'duration-200'">
             <div v-if="isOverlayActive" 
-                :class="`fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-30 text-white rounded-[3px] overflow-hidden 
-                 shadow-main trigger-add-purchase bg-main-gradient
+                :class="`fixed top-1/2 left-1/2  -translate-x-1/2 -translate-y-1/2 z-30 text-white rounded-[3px] overflow-hidden 
+                shadow-main trigger-add-purchase bg-main-gradient
                 max-[600px]:w-full sm:w-1/4 min-[600px]:min-w-[600px]`">
 
                 <MainContainerSlot 
@@ -42,10 +41,6 @@
                     @toggleMenu="toggleMenu" 
                 >
                     <div class="max-h-[72vh] overflow-y-auto">
-                        <!-- Errors -->
-                        <div class="relative">
-                            <p class="text-sm font-light p-3 absolute text-red-300">{{ textError }}</p>
-                        </div>
                         <div>
                             <!-- Inputs  -->
                             <ContainerInputs 
@@ -53,6 +48,7 @@
                                 v-model:inputPriceVal="inputPriceVal" 
                                 v-model:inputNoteVal="inputNoteVal" 
                                 v-model:inputDateVal="inputDateVal" 
+                                v-model:mandatoryInputs="mandatoryInputs"
                                 :typeTransaction="typeTransaction" 
                             />
                             <!-- Categories -->
@@ -64,18 +60,13 @@
                 </MainContainerSlot>
             </div>
         </TransitionOpacity>
-
-        <TransitionPopUp duration-in="500" duration-out="500">
-            <OverlaySuccessAction text="Votre transaction a été créée." v-if="isSuccessAction" v-model:overlayActive="isSuccessAction" />
-        </TransitionPopUp>
     </div>
-    
 </template>
 
 <script setup>
     // import
     import { ref, watch, computed, reactive, defineAsyncComponent, onMounted, onUnmounted } from 'vue';
-    import { setSvgConfig, svgConfig } from '@/svg/svgConfig';
+    import { setSvgConfig } from '@/svg/svgConfig';
     import IconAddPurchase from '@/component/svgs/IconAddPurchase.vue';
     import TransitionOpacity from '@/component/transition/TransitionOpacity.vue';
     import useClickOutside from '@/composable/useClickOutSide';
@@ -87,10 +78,9 @@
     import { formatDateForCurrentDay, formatDateForFirstDay, isCurrentMonth } from '@/composable/useGetDate';
     import { listPurchases, listRecurings } from '@/svg/listTransactionSvgs';
     import { isAnyMandatoryInputEmpty, isAnyInputError, TYPE_SUBMIT_ERROR, TEXT_SUBMIT_ERROR } from '@/error/useHandleError';
-    import TransitionPopUp from '@/component/transition/TransitionPopUp.vue';
     import { isValidCategory } from '@/error/useValidFormat';
+    import { createToast } from '@/composable/useToastNotification';
 
-    const OverlaySuccessAction = defineAsyncComponent(() => import('@/component/overlay/OverlaySuccessAction.vue'));
     const ContainerInputs = defineAsyncComponent(() => import('@/component/container/ContainerInputs.vue'));
     const ContainerSelectCategories = defineAsyncComponent(() => import('@/component/container/ContainerSelectCategories.vue'));
 
@@ -113,12 +103,13 @@
         inputPriceVal: false,
         inputDateVal: false
     });
+    const mandatoryInputs = reactive({
+        inputPriceVal: false,
+        inputDateVal: false
+    });
 
-    const submitError = ref(null);
-    const isSuccessAction = ref(false);
-    const styleIconMd = setSvgConfig({width:'35px', fill:'white', });
+    const styleIconMd = setSvgConfig({width:'32px', fill:'white', });
     const styleIconBase = setSvgConfig({width:'50px', fill:'white', });
-
     const width = ref(window.innerWidth);
 
     // life cycle / functions
@@ -131,15 +122,7 @@
     });
 
     const styleIcon = computed(() => (isMobile.value) ? styleIconBase : styleIconMd );
-
     const isMobile = computed(() => width.value < 768);
-
-    const textError = computed(() => {
-        if(submitError.value === TYPE_SUBMIT_ERROR.MANDATORY_EMPTY_INPUTS) return TEXT_SUBMIT_ERROR.MANDATORY_EMPTY_INPUTS;
-        else if(submitError.value === TYPE_SUBMIT_ERROR.NOT_SUCCESS_REQUEST) return "La requête a échoué.";
-        else if(submitError.value === TYPE_SUBMIT_ERROR.CATEGORY_ERROR) return TEXT_SUBMIT_ERROR.CATEGORY_ERROR;
-        else if(submitError.value === TYPE_SUBMIT_ERROR.DATE_EMPTY) return TEXT_SUBMIT_ERROR.DATE_EMPTY;
-    });
 
     watch( () => [dateSelected.month, dateSelected.year], async ([newMonth, newYear]) => {
         inputDateVal.value = formatDateInput();
@@ -160,7 +143,6 @@
     async function toggleMenu(request) {
         switch(request) {
             case 'openOverlay' : {
-                submitError.value = null;
                 typeTransaction.value = false;
                 resetInputs();
                 isOverlayActive.value = !isOverlayActive.value;
@@ -172,20 +154,15 @@
                 const allMandatoryValInputs = getValuesMandantInputs();
                 const nameCategory = getCurrentNameCategory();
 
-                if(isDateEmpty(nameCategory)) {
-                    submitError.value = TYPE_SUBMIT_ERROR.DATE_EMPTY;
-                    return;
-                }
-                else if(isAnyMandatoryInputEmpty(allMandatoryValInputs)) {
-                    submitError.value = TYPE_SUBMIT_ERROR.MANDATORY_EMPTY_INPUTS;
+                if(isAnyMandatoryInputEmpty(allMandatoryValInputs)) {
+                    activeErrorForMandatInputsEmpty();
+                    createToast(TEXT_SUBMIT_ERROR.MANDATORY_EMPTY_INPUTS, 'error');
                     return;
                 }
                 else if(isAnyInputError(allErrorsInputs)) {
-                    submitError.value = TYPE_SUBMIT_ERROR.INPUTS_FORMAT_ERRORS;
                     return;
                 }
                 else if(!isValidCategory(nameCategory)) {
-                    submitError.value = TYPE_SUBMIT_ERROR.CATEGORY_ERROR;
                     return;
                 }
                 prepareAddTransaction();
@@ -233,24 +210,22 @@
     }
     
     async function prepareAddTransaction() {
-        const dataRequest = await addTransaction({
+        const response = await addTransaction({
             amount: inputPriceVal.value,
             trsCategory: getCurrentNameCategory(),
             trsType: getCurrentTransactionType(),
             date: inputDateVal.value,
             note: inputNoteVal.value
         });
-        const isSuccessRequest = dataRequest?.isSuccessRequest;
+        const isSuccessRequest = response?.isSuccessRequest;
         if(!isSuccessRequest) {
-            submitError.value = TYPE_SUBMIT_ERROR.NOT_SUCCESS_REQUEST;
             return;
         }
         const nameTypeTrs = getCurrentTransactionType();
         const month = dateSelected.month;
         const year = dateSelected.year;
+        createToast('Votre transaction a été ajoutée.', 'success');
         updateAllDataTransations(month, year, nameTypeTrs);
-        submitError.value = null;
-        isSuccessAction.value = true;
     }
 
     function getStatesErrorInputs() {
@@ -267,8 +242,11 @@
             category: currentCategory.value,
         }
     }
-
+    function activeErrorForMandatInputsEmpty() {
+        if (!inputPriceVal.value) mandatoryInputs.inputPriceVal = true;
+        if (!inputDateVal.value) mandatoryInputs.inputDateVal = true;
+    }
     function isDateEmpty() {
-        return inputDateVal.value === '';
+        return inputDateVal.value === '' || inputDateVal.valueAsDate === null;
     }
 </script>

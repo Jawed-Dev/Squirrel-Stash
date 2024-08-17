@@ -1,8 +1,8 @@
 
 <template>
-    <div class="">
-        <p class="">{{ props.titleInput }}</p>
-        <input class=""
+    <div>
+        <p>{{ props.titleInput }}</p>
+        <input 
             v-model="text" type="text" 
             :class="`border rounded-md border-custom-gray pl-2 ${extraClass}`" 
             id="input-mail"

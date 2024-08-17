@@ -1,6 +1,6 @@
 <template>
     <div v-if="componentLoaded">
-        <div v-if="!isEmptyListTransaction" class="rounded-[3px] overflow-hidden my-custom-margin-main  shadow-main">
+        <div v-if="!isEmptyListTransaction" class="rounded-[3px] overflow-hidden my-custom-margin-main shadow-main relative">
             <div class="gradient-border text-white overflow-hidden
                 bg-main-gradient w-full">     
                 <div class="flex flex-col justify-center relative pt-3">
@@ -13,7 +13,7 @@
                         />
                     </div>
                 </div>
-                <div class="flex py-2 pl-0 sm:pl-4 md:pl-3 mt-5 bg-gradient-x-blue  shadow-main">
+                <div class="absolute left-0 w-full flex py-2 pl-0 sm:pl-4 md:pl-3 mt-5 bg-gradient-x-blue shadow-main">
                     <div class="text-[15px] sm:text-base ml-[20px] sm:ml-[40px] md:pl-[20px] w-[25%] overflow-hidden text-ellipsis">
                         <p @click="toggleOrder(ORDER_STATE.CATEGORY)" 
                         :class="`${colorForOrderSelected(ORDER_STATE.CATEGORY)} w-fit cursor-pointer`" 
@@ -36,7 +36,7 @@
                     </div>
                 </div>
                 
-                <div class="">
+                <div class="mt-[calc(105px-45px)]">
                     <ContainerTransactionInfo v-for="(transaction, index) of filteredTransactions" 
                         :key="transaction.transaction_id" v-model:currentMenuEditDeleteTrs="currentMenuEditDeleteTrs" 
                         :indexMenu="index" :infoTransaction="transaction" :lengthData="filteredTransactions.length"
@@ -79,6 +79,7 @@
     const totalItems = defineModel('totalItems');
     const currentPage = defineModel('currentPage');
     const itemsPerPage = defineModel('itemsPerPage');
+    const isLoadedData = defineModel('isLoadedData');
 
     const currentMenuEditDeleteTrs = ref(-1);
     const props = defineProps({
@@ -94,6 +95,7 @@
         const params = paramsSearch.params;
         await updateDataTrsSearch(params);
         componentLoaded.value = true;
+        isLoadedData.value = true;
     });
 
     watch( () => currentPage.value, (newPage) => {

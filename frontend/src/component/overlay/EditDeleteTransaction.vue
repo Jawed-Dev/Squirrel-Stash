@@ -1,12 +1,10 @@
 <template>
     <div class="w-full flex justify-center relative">
         <IconOptions @click="toggleMenu()" class="cursor-pointer trigger-menu-editdelete" :svg="iconOptions"/>
-        <TransitionOpacity ref="elementTransition" :durationIn="'duration-500'" :durationOut="'duration-500'">
+        <TransitionOpacity :durationIn="'duration-500'" :durationOut="'duration-500'">
             <div v-if="isMenuActive" 
-                class="flex flex-col items-center absolute z-10 trigger-menu-editdelete
-                -translate-y-0 -translate-x-20
-                bg-main-gradient w-[100px] rounded-md overflow-hidden
-                 shadow-main">
+                class="absolute flex flex-col items-center z-10 trigger-menu-editdelete shadow-main
+                -translate-y-0 -translate-x-20 bg-main-gradient w-[100px] rounded-md overflow-hidden">
                 <p 
                     @click="handleMenu('edit')" 
                     class="hover:bg-custom-blue w-full text-center cursor-pointer p-1 border-b border-slate-700">Modifier
@@ -20,14 +18,12 @@
         <TransitionOpacity :durationIn="'duration-500'" :durationOut="'duration-500'">
         <EditTransaction 
             v-if="isMenuEditActive" 
-            v-model:isSuccessEdit="isSuccessEdit"
             :indexMenu="indexMenu" 
             :infoTransaction="infoTransaction" 
             v-model:menuActive="isMenuEditActive"
         />
         <DeleteTransaction 
             v-if="isMenuDeleteActive" 
-            v-model:isSuccessDelete="isSuccessDelete"
             :indexMenu="indexMenu" 
             :infoTransaction="infoTransaction" 
             v-model:menuActive="isMenuDeleteActive"
@@ -49,11 +45,9 @@
     import useEscapeKey from '@/composable/useEscapeKey';
     import EditTransaction from '@/component/overlay/EditTransaction.vue';
     
-
     const DeleteTransaction = defineAsyncComponent(() => import('@/component/overlay/DeleteTransaction.vue'));
 
     // variables, props ...
-    const elementTransition = ref(null);
     const isMenuEditActive = ref(false);
     const isMenuDeleteActive = ref(false);
 
@@ -71,8 +65,6 @@
 
     const currentMenuEditDeleteTrs = defineModel('currentMenuEditDeleteTrs');
     const isMenuActive = ref(false);
-    const isSuccessEdit = defineModel('isSuccessEdit');
-    const isSuccessDelete = defineModel('isSuccessDelete');
 
     watch(currentMenuEditDeleteTrs, (newVal, oldVald) => {
         isMenuActive.value = newVal === props.indexMenu;

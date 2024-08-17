@@ -1,20 +1,15 @@
 <template>
     <nav v-show="isValidPage"
         ref="headerRef" 
-        :class="`font-main flex md:flex-col items-center
+        :class="`font-main flex md:flex-col items-center bg-header-gradient shadow-main z-10 
         w-full md:w-header-tablet-width xl:w-header-width md:h-[calc(100vh-(40px))] h-[50px]
-        md:top-top-Header bottom-0 md:left-[20px] xl:left-[30px] fixed 
-        bg-header-gradient md:rounded-md 
-         shadow-main
-        ${extendHeader} z-10 md:max-h-[calc(100vh-(40px))] max-h-none md:overflow-y-auto`"
+        md:top-top-Header bottom-0 md:left-[20px] xl:left-[30px] fixed md:rounded-md 
+        ${extendHeader} md:max-h-[calc(100vh-(40px))] max-h-none md:overflow-y-auto`"
             @mouseenter="isHovered = true"
             @mouseleave="isHovered = false"
         >
         
-        <div 
-        v-show="!isMobile" 
-        class="flex relative w-full h-[50px] md:h-fit py-2"
-        >
+        <div v-show="!isMobile" class="flex relative w-full h-[50px] md:h-fit py-2">
             <div class="flex md:w-header-tablet-width xl:w-header-width justify-center p-[8px] xl:p-[12px]">
                 <LogoMainPicOnly class=" bg-main-gradient  shadow-custom-hover rounded-xl" :svg="logoStyle" />
             </div>
@@ -22,8 +17,8 @@
                 <TransitionOpacity v-if="!isMobile" :durationIn="'duration-300'" :durationOut="'duration-0'">
                     <p 
                         v-if="isHovered && isTextIconsVisible"
-                        class=" text font-light flex absolute w-[140px] right-[0px] top-[50%] transform -translate-y-1/2
-                        pl-3 lg:pl-4 text-white " 
+                        class="absolute flex text font-light w-[140px] 
+                        right-[0px] top-[50%] -translate-y-1/2 pl-3 lg:pl-4 text-white " 
                     >
                     Squirrel Stash</p>
                 </TransitionOpacity>
@@ -39,12 +34,12 @@
                 class="flex flex-col relative items-center justify-center w-[100px] md:w-full md:items-stretch h-[50px] md:h-fit" 
             >
                 
-                <div :key="index" @click="handleClickHeader(icon.page)" 
+                <div :key="index" @click="handleClickHeader(icon)" 
                     :class="`flex relative ${classTranslateY} md:py-2 cursor-pointer py-4
                     ${borderCurrentPage(icon.page)}`">
                     
                         <div class="flex flex-col items-center relative">
-                            <component :is="icon.Component" :svg="iconsStyle" 
+                            <component :is="icon.Component" :svg="styleIcon" 
                             class="w-header-width md:w-header-tablet-width xl:w-header-width"/>
                         </div>
                         
@@ -64,11 +59,11 @@
         <div v-show="!isMobile" class="w-full flex md:flex-col mt-3">
             <div class="w-full flex flex-col relative" v-for="(icon, index) of dataListPage2">
                 <div 
-                    :key="index" @click="handleClickHeader(icon.page)" 
+                    :key="index" @click="handleClickHeader(icon)" 
                     :class="`flex relative ${classTranslateY} py-2 cursor-pointer 
                     ${borderCurrentPage(icon.page)}`"
                 >
-                    <component :is="icon.Component" :svg="iconsStyle" class="md:w-header-tablet-width xl:w-header-width "/>
+                    <component :is="icon.Component" :svg="styleIcon" class="md:w-header-tablet-width xl:w-header-width "/>
 
                     <TransitionOpacity v-if="!isMobile" :durationIn="'duration-300'" :durationOut="'duration-0'">
                         <router-link 
@@ -95,11 +90,8 @@
     import { storeAuthTOken } from '@/storePinia/useStoreDashboard';
     import TransitionOpacity from '@/component/transition/TransitionOpacity.vue';  
     import { classTransitionHover } from '@/composable/useClassTransitionHover';
-    //import { disconnectUser } from '@/composable/useBackendActionData';
     import { setSvgConfig } from '@/svg/svgConfig';
-    import LogoMain from '@/component/svgs/LogoMain.vue';
     import LogoMainPicOnly from '@/component/svgs/LogoMainPicOnly.vue';
-    
     
     // import async icons & dynamic
     const IconDashboard = defineAsyncComponent(() => import('@/component/svgs/IconDashboard.vue'));
@@ -128,7 +120,7 @@
     { Component: IconLogOut, link:'',page: 'disconnect', text: 'Déconnexion' },
     ];
 
-    const iconsStyle = setSvgConfig({width:'25px', fill:'white'});
+    const styleIcon = setSvgConfig({width:'25px', fill:'white'});
     const logoStyle = setSvgConfig({fill:'white'});
 
     const classTranslateY = classTransitionHover('translateY');
@@ -150,6 +142,7 @@
         'inscription',
         'mot-de-passe-oublie',
         'reinitialiser-mot-de-passe',
+        '404',
     ];
 
     // life cycle, functions ...
@@ -189,8 +182,8 @@
         if(headerRef.value) isTextIconsVisible.value = headerRef.value.clientWidth > 160;
     };
 
-    async function handleClickHeader(page) {
-        switch (page) {
+    async function handleClickHeader(data) {
+        switch (data.page) {
             case 'tableau-de-bord': {
                 router.push('/tableau-de-bord');
                 break;
@@ -215,12 +208,12 @@
                 const authToken = storeAuthTOken();
                 authToken.token = '';
                 localStorage.removeItem('authToken');
-                //await disconnectUser();
                 router.push('/connexion');
                 break;
             }
             default: {
-                router.push('/connexion');
+                document.title = 'Page introuvable';
+                router.push('/404');
                 break;
             }
         }

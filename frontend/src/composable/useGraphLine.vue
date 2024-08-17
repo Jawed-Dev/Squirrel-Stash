@@ -1,13 +1,14 @@
 <template>
     <div style="position: relative; height:350px; width:100%">
         <canvas class="mt-5" ref="canvas"></canvas>
+        <ButtonDownloadChart :canvas="canvas" />
     </div>
 </template>
 
 <script setup>
 import { ref, onMounted, watch } from 'vue';
 import Chart from 'chart.js/auto';
-
+import ButtonDownloadChart from '@/component/button/ButtonDownloadChart.vue';
 
 const props = defineProps({
     dataTransaction: { default: []},

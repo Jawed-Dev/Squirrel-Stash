@@ -10,12 +10,6 @@
 
             <form @submit.prevent="handleLogin"
                 class="overflow-x-auto min-w-[350px] md:w-[45%] lg:w-[60%] xl:w-1/3 xl:min-w-[390px] 2xl:min-w-[420px]">
-                
-                <!-- Errors -->
-                <div class="relative w-full">
-                    <p class="text-sm font-light pt-5 text-red-300">{{ textError }}</p>
-                </div>
-
                 <div>
                     <label class="text-white font-light" for="login-mail">Adresse email</label>
                     <InputBase 
@@ -23,6 +17,7 @@
                         iconName="Email"
                         v-model="inputs.email" 
                         v-model:stateError="errorInputs.email"
+                        v-model:mandatoryInput="mandatoryInputs.email"
                         type="email"
                         placeholder="exemple.domaine.com"
                         validFormat="email"
@@ -36,13 +31,14 @@
                         iconName="Password"
                         v-model="inputs.password" 
                         v-model:stateError="errorInputs.password"
+                        v-model:mandatoryInput="mandatoryInputs.password"
                         type="password"
                         placeholder="Mot de passe"
                         validFormat="password"
                     />
                 </div>
     
-                <div class="mt-5 flex flex-col items-center gap-1 justify-between 
+                <div class="mt-6 flex flex-col items-center gap-1 justify-between 
                             lg:px-2 lg:items-stretch lg:gap-0 xl:px-5 lg:flex-row">
                             
                     <div class="flex gap-1">
@@ -95,6 +91,7 @@
     import LogoMain from '@/component/svgs/LogoMain.vue';
     import TransitionOpacity from '@/component/transition/TransitionOpacity.vue';
     const OverlayContactUs = defineAsyncComponent(() => import('@/component/overlay/OverlayContactUs.vue'));
+    import { createToast } from '@/composable/useToastNotification';
             
     // props, variables
     const router = useRouter();
@@ -105,17 +102,16 @@
         password: '',
         confirmCheckbox: false
     });
+    const mandatoryInputs = reactive({
+        email: false,
+        password: false
+    });
 
     // handle errors
     const errorInputs = reactive({
         email: false,
         password: false
     }); 
-    const textError = computed(() => {
-        if(submitError.value === TYPE_SUBMIT_ERROR.MANDATORY_EMPTY_INPUTS) return TEXT_SUBMIT_ERROR.ALL_INPUTS_MANDATORY;
-        if(submitError.value === TYPE_SUBMIT_ERROR.NOT_SUCCESS_REQUEST) return "Les identifiants sont incorrects.";
-    });
-    const submitError = ref(null);
 
     // life cycle, functions
     async function handleLogin() {
@@ -123,12 +119,12 @@
         const stateErrorsInputs = getStatesErrorInputs();
         const stateMandatoryInputs = getValuesMandantInputs();
         if(isAnyMandatoryInputEmpty(stateMandatoryInputs)) {
-            submitError.value = TYPE_SUBMIT_ERROR.MANDATORY_EMPTY_INPUTS;
+            activeErrorForMandatInputsEmpty();
+            createToast(TEXT_SUBMIT_ERROR.MANDATORY_EMPTY_INPUTS, 'error');
             return;
         }
 
         else if(isAnyInputError(stateErrorsInputs)) {
-            submitError.value = TYPE_SUBMIT_ERROR.INPUTS_FORMAT_ERRORS;
             return;
         }
 
@@ -139,13 +135,13 @@
         });
 
         if(!isSuccessLogin) {
-            submitError.value = TYPE_SUBMIT_ERROR.NOT_SUCCESS_REQUEST;
+            createToast("Vos identifiants sont incorrects.", 'error');
             inputs.password = '';
             return;
         }
 
         // success login
-        submitError.value = null;
+        createToast('Vous vous êtes connecté avec succès.', 'success');
         router.push('/tableau-de-bord');
     }
     
@@ -154,6 +150,11 @@
             email: errorInputs.email,
             password: errorInputs.password,
         }
+    }
+
+    function activeErrorForMandatInputsEmpty() {
+        if (!inputs.email) mandatoryInputs.email = true;
+        if (!inputs.password) mandatoryInputs.password = true;
     }
  
     function getValuesMandantInputs() {

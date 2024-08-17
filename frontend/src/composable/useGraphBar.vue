@@ -1,14 +1,15 @@
 <template>
-    
-    <div style="position: relative; height:350px; width:100%">
+    <div style="position:relative; height:350px; width:100%">
         <canvas class="mt-5" ref="canvas"></canvas>
-        <button class="absolute right-3 top-[-80px] font-light" @click="downloadChart">Télécharger</button>
+        <ButtonDownloadChart :canvas="canvas" />
+        <!-- <button class="absolute right-3 top-[-78px] font-light" @click="downloadChart">Télécharger</button> -->
     </div>
 </template>
 
 <script setup>
 import { ref, onMounted, watch } from 'vue';
 import Chart from 'chart.js/auto';
+import ButtonDownloadChart from '@/component/button/ButtonDownloadChart.vue';
 
 // props, variables
 const props = defineProps({
@@ -65,7 +66,6 @@ function updateChartData(chart, newData) {
 
     chartInstance.data.datasets.forEach((dataset) => {
         dataset.borderColor = 'white';
-        //dataset.borderColor = props.colorsGraph.borderColor;
         dataset.backgroundColor = gradient;
     });
     
@@ -76,14 +76,14 @@ function updateChartData(chart, newData) {
     chart.update();
 }
 
-function downloadChart() {
-    if (canvas.value) {
-        const link = document.createElement('a');
-        link.href = canvas.value.toDataURL('image/png');
-        link.download = 'graphique.png';
-        link.click();
-    }
-}
+// function downloadChart() {
+//     if (canvas.value) {
+//         const link = document.createElement('a');
+//         link.href = canvas.value.toDataURL('image/png');
+//         link.download = 'graphique.png';
+//         link.click();
+//     }
+// }
 
 
 function getChartOptions() {

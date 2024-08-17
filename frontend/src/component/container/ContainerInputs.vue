@@ -9,6 +9,7 @@
                         extraClass="text-[14px] py-[1px]"
                         v-model="inputDateVal" 
                         v-model:stateError="errorInputs.inputDateVal" 
+                        v-model:mandatoryInput="mandatoryInputs.inputDateVal"
                         width="w-full"
                         placeholder="Date"
                         id="input-date"
@@ -27,6 +28,7 @@
                         iconName="Amount"
                         v-model="inputPriceVal" 
                         v-model:stateError="errorInputs.inputPriceVal" 
+                        v-model:mandatoryInput="mandatoryInputs.inputPriceVal"
                         placeholder="Votre montant"
                         type="text"
                         id="input-amount-trs"
@@ -61,37 +63,15 @@
 </template>
 
 <script setup>
-    
-    import { computed } from 'vue';
     import InputBase from '@/component/input/InputBase.vue';
     const props = defineProps({
         infoTransaction: { default: []},
         typeTransaction: { default: false}
-    })
-    // const textNote = computed(() => {
-    //     if(props.infoTransaction) {
-    //         const isPurchase = props.typeTransaction === false;
-    //         return (isPurchase) ? "Note" : "Note";
-    //     }
-    //     else {
-    //         const isPurchase = props.infoTransaction?.transaction_type === 'purchase';
-    //         return (isPurchase) ? "Note" : "Note";
-    //     }
-    // });
-
-    // const textAmount = computed(() => {
-    //     if(props.infoTransaction) {
-    //         const isPurchase = props.typeTransaction === false;
-    //         return (isPurchase) ? "Montant (€)" : "Montant de prélèvement (€)";
-    //     }
-    //     else {
-    //         const isPurchase = props.infoTransaction?.transaction_type === 'purchase';
-    //         return (isPurchase) ? "Montant (€)" : "Montant de prélèvement (€)";
-    //     }
-    // });
+    });
     
     const inputNoteVal = defineModel('inputNoteVal');
     const inputPriceVal = defineModel('inputPriceVal');
     const inputDateVal = defineModel('inputDateVal');
     const errorInputs = defineModel('errorInputs');
+    const mandatoryInputs = defineModel('mandatoryInputs');
 </script>

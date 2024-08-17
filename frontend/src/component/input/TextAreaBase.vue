@@ -15,7 +15,6 @@
 import { computed } from 'vue';
 
 // variables, props, ...
-
 const props = defineProps({
     extraClass: { default:'' },
     modelValue: { default:''},
@@ -23,16 +22,18 @@ const props = defineProps({
     width: {default:''},
     id: {default:''},
     borderHidden: {default: false },
-    
 });
 
 const model = defineModel();
+const mandatoryInput = defineModel('mandatoryInput');
 
 // life cycle functions
 
 const colorBorder = computed(() => {
+    if(model.value) mandatoryInput.value = false;
+    if(mandatoryInput.value) return 'border-custom-orange'
     if(props.borderHidden) return '';
-    return (props.modelValue) ? "border-custom-blue" : "hover:border-custom-blue border-slate-600";
+    return (props.modelValue) ? "border-custom-green" : "hover:border-custom-blue border-slate-600";
 });
 
 function onInput(event) {

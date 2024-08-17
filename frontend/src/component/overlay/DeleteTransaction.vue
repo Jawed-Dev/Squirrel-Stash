@@ -24,19 +24,16 @@
     import { deleteTransaction } from '@/composable/useBackendActionData';
     import { storeDateSelected } from '@/storePinia/useStoreDashboard';
     import { updateAllDataTransations } from '@/storePinia/useUpdateStoreByBackend';
-
-
+    import { createToast } from '@/composable/useToastNotification';
 
     // stores Pinia
     const dateSelected = storeDateSelected();
-
     // props, variables..
     const props = defineProps({
         width: {default: ''},
         infoTransaction: {default: {}},
         indexMenu: {default: 0},
     });
-    const isSuccessDelete = defineModel('isSuccessDelete');
     const isOverlayActive = defineModel('menuActive');
 
     // life cycle, functions
@@ -68,7 +65,7 @@
                 const isSuccessRequest = await deleteTransaction(transactionId);
                 if(isSuccessRequest) {
                     await updateAllDataTransations(dateSelected.month, dateSelected.year, props.infoTransaction.transaction_type);
-                    isSuccessDelete.value = true;
+                    createToast('Votre transaction a été supprimée.', 'success');
                     closeOverlay();
                 }
                 break;

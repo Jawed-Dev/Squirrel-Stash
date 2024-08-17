@@ -1,5 +1,7 @@
 
 import { NAME_FOLDER_MAIN } from '@/config.js';
+import { createToast } from '@/composable/useToastNotification';
+import { TEXT_SUBMIT_ERROR } from '@/error/useHandleError';
 
 export default async function useConfigFetchGetData(params) {
   try {
@@ -34,7 +36,10 @@ export default async function useConfigFetchGetData(params) {
     // fetch
     const response = await fetch(fullPath, fetchOptions);
     //console.log(response);
-    if (!response.ok) throw new Error(`Erreur de Statut HTTP: ${response.status}`);
+    if (!response.ok) {
+      createToast(TEXT_SUBMIT_ERROR.FAIL_REQUEST, 'error');
+      throw new Error(`Erreur de Statut HTTP: ${response.status}`);
+    }
     const data = await response.json();
     return data;
   } 

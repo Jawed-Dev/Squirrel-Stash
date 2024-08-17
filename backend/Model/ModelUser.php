@@ -29,22 +29,20 @@
         public function insertUser($db, $data) {
             $dataQuery = $data;
             $reqSql = 
-            "INSERT INTO user (user_last_name, user_first_name, user_email, user_password, user_last_ip, user_account_createAt)
-            SELECT :lastName, :firstName, :email, :password, :lastIp, NOW()
+            "INSERT INTO user (user_last_name, user_first_name, user_email, user_password)
+            SELECT :lastName, :firstName, :email, :password
             FROM DUAL
             WHERE NOT EXISTS (
                 SELECT 1 from user WHERE user_email = :email
             )";
 
             $hashedPassword = password_hash($dataQuery['password'], PASSWORD_BCRYPT);
-            $ip = ''; 
 
             $query = $db->prepare($reqSql);
             $query->bindValue(':lastName', $dataQuery['lastName'], PDO::PARAM_STR);
             $query->bindValue(':firstName',  $dataQuery['firstName'], PDO::PARAM_STR);
             $query->bindValue(':email',  $dataQuery['email'], PDO::PARAM_STR);
             $query->bindValue(':password',  $hashedPassword, PDO::PARAM_STR);
-            $query->bindValue(':lastIp',  $ip , PDO::PARAM_STR);
             $query->execute();
             $isSuccessRequest = $query->rowCount() > 0;
             return $isSuccessRequest;
@@ -157,7 +155,7 @@
             $reqSql = 
             "UPDATE user 
             INNER JOIN update_password ON user_id = update_pass_user_id 
-            SET user_password = :newPass, user_last_update_password = NOW()
+            SET user_password = :newPass
             WHERE update_pass_token = :resetPassToken
             AND update_pass_expireAt > NOW() 
             AND update_pass_createdAt <= NOW()";
@@ -179,7 +177,7 @@
 
             $reqSql = 
             "UPDATE user 
-            SET user_password = :newPass, user_last_update_password = NOW()
+            SET user_password = :newPass
             WHERE 
                 user_id = :userId";
             
@@ -201,7 +199,7 @@
 
             $reqSql = "UPDATE user 
             INNER JOIN update_email ON user_id = update_email_user_id  
-            SET user_email = update_email_new_email, user_last_update_email = NOW()
+            SET user_email = update_email_new_email
             WHERE update_email_token = :token
             AND user_id = :userId
             AND update_email_expireAt > NOW() 
@@ -305,8 +303,8 @@
             $dataQuery = $data['bodyData'];
             $userId = $data['userId'];
 
-            $reqSql = "INSERT INTO update_password (update_pass_token, update_pass_createdAt, update_pass_expireAt, update_pass_user_id, update_pass_email, update_pass_ip_sender)
-            SELECT :resetPassToken, NOW(), NOW() + INTERVAL 10 MINUTE, user_id, :email, :ipSender
+            $reqSql = "INSERT INTO update_password (update_pass_token, update_pass_createdAt, update_pass_expireAt, update_pass_user_id, update_pass_email)
+            SELECT :resetPassToken, NOW(), NOW() + INTERVAL 10 MINUTE, user_id, :email
             FROM user 
             WHERE user_email = :email
             AND NOT EXISTS (
@@ -317,12 +315,10 @@
             ";
             
             $query = $db->prepare($reqSql);
-            $ipUser = '';
 
             $query->bindValue(':resetPassToken', $dataQuery['resetPassToken'], PDO::PARAM_STR);
             $query->bindValue(':userId', $userId, PDO::PARAM_INT);
             $query->bindValue(':email', $dataQuery['email'], PDO::PARAM_STR);
-            $query->bindValue(':ipSender', $ipUser, PDO::PARAM_STR);
             $query->execute();
             $isSuccessRequest = $query->rowCount();
             return ($isSuccessRequest) ? true : false;
@@ -332,8 +328,8 @@
             $dataQuery = $data['bodyData'];
             $userId = $data['userId'];
 
-            $reqSql = "INSERT INTO update_email (update_email_token, update_email_createdAt, update_email_expireAt, update_email_user_id, update_email_new_email, update_email_ip_sender)
-            SELECT :token, NOW(), NOW() + INTERVAL 10 MINUTE, user_id, :newEmail, :ipSender
+            $reqSql = "INSERT INTO update_email (update_email_token, update_email_createdAt, update_email_expireAt, update_email_user_id, update_email_new_email)
+            SELECT :token, NOW(), NOW() + INTERVAL 10 MINUTE, user_id, :newEmail
             FROM user 
             WHERE user_email = :currentEmail
             AND NOT EXISTS (
@@ -344,13 +340,10 @@
             ";
             
             $query = $db->prepare($reqSql);
-            $ipUser = '';
-
             $query->bindValue(':token', $dataQuery['token'], PDO::PARAM_STR);
             $query->bindValue(':userId', $userId, PDO::PARAM_INT);
             $query->bindValue(':newEmail', $dataQuery['newEmail'], PDO::PARAM_STR);
             $query->bindValue(':currentEmail', $dataQuery['currentEmail'], PDO::PARAM_STR);
-            $query->bindValue(':ipSender', $ipUser, PDO::PARAM_STR);
             $query->execute();
             $isSuccessRequest = $query->rowCount();
             return ($isSuccessRequest) ? true : false;

@@ -1,8 +1,8 @@
 <template>
     <div>
-        <div v-if="props.infoTransaction.transaction_id" :class="`py-5 flex flex-col border-gray-700 text-white ${borderBottom} `">
+        <div v-if="props.infoTransaction.transaction_id" :class="`py-8 flex flex-col border-gray-700 text-white ${borderBottom} `">
 
-            <div :class="`pl-1 sm:pl-4 md:pl-3 font-light flex items-center `">
+            <div :class="`pl-1 sm:pl-4 md:pl-3 font-light flex items-center`">
                 <IconLoader 
                     :nameIcon="infoTransaction.transaction_category" 
                     :svg="iconConfig" 
@@ -15,13 +15,11 @@
                 <p class="w-[22%] text-[15px] sm:text-left text-center">{{infoTransaction.formatted_date}}</p>
                 <p class="text-[15px] grow text-center md:pl-[1px] sm:w-[14%] sm:grow-0 sm:text-left ">{{ transactionCount }}</p>
     
-                <div class="flex gap-1 items-center flex-col pr-1 relative justify-end sm:grow overflow-visible">
+                <div class="flex items-center flex-col gap-1 pr-3 sm:grow overflow-visible">
                     <EditDeleteTransaction 
                         :infoTransaction="infoTransaction" 
                         :indexMenu="props.indexMenu" 
                         v-model:currentMenuEditDeleteTrs="currentMenuEditDeleteTrs" 
-                        v-model:isSuccessEdit="isSuccessEdit"
-                        v-model:isSuccessDelete="isSuccessDelete"
                     />
                     <IconInfo 
                         @click="toggleDetails"
@@ -35,10 +33,10 @@
             <TransitionOpacity duration-out="duration-300">
                 <div v-if="isShowingDetails" class="relative flex items-center trigger-info-note">
                     <p v-if="infoTransaction.transaction_note" 
-                        class="pl-4 py-1 absolute w-full bg-main-gradient font-light top-1  shadow-main" >
-                        Note : {{ infoTransaction.transaction_note }}
+                        class="text-md text-center pl-4 py-[3px] absolute w-full bg-main-gradient font-light top-[2px] shadow-main" >
+                        Note : <span class="font-medium">{{ infoTransaction.transaction_note }}</span>
                     </p>
-                    <p  v-else class="text-center pl-4 py-1 absolute w-full bg-main-gradient font-light top-1  shadow-main">
+                    <p  v-else class="text-md text-center pl-4 py-[3px] absolute w-full bg-main-gradient font-light top-[2px] shadow-main">
                         Aucune note
                     </p>
                 </div>
@@ -49,7 +47,7 @@
         
         <div 
             v-if="(!props.infoTransaction.transaction_id)" 
-            :class="`min-h-[105px] sm:pl-4 md:pl-3 flex items-center py-6 ${borderBottom} border-gray-700 text-white relative`">
+            :class="`min-h-[124px] sm:pl-4 md:pl-3 flex items-center py-6 ${borderBottom} border-gray-700 text-white relative`">
             <IconLoader nameIcon="Invisible" :svg="iconConfig" 
             :class="`${iconConfig.color} rounded-full p-[10px]  shadow-main`"/>
             <p class="absolute w-full text-[15px] text-center font-light">Aucune donnée</p>
@@ -76,10 +74,8 @@
         lengthData: { default: 0 }
     });
 
-    const styleIconInfo = setSvgConfig({width:'30px', fill:'white'})
+    const styleIconInfo = setSvgConfig({width:'25px', fill:'white'})
     const currentMenuEditDeleteTrs = defineModel('currentMenuEditDeleteTrs');
-    const isSuccessEdit = defineModel('isSuccessEdit');
-    const isSuccessDelete = defineModel('isSuccessDelete');
     const isShowingDetails = ref(false);
 
     // life cycle, functions

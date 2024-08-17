@@ -1,8 +1,7 @@
 <template>
     <div class="fixed inset-0 bg-black bg-opacity-90 z-20 ">
         <div :class="`fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 text-white rounded-[3px]
-                 shadow-main bg-main-gradient
-                max-[850px]:w-full min-[850px]:min-w-[850px] font-main`">
+                 shadow-main bg-main-gradient max-[850px]:w-full min-[850px]:min-w-[850px] font-main`">
     
             <MainContainerSlot :hideCross="true" :bgMainBtn="'bg-gradient-blue'" width='w-full'
             :textBtn1="'Refuser'" :textBtn2="'Accepter'"  titleContainer="Cookies" @toggleMenu="toggleMenu">

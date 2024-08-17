@@ -23,11 +23,6 @@
                             </div>
 
                             <div class="grow flex flex-col justify-center">
-                                <!-- Errors -->
-                                <div class="relative">
-                                    <p class="text-sm font-light absolute text-red-300">{{ textError }}</p>
-                                </div>
-                
                                 <div class="xl:mt-5 w-full flex">
                                     <div class="w-full flex flex-col justify-center xl:justify-center 2xl:justify-evenly 
                                             items-center mt-3 gap-2 sm:gap-5 2xl:gap-0 sm:flex-row">
@@ -39,6 +34,7 @@
                                                 id="input-firstname" 
                                                 v-model="inputsProfil.firstName"
                                                 v-model:stateError="errorInputs.firstName"
+                                                v-model:mandatoryInput="mandatoryInputs.firstName"
                                                 extraClass="" 
                                                 :placeholder="`Prénom`"
                                                 type="text"
@@ -54,6 +50,7 @@
                                                 id="input-lastname" 
                                                 v-model="inputsProfil.lastName" 
                                                 v-model:stateError="errorInputs.lastName"
+                                                v-model:mandatoryInput="mandatoryInputs.lastName"
                                                 extraClass="" 
                                                 placeholder="Nom"
                                                 type="text"
@@ -126,29 +123,23 @@
             </form>
         </div>
     </section>
-    <TransitionPopUp duration-in="500" duration-out="500">
-        <OverlaySuccessAction text="Votre profil a été édité." v-if="isSuccessAction" v-model:overlayActive="isSuccessAction" />
-    </TransitionPopUp>
 </template>
 
 
 <script setup>
-    import { ref, reactive, onMounted, computed, defineAsyncComponent } from 'vue';
+    import { ref, reactive, onMounted, computed } from 'vue';
     import ContainerTextUnderline from '@/component/container/ContainerTextUnderline.vue'; 
     import InputBase from '@/component/input/InputBase.vue';
     import { storeProfilUser } from '@/storePinia/useStoreDashboard';
     import { updateStoreUserProfil } from '@/storePinia/useUpdateStoreByBackend';
     import { updateUserProfil } from '@/composable/useBackendActionData';
     import { isAnyMandatoryInputEmpty, isAnyInputError, TYPE_SUBMIT_ERROR, TEXT_SUBMIT_ERROR } from '@/error/useHandleError';
-    import TransitionPopUp from '@/component/transition/TransitionPopUp.vue';
     import TransitionAxeY from '@/component/transition/TransitionAxeY.vue';
     import UseIconLoader from '@/composable/useIconLoader.vue';
     import ImageEditProfil from '@/component/svgs/ImageEditProfil.vue';
     import { setSvgConfig } from '@/svg/svgConfig';
-
+    import { createToast } from '@/composable/useToastNotification';
     
-    const OverlaySuccessAction = defineAsyncComponent(() => import('@/component/overlay/OverlaySuccessAction.vue'));
-
     // Store Pinia
     const dataProfilUser = storeProfilUser();
 
@@ -167,18 +158,16 @@
         gender: false
     });
 
-    const submitError = ref(null);
-    const isSuccessAction = ref(false);
+    const mandatoryInputs = reactive({
+        firstName: false,
+        lastName: false,
+    });
+
     const toggleShowParams= ref(false);
     const iconConfig = setSvgConfig({width:'30px', fill:'white' });
     const imageConfig = setSvgConfig({width:'300px', fill:'white' });
 
     // life cycle, functions
-    const textError = computed(() => {
-        if(submitError.value === TYPE_SUBMIT_ERROR.MANDATORY_EMPTY_INPUTS) return TEXT_SUBMIT_ERROR.MANDATORY_EMPTY_INPUTS;
-        else if(submitError.value === TYPE_SUBMIT_ERROR.NOT_SUCCESS_REQUEST) return "La requête a échoué.";
-    });
-
     onMounted(async () => {
         await updateStoreUserProfil();
         updateEditProfil();
@@ -200,11 +189,11 @@
         const allErrorsInputs = getStatesErrorInputs();
         const allMandatoryValInputs = getValuesMandantInputs();
         if(isAnyMandatoryInputEmpty(allMandatoryValInputs)) {
-            submitError.value = TYPE_SUBMIT_ERROR.MANDATORY_EMPTY_INPUTS;
+            activeErrorForMandatInputsEmpty();
+            createToast(TEXT_SUBMIT_ERROR.MANDATORY_EMPTY_INPUTS, 'error');
             return;
         }
         else if(isAnyInputError(allErrorsInputs)) {
-            submitError.value = TYPE_SUBMIT_ERROR.INPUTS_FORMAT_ERRORS;
             return;
         }
         const response = await await updateUserProfil({
@@ -215,13 +204,11 @@
         });
         const isSuccessRequest = response?.isSuccessRequest;
         if(!isSuccessRequest) {
-            submitError.value = TYPE_SUBMIT_ERROR.NOT_SUCCESS_REQUEST;
             return;
         }
         await updateStoreUserProfil();
+        createToast('Votre profil a été édité.', 'success');
         updateEditProfil();
-        submitError.value = null;
-        isSuccessAction.value = true;
     }
 
     function updateEditProfil() {
@@ -246,7 +233,10 @@
             lastName: inputsProfil.lastName,
         }
     }
-
+    function activeErrorForMandatInputsEmpty() {
+        if (!inputsProfil.firstName) mandatoryInputs.firstName = true;
+        if (!inputsProfil.lastName) mandatoryInputs.lastName = true;
+    }
     function toggleParamsSearch() {
         toggleShowParams.value = !toggleShowParams.value;
     }

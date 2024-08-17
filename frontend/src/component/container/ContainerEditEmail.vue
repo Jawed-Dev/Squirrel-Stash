@@ -21,13 +21,7 @@
                                 <ImageEditEmail class="pt-5 w-full" :svg="imageConfig" />
                             </div>
 
-                            <div class="grow flex flex-col justify-center">
-
-                                <!-- Errors -->
-                                <div class="relative">
-                                    <p class="text-sm font-light absolute text-red-300">{{ textError }}</p>
-                                </div>
-                
+                            <div class="grow flex flex-col justify-center">                
                                 <div class="xl:mt-5 w-full flex">
                                     <div class="w-full flex flex-col justify-center xl:justify-center 2xl:justify-evenly 
                                             items-center mt-3 gap-5 2xl:gap-0 sm:flex-row">
@@ -47,6 +41,7 @@
                                                 id="input-new-mail" 
                                                 v-model="inputsMail.newMail" 
                                                 v-model:stateError="errorInput"
+                                                v-model:mandatoryInput="mandatoryInput"
                                                 extraClass="" 
                                                 placeholder="Non défini"
                                                 type="mail"
@@ -69,9 +64,6 @@
             </form>
         </div>
     </section>
-    <TransitionPopUp duration-in="500" duration-out="500">
-        <OverlaySuccessAction text="Un email vous a été envoyé pour confirmer votre nouvelle adresse email." v-if="isSuccessAction" v-model:overlayActive="isSuccessAction" />
-    </TransitionPopUp>
 </template>
 
 
@@ -84,34 +76,24 @@
     import InputBase from '@/component/input/InputBase.vue';
     import ContainerTextUnderline from '@/component/container/ContainerTextUnderline.vue'; 
     import { isAnyMandatoryInputEmpty, isAnyInputError, TYPE_SUBMIT_ERROR, TEXT_SUBMIT_ERROR } from '@/error/useHandleError';
-    import TransitionPopUp from '@/component/transition/TransitionPopUp.vue';
     import TransitionAxeY from '@/component/transition/TransitionAxeY.vue';
     import UseIconLoader from '@/composable/useIconLoader.vue';
     import { setSvgConfig } from '@/svg/svgConfig';
     import ImageEditEmail from '@/component//svgs/ImageEditEmail.vue';
-
-    const OverlaySuccessAction = defineAsyncComponent(() => import('@/component/overlay/OverlaySuccessAction.vue'));
+    import { createToast } from '@/composable/useToastNotification';
     
     const emailUser = storeEmailUser();
     const inputsMail = reactive({
         currentMail: '',
         newMail: '',
     });
-
     const errorInput = ref(false);
-    const submitError = ref(null);
-    const isSuccessAction = ref(false);
+    const mandatoryInput = ref(false); 
     const toggleShowParams= ref(false);
     const iconConfig = setSvgConfig({width:'30px', fill:'white' });
     const imageConfig = setSvgConfig({width:'300px', fill:'white' });
 
     // life cycle, functions
-    const textError = computed(() => {
-        if(submitError.value === TYPE_SUBMIT_ERROR.MANDATORY_EMPTY_INPUTS) return TEXT_SUBMIT_ERROR.ALL_INPUTS_MANDATORY;
-        else if(submitError.value === TYPE_SUBMIT_ERROR.NOT_SUCCESS_REQUEST) return "La requête a échoué.";
-        else if(submitError.value === TYPE_SUBMIT_ERROR.NEW_EMAIL_ERROR) return TEXT_SUBMIT_ERROR.NEW_EMAIL_ERROR;
-    });
-
     onMounted(async () => {
         await updateStoreUserEmail();
         updateEditEmail();
@@ -135,15 +117,14 @@
         const allErrorsInputs = getStatesErrorInputs();
         const allMandatoryValInputs = getValuesMandantInputs();
         if(isAnyMandatoryInputEmpty(allMandatoryValInputs)) {
-            submitError.value = TYPE_SUBMIT_ERROR.MANDATORY_EMPTY_INPUTS;
+            activeErrorForMandatInputsEmpty();
+            createToast(TEXT_SUBMIT_ERROR.MANDATORY_EMPTY_INPUTS, 'error');
             return;
         }
         else if(isAnyInputError(allErrorsInputs)) {
-            submitError.value = TYPE_SUBMIT_ERROR.INPUTS_FORMAT_ERRORS;
             return;
         }
         else if(isNewEmailSameAsOld()) {
-            submitError.value = TYPE_SUBMIT_ERROR.NEW_EMAIL_ERROR;
             resetInputs();
             return;
         }
@@ -152,14 +133,12 @@
         });
         const isSuccessRequest = response?.isSuccessRequest;
         if(!isSuccessRequest) {
-            submitError.value = TYPE_SUBMIT_ERROR.NOT_SUCCESS_REQUEST;
             return;
         }
         await updateStoreUserEmail();
         updateEditEmail();
         clearInputsEmail();
-        submitError.value = null;
-        isSuccessAction.value = true;
+        createToast('Votre email a été éditée.', 'success');
     }
 
     function getStatesErrorInputs() {
@@ -171,6 +150,9 @@
         return {
             email: inputsMail.newMail
         }
+    }
+    function activeErrorForMandatInputsEmpty() {
+        if (!inputsMail.newMail) mandatoryInput.value = true;
     }
 
     function isNewEmailSameAsOld() {

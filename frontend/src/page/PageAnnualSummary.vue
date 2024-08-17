@@ -1,6 +1,6 @@
 <template>
     <div class="font-main flex flex-col min-h-screen bg-main-bg w-full pb-[50px] md:pb-0">
-        <div class="mx-1 md:ml-[calc(20px+65px+20px)] xl:ml-[calc(30px+75px+30px)] md:mr-[20px] xl:mr-[30px] flex flex-col my-5">
+        <div v-show="isLoadedData" class="mx-1 md:ml-[calc(20px+65px+20px)] xl:ml-[calc(30px+75px+30px)] md:mr-[20px] xl:mr-[30px] flex flex-col my-5">
 
             <h1 class="text-2xl font-light text-white">Récapitulatif de l'année</h1>
 
@@ -12,22 +12,22 @@
                 />
             </div>
 
-<section class="w-full flex flex-col xl:flex-row gap-5 mt-custom-margin-main rounded-[3px]"> 
-    <ContainerGraphYear 
-        title1="Achats par mois" title2="Prélèvements par mois"
-        :dataTransaction="yearListTrsByMonth.data" 
-        :typeGraph="useGraphLine" 
-        v-model="typeTransaction.graphByMonth"
-        :class="'w-full xl:w-1/2  shadow-main overflow-hidden'" 
-    />
-    <ContainerGraphYear 
-        title1="Achats par catégorie" title2="Prélèvements par catégorie"
-        :dataTransaction="yearListTrsByCategories.data" 
-        :typeGraph="useGraphBar" 
-        v-model="typeTransaction.graphByCategories"
-        :class="'w-full xl:w-1/2  shadow-main overflow-hidden '" 
-    />
-</section>
+            <section class="w-full flex flex-col xl:flex-row gap-5 mt-custom-margin-main rounded-[3px]"> 
+                <ContainerGraphYear 
+                    title1="Achats par mois" title2="Prélèvements par mois"
+                    :dataTransaction="yearListTrsByMonth.data" 
+                    :typeGraph="useGraphLine" 
+                    v-model="typeTransaction.graphByMonth"
+                    :class="'w-full xl:w-1/2  shadow-main overflow-hidden'" 
+                />
+                <ContainerGraphYear 
+                    title1="Achats par catégorie" title2="Prélèvements par catégorie"
+                    :dataTransaction="yearListTrsByCategories.data" 
+                    :typeGraph="useGraphBar" 
+                    v-model="typeTransaction.graphByCategories"
+                    :class="'w-full xl:w-1/2  shadow-main overflow-hidden '" 
+                />
+            </section>
  
             <section class="flex flex-col sm:flex-row sm:gap-5 justify-around">
                 <div class="flex flex-col w-full justify-around min-[1340px]:flex-row min-[1340px]:gap-5">
@@ -80,6 +80,9 @@
             </section>
 
         </div>
+        <div v-show="!isLoadedData">
+            <ContainerSpinner />
+        </div>
     </div>
 </template>
 
@@ -102,6 +105,8 @@
     import useGraphLine from '@/composable/useGraphLine.vue';
     import useGraphBar from '@/composable/useGraphBar.vue';
     import useGraphDonut from '@/composable/useGraphDonut.vue';
+    import ContainerSpinner from '@/component/container/ContainerSpinner.vue';
+
 
     
     // store Pinia
@@ -111,6 +116,7 @@
     const topYearCategories = storeTopYearCategories();
 
     // props, variables
+    const isLoadedData = ref(false);
     const currentYear = getCurrentYear();
     const yearSelected = ref(currentYear);
     const typeTransaction = reactive({
@@ -148,6 +154,7 @@
         await updateStoreYearListTrsByCategories(newYear, getNameTypeTransaction(typeTransaction.graphByCategories));
         await updateStoreTopYearCategories(newYear, 'purchase');
         await updateStoreTopYearCategories(newYear, 'recurring');
+        isLoadedData.value = true;
     }, { immediate: true, deep: true });
 
     watch( () => [typeTransaction.graphByMonth], async () => {

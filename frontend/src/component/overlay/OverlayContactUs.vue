@@ -7,10 +7,6 @@
             <MainContainerSlot :bgMainBtn="'bg-gradient-blue'" width='w-full'
             :textBtn1="'Fermer'" :textBtn2="'Envoyer'" titleContainer="Support et Aide" @toggleMenu="toggleMenu">
                 <div class="max-h-[76vh] overflow-y-auto">
-                    <!-- Errors -->
-                    <div class="relative pl-2">
-                        <p class="font-light absolute text-red-300">{{ textError }}</p>
-                    </div>
                     <div class="flex flex-col justify-center items-center w-full rounded-[3px] my-[40px]">
                         <div class="flex flex-col w-[90%] sm:w-full items-center px-10">
                             <div class="flex flex-col gap-7">
@@ -28,6 +24,7 @@
                                             id="input-firstname" 
                                             v-model="input.firstName" 
                                             v-model:stateError="errorInputs.firstName"
+                                            v-model:mandatoryInput="mandatoryInputs.firstName"
                                             :placeholder="`Non défini`"
                                             type="text"
                                             validFormat="firstName"
@@ -41,6 +38,7 @@
                                             id="input-lastname" 
                                             v-model="input.lastName" 
                                             v-model:stateError="errorInputs.lastName"
+                                            v-model:mandatoryInput="mandatoryInputs.lastName"
                                             :placeholder="`Non défini`"
                                             type="text"
                                             validFormat="lastName"
@@ -57,6 +55,7 @@
                                         id="input-email" 
                                         v-model="input.email" 
                                         v-model:stateError="errorInputs.email"
+                                        v-model:mandatoryInput="mandatoryInputs.email"
                                         :placeholder="`Non défini`"
                                         type="email"
                                         validFormat="email"
@@ -70,6 +69,7 @@
                                         id="content-email" 
                                         v-model="input.contentEmail" 
                                         v-model:stateError="errorInputs.contentEmail"
+                                        v-model:mandatoryInput="mandatoryInputs.contentEmail"
                                         :placeholder="`...`"
                                         validFormat="message"
                                         :hideAnimation="true"
@@ -81,9 +81,6 @@
                 </div>
             </MainContainerSlot>
         </div>
-        <TransitionPopUp duration-in="500" duration-out="500">
-            <OverlaySuccessAction text="Votre email a été envoyé." v-if="isSuccessAction" v-model:overlayActive="isSuccessAction" />
-        </TransitionPopUp>
     </div>
     
 </template>
@@ -91,7 +88,7 @@
     
 
 <script setup>
-    import { reactive, ref, computed, watch, defineAsyncComponent  } from 'vue';
+    import { reactive, ref, watch } from 'vue';
     import MainContainerSlot from '@/component/containerSlot/MainContainerSlot.vue';
     import useClickOutside from '@/composable/useClickOutSide';
     import useEscapeKey from '@/composable/useEscapeKey';
@@ -99,8 +96,7 @@
     import TextAreaBase from '@/component//input/TextAreaBase.vue';
     import { sendEmailToSupport } from '@/composable/useBackendActionData';
     import { isAnyMandatoryInputEmpty, isAnyInputError, TYPE_SUBMIT_ERROR, TEXT_SUBMIT_ERROR } from '@/error/useHandleError';
-    import TransitionPopUp from '@/component/transition/TransitionPopUp.vue';
-    const OverlaySuccessAction = defineAsyncComponent(() => import('@/component/overlay/OverlaySuccessAction.vue'));
+    import { createToast } from '@/composable/useToastNotification';
 
     // props, variables..
     const props = defineProps({
@@ -121,20 +117,19 @@
         contentEmail: false,
     });
 
-    const submitError = ref(null);
-    const isSuccessAction = ref(false);
+    const mandatoryInputs = reactive({
+        firstName: false,
+        lastName: false,
+        email: false,
+        contentEmail: false,
+    });
+
     const isOverlayActive = defineModel();
 
     // life cycle, functions
-    const textError = computed(() => {
-        if(submitError.value === TYPE_SUBMIT_ERROR.MANDATORY_EMPTY_INPUTS) return TEXT_SUBMIT_ERROR.ALL_INPUTS_MANDATORY;
-        else if(submitError.value === TYPE_SUBMIT_ERROR.NOT_SUCCESS_REQUEST) return "La requête a échoué.";
-        else if(submitError.value === TYPE_SUBMIT_ERROR.CONFIRM_PASS_ERROR) return TEXT_SUBMIT_ERROR.CONFIRM_PASS_ERROR;
-    });
-
-    watch(isOverlayActive, () => {
-        submitError.value = null;
-    });
+    // watch(isOverlayActive, () => {
+    //     submitError.value = null;
+    // });
 
     useEscapeKey(isOverlayActive, () => {
         isOverlayActive.value = false;
@@ -151,11 +146,11 @@
                 const allErrorsInputs = getStatesErrorInputs();
                 const allMandatoryValInputs = getValuesMandantInputs();
                 if(isAnyMandatoryInputEmpty(allMandatoryValInputs)) {
-                    submitError.value = TYPE_SUBMIT_ERROR.MANDATORY_EMPTY_INPUTS;
+                    activeErrorForMandatInputsEmpty();
+                    createToast(TEXT_SUBMIT_ERROR.MANDATORY_EMPTY_INPUTS, 'error');
                     return;
                 }
                 else if(isAnyInputError(allErrorsInputs)) {
-                    submitError.value = TYPE_SUBMIT_ERROR.INPUTS_FORMAT_ERRORS;
                     return;
                 }
                 const response = await sendEmailToSupport({
@@ -166,12 +161,11 @@
                 });
                 const isSuccessRequest = response?.isSuccessRequest;
                 if(!isSuccessRequest) {
-                    submitError.value = TYPE_SUBMIT_ERROR.NOT_SUCCESS_REQUEST;
                     return;
                 }
-                resetInputs();
-                submitError.value = null;
-                isSuccessAction.value = true;
+                createToast('Votre demande de support a bien été envoyée.', 'success');
+                closeOverlay();
+                // resetInputs();
                 break;
             }
             case 'cancel': {
@@ -190,6 +184,13 @@
         input.lastName = '';
         input.email = '';
         input.contentEmail = '';
+    }
+
+    function activeErrorForMandatInputsEmpty() {
+        if (!input.firstName) mandatoryInputs.firstName = true;
+        if (!input.lastName) mandatoryInputs.lastName = true;
+        if (!input.email) mandatoryInputs.email = true;
+        if (!input.email) mandatoryInputs.contentEmail = true;
     }
 
     function getStatesErrorInputs() {

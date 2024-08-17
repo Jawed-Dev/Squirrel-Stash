@@ -111,3 +111,6 @@ input:focus::placeholder {
     color: transparent; 
 }
   
+.Vue-Toastification__toast {
+    padding: 2px;
+}
