@@ -28,7 +28,7 @@ export default {
         'custom-purple' : '#e14eca',
         'custom-turquoise' : '#00f2c3',
         
-        'second-bg' : '#1b1e3390',
+        'second-bg' : '#1b1e33',
         'main-bg': "#141414",
         //'main-bg': "#141414",
       },
@@ -50,6 +50,7 @@ export default {
         'custom-gradient': "linear-gradient(to top left, #101010 70%, #ffffff 450%)",
 
         'gradient-blue' : "linear-gradient(0deg,#3358f4,#1d8cf8)",
+        'gradient-blue-hover' : "linear-gradient(0deg,#3358f4B0,#1d8cf890)",
         'gradient-green' : "linear-gradient(0deg,#389466,#42b883)",
         'gradient-red' : "linear-gradient(0deg, #ec250d, #fd5d93)",
         'gradient-orange' : "linear-gradient(0deg,#ff6491,#ff8d72)",
@@ -67,7 +68,7 @@ export default {
       boxShadow: {
         // 'custom-main': '0px 0px 2px #000000',
         'main': '0px 1px 4px #000000',
-        'custom-lower': '1px 1px 3px #38393b',
+        'custom-lower': '0px 0px 5px #969C99',
         'custom-hover': '0px 0px 1px #000000',
         'custom-very-low': '1px 1px 1px white',
       }

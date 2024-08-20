@@ -45,6 +45,12 @@ router.beforeEach(async (to, from, next) => {
       next('/404');
       return;
     } 
+    // for dont request the back when we got page 404
+    if(currentRequest === 'page404') {
+      next();
+      return;
+    }
+
     // token JWT
     let localToken = getLStorageAuthToken();
     const dataPage = await useConfigFetchGetPage(currentRequest, localToken);

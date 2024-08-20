@@ -127,10 +127,6 @@
     const isOverlayActive = defineModel();
 
     // life cycle, functions
-    // watch(isOverlayActive, () => {
-    //     submitError.value = null;
-    // });
-
     useEscapeKey(isOverlayActive, () => {
         isOverlayActive.value = false;
     });

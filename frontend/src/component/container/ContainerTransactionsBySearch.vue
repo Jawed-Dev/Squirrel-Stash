@@ -1,5 +1,5 @@
 <template>
-    <div v-if="componentLoaded">
+    <div v-if="isLoadedData">
         <div v-if="!isEmptyListTransaction" class="rounded-[3px] overflow-hidden my-custom-margin-main shadow-main relative">
             <div class="gradient-border text-white overflow-hidden
                 bg-main-gradient w-full">     
@@ -53,11 +53,12 @@
 
 <script setup>
     // import
-    import { ref, computed, watch, onMounted, nextTick } from 'vue';
+    import { ref, computed, watch, onMounted } from 'vue';
     import ContainerTransactionInfo from '@/component/container/ContainerTransactionInfo.vue';
     import ContainerPagination from '@/component/container/ContainerPagination.vue';
     import { storeDataTrsSearch, storeParamsSearch } from '@/storePinia/useStoreDashboard';
     import { updateDataTrsSearch } from '@/storePinia/useUpdateStoreByBackend';
+    import { isLoadedData ,timerLoadPageSpinner } from '@/composable/useSpinnerLoadData';
 
     // Store Pinia
     const paramsSearch = storeParamsSearch();
@@ -71,15 +72,10 @@
     };
 
     // variables, props...
-    // const totalItems = ref(0);
-    // const currentPage = ref(1);
-    // const itemsPerPage = ref(1);
-
-    const componentLoaded = ref(false);
     const totalItems = defineModel('totalItems');
     const currentPage = defineModel('currentPage');
     const itemsPerPage = defineModel('itemsPerPage');
-    const isLoadedData = defineModel('isLoadedData');
+    const emitIsLoadedData = defineModel('isLoadedData');
 
     const currentMenuEditDeleteTrs = ref(-1);
     const props = defineProps({
@@ -90,13 +86,16 @@
     const orderAsc = defineModel('orderAsc');
 
     // life cycle, function
-
     onMounted(async () => {
+        const timeMountedComponent = Date.now();
         const params = paramsSearch.params;
-        await updateDataTrsSearch(params);
-        componentLoaded.value = true;
-        isLoadedData.value = true;
+        await updateDataTrsSearch(params);        
+        timerLoadPageSpinner(timeMountedComponent, emitIsLoadedData);
     });
+
+    // watch(isLoadedData, (newVal) => {
+    //     emitIsLoadedData.value = newVal;
+    // });
 
     watch( () => currentPage.value, (newPage) => {
         const params = paramsSearch.params;

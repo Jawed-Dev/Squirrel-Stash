@@ -1,8 +1,13 @@
 <template>
-	<svg
-		@click="toggleMenu" :width="svg.width" :height="svg.height" viewBox="0 0 24 24" 
-		:fill="svg.fill" xmlns="http://www.w3.org/2000/svg">
-		<path d="M12 14a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm-6 0a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm12 0a2 2 0 1 0 0-4 2 2 0 0 0 0 4z" :fill="svg.fill"/>
+	<svg 
+		xmlns="http://www.w3.org/2000/svg" :width="svg.width" :height="svg.height" viewBox="0 0 24 24" 
+		fill="currentColor" stroke="currentColor" 
+			stroke-width="2" stroke-linecap="round" stroke-linejoin="round" 
+			class="icon icon-tabler icons-tabler-outline icon-tabler-dots">
+		<path stroke="none" d="M0 0h24v24H0z" fill="none" />
+		<path d="M5 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
+		<path d="M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
+		<path d="M19 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
 	</svg>
 </template>
 

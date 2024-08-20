@@ -28,6 +28,7 @@
 
 <script setup>
     import InputBase from '@/component/input/InputBase.vue';
+    
 
     // props, variables ...
     const searchAmountMin = defineModel('searchAmountMin');

@@ -161,6 +161,9 @@ export async function updateTransaction(params) {
     if(!params.id) return null;
     if(!params.note) params.note = '';
 
+    console.log('params.amount', params.amount)
+    console.log('params.amount', typeof params.amount)
+
     const localToken = getLStorageAuthToken();
     const body = {
         transactionId: Number(params.id),

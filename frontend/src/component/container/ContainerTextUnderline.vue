@@ -3,11 +3,11 @@
         text-white font-light`">
         <div v-show="iconName">
             <!-- <span>{{ unicode }}</span> -->
-            <UseIconLoader :nameIcon="iconName" :svg="{width:'20px', fill:'rgba(255, 255, 255, 0.8)'}"  />
+            <UseIconLoader class="bg-transparent " :nameIcon="iconName" :svg="{width:'20px', fill:'rgba(255, 255, 255, 0.8)'}"  />
         </div>
         <p 
         :id="id" 
-        :class="`text-[15px] p-1  pl-2 ${extraClass}`"> {{ text }}
+        :class="`bg-transparent text-[15px] p-1  pl-2 ${extraClass}`"> {{ text }}
         </p>
     </div>
 </template>

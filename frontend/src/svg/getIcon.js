@@ -77,6 +77,10 @@ export async function getIconByName(name) {
             return await import ('@/component/svgs/IconPencil.vue');
         }
 
+        case 'Calendar' : {
+            return await import ('@/component/svgs/IconCalendar.vue');
+        }
+
         case 'Category' : {
             return await import ('@/component/svgs/IconCategoryTrs.vue');
         }

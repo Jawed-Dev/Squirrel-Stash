@@ -1,6 +1,6 @@
 <template>
     <div class="w-full flex justify-center relative">
-        <IconOptions @click="toggleMenu()" class="cursor-pointer trigger-menu-editdelete" :svg="iconOptions"/>
+        <IconOptions @click="toggleMenu()" class="cursor-pointer trigger-menu-editdelete hover:stroke-blue-500" :svg="iconOptions"/>
         <TransitionOpacity :durationIn="'duration-500'" :durationOut="'duration-500'">
             <div v-if="isMenuActive" 
                 class="absolute flex flex-col items-center z-10 trigger-menu-editdelete shadow-main

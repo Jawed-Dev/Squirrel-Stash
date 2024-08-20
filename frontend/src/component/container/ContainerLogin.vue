@@ -1,8 +1,8 @@
 <template>
-    <section class="w-full flex flex-col items-center justify-center h-screen bg-main-gradient font-main 
-        shadow-main overflow-y-auto min-h-[600px] lg:w-1/2">
+    <section class="w-full flex flex-col items-center justify-center h-screen font-main 
+         overflow-y-auto min-h-[600px] lg:w-1/2 relative ">
 
-        <div class="w-full flex flex-col items-center justify-center">
+        <div class="w-full flex flex-col items-center justify-center bg-opacity-0">
 
             <LogoMain :svg="{width:'200px'}" />
 
@@ -46,27 +46,27 @@
                         <p class="txt-main-blue text-sm text-white font-light">Se rappeler de moi</p>
                     </div>
                     <router-link 
-                        class="text-main-blue font-light text-sm" 
+                        class="text-main-blue font-light text-sm hover:text-sky-200" 
                         to="/mot-de-passe-oublie">Mot de passe oublié ?
                     </router-link>
                 </div>
                 
                 <div>
                     <button :class="`bg-main-blue  shadow-main 
-                        w-full py-2 rounded-lg text-white mt-5`">Se connecter
+                        w-full py-2 rounded-lg text-white mt-5 hover:bg-opacity-50`">Se connecter
                     </button>
                 </div>
                 
                 <div class="mt-5 flex flex-col items-center gap-1 lg:gap-5 justify-center lg:px-0 lg:items-stretch xl:px-5 lg:flex-row">
                     <p class="text-white font-light">Vous n'avez pas de compte ?</p> 
-                    <router-link class="text-main-blue font-light  text-sm" to="/inscription" >S'inscrire</router-link>
+                    <router-link class="text-main-blue font-light text-sm hover:text-sky-200" to="/inscription" >S'inscrire</router-link>
                 </div>
 
                 <div class="mt-5 flex flex-col items-center gap-1 lg:gap-5 justify-center sm:gap-2 sm:px-0 sm:items-center xl:px-5 sm:flex-row">
                     <p class="text-white font-light">Besoin d'aide ?</p> 
                     <p 
                         @click="toggleRules"
-                        class="text-main-blue font-light text-sm cursor-pointer">Contactez-nous
+                        class="text-main-blue font-light text-sm cursor-pointer hover:text-sky-200">Contactez-nous
                     </p>
                 </div>
             </form>
@@ -77,12 +77,14 @@
                 />
             </TransitionOpacity>       
         </div>
+        
+        <!-- <div class="absolute h-screen w-full bg-[url('/blob-scene-haikei_3.svg')] bg-cover bg-center bg-no-repeat opacity-[10%]"></div> -->
     </section>
 </template>
 
 
 <script setup>
-    import { ref, reactive, computed, defineAsyncComponent } from 'vue';
+    import { ref, reactive, defineAsyncComponent } from 'vue';
     import { useRouter } from 'vue-router';
     import InputBase from '@/component/input/InputBase.vue';
     import InputCheckbox from '@/component/input/InputCheckbox.vue';

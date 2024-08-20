@@ -25,7 +25,7 @@
                     />
                 </div>
 
-                <button :class="`bg-main-blue shadow-main w-full py-2 rounded-lg text-white mt-6`"
+                <button :class="`bg-main-blue shadow-main w-full py-2 rounded-lg text-white mt-6 hover:bg-opacity-50`"
                     >Envoyer
                 </button>           
 

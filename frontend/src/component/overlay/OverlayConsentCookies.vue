@@ -28,7 +28,7 @@
                             <p class="opacity-90 font-light">
                                 En utilisant notre service, vous acceptez l'emploi de ces cookies essentiels pour une expérience et une sécurité optimales. <span class="block"></span>
                                 Pour plus d'informations sur la gestion de vos données, veuillez consulter notre 
-                                <span :onclick="openPolicyOverlay" class="text-violet-400 font-normal cursor-pointer">Politique de confidentialité</span>.
+                                <span :onclick="openPolicyOverlay" class="hover:text-blue-300 text-main-blue font-normal cursor-pointer">Politique de confidentialité</span>.
                             </p>
                         </div>
         
@@ -46,8 +46,9 @@
     import { useRouter } from 'vue-router';
     import MainContainerSlot from '@/component/containerSlot/MainContainerSlot.vue';
     import { setLStorageCookieConsent, getLStorageAuthToken} from "@/composable/useLocalStorage";
+    import { storeAuthTOken } from '@/storePinia/useStoreDashboard';
     const OverlayPrivacy = defineAsyncComponent(() => import('@/component/overlay/OverlayPrivacy.vue'));
-
+    
     // props, variables..
     const props = defineProps({
         width: {default: ''}
@@ -55,7 +56,7 @@
     const router = useRouter();
     const isOverlayActive = defineModel();
     const OverlayPrivacyActive = ref(false);
-
+    
     // life cycle, functions
     async function toggleMenu(request) {
         switch(request) {
@@ -63,8 +64,12 @@
                 const isTokenValid = getLStorageAuthToken();
                 if(isTokenValid) {
                     localStorage.removeItem('authToken');
+                    const authToken = storeAuthTOken();
+                    authToken.token = '';
                 }
+                closeOverlay();
                 router.push('/connexion');
+                isOverlayActive.value = true;
                 break;
             }
             case 'valid': {
@@ -76,7 +81,7 @@
     }
 
     function closeOverlay() {
-        isOverlayActive.value = true;
+        isOverlayActive.value = false;
     }
 
     function openPolicyOverlay() {

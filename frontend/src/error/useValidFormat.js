@@ -24,7 +24,7 @@ export function isValidPassword(password) {
 }
 
 export function isValidGender(gender) {
-    const validGenders = ['homme', 'femme', 'autre'];
+    const validGenders = ['Homme', 'Femme', 'Non défini'];
     return validGenders.includes(gender.toLowerCase());
 }
 
@@ -39,9 +39,8 @@ export function isValidLastName(lastName) {
 }
 
 export function isValidInputAmount(amount) {
-    console.log('amount',amount);
-    const regex = /^\d+$/;
-    return regex.test(amount) && amount <= 1000000000;
+    const regex =  /^\d+(,\d{0,2})?$/;
+    return regex.test(amount) && parseFloat(amount.replace(',', '.')) <= 1000000000;
 }
 
 export function isValidInputNote(note) {

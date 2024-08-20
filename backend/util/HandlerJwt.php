@@ -51,7 +51,7 @@
             }
             catch (Exception $e) {
                 // log
-                return throw new Exception('Erreurs de données.');
+                return throw new Exception('Erreurs de données. 4');
             }
         }
 

@@ -147,7 +147,6 @@
 
         public function isValidThresholdAmount($trsAmount) {
             if(empty($trsAmount)) return false;
-
             $regex = "/^\d+(,\d+)?$/";
             $maxLen = strlen($trsAmount) <= 10;
             $isValidPattern = preg_match($regex, $trsAmount) === 1;
@@ -159,11 +158,12 @@
             if(empty($trsAmount)) return false;
             //if(!is_string($trsAmount)) return false;
 
-            $maxLen = strlen($trsAmount) <= 10;
-            $regex = "/^\d+(,\d+)?$/";
+            $maxVal = $trsAmount <= 1000000000;
+            $regex = "/^\d+(\.\d{1,2})?$/";
             $isValidPattern = preg_match($regex, $trsAmount) === 1;
-            $isInt  = is_int($trsAmount);
-            return $isValidPattern && $maxLen && $isInt;
+            $isFloat = is_float($trsAmount);
+            $isInt = is_int($trsAmount);
+            return $isValidPattern && $maxVal && ($isInt || $isFloat);
         }
 
         public function isValidTransactionType($trsType) {
@@ -244,7 +244,7 @@
         public function isValidGenderProfil($gender) {
             if(!empty($gender)){
                 if(!is_string($gender)) return false;
-                $isCorrectValue = $gender ==='Homme' || $gender ==='Femme' || $gender ==='Autre';
+                $isCorrectValue = $gender ==='Homme' || $gender ==='Femme' || $gender ==='Non défini';
                 return $isCorrectValue;
             }
             return true;

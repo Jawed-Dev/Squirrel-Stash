@@ -1,6 +1,11 @@
 <template>
     
-        <IconPreferences @click="toggleMenu('openNClose')" class='cursor-pointer' v-show="isIconActive" :svg="iconThreshold" /> 
+        <IconPreferences 
+            @click="toggleMenu('openNClose')" 
+            class='cursor-pointer hover:fill-blue-500' 
+            v-show="isIconActive" 
+            :svg="iconThreshold" 
+        /> 
     
         <TransitionOpacity :durationIn="'duration-300'" :durationOut="'duration-200'">
             <div v-show="isOverlayActive" class="fixed inset-0 bg-black bg-opacity-80 z-30"></div>
@@ -74,6 +79,7 @@
     const AmountThreshold = ref('');
     const errorInput = ref(false);
     const mandatoryInput = ref(false);
+
 
     // life cycle, functions
     useEscapeKey(isOverlayActive, () => {

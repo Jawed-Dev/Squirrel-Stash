@@ -1,12 +1,13 @@
 <template>
-    <div style="position: relative; height:350px; width:100%">
+    <!-- <div style="position: relative; height:350px; width:100%"> -->
+    <div class="relative min-h-[350px] w-full">
         <canvas class="mt-5" ref="canvas"></canvas>
-        <ButtonDownloadChart :canvas="canvas" />
+        <ButtonDownloadChart v-if="!isDataEmpty" :canvas="canvas" />
     </div>
 </template>
 
 <script setup>
-import { ref, onMounted, watch } from 'vue';
+import { ref, onMounted, watch, computed } from 'vue';
 import Chart from 'chart.js/auto';
 import ButtonDownloadChart from '@/component/button/ButtonDownloadChart.vue';
 
@@ -17,7 +18,6 @@ const props = defineProps({
 
 const canvas = ref(null);
 let chartInstance = null;
-
 
 onMounted(() => {
     const gradient = canvas.value.getContext('2d').createLinearGradient(0, 0, 0, 400);
@@ -43,13 +43,20 @@ onMounted(() => {
 });
 
 watch(() => props.dataTransaction, (newData) => {
-        console.log('newData',newData)
+        if(!newData) return;
         updateChartData(chartInstance, newData);
 }, { deep: true });
 
+const isDataEmpty = computed( () => {
+    let dataEmpty = true;
+    props.dataTransaction.forEach(element => {
+        if(element.total_amount > 0) dataEmpty = false;
+    });
+    return dataEmpty;
+});
 
 function updateChartData(chart, newData) {
-    if (!chartInstance) return;  
+    if (!chart) return;  
 
     const ctx = canvas.value.getContext('2d');
     const gradient = ctx.createLinearGradient(0, 300, 0, 300);
@@ -88,13 +95,22 @@ function getChartOptions() {
         scales: {
             x: {
                 grid: { display: true, color: '' },
-                ticks: { stepSize: 5, color: 'white' },
+                ticks: { 
+                    stepSize: 5, 
+                    color: 'white',  
+                    font: {
+                        size: 13
+                    },
+                },
             },
             y: {
                 beginAtZero: true,
                 ticks: {
                     stepSize: 0,
                     color: 'white',
+                    font: {
+                        size: 13
+                    },
                     callback: value => `${value} €`
                 },
                 grid: {

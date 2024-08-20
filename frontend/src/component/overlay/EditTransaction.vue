@@ -49,6 +49,8 @@
     import { isAnyMandatoryInputEmpty, isAnyInputError, TYPE_SUBMIT_ERROR, TEXT_SUBMIT_ERROR } from '@/error/useHandleError';
     import { isValidCategory } from '@/error/useValidFormat';
     import { createToast } from '@/composable/useToastNotification';
+    import { formatFloatAsString, formatStringToFloat } from '@/composable/useMath';
+    
 
     // stores Pinia
     const dateSelected = storeDateSelected();
@@ -153,7 +155,7 @@
     }
     function loadDataTransaction() {
         if(!props.infoTransaction.transaction_id) return;
-        inputPriceVal.value = props.infoTransaction.transaction_amount;
+        inputPriceVal.value = formatFloatAsString(props.infoTransaction.transaction_amount);
         inputNoteVal.value = props.infoTransaction.transaction_note;
         inputDateVal.value = props.infoTransaction.transaction_date;
         typeTransaction.value = getTypeTransaction();
@@ -162,7 +164,7 @@
     async function prepareUpdateTransaction() {
         const dataRequest = await updateTransaction({
             id: props.infoTransaction.transaction_id,
-            amount: inputPriceVal.value,
+            amount: formatStringToFloat(inputPriceVal.value),
             trsCategory: getCurrentNameCategory(),
             trsType: getCurrentTransactionType(),
             date: inputDateVal.value,

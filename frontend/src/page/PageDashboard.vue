@@ -1,12 +1,13 @@
 <template>
     <div class="font-main flex flex-col bg-main-bg w-full min-h-screen pb-[calc(50px)] md:pb-0">
-        <div v-show="isLoadedData"  class="mx-1 md:ml-[calc(20px+65px+20px)] xl:ml-[calc(30px+75px+30px)] md:mr-[20px] xl:mr-[30px] flex flex-col mt-5">
+        <div v-show="isLoadedData" class="mx-1 md:ml-[calc(20px+65px+20px)] xl:ml-[calc(30px+75px+30px)] 
+            md:mr-[20px] xl:mr-[30px] flex flex-col mt-5">
             <h1 class="text-2xl font-light text-white">Économie du mois</h1>
-            <p class="font-light text-white mt-2 pr-2">Bonjour {{ firstNameUser }}, voici votre résumé du mois.</p> 
+            <p class="font-light text-white scroll-mt-36 pr-2">Bonjour {{ firstNameUser }}, voici votre résumé du mois.</p> 
 
             <div class="flex gap-5 flex-col lg:flex-row lg:justify-between items-center w-full">
-                <section class="flex w-full flex-col justify-between lg:mt-5 order-2 lg:order-1">
-                    <div class="flex flex-col gap-5 sm:gap-2 sm:flex-row sm:w-full lg:w-1/4 lg:mb-0">
+                <section class="flex w-full flex-col justify-end lg:min-h-[129.5px] order-2 lg:order-1">
+                    <div class="flex flex-col gap-5 sm:gap-2 sm:flex-row md:mb-5 sm:w-full lg:w-1/4 lg:mb-5">
                         <SelectMonth class="min-h-[42px] w-full md:min-w-[200px]" v-model="dateSelected.month" :listSelect="monthNames" />
                         <SelectYear class="min-h-[42px] w-full sm:min-w-[200px]" v-model="dateSelected.year" :listSelect="getAvailableYear()" />
                     </div>
@@ -22,13 +23,11 @@
                 />
             </div>
 
-            <section class="w-full mt-custom-margin-main rounded-[3px] overflow-hidden  shadow-main"> 
-                <ContainerTransactionsMonth v-if="isLoadedData"/>
-            </section>
+            <ContainerTransactionsMonth  />           
 
             <section class="flex flex-col sm:flex-row sm:gap-5 justify-around">
 
-                <div class="flex flex-col w-full justify-around min-[1340px]:flex-row min-[1340px]:gap-5 ">
+                <div class="flex flex-col w-full justify-around min-[1340px]:flex-row min-[1340px]:gap-5">
                     <ContainerStatMonth nameIcon="calculator" bgIcon="bg-gradient-orange" :colorValue="'text-custom-orange'" 
                     :amountValue="statisticDetails.totalTransactions + ' €'" :nameStat="'Total des transactions'" :width="'min-[1340px]:w-1/2 w-full'" />
     
@@ -68,14 +67,15 @@
     import AddTransaction from '@/component/overlay/AddTransaction.vue';
     import { monthNames, getAvailableYear, getCurrentMonthName, getCurrentYear, getMonthNumber } from '@/composable/useGetDate';
     import { getUserFirstName } from '@/composable/useBackendGetData';
-    import { storeTrsMonthByDay, storeThreshold, storeDateSelected, storeStatisticDetails } from '@/storePinia/useStoreDashboard';
+    import { storeThreshold, storeDateSelected, storeStatisticDetails } from '@/storePinia/useStoreDashboard';
     import { updateThresholdByMonth, updateTotalTrsByMonth, updateBalanceEcoByMonth, updateBiggestTrsByMonth } from '@/storePinia/useUpdateStoreByBackend';
     import ContainerSpinner from '@/component/container/ContainerSpinner.vue';
+    import { isLoadedData, timerLoadPageSpinner } from '@/composable/useSpinnerLoadData';
     
     // stores Pinia
     const threshold = storeThreshold();
     // props, variables, ...
-    const isLoadedData = ref(false);
+    //const isLoadedData = ref(false);
     const dateSelected = storeDateSelected();
     const statisticDetails = storeStatisticDetails();
     const firstNameUser = ref('');
@@ -98,12 +98,13 @@
     });
 
     watch( () => [dateSelected.month, dateSelected.year], async ([newMonth, newYear]) => {
+        const timeMountedComponent = Date.now();
         await updateThresholdByMonth(newMonth, newYear);
         await updateTotalTrsByMonth(newMonth, newYear);
         await updateBalanceEcoByMonth(newMonth, newYear);
         await updateBiggestTrsByMonth(newMonth, newYear, 'purchase');
         await updateBiggestTrsByMonth(newMonth, newYear, 'recurring');
-        isLoadedData.value  = true;
+        timerLoadPageSpinner(timeMountedComponent);
     }, {  immediate:true, deep:true });
 
     // computed
@@ -136,6 +137,5 @@
     const nameBiggestRecurring = computed(() => {
         const nameBiggestPurch = statisticDetails?.biggestRecurring?.transaction_category;
         return (nameBiggestPurch) ? nameBiggestPurch : 'Aucune donnée';
-    });
-    
+    });    
 </script>

@@ -1,12 +1,12 @@
 <template>
-    <div class="relative" style="position: relative; height:350px; width:100%">
+    <div class="relative min-h-[350px] w-full">
         <canvas class="mt-5" ref="canvas"></canvas>
-        <ButtonDownloadChart top="top-[-53px]" :canvas="canvas" />
+        <ButtonDownloadChart v-if="!isDataEmpty" top="top-[-53px]" :canvas="canvas" />
     </div>
 </template>
 
 <script setup>
-import { ref, onMounted, watch,computed } from 'vue';
+import { ref, onMounted, watch, computed } from 'vue';
 import Chart from 'chart.js/auto';
 import ButtonDownloadChart from '@/component/button/ButtonDownloadChart.vue';
 
@@ -60,12 +60,20 @@ onMounted(() => {
 });
 
 watch(() => props.dataTransaction, (newData) => {
+    if(!newData) return;
     updateChartData(chartInstance, newData);
 }, { deep: true });
 
+const isDataEmpty = computed( () => {
+    let dataEmpty = true;
+    props.dataTransaction.forEach(element => {
+        if(element.total_amount > 0) dataEmpty = false;
+    });
+    return dataEmpty;
+});
 
 function updateChartData(chart, newData) {
-    if (!chartInstance) return;  
+    if (!chart) return;  
 
     const ctx = canvas.value.getContext('2d');
     const gradient = ctx.createLinearGradient(0, 0, 0, 300);

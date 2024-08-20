@@ -1,37 +1,32 @@
 <template>
-    <div 
-        :class="`bg-second-bg z-10 px-2 flex border-2 items-center py-[1px] rounded-lg mt-[2px]
-        ${border} transition-all duration-500 ${colorBorder} text-white font-light`">
+    <div @click="openDatePicker"
+        :class="`z-10 bg-second-bg px-2 flex border-2 items-center py-[1px] rounded-lg mt-[2px] 
+        transition-all duration-500 text-white font-light ${border} ${colorBorder} ${cursorPointerForDate}`">
+
+        <!-- Icon -->
         <div v-show="iconName"> 
             <UseIconLoader :nameIcon="iconName" :svg="{width:'20px', fill:'rgba(255, 255, 255, 1)'}"  />
         </div>
 
-        <input
-            @input="onInput"
-            @focus="isInputFocused = true" 
-            @blur="isInputFocused = false"
-            :class="`p-1 pl-2 bg-second-bg text-[15px] ${props.extraClass} transition-colors 
-            duration-500 ${colorValidationInput} focus:outline-none ${width} .webkit-white w-full`"
+        <!-- input Element -->
+        <input @input="onInput" @focus="isInputFocused = true" @blur="isInputFocused = false"
+            :class="`p-1 bg-transparent pl-2 ${cursorPointerForDate} text-[15px] ${props.extraClass} transition-colors 
+            duration-500 ${colorValidationInput} focus:outline-none ${width} w-full`"
+
             :value="inputValue"
             :type="type"
             :placeholder="placeholder"
             :id="props.id"
+            :ref="type === 'date' ? 'refInput' : ''"
         >
-    
-        <div :class="`transition-colors duration-500 ${colorValidationInput} mx-1 `">
+        <!-- icon Validation if is active -->
+        <div :class="`transition-colors bg-transparent duration-500 ${colorValidationInput} mx-1 `">
             {{ iconValidationInput }}
         </div>
     </div>
     <TransitionOpacity duration-in="duration-150" duration-out="duration-0">
         <div v-if="isAnyError" :class="`text-red-200 font-light relative`">
             <p class="text-sm mt-[1px] absolute">{{ isAnyError }}</p>
-            <!-- <div title="Format valide : exemple@domaine.com" class="text-white mt-[6px] absolute left-[106px] bg-gradient-vanusa shadow-main hover:bg-custom-blue p-1 rounded-full cursor-pointer"> 
-                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-question-mark">
-                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                    <path d="M8 8a3.5 3 0 0 1 3.5 -3h1a3.5 3 0 0 1 3.5 3a3 3 0 0 1 -2 3a3 4 0 0 0 -2 4" />
-                    <path d="M12 19l0 .01" />
-                </svg>
-            </div> -->
         </div>
     </TransitionOpacity>
 </template>
@@ -42,7 +37,6 @@
     import { typeError } from '@/error/useHandleError';
     import UseIconLoader from '@/composable/useIconLoader.vue';
     import { createToast } from '@/composable/useToastNotification';
-
     import {
         isValidMail,
         isValidPassword,
@@ -58,7 +52,9 @@
         isValidMessage
     } from '@/error/useValidFormat';
 
+
     // variables, props, ...
+    const refInput = ref(null);
     const validators = {
         email: isValidMail,
         password: isValidPassword,
@@ -111,6 +107,10 @@
         return (isInputFocused.value) ? "border-custom-blue" : "hover:border-custom-blue border-slate-600";
     });
 
+    const cursorPointerForDate = computed(() => {
+        return props.type === 'date' ? 'cursor-pointer' : '';
+    });
+
     const colorValidationInput = computed(() => {
         if(props.hideAnimation) return '';
         if(isInputEmpty()) return '';
@@ -147,10 +147,8 @@
     //life cycle functions
     watch(inputValue, () => {
         if(isTimerCheckErrorActive()) clearTimeout(timeoutCheckError.value);
-        //if(modelStateError.value) return;
         timeoutCheckError.value = setTimeout(() => {
             timeoutCheckError.value = null;
-            console.log('debouncing', timeoutCheckError.value);
          }, 1000);
     });
 
@@ -179,6 +177,12 @@
     function isTimerCheckErrorActive() {
         return timeoutCheckError.value;
     }
+
+    const openDatePicker = () => {
+        if (refInput.value) refInput.value.showPicker();
+    };
+
+    
 </script>
 
 

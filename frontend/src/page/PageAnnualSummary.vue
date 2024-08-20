@@ -13,7 +13,7 @@
             </div>
 
             <section class="w-full flex flex-col xl:flex-row gap-5 mt-custom-margin-main rounded-[3px]"> 
-                <ContainerGraphYear 
+                <ContainerGraphYear
                     title1="Achats par mois" title2="Prélèvements par mois"
                     :dataTransaction="yearListTrsByMonth.data" 
                     :typeGraph="useGraphLine" 
@@ -106,9 +106,8 @@
     import useGraphBar from '@/composable/useGraphBar.vue';
     import useGraphDonut from '@/composable/useGraphDonut.vue';
     import ContainerSpinner from '@/component/container/ContainerSpinner.vue';
+    import { isLoadedData ,timerLoadPageSpinner } from '@/composable/useSpinnerLoadData';
 
-
-    
     // store Pinia
     const yearListTrsByMonth = storeYearListTrsByMonth();
     const yearListTrsByCategories = storeYearListTrsByCategories();
@@ -116,7 +115,6 @@
     const topYearCategories = storeTopYearCategories();
 
     // props, variables
-    const isLoadedData = ref(false);
     const currentYear = getCurrentYear();
     const yearSelected = ref(currentYear);
     const typeTransaction = reactive({
@@ -125,6 +123,7 @@
         donutTopPurchases: false,
         donutTopRecurring: true,
     });
+    let timerId = null;
 
     // fonctions, life cycle
     const iconNamePurchases = computed(() => {
@@ -146,6 +145,7 @@
 
 
     watch(yearSelected, async (newYear) => {
+        const timeMountedComponent = Date.now();
         await updateStoreYearListTrsByMonth(newYear, getNameTypeTransaction(typeTransaction.graphByMonth));
         await updateStoreTotalTrsByYear(newYear);
         await updateBiggestTrsByYear(newYear,'purchase');
@@ -154,7 +154,7 @@
         await updateStoreYearListTrsByCategories(newYear, getNameTypeTransaction(typeTransaction.graphByCategories));
         await updateStoreTopYearCategories(newYear, 'purchase');
         await updateStoreTopYearCategories(newYear, 'recurring');
-        isLoadedData.value = true;
+        timerLoadPageSpinner(timeMountedComponent);
     }, { immediate: true, deep: true });
 
     watch( () => [typeTransaction.graphByMonth], async () => {

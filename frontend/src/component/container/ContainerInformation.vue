@@ -1,6 +1,6 @@
 <template>
-    <section :class="`hidden lg:flex flex-col items-center justify-center 
-        bg-main-bg text-white lg:w-1/2 lg:h-screen ${heightMin} font-main`">
+    <section :class="`hidden lg:flex flex-col items-center justify-center
+         text-white lg:w-1/2 lg:h-screen ${heightMin} font-main`">
 
         <div class="flex flex-col items-center gap-10 justify-between w-full mt-5">
             <component :is="image" :svg="styleIcon" />
@@ -8,8 +8,14 @@
                 Lorem ipsum, dolor sit amet consectetur adipisicing elit. Aspernatur sit beatae totam quibusdam rerum mollitia eaque minus vel explicabo consequatur incidunt !
             </p>
         </div>
+
+        <!-- <div class="absolute h-screen ml-[100%] w-full bg-[url('/layered-waves-haikei.svg')] bg-cover bg-le bg-no-repeat opacity-100 z-50">
+
+
+        </div> -->
         
     </section>
+    
 </template>
 
 

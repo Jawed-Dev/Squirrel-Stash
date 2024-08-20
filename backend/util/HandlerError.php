@@ -214,6 +214,7 @@
         }
 
         public function verifySendEmailToSupport($data) {
+            var_dump($data);
             $this->clearErrors();
             $bodyData = $data['bodyData'];
             $this->validateFormat('isValidFirstName', $bodyData['firstName'] ?? null);

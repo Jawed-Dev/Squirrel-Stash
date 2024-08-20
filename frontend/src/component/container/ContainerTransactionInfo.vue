@@ -6,7 +6,7 @@
                 <IconLoader 
                     :nameIcon="infoTransaction.transaction_category" 
                     :svg="iconConfig" 
-                    :class="`${iconConfig.color} rounded-full p-[10px]  shadow-main`"
+                    :class="`${iconConfig.color} rounded-full p-2 shadow-main`"
                 />
         
                 <p class="w-[25%] text-[15px] pl-[5px] md:pl-[20px] sm:text-left 
@@ -23,7 +23,7 @@
                     />
                     <IconInfo 
                         @click="toggleDetails"
-                        class="cursor-pointer trigger-info-note"
+                        class="cursor-pointer trigger-info-note hover:stroke-blue-500"
                         :svg="styleIconInfo"
                     />
                 </div>
@@ -64,6 +64,8 @@
     import TransitionOpacity from '@/component//transition/TransitionOpacity.vue';
     import useClickOutside from '@/composable/useClickOutSide';
     import useEscapeKey from '@/composable/useEscapeKey';
+    import { formatFloatAsString, formatStringToFloat } from '@/composable/useMath';
+    
     
     
     
@@ -80,7 +82,8 @@
 
     // life cycle, functions
     const transactionAmount = computed(() => {
-       return (props.infoTransaction.transaction_id) ? props.infoTransaction.transaction_amount + ' €' : '';
+        const amount = props.infoTransaction.transaction_amount;
+       return (amount) ? formatFloatAsString(amount) + ' €' : '';
     });
     const transactionCount = computed(() => {
        return (props.infoTransaction.transaction_id) ? props.infoTransaction.count_categories + ' x' : '';

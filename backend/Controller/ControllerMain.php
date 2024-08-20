@@ -136,7 +136,7 @@
             return $this->EmailSender;
         }
 
-        public function prepareDataForController($requireAuth= true, $requireBodyData = true,  $requireDatabase = true) {
+        public function prepareDataForController($requireAuth= true, $requireBodyData = true,  $requireDatabase = true, $allowForAllAuth = false) {
             $bodyDataJson = null;
             $bodyData = null;
             $db = null;
@@ -145,27 +145,26 @@
             if($requireBodyData) {
                 $bodyDataJson = $this->getRequestBodyJson();
                 $bodyData = json_decode($bodyDataJson, true);
-                // foreach ($bodyData as &$value) {
-                //     if(is_string($value) && $value) $this->getHandlerValidFormat()->sanitizeData($value);
-                // }
                 if(!$bodyDataJson) throw new Exception('Erreur de données.');
             }
             if($requireDatabase) {
                 $db = $this->getDatabase();
-                if(!$db) throw new Exception('Erreurs de données.');
+                if(!$db) throw new Exception('Erreurs de données. 1 ');
             }
             
-            if($requireAuth) {
-                $decodedJwt = $this->getHandlerJwt()->getJwtFromHeader();
-                $isSessionActive = $this->getControllerUser()->isSessionActive($decodedJwt);
-                if(!$isSessionActive) throw new Exception('Erreurs de données.');
-                $userId = $this->getControllerUser()->getUserIdFromJwt($decodedJwt);
-                if(!$userId) throw new Exception('Erreurs de données.');
-            }
-            else {
-                $decodedJwt = $this->getHandlerJwt()->getJwtFromHeader();
-                $isSessionActive = $this->getControllerUser()->isSessionActive($decodedJwt);
-                if($isSessionActive) throw new Exception('Erreurs de données.');
+            if(!$allowForAllAuth) {
+                if($requireAuth) {
+                    $decodedJwt = $this->getHandlerJwt()->getJwtFromHeader();
+                    $isSessionActive = $this->getControllerUser()->isSessionActive($decodedJwt);
+                    if(!$isSessionActive) throw new Exception('Erreurs de données. 2');
+                    $userId = $this->getControllerUser()->getUserIdFromJwt($decodedJwt);
+                    if(!$userId) throw new Exception('Erreurs de données. 2');
+                }
+                else {
+                    $decodedJwt = $this->getHandlerJwt()->getJwtFromHeader();
+                    $isSessionActive = $this->getControllerUser()->isSessionActive($decodedJwt);
+                    if($isSessionActive) throw new Exception('Erreurs de données. 3');
+                }
             }
 
             return [
@@ -182,25 +181,28 @@
             $requireDatabase = $params['requireDatabase'] ?? true;
             $functionValidData = $params['functionValidData'] ?? null;
 
+            // for methods which are used for connected user and not connected like overlay support
+            $allowForAllAuth = $params['allowForAllAuth'] ?? false;
+
             // get Data for a Controller
-            $dataRequest = $this->prepareDataForController($requireAuth, $requireBodyData, $requireDatabase);
+            $dataRequest = $this->prepareDataForController($requireAuth, $requireBodyData, $requireDatabase, $allowForAllAuth);
         
             // option database
             if($requireDatabase) $dataRequire[] = $dataRequest['dataBase'];
             // params userId
-            if($requireAuth) $dataRequire[] = $dataRequest['userId'];
+            if($requireAuth && !$allowForAllAuth) $dataRequire[] = $dataRequest['userId'];
             // params bodydata
             if($requireBodyData) {
                 $dataRequire[] = $dataRequest['bodyData'];
             }
             // Verify the presence of essential data
             $isAnyMainDataEmpty = $this->getHandlerError()->verifyIfMainDataExists($dataRequire);
-            if ($isAnyMainDataEmpty) return throw new Exception('Erreurs dans la requête.');
+            if ($isAnyMainDataEmpty) return throw new Exception('Erreurs dans la requête 1.');
 
             // Verify the expected format of data 
             if($functionValidData) {   
                 $isAnyError = $this->getHandlerError()->$functionValidData($dataRequest);
-                if ($isAnyError) return throw new Exception('Erreurs dans la requête.');
+                if ($isAnyError) return throw new Exception('Erreurs dans la requête 2.');
             }
             return $dataRequest;
         }

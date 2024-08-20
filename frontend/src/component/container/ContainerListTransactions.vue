@@ -1,10 +1,10 @@
 <template>
-    <div class="rounded-[3px] overflow-hidden my-custom-margin-main shadow-main relative">
+    <div class="rounded-[3px] overflow-hidden my-5 shadow-main relative">
         <div class="bg-main-gradient w-full gradient-border text-white"> 
     
             <div class="flex items-center justify-between">
                 <h2 class="pl-3 pb-2 pt-3 text-xl font-extralight pr-8 sm:pb-0">{{ textTitle }}</h2>
-                <router-link to="/historique-transactions" :class="`pt-3  font-light cursor-pointer pr-3 ${translateY}`">Voir plus ></router-link>
+                <router-link to="/historique-transactions" :class="`pt-3 font-light cursor-pointer pr-3 ${translateY} hover:text-blue-500`">Voir plus ></router-link>
             </div>
 
             <div class="flex w-full xl:hidden justify-center ">

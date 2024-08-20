@@ -16,8 +16,12 @@
                         type="date"
                         validFormat="trsDate"
                         :hideAnimation="true"
+                        iconName="Calendar"
                     />
                 </div>
+
+                
+                
             </div>
 
             <div class="w-1/2 mt-4 min-[600px]:mt-3">
@@ -75,3 +79,6 @@
     const errorInputs = defineModel('errorInputs');
     const mandatoryInputs = defineModel('mandatoryInputs');
 </script>
+
+
+

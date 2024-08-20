@@ -70,13 +70,9 @@
                         break;
                     }
 
-                    // case 'page404': {
-                    //     getControllerMain()->authorizePage();
-                    //     break;
-                    // }
-
                     default: {
-                        getControllerMain()->sendJsonResponse(['message' => 'Page not found', 'status' => 404]);
+                        http_response_code(404);
+                        getControllerMain()->sendJsonResponse(['message' => 'Page not found']);
                         break;
                     }
                 }
@@ -221,9 +217,6 @@
                         getControllerMain()->getControllerUser()->sendEmailToSupport();
                         break;
                     }
-
-                    
-                    
                 }
             }
         }

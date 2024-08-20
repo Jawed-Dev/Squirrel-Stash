@@ -1,5 +1,5 @@
 <template>
-    <div class="overflow-hidden  shadow-main rounded-[3px]">
+    <div class="overflow-hidden  shadow-main rounded-[3px] relative">
         <div class="pl-3 bg-main-gradient text-white rounded-md gradient-border ">
             <h2 class="pb-2 pt-3 text-xl font-extralight pr-8">{{(!typeTransaction) ? title1 : title2 }}</h2>
             <div class="w-full flex justify-center">
@@ -7,15 +7,20 @@
                     <ToggleButton v-model:typeTransaction="typeTransaction" text1="Achats" text2="Prélèvements" />
                 </div>
             </div>
-            <typeGraph limitWidth="40" :typeTransaction="typeTransaction" :colorsGraph="(!typeTransaction) ? colorPurchases : colorReccurings" 
+            <typeGraph 
+            :class="opacityDataEmpty" limitWidth="40" :typeTransaction="typeTransaction" 
+            :colorsGraph="(!typeTransaction) ? colorPurchases : colorReccurings" 
             :dataTransaction="dataTransaction" />
       
         </div>
+        <div v-show="isDataEmpty" class="w-full">
+            <p class="opacity-100 absolute w-fit transform -translate-x-1/2 -translate-y-1/2 text-center text-xl text-white top-1/2 left-1/2">Aucune donnée</p>
+        </div>    
     </div>
 </template>
 
 <script setup>
-    import { onMounted, computed } from 'vue';
+    import { computed } from 'vue';
     import ToggleButton from '@/component/button/ToggleButton.vue';
     
     // variables, props ...
@@ -40,7 +45,15 @@
     }
 
     // life cycle / functions
-    onMounted(() => {
-        console.log('onMount', props.dataTransaction);
+    const opacityDataEmpty = computed(() => {
+        return isDataEmpty.value ? 'opacity-50' : '';
+    });
+
+    const isDataEmpty = computed(() => {
+        let isAllDataEmpty = true;
+        props.dataTransaction.forEach(data => {
+            if (data.total_amount > 0) isAllDataEmpty = false;
+        });
+        return isAllDataEmpty;
     });
 </script>

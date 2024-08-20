@@ -5,22 +5,23 @@
         w-full md:w-header-tablet-width xl:w-header-width md:h-[calc(100vh-(40px))] h-[50px]
         md:top-top-Header bottom-0 md:left-[20px] xl:left-[30px] fixed md:rounded-md 
         ${extendHeader} md:max-h-[calc(100vh-(40px))] max-h-none md:overflow-y-auto`"
-            @mouseenter="isHovered = true"
-            @mouseleave="isHovered = false"
+            @mouseenter="isHoverHeader = true"
+            @mouseleave="isHoverHeader = false"
         >
         
         <div v-show="!isMobile" class="flex relative w-full h-[50px] md:h-fit py-2">
-            <div class="flex md:w-header-tablet-width xl:w-header-width justify-center p-[8px] xl:p-[12px]">
-                <LogoMainPicOnly class=" bg-main-gradient  shadow-custom-hover rounded-xl" :svg="logoStyle" />
-            </div>
+            <router-link to="/tableau-de-bord" class="flex md:w-header-tablet-width xl:w-header-width justify-center p-[8px] xl:p-[12px]">
+                <LogoMainPicOnly class=" bg-main-gradient shadow-custom-hover rounded-xl" :svg="logoStyle" />
+            </router-link>
             <div>
                 <TransitionOpacity v-if="!isMobile" :durationIn="'duration-300'" :durationOut="'duration-0'">
-                    <p 
-                        v-if="isHovered && isTextIconsVisible"
-                        class="absolute flex text font-light w-[140px] 
-                        right-[0px] top-[50%] -translate-y-1/2 pl-3 lg:pl-4 text-white " 
+                    <router-link  
+                        to="/tableau-de-bord"
+                        v-if="isHoverHeader && isTextIconsVisible"
+                        class="absolute flex text w-[140px] 
+                        right-[0px] top-[50%] -translate-y-1/2 pl-3 lg:pl-4 text-white cursor-pointer" 
                     >
-                    Squirrel Stash</p>
+                    Squirrel Stash</router-link>
                 </TransitionOpacity>
             </div>
         </div>
@@ -34,18 +35,18 @@
                 class="flex flex-col relative items-center justify-center w-[100px] md:w-full md:items-stretch h-[50px] md:h-fit" 
             >
                 
-                <div :key="index" @click="handleClickHeader(icon)" 
-                    :class="`flex relative ${classTranslateY} md:py-2 cursor-pointer py-4
+                <div :key="index" @click="handleClickHeader(icon)" @mouseenter="blablabla(icon)" @mouseleave ="blablabla2(icon)"
+                    :class="`flex relative ${classTranslateY} md:py-2 cursor-pointer py-4 
                     ${borderCurrentPage(icon.page)}`">
                     
                         <div class="flex flex-col items-center relative">
                             <component :is="icon.Component" :svg="styleIcon" 
-                            class="w-header-width md:w-header-tablet-width xl:w-header-width"/>
+                            :class="`w-header-width md:w-header-tablet-width xl:w-header-width ${changeColorHoverIcon(icon)}`"/> 
                         </div>
                         
                         <TransitionOpacity v-if="!isMobile" :durationIn="'duration-300'" :durationOut="'duration-0'">
                             <router-link 
-                                :to="icon.link" v-show="isHovered && isTextIconsVisible" 
+                                :to="icon.link" v-show="isHoverHeader && isTextIconsVisible" 
                                 class="flex items-center absolute w-[150px] right-[0px] top-[50%] transform -translate-y-1/2 
                                 pl-3 text-[14px] text-white font-light">{{ icon.text }}
                             </router-link>
@@ -57,17 +58,18 @@
         <div v-show="!isMobile" class="w-[80%] border-[1px] mt-3"></div>
 
         <div v-show="!isMobile" class="w-full flex md:flex-col mt-3">
-            <div class="w-full flex flex-col relative" v-for="(icon, index) of dataListPage2">
+            <div class="w-full flex flex-col relative" v-for="(icon, index) of dataListPage2" >
                 <div 
-                    :key="index" @click="handleClickHeader(icon)" 
+                    :key="index" @click="handleClickHeader(icon)" @mouseenter="blablabla(icon)" @mouseleave ="blablabla2(icon)"
                     :class="`flex relative ${classTranslateY} py-2 cursor-pointer 
                     ${borderCurrentPage(icon.page)}`"
                 >
-                    <component :is="icon.Component" :svg="styleIcon" class="md:w-header-tablet-width xl:w-header-width "/>
+                    <component :is="icon.Component" :svg="styleIcon" :class="`md:w-header-tablet-width xl:w-header-width 
+                    ${changeColorHoverIcon(icon)}`"/>
 
                     <TransitionOpacity v-if="!isMobile" :durationIn="'duration-300'" :durationOut="'duration-0'">
                         <router-link 
-                            :to="icon.link" v-show="isHovered && isTextIconsVisible" 
+                            :to="icon.link" v-show="isHoverHeader && isTextIconsVisible" 
                             class="absolute w-[150px] right-[0px] top-[50%] transform -translate-y-1/2 pl-3 flex 
                             items-center text-[14px] text-white">{{ icon.text }}
                         </router-link>
@@ -85,7 +87,7 @@
 
 
 <script setup>
-    import {ref, onMounted, onUnmounted, computed, defineAsyncComponent, reactive} from 'vue';
+    import {ref, onMounted, onUnmounted, computed, defineAsyncComponent, reactive, shallowRef} from 'vue';
     import { useRouter } from 'vue-router';
     import { storeAuthTOken } from '@/storePinia/useStoreDashboard';
     import TransitionOpacity from '@/component/transition/TransitionOpacity.vue';  
@@ -108,16 +110,16 @@
 
     // variables, props, ...
     const dataListPage1 = [
-        { Component: IconDashboard, link:'/tableau-de-bord', page: 'tableau-de-bord', text:'Tableau de bord'},
-        { Component: IconGraph, link:'/recap-annuel',page:'recap-annuel',text: 'Recap Annuel' },
-        { Component: IconPurchases, link:'/historique-transactions',page:'historique-transactions', text:'Historique'},
-        { Component: IconUser, link:'/utilisateur', page: 'utilisateur', text: 'Utilisateur' },
+        { Component: IconDashboard, link:'/tableau-de-bord', page: 'tableau-de-bord', text:'Tableau de bord', isHover: ref(false)},
+        { Component: IconGraph, link:'/recap-annuel',page:'recap-annuel',text: 'Recap Annuel', isHover: ref(false)},
+        { Component: IconPurchases, link:'/historique-transactions',page:'historique-transactions', text:'Historique', isHover: ref(false)},
+        { Component: IconUser, link:'/utilisateur', page: 'utilisateur', text: 'Utilisateur', isHover: ref(false)},
     ];
 
     const dataListPage2 = [    
-    { Component: IconSupport, link:'',page: 'contact', text: 'Support et aide' },
-    { Component: IconInfo, link:'',page: '', text: 'Version 1.0' },
-    { Component: IconLogOut, link:'',page: 'disconnect', text: 'Déconnexion' },
+        { Component: IconSupport, link:'',page: 'contact', text: 'Support et aide', isHover: ref(false)},
+        { Component: IconInfo, link:'',page: 'info', text: 'Version 1.0', isHover: ref(false)},
+        { Component: IconLogOut, link:'',page: 'disconnect', text: 'Déconnexion', isHover: ref(false)},
     ];
 
     const styleIcon = setSvgConfig({width:'25px', fill:'white'});
@@ -125,7 +127,7 @@
 
     const classTranslateY = classTransitionHover('translateY');
     const classTranslateWidth = classTransitionHover('extendHeader');
-    const isHovered = ref(false);
+    const isHoverHeader = ref(false);
     const isTextIconsVisible = ref(false);
     const isOverlayActive = reactive({
         privacy: false,
@@ -136,6 +138,7 @@
     const router = useRouter();
     const width = ref(window.innerWidth);
     const headerRef = ref(null);     
+    const isDivIconHover = ref(false);
 
     const notAllowedPages = [
         'connexion',
@@ -170,10 +173,19 @@
 
     const borderCurrentPage = computed(() => {
         return (page) => {
-            if(router.currentRoute.value.path.substring(1) === 'mon-compte') {
+            const currentPage = router.currentRoute.value.path.substring(1);
+            if(currentPage === 'mon-compte') {
                 if(page === 'utilisateur') return 'bg-main-gradient  shadow-main';
             }
-            return page === router.currentRoute.value.path.substring(1) ? 'bg-main-gradient' : '';
+            return page === currentPage ? 'bg-main-gradient' : '';
+        }
+    });
+
+
+    const changeColorHoverIcon = computed(() => {
+        return (icon) => {
+            if(icon.isHover.value && borderCurrentPage.value(icon.page)) return '';
+            return icon.isHover.value && !borderCurrentPage.value(icon.page) ? 'stroke-black' : 'stroke-red';
         }
     });
 
@@ -204,6 +216,9 @@
                 isOverlayActive.contactUs = true;
                 break;
             }
+            case 'info' : {
+                break;
+            }
             case 'disconnect' : {
                 const authToken = storeAuthTOken();
                 authToken.token = '';
@@ -218,6 +233,14 @@
             }
         }
     }    
+
+    function blablabla(icon) {
+        icon.isHover.value = true;
+    }
+
+    function blablabla2(icon) {
+        icon.isHover.value = false;
+    }
 </script>
 
 

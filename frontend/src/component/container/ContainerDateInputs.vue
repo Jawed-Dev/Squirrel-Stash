@@ -8,6 +8,7 @@
             placeholder="Ex: 06/06/2024"
             type="date"
             :hideAnimation="true"
+            iconName="Calendar"
         />
     </div>
 
@@ -20,6 +21,7 @@
             id="input-date-end"
             type="date"
             :hideAnimation="true"
+            iconName="Calendar"
         />
     </div>                      
 </template>

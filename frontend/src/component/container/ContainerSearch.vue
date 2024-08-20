@@ -58,7 +58,7 @@
                             </div>
                             <div class="w-full flex justify-center mt-8 sm:mt-12 my-3">
                                 <div class=" shadow-main min-w-[250px] w-1/4 md:w-1/5 overflow-x-hidden text-ellipsis">
-                                    <button class="w-full rounded-sm py-2 bg-gradient-blue rounded-br-[3px] font-light">Rechercher
+                                    <button class="w-full rounded-sm py-2 bg-gradient-blue rounded-br-[3px] font-light hover:opacity-90">Rechercher
                                     </button>
                                 </div>
                             </div>
@@ -135,11 +135,7 @@
         if(!searchType.value) return '';
         return (searchType.value === 'Achat') ? 'purchase' : 'recurring';
     }
-
-    function resetTrsCategory() {
-        searchCategory.value = '';
-    }
-    
+        
     function updateStoreParams(params) {
         paramsSearch.params = params;
         console.log('params 2', params);

@@ -174,7 +174,9 @@
         }
 
         public function sendUpdateMail() {
-            $paramsValidation = ['functionValidData' => 'verifySendUpdateMail'];
+            $paramsValidation = [
+                'functionValidData' => 'verifySendUpdateMail'
+            ];
             $dataRequest = $this->getControllerMain()->validateDataForController($paramsValidation);
             $db = $dataRequest['dataBase'];
             $userId = $dataRequest['userId'];
@@ -209,9 +211,11 @@
         }
 
         public function sendEmailToSupport() {
-            $paramsValidation = ['functionValidData' => 'verifySendEmailToSupport'];
+            $paramsValidation = [
+                'requireDatabase' => false,
+                'allowForAllAuth' => true,
+                'functionValidData' => 'verifySendEmailToSupport'];
             $dataRequest = $this->getControllerMain()->validateDataForController($paramsValidation);
-            $db = $dataRequest['dataBase'];
             $dataBody = $dataRequest['bodyData'];
             
             $paramsEmail = [

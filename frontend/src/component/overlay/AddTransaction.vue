@@ -2,12 +2,12 @@
     <div>
         <div class="fixed bottom-[-2px] sm:bottom-[25px] left-[calc(50%+1px)] transform -translate-x-1/2 -translate-y-1/2
             md:relative md:translate-x-0 sm:translate-y-0 md:bottom-auto md:left-auto
-            z-20 md:z-10 mt-5 w-full lg:min-w-[calc(200px*2+7px)] lg:w-1/4 rounded-[3px] md:shadow-main
-            hover:shadow-slate-500">
+            z-20 md:z-10 w-full lg:min-w-[calc(200px*2+7px)] lg:w-1/4 rounded-[3px] 
+            hover:shadow-custom-lower">
 
-            <div @click="toggleMenu('openOverlay')" 
-            class="bg-transparent md:bg-main-gradient border-none md:border-solid gradient-border trigger-add-purchase cursor-pointer">
-                <div class="flex justify-center md:justify-between items-center md:px-2 min-h-[42px] min-w-[214px]">
+            <div @click="toggleOverlay" 
+                class="bg-transparent md:bg-main-gradient border-none md:border-solid gradient-border trigger-add-purchase cursor-pointer">
+                <div class="flex justify-center md:justify-between items-center md:px-2 min-h-[42px] min-w-[214px] ">
 
                     <p v-show="!isMobile" 
                     class="w-full text-white flex justify-center font-light" 
@@ -15,13 +15,13 @@
 
                     <div class="grow flex justify-center py-[2px]">
                         <IconAddPurchase 
+                            @click="toggleOverlayMobile" 
                             class="p-[1px] bg-gradient-blue rounded-full md:rounded-md right-[100px] top-[50vh]
                             z-10 shadow-main" 
                             :svg="styleIcon"
                         />
                     </div>
                 </div>
-
             </div>
         </div>
 
@@ -80,6 +80,7 @@
     import { isAnyMandatoryInputEmpty, isAnyInputError, TYPE_SUBMIT_ERROR, TEXT_SUBMIT_ERROR } from '@/error/useHandleError';
     import { isValidCategory } from '@/error/useValidFormat';
     import { createToast } from '@/composable/useToastNotification';
+    import { formatStringToFloat } from '@/composable/useMath';
 
     const ContainerInputs = defineAsyncComponent(() => import('@/component/container/ContainerInputs.vue'));
     const ContainerSelectCategories = defineAsyncComponent(() => import('@/component/container/ContainerSelectCategories.vue'));
@@ -115,6 +116,7 @@
     // life cycle / functions
     onMounted( () => {
         window.addEventListener('resize', handleResize);
+        
     });
 
     onUnmounted(() => {
@@ -140,14 +142,22 @@
         closeMenu();
     });
 
+    function toggleOverlay() {
+        if(isMobile.value) return;
+        typeTransaction.value = false;
+        resetInputs();
+        isOverlayActive.value = !isOverlayActive.value;
+    };
+
+    function toggleOverlayMobile() {
+        if(!isMobile.value) return;
+        typeTransaction.value = false;
+        resetInputs();
+        isOverlayActive.value = !isOverlayActive.value;
+    };
+
     async function toggleMenu(request) {
         switch(request) {
-            case 'openOverlay' : {
-                typeTransaction.value = false;
-                resetInputs();
-                isOverlayActive.value = !isOverlayActive.value;
-                break;
-            }
             case 'valid' : {
                 if(!isOverlayActive.value) return;
                 const allErrorsInputs = getStatesErrorInputs();
@@ -211,7 +221,7 @@
     
     async function prepareAddTransaction() {
         const response = await addTransaction({
-            amount: inputPriceVal.value,
+            amount: formatStringToFloat(inputPriceVal.value),
             trsCategory: getCurrentNameCategory(),
             trsType: getCurrentTransactionType(),
             date: inputDateVal.value,
@@ -227,7 +237,7 @@
         createToast('Votre transaction a été ajoutée.', 'success');
         updateAllDataTransations(month, year, nameTypeTrs);
     }
-
+    
     function getStatesErrorInputs() {
         return {
             date: errorInputs.inputDateVal,

@@ -1,13 +1,12 @@
 <template>
-    <div style="position:relative; height:350px; width:100%">
+    <div class="relative min-h-[350px] w-full">
         <canvas class="mt-5" ref="canvas"></canvas>
-        <ButtonDownloadChart :canvas="canvas" />
-        <!-- <button class="absolute right-3 top-[-78px] font-light" @click="downloadChart">Télécharger</button> -->
+        <ButtonDownloadChart v-show="!isDataEmpty" :canvas="canvas" />
     </div>
 </template>
 
 <script setup>
-import { ref, onMounted, watch } from 'vue';
+import { ref, onMounted, watch, computed } from 'vue';
 import Chart from 'chart.js/auto';
 import ButtonDownloadChart from '@/component/button/ButtonDownloadChart.vue';
 
@@ -15,11 +14,10 @@ import ButtonDownloadChart from '@/component/button/ButtonDownloadChart.vue';
 const props = defineProps({
     dataTransaction: { default: []},
     colorsGraph: { default: () => {}},
-    limitWidth: {default: undefined}
+    limitWidth: {default: undefined},
 });
 
-const dataLoaded = ref(false);
-
+//const dataLoaded = ref(false);
 const canvas = ref(null);
 let chartInstance = null;
 
@@ -46,25 +44,32 @@ onMounted(() => {
         },
         options: getChartOptions()
     });
-
-    dataLoaded.value = true;
 });
 
-
 watch(() => props.dataTransaction, (newData) => {
-    updateChartData(chartInstance, newData);
+    if(!newData) return;
+    updateChartData(chartInstance, newData);    
 }, { deep: true });
 
 
+
+const isDataEmpty = computed( () => {
+    let dataEmpty = true;
+    props.dataTransaction.forEach(element => {
+        if(element.total_amount > 0) dataEmpty = false;
+    });
+    return dataEmpty;
+});
+
 function updateChartData(chart, newData) {
-    if (!chartInstance) return;  
+    if (!chart) return;  
 
     const ctx = canvas.value.getContext('2d');
     const gradient = ctx.createLinearGradient(0, 0, 0, 400);
     gradient.addColorStop(0, props.colorsGraph.color1);
     gradient.addColorStop(1, props.colorsGraph.color2);
 
-    chartInstance.data.datasets.forEach((dataset) => {
+    chart.data.datasets.forEach((dataset) => {
         dataset.borderColor = 'white';
         dataset.backgroundColor = gradient;
     });
@@ -76,19 +81,13 @@ function updateChartData(chart, newData) {
     chart.update();
 }
 
-// function downloadChart() {
-//     if (canvas.value) {
-//         const link = document.createElement('a');
-//         link.href = canvas.value.toDataURL('image/png');
-//         link.download = 'graphique.png';
-//         link.click();
-//     }
-// }
-
 
 function getChartOptions() {
     return {
         responsive: true,
+        // animation: {
+        //     duration: 1000,
+        // },
         maintainAspectRatio: false,
         plugins: {
             legend: { display: false },
@@ -104,7 +103,13 @@ function getChartOptions() {
         scales: {
             x: {
                 grid: { display: true, color: '' },
-                ticks: { stepSize: 5, color: 'white' },
+                ticks: { 
+                    stepSize: 5, 
+                    color: 'white',
+                    font: {
+                        size: 13
+                    },
+                },
             },
             y: {
                 beginAtZero: true,
@@ -112,7 +117,10 @@ function getChartOptions() {
                 ticks: {
                     stepSize: 0,
                     color: 'white',
-                    callback: value => `${value} €`
+                    font: {
+                        size: 13
+                    },
+                    callback: value => `${value} €`,
                 },
                 grid: {
                     display: true,

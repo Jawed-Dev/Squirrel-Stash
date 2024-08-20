@@ -47,7 +47,7 @@
             VALUES (:userId, :amount, :trsCategory, :trsType, :trsDate, :note)";
             $query = $db->prepare($reqSql);
             $query->bindValue(':userId',  $userId, PDO::PARAM_INT);
-            $query->bindValue(':amount',  $dataQuery['transactionAmount'], PDO::PARAM_INT);
+            $query->bindValue(':amount',  $dataQuery['transactionAmount'], PDO::PARAM_STR);
             $query->bindValue(':trsCategory',  $dataQuery['transactionCategory'], PDO::PARAM_STR);
             $query->bindValue(':trsType',  $dataQuery['transactionType'], PDO::PARAM_STR);
             $query->bindValue(':trsDate',  $dataQuery['transactionDate'], PDO::PARAM_STR);
@@ -75,7 +75,7 @@
             $query = $db->prepare($reqSql);
             $query->bindValue(':userId',  $userId, PDO::PARAM_INT);
             $query->bindValue(':trsId',  $dataQuery['transactionId'], PDO::PARAM_INT);
-            $query->bindValue(':amount',  $dataQuery['transactionAmount'], PDO::PARAM_INT);
+            $query->bindValue(':amount',  $dataQuery['transactionAmount'], PDO::PARAM_STR);
             $query->bindValue(':trsType',  $dataQuery['transactionType'], PDO::PARAM_STR);
             $query->bindValue(':trsCategory',  $dataQuery['transactionCategory'], PDO::PARAM_STR);
             $query->bindValue(':trsDate',  $dataQuery['transactionDate'], PDO::PARAM_STR);
@@ -264,7 +264,8 @@
                 WHERE 
                     $whereClauseCommon
                 ORDER BY 
-                    transaction_date DESC
+                    transaction_date DESC,
+                    transaction_id DESC
                 LIMIT 
                     :limit
             ";

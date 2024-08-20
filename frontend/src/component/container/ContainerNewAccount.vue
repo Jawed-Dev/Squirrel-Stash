@@ -85,20 +85,20 @@
                     <InputCheckbox v-model="confirmCheckbox" type="checkbox" />
                     <p class="txt-main-blue text-[14px] text-white font-light" >
                         Accepter les règles de 
-                        <span @click="toggleRules('privacy')" class="text-main-blue cursor-pointer">confidentialité</span> et 
-                        <span @click="toggleRules('user')" class="text-main-blue cursor-pointer">d'utilisation</span>.
+                        <span @click="toggleRules('privacy')" class="text-main-blue cursor-pointer hover:text-sky-200">confidentialité</span> et 
+                        <span @click="toggleRules('user')" class="text-main-blue cursor-pointer hover:text-sky-200">d'utilisation</span>.
                     </p>
                 </div>
     
                 <div class="px-2">
                     <button :class="`bg-main-blue  shadow-main 
-                        w-full py-2 rounded-lg text-white mt-5`">S'inscrire
+                        w-full py-2 rounded-lg text-white mt-5 hover:bg-opacity-50`">S'inscrire
                     </button>
                 </div>
     
                 <div class="flex pt-5 gap-9 justify-center">
                     <p class="text-white font-light">Vous avez déjà un compte ?</p> 
-                    <router-link to="/" class="text-main-blue font-light">Se connecter</router-link>
+                    <router-link to="/" class="text-main-blue font-light hover:text-sky-200">Se connecter</router-link>
                 </div>
             </form>
             <TransitionOpacity durationIn="duration-300" durationOut="duration-200" >

@@ -84,7 +84,7 @@
                         </div>
                         <div class="w-full flex justify-center sm:mt-12 my-3">
                             <div class=" shadow-main min-w-[250px] w-1/4 md:w-1/5 overflow-x-hidden text-ellipsis">
-                                <button class="w-full rounded-sm py-2 bg-gradient-blue rounded-br-[3px] font-light">Editer</button>
+                                <button class="w-full rounded-sm py-2 bg-gradient-blue rounded-br-[3px] font-light hover:opacity-90">Editer</button>
                             </div>
                         </div>
                     </div>

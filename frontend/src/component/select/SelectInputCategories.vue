@@ -1,12 +1,12 @@
 <template>
     <div class="flex justify-center items-center w-[65%] gap-2">
-        <useIconLoader class="rounded-full p-2  shadow-main w-fit" 
+        <useIconLoader class="rounded-full p-[6px] shadow-main w-fit" 
             :svg="(!typeTransaction) ? svgPurchases : svgReccurings" 
             :nameIcon="nameIcon" 
         />
         <select v-model="currentCategory" 
         :class="`font-light pl-2 py-[2px] gradient-border text-white ${width} grow
-            rounded-[3px] bg-main-gradient  shadow-main outline-none`"
+            rounded-[3px] bg-main-gradient  shadow-main outline-none cursor-pointer hover:shadow-custom-lower`"
         >
         <option class="bg-main-bg font-light" v-for="(category, index) in listSelect" :key="index" :value="index">{{ category.text }}</option>
         </select>

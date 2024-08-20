@@ -67,7 +67,7 @@
 
                                         <div class="flex flex-col w-1/3 min-w-[280px] lg:min-w-[300px] 2xl:min-w-[300px] md:w-1/4">
                                             <label class="pl-2 text-white font-light" for="input-gender">Genre</label>
-                                            <InputBase 
+                                            <!-- <InputBase 
                                                 iconName="Gender"
                                                 id="input-gender" 
                                                 v-model="inputsProfil.gender" 
@@ -77,7 +77,16 @@
                                                 type="text"
                                                 validFormat="gender"
                                                 :hideAnimation="true"
-                                            />
+                                            /> -->
+                                            <select v-model="inputsProfil.gender" 
+                                                :class="`font-light pl-2 py-[2px] gradient-border text-white min-w-[280px] lg:min-w-[300px] 2xl:min-w-[300px] md:w-1/4
+                                                    rounded-[3px] bg-main-gradient  shadow-main outline-none cursor-pointer hover:shadow-custom-lower`"
+                                                >
+                                                <option 
+                                                    class="bg-main-bg font-light" v-for="(category, index) 
+                                                    of GenderCategories" :key="index" :value="category">{{ category }}
+                                                </option>
+                                            </select>
                                         </div>
                                         <div class="flex flex-col w-1/3 min-w-[280px] lg:min-w-[300px] 2xl:min-w-[300px] md:w-1/4">
                                             <label class="pl-2 text-white font-light" for="input-pass">Rôle</label>
@@ -115,7 +124,7 @@
                         
                         <div class="w-full flex justify-center mt-12 my-3">
                             <div class=" shadow-main min-w-[250px] w-1/4 md:w-1/5 overflow-x-hidden text-ellipsis">
-                                <button class="w-full rounded-sm py-2 bg-gradient-blue rounded-br-[3px] font-light">Editer</button>
+                                <button class="w-full rounded-sm py-2 bg-gradient-blue rounded-br-[3px] font-light hover:opacity-90">Editer</button>
                             </div>
                         </div>
                     </div>
@@ -133,7 +142,7 @@
     import { storeProfilUser } from '@/storePinia/useStoreDashboard';
     import { updateStoreUserProfil } from '@/storePinia/useUpdateStoreByBackend';
     import { updateUserProfil } from '@/composable/useBackendActionData';
-    import { isAnyMandatoryInputEmpty, isAnyInputError, TYPE_SUBMIT_ERROR, TEXT_SUBMIT_ERROR } from '@/error/useHandleError';
+    import { isAnyMandatoryInputEmpty, isAnyInputError, TEXT_SUBMIT_ERROR } from '@/error/useHandleError';
     import TransitionAxeY from '@/component/transition/TransitionAxeY.vue';
     import UseIconLoader from '@/composable/useIconLoader.vue';
     import ImageEditProfil from '@/component/svgs/ImageEditProfil.vue';
@@ -148,8 +157,10 @@
         lastName: '',
         birthday: '',
         gender: '',
-        roleLevel: ''
+        roleLevel: '',
     });
+
+    const GenderCategories = ['Homme', 'Femme', 'Non défini'];
 
     const errorInputs = reactive({
         firstName: false,

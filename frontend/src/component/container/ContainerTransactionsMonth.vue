@@ -1,20 +1,20 @@
 <template>
-    <div class="pl-3 bg-main-gradient text-white rounded-md gradient-border relative">
-        <h2 class="pb-2 pt-3 text-xl font-extralight pr-8 sm:pb-0">{{(!typeTransaction) ? 'Achats du mois' : 'Prélèvements du mois'}}</h2>
-        <div class="w-full flex justify-center">
-            <div class="w-1/6 min-w-[250px]">
-                <ToggleButton v-model:typeTransaction="typeTransaction" :text1="'Achats'" :text2="'Prélèvements'" />
+     <section class="w-full mt-5 rounded-[3px] overflow-hidden shadow-main relative">
+        <div class="pl-3 bg-main-gradient text-white rounded-md gradient-border">
+            <h2 class="pb-2 pt-3 text-xl font-extralight pr-8 sm:pb-0">{{(!typeTransaction) ? 'Achats du mois' : 'Prélèvements du mois'}}</h2>
+            <div class="w-full flex justify-center">
+                <div class="w-1/6 min-w-[250px]">
+                    <ToggleButton v-model:typeTransaction="typeTransaction" :text1="'Achats'" :text2="'Prélèvements'" />
+                </div>
             </div>
+            <useGraphBar 
+            :class="opacityDataEmpty" :colorsGraph="(!typeTransaction) ? colorPurchases : colorReccurings" 
+            :dataTransaction="listTransactions" />
         </div>
-        <useGraphBar :colorsGraph="(!typeTransaction) ? colorPurchases : colorReccurings" 
-        :dataTransaction="listTransactions" />
-        <!-- <div 
-            v-show="isDataEmpty" 
-            class="absolute text-white opacity-80 top-1/2 left-1/2 transform translate-x-1/2 translate-y-1/2">
-            <p class=" text-xl w-full">Aucune donnée</p>
-        </div> -->        
-    </div>
-
+         <div v-show="isDataEmpty" class="w-full">
+            <p class="opacity-100 absolute w-fit transform -translate-x-1/2 -translate-y-1/2 text-center text-xl text-white top-1/2 left-1/2">Aucune donnée</p>
+        </div>    
+     </section>
 </template>
 
 <script setup>
@@ -41,6 +41,7 @@
         color2: '#DA445310',
         borderColor: '#ec250d'
     }
+
     // life cycle / functions
     const isDataEmpty = computed(() => {
         let isAllDataEmpty = true;
@@ -50,9 +51,17 @@
         return isAllDataEmpty;
     });
 
+    const showGraph = computed(() => {
+        return props.isLoadedData;
+    });
+    
     const listTransactions = computed(() => {
         return (!typeTransaction.value) ? transactionsMonthByDay.listPurchases : transactionsMonthByDay.listRecurrings;
     })
+
+    const opacityDataEmpty = computed(() => {
+        return isDataEmpty.value ? 'opacity-50' : '';
+    });
 
     watch( () => [dateSelected.month, dateSelected.year], async ([newMonth, newYear]) => {
         updateListTrsMonthByDay(newMonth, newYear, 'purchase');

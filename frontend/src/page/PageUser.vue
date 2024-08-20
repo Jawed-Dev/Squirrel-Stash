@@ -16,7 +16,7 @@
                                 @click="handlePages(page.page)"
                                 class="flex flex-col items-center justify-center gap-1 w-[calc(33.333333%-20px)] 
                                 min-w-[200px]
-                                md:hover:shadow-gray-600
+                                md:hover:shadow-custom-lower
                                  lg:cursor-pointer 
                                  bg-main-gradient rounded-md overflow-hidden shadow-main">
                                  
