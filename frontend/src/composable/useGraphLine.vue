@@ -10,6 +10,7 @@
 import { ref, onMounted, watch, computed } from 'vue';
 import Chart from 'chart.js/auto';
 import ButtonDownloadChart from '@/component/button/ButtonDownloadChart.vue';
+import { formatFloatAsString } from '@/composable/useMath';
 
 const props = defineProps({
     dataTransaction: { default: []},
@@ -87,7 +88,7 @@ function getChartOptions() {
                 displayColors: false,
                 callbacks: {
                     label: function(tooltipItem) {
-                        return "Montant: " + tooltipItem.raw + ' €';
+                        return "Montant: " + formatFloatAsString(tooltipItem.raw) + ' €';
                     }
                 }
             }

@@ -13,6 +13,8 @@ import {
         storeYearListTrsByCategories, storeTopYearCategories
 } from '@/storePinia/useStoreDashboard';
 
+import Decimal from 'decimal.js';
+Decimal.config({ precision: 10 });
 
 // list transactions month By Day
 export async function updateListTrsMonthByDay(month, year, transactionType) {
@@ -60,27 +62,34 @@ export async function updateLastNTrsByMonth(month, year, transactionType) {
 export async function updateThresholdByMonth(month, year) {
     const threshold = storeThreshold();
     const thresholdFetched = await getThresholdByMonth(month, year);
-    const thresholdAmount = thresholdFetched?.data?.threshold_amount;
-    threshold.amount  = (thresholdAmount) ? thresholdAmount : 0;
+
+    const thresholdAmount = thresholdFetched?.data?.threshold_amount || 0;
+    const formattedThresholdAmount = parseFloat(thresholdAmount).toFixed(2);
+
+    threshold.amount = formattedThresholdAmount;
+    console.log(`Threshold Amount set to: ${threshold.amount}`);
 }
 
 export async function updateTotalTrsByMonth(month, year) {
     const statisticDetails = storeStatisticDetails();
     const totalTransactionsFetched = await getTotalTrsByMonth(month, year);
-    const totalTransactions = totalTransactionsFetched?.data?.total_transactions;
-    statisticDetails.totalTransactions = (totalTransactions) ? totalTransactions : 0;
+    const totalTransactionsRaw = totalTransactionsFetched?.data?.total_transactions || 0;
+    const totalTransactions = new Decimal(totalTransactionsRaw);
+    statisticDetails.totalTransactions = parseFloat(totalTransactions).toFixed(2);
 }
 
 export async function updateBalanceEcoByMonth(month, year) {
     const thresholdFetched = await getThresholdByMonth(month, year);
     const totalTransactionsFetched = await getTotalTrsByMonth(month, year);
 
-    const totalTransactions = totalTransactionsFetched?.data?.total_transactions;
-    const thresholdAmount = thresholdFetched?.data?.threshold_amount;
+    const totalTransactions = new Decimal(totalTransactionsFetched?.data?.total_transactions || 0);
+    const thresholdAmount = new Decimal(thresholdFetched?.data?.threshold_amount || 0);
+
+    const economyBalanceValue = thresholdAmount.minus(totalTransactions);
 
     const statisticDetails = storeStatisticDetails();
-    const economyBalanceValue = thresholdAmount - totalTransactions;
-    statisticDetails.economyBalance = (economyBalanceValue) ? economyBalanceValue : 0;
+    statisticDetails.economyBalance = parseFloat(economyBalanceValue).toFixed(2);
+
 }
 
 export async function updateBiggestTrsByMonth(month, year, transactionType) {
@@ -150,8 +159,9 @@ export async function updateStoreYearListTrsByMonth(year, transactionType) {
 export async function updateStoreTotalTrsByYear(year) {
     const textStatsByYear = storeTextStatsByYear();
     const response = await getTotalTrsByYear(year);
-    const totalTransactions = response?.data.total_transactions;
-    textStatsByYear.totalTransactions = (totalTransactions) ? totalTransactions + ' €' : 0 + ' €';
+    const totalTransactionsRaw = response?.data.total_transactions || 0;
+    const formatTotalTransactions = new Decimal(totalTransactionsRaw);
+    textStatsByYear.totalTransactions = parseFloat(formatTotalTransactions).toFixed(2);
 }
 
 export async function updateBiggestTrsByYear(year, transactionType) {

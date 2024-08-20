@@ -11,9 +11,9 @@
         
                 <p class="w-[25%] text-[15px] pl-[5px] md:pl-[20px] sm:text-left 
                 overflow-hidden text-ellipsis">{{infoTransaction.transaction_category}}</p>
-                <p class="w-[22%] text-[15px] pl-5 sm:pl-0 text-left ">{{ transactionAmount }}</p>
+                <p class="w-[22%] text-[15px] text-nowrap pl-3 sm:pl-0 text-left overflow-hidden text-ellipsis">{{ transactionAmount }}</p>
                 <p class="w-[22%] text-[15px] sm:text-left text-center">{{infoTransaction.formatted_date}}</p>
-                <p class="text-[15px] grow text-center md:pl-[1px] sm:w-[14%] sm:grow-0 sm:text-left ">{{ transactionCount }}</p>
+                <p class="text-[15px] grow text-center md:pl-[1px] text-nowrap  sm:w-[14%] sm:grow-0 sm:text-left ">{{ transactionCount }}</p>
     
                 <div class="flex items-center flex-col gap-1 pr-3 sm:grow overflow-visible">
                     <EditDeleteTransaction 

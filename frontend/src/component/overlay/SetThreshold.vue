@@ -34,7 +34,7 @@
                                         v-model:mandatoryInput="mandatoryInput"
                                         placeholder="Montant"
                                         id="input-amount-treshold"
-                                        validFormat="amount"
+                                        validFormat="onlyInt"
                                         :hideAnimation="true"
                                         :onlyNumbers="true"
                                     />

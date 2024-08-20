@@ -87,6 +87,7 @@
 
     // life cycle, function
     onMounted(async () => {
+        emitIsLoadedData.value = false;
         const timeMountedComponent = Date.now();
         const params = paramsSearch.params;
         await updateDataTrsSearch(params);        

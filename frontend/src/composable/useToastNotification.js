@@ -17,6 +17,9 @@ export function createToast(text, type = 'info' ) {
         hideProgressBar: false,
         closeButton: "button",
         icon: true,
-        rtl: false
+        rtl: false,
+        bodyClassName: ["custom-class-1"]
+          
+          
     });
 }

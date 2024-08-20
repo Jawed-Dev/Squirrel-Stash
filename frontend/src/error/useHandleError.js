@@ -47,7 +47,7 @@ export const typeError = {
     amount: { 
         code: 5, 
         message: "Montant invalide.", 
-        adviceFormat: "Le montant doit être un nombre sans virgule.",
+        adviceFormat: "Exemple de montant valide : \n 10 | 10,1 | 10,21",
     },   
     trsDate: { 
         code: 6, 
@@ -83,6 +83,11 @@ export const typeError = {
         code: 12,
         message: "Date invalide.", 
         adviceFormat: "Format de date invalide."
+    },
+    onlyInt: {
+        code: 12,
+        message: "Montant invalide.", 
+        adviceFormat: "Le montant doit être un nombre sans virgule."
     }
 };
 

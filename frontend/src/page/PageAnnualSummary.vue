@@ -33,7 +33,7 @@
                 <div class="flex flex-col w-full justify-around min-[1340px]:flex-row min-[1340px]:gap-5">
                     <ContainerStatMonth 
                         nameIcon="calculator" bgIcon="bg-gradient-orange" :colorValue="'text-custom-orange'" 
-                        :amountValue="textStatsByYear.totalTransactions" nameStat="Total des transactions" 
+                        :amountValue="textTotalTransaction" nameStat="Total des transactions" 
                         :width="'min-[1340px]:w-1/2 w-full'" 
                     />
 
@@ -87,7 +87,7 @@
 </template>
 
 <script setup>
-    import { ref, reactive, watch, computed } from 'vue'; 
+    import { ref, reactive, watch, computed, onMounted } from 'vue'; 
     import SelectYear from '@/component/select/SelectYear.vue';
     import { getAvailableYear, getCurrentYear } from '@/composable/useGetDate';
     import ContainerStatMonth from '@/component/container/ContainerStatMonth.vue';
@@ -107,7 +107,8 @@
     import useGraphDonut from '@/composable/useGraphDonut.vue';
     import ContainerSpinner from '@/component/container/ContainerSpinner.vue';
     import { isLoadedData ,timerLoadPageSpinner } from '@/composable/useSpinnerLoadData';
-
+    import { formatFloatAsString } from '@/composable/useMath';
+    
     // store Pinia
     const yearListTrsByMonth = storeYearListTrsByMonth();
     const yearListTrsByCategories = storeYearListTrsByCategories();
@@ -123,9 +124,12 @@
         donutTopPurchases: false,
         donutTopRecurring: true,
     });
-    let timerId = null;
 
     // fonctions, life cycle
+    onMounted(() => {
+        isLoadedData.value = false;
+    });
+
     const iconNamePurchases = computed(() => {
         const nameIcon = textStatsByYear?.biggestPurchase;
         return (nameIcon) ? nameIcon : 'Invisible';
@@ -143,6 +147,10 @@
         return (nameBiggestPurch) ? nameBiggestPurch : 'Aucune donnée';
     });
 
+    const textTotalTransaction = computed (() => {
+        return formatFloatAsString(textStatsByYear.totalTransactions) + ' €';
+    });
+
 
     watch(yearSelected, async (newYear) => {
         const timeMountedComponent = Date.now();
@@ -157,11 +165,11 @@
         timerLoadPageSpinner(timeMountedComponent);
     }, { immediate: true, deep: true });
 
-    watch( () => [typeTransaction.graphByMonth], async () => {
+    watch( () => typeTransaction.graphByMonth, async () => {
         await updateStoreYearListTrsByMonth(yearSelected.value, getNameTypeTransaction(typeTransaction.graphByMonth));
     }, {  immediate:true, deep:true });
 
-    watch( () => [typeTransaction.graphByCategories], async () => {
+    watch( () => typeTransaction.graphByCategories, async () => {
         await updateStoreYearListTrsByCategories(yearSelected.value, getNameTypeTransaction(typeTransaction.graphByCategories));
     }, {  immediate:true, deep:true });
 

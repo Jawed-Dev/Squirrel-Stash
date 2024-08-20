@@ -17,7 +17,7 @@
                     class="order-1 lg:order-2"
                     :isIconActive="true" nameIcon="target" bgIcon="bg-gradient-blue" 
                     :colorValue="'text-white'" 
-                    :amountValue="threshold.amount +' €'" 
+                    :amountValue="textThreshold" 
                     :nameStat="'Seuil mensuel'" 
                     :width="'mt-5 w-full lg:min-w-[calc(200px*2+8px)] lg:w-1/4'"
                 />
@@ -29,7 +29,7 @@
 
                 <div class="flex flex-col w-full justify-around min-[1340px]:flex-row min-[1340px]:gap-5">
                     <ContainerStatMonth nameIcon="calculator" bgIcon="bg-gradient-orange" :colorValue="'text-custom-orange'" 
-                    :amountValue="statisticDetails.totalTransactions + ' €'" :nameStat="'Total des transactions'" :width="'min-[1340px]:w-1/2 w-full'" />
+                    :amountValue="textTotalTransaction" :nameStat="'Total des transactions'" :width="'min-[1340px]:w-1/2 w-full'" />
     
                     <ContainerStatMonth nameIcon="balance" bgIcon="bg-gradient-green" :colorValue="colorTextBalanceEconomy" 
                     :amountValue="textBalanceEconomy" :nameStat="'Balance d\'économie'" :width="'min-[1340px]:w-1/2 w-full'" />
@@ -71,6 +71,8 @@
     import { updateThresholdByMonth, updateTotalTrsByMonth, updateBalanceEcoByMonth, updateBiggestTrsByMonth } from '@/storePinia/useUpdateStoreByBackend';
     import ContainerSpinner from '@/component/container/ContainerSpinner.vue';
     import { isLoadedData, timerLoadPageSpinner } from '@/composable/useSpinnerLoadData';
+    import { formatFloatAsString } from '@/composable/useMath';
+    
     
     // stores Pinia
     const threshold = storeThreshold();
@@ -87,6 +89,7 @@
 
     // life cycle / functions
     onMounted(async () => {
+        isLoadedData.value = false;
         const response = await getUserFirstName();
         const userFirstName = response?.data?.user_first_name;
         firstNameUser.value = userFirstName;
@@ -109,11 +112,20 @@
 
     // computed
     const textBalanceEconomy = computed(() => {
-        if(statisticDetails.economyBalance === threshold.amount) return 'Aucune donnée';
-        if(statisticDetails.economyBalance === 0) return 'Limite atteinte';
-        else if((statisticDetails.economyBalance > 0)) return '+'+ statisticDetails.economyBalance + ' €';
-        return statisticDetails.economyBalance +' €';
+        if(Math.abs(statisticDetails.economyBalance - threshold.amount) < 0.001) return 'Aucune donnée';
+        if(Math.abs(statisticDetails.economyBalance) < 0.001)  return 'Limite atteinte';
+        if((statisticDetails.economyBalance > 0)) return '+'+ formatFloatAsString(statisticDetails.economyBalance) + ' €';
+        return formatFloatAsString(statisticDetails.economyBalance) +' €';
     });
+
+    const textTotalTransaction = computed (() => {
+        return formatFloatAsString(statisticDetails.totalTransactions) + ' €';
+    });
+
+    const textThreshold = computed(() => {
+        return formatFloatAsString(threshold.amount) +' €';
+    });
+
     const colorTextBalanceEconomy = computed(() => {
         const balanceEconomyValue = statisticDetails.economyBalance;
         if(statisticDetails.economyBalance === threshold.amount) return 'text-white';

@@ -39,6 +39,16 @@ export function isValidLastName(lastName) {
 }
 
 export function isValidInputAmount(amount) {
+    const regex = /^\d+(,\d{1,2})?$/;
+    return regex.test(amount) && parseFloat(amount.replace(',', '.')) <= 1000000000;
+}
+
+export function isValidInputInt(amount) {
+    const regex = /^\d+$/;
+    return regex.test(amount) && amount <= 1000000000;
+}
+
+export function formatInputAmount(amount) {
     const regex =  /^\d+(,\d{0,2})?$/;
     return regex.test(amount) && parseFloat(amount.replace(',', '.')) <= 1000000000;
 }

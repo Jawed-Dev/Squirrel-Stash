@@ -49,7 +49,7 @@
     import { isAnyMandatoryInputEmpty, isAnyInputError, TYPE_SUBMIT_ERROR, TEXT_SUBMIT_ERROR } from '@/error/useHandleError';
     import { isValidCategory } from '@/error/useValidFormat';
     import { createToast } from '@/composable/useToastNotification';
-    import { formatFloatAsString, formatStringToFloat } from '@/composable/useMath';
+    import { formatFloatAsString, formatStringToFloat, formatFloatAsStringNoEspace } from '@/composable/useMath';
     
 
     // stores Pinia
@@ -155,7 +155,7 @@
     }
     function loadDataTransaction() {
         if(!props.infoTransaction.transaction_id) return;
-        inputPriceVal.value = formatFloatAsString(props.infoTransaction.transaction_amount);
+        inputPriceVal.value = formatFloatAsStringNoEspace(props.infoTransaction.transaction_amount);
         inputNoteVal.value = props.infoTransaction.transaction_note;
         inputDateVal.value = props.infoTransaction.transaction_date;
         typeTransaction.value = getTypeTransaction();

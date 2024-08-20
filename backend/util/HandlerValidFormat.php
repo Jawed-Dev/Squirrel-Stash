@@ -156,8 +156,6 @@
 
         public function isValidTransactionAmount($trsAmount) {
             if(empty($trsAmount)) return false;
-            //if(!is_string($trsAmount)) return false;
-
             $maxVal = $trsAmount <= 1000000000;
             $regex = "/^\d+(\.\d{1,2})?$/";
             $isValidPattern = preg_match($regex, $trsAmount) === 1;

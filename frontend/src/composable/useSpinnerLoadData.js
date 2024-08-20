@@ -4,6 +4,7 @@ export const isLoadedData = ref(false);
 let timerId = null;
 
 export function timerLoadPageSpinner(timeMountedComponent, refIsLoad = null) {
+    //if(isLoadedData.value) return;
     const timeForLoadData = Date.now() - timeMountedComponent;
     const MIN_TIME_LOAD = 200;
     if(timeForLoadData >= MIN_TIME_LOAD) {

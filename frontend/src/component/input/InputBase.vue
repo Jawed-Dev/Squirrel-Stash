@@ -49,7 +49,9 @@
         isValidDate,
         isValidTrsDate,
         isValidGender,
-        isValidMessage
+        isValidMessage,
+        formatInputAmount,
+        isValidInputInt
     } from '@/error/useValidFormat';
 
 
@@ -67,7 +69,8 @@
         date: isValidDate,
         trsDate: isValidTrsDate,
         gender: isValidGender,
-        message: isValidMessage
+        message: isValidMessage,
+        onlyInt: isValidInputInt,
     };
     
     const props = defineProps({
@@ -162,7 +165,7 @@
 
     function onInput(event) {
         if(props.onlyNumbers && event.target.value.trim() !== '') {
-            if(!isValidInputAmount(event.target.value)) {
+            if(!formatInputAmount(event.target.value)) {
                 event.target.value = inputValue.value;
                 return;
             }
