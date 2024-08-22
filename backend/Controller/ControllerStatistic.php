@@ -18,6 +18,7 @@
         function fetchTotalTrsByMonth();
         function fetchBiggestTrsByMonth();
         function fetchDataTrsBySearch();
+        function getBalanceEconomyByMonth();
 
         function getYearListTrsByMonth();
         function getTotalTrsByYear();
@@ -115,6 +116,16 @@
 
             $db = $dataRequest['dataBase'];
             $data = $this->getModelStatistic()->getDataTrsBySearch($db, $dataRequest);
+            // log ici ?
+            $this->getViewStatistic()->renderJson(['data' => $data]);
+        }
+
+        public function getBalanceEconomyByMonth() {
+            $paramsValidation = [];
+            $dataRequest = $this->getControllerMain()->validateDataForController($paramsValidation);
+
+            $db = $dataRequest['dataBase'];
+            $data = $this->getModelStatistic()->getBalanceEconomyByMonth($db, $dataRequest);
             // log ici ?
             $this->getViewStatistic()->renderJson(['data' => $data]);
         }

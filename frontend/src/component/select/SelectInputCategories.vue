@@ -1,5 +1,5 @@
 <template>
-    <div class="flex justify-center items-center w-[65%] gap-2">
+    <div class="flex justify-center items-center w-[75%] min-[550px]:w-[65%]  gap-2">
         <useIconLoader class="rounded-full p-[6px] shadow-main w-fit" 
             :svg="(!typeTransaction) ? svgPurchases : svgReccurings" 
             :nameIcon="nameIcon" 

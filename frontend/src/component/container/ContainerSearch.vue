@@ -3,9 +3,9 @@
         <div :class='`text-white w-full relative`'>   
             <div 
                 @click="toggleParamsSearch" 
-                class="absolute w-full mt-5  shadow-main bg-gradient-x-blue py-2 pl-3
+                class="absolute w-full mt-3 shadow-main bg-gradient-x-blue py-2 pl-3
                 font-light flex justify-start gap-2 text-[18px] text-white 
-                hover:shadow-slate-500 cursor-pointer">
+                hover:shadow-custom-lower cursor-pointer">
                 <UseIconLoader :svg=iconConfig :nameIcon="typeIconShowParams"  />
                 <h1>Paramètres de recherche</h1>
             </div>
@@ -16,14 +16,14 @@
                             <div class="xl:flex w-full">
                                 
                                 <div class="xl:w-[40%] 2xl:w-[45%] flex justify-center">
-                                    <ImageSearch class="pt-5 w-full" :svg="imageConfig" />
+                                    <ImageSearch class="pt-5 w-full" :svg="sizeImage" />
                                 </div>
 
                                 <div class="grow flex flex-col justify-center">
 
                                     <div class="xl:mt-5 w-full flex">
                                         <div class="w-full flex flex-col justify-center xl:justify-center 2xl:justify-evenly 
-                                            items-center mt-3 gap-2 sm:gap-5 2xl:gap-0 sm:flex-row">
+                                            items-center mt-6 gap-2 sm:gap-12 2xl:gap-0 sm:flex-row">
                                             <ContainerAmountInputs 
                                                 v-model:searchAmountMin="searchAmountMin" 
                                                 v-model:searchAmountMax="searchAmountMax" 
@@ -33,7 +33,7 @@
                 
                                     <div class="mt-5 w-full flex">
                                         <div class="w-full flex flex-col justify-center xl:justify-center 2xl:justify-evenly 
-                                            items-center mt-3 gap-2 sm:gap-5 2xl:gap-0 sm:flex-row">
+                                            items-center gap-2 sm:gap-12 2xl:gap-0 sm:flex-row">
                                             <ContainerDateInputs 
                                                 v-model:checkboxDateMin="checkboxDateMin" 
                                                 v-model:checkboxDateMax="checkboxDateMax" 
@@ -45,7 +45,7 @@
                 
                                     <div class="mt-5 w-full flex">
                                         <div class="w-full flex flex-col justify-center xl:justify-center 2xl:justify-evenly 
-                                            items-center mt-3 gap-2 sm:gap-5 2xl:gap-0 sm:flex-row">
+                                            items-center gap-2 sm:gap-12 2xl:gap-0 sm:flex-row">
                                             <ContainerNoteInput v-model="searchNote" />
                                             <ContainerCategoryInput 
                                                 v-model:checkboxCategory="checkboxCategory" 
@@ -74,7 +74,6 @@
 
 <script setup>
     import { ref, computed, onMounted } from 'vue';
-    import { getCurrentDate } from '@/composable/useGetDate';
     import { updateDataTrsSearch } from '@/storePinia/useUpdateStoreByBackend';
     import { storeParamsSearch } from '@/storePinia/useStoreDashboard';
     import ContainerAmountInputs from '@/component/container/ContainerAmountInputs.vue';
@@ -83,8 +82,9 @@
     import ContainerCategoryInput from '@/component/container/ContainerCategoryInput.vue';
     import TransitionAxeY from '@/component/transition/TransitionAxeY.vue';
     import UseIconLoader from '@/composable/useIconLoader.vue';
-    import { setSvgConfig } from '@/svg/svgConfig';
     import ImageSearch from '@/component//svgs/ImageSearch.vue';
+    import { setSvgConfig } from '@/svg/svgConfig';
+    import { getScreenSize } from '@/composable/useSizeScreen';
     
     
     // variables, props
@@ -109,7 +109,9 @@
     const searchNote= ref('');
     const toggleShowParams= ref(false);
     const iconConfig = setSvgConfig({width:'30px', fill:'white' });
-    const imageConfig = setSvgConfig({width:'300px', fill:'white' });
+    const imageConfigBig = setSvgConfig({width:'300px', fill:'white' });
+    const imageConfig = setSvgConfig({width:'240px', fill:'white' });
+    const { widthScreenValue } = getScreenSize();
 
     // life cycle, functions...
     onMounted(() => {
@@ -122,8 +124,12 @@
         return (toggleShowParams.value) ? 'ArrowUp' : 'ArrowDown';
     });
     const paddingForMenuOpen = computed(() => {
-        return (toggleShowParams.value) ? '' : 'pb-5';
+        return (toggleShowParams.value) ? '' : 'pb-1';
     });
+
+    const sizeImage = computed(() => {
+        return widthScreenValue.value < 1024 ? imageConfig : imageConfigBig;
+    })
 
     async function handleSubmit() {
         const params = getAllParamsSearch();

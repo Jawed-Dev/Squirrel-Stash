@@ -1,6 +1,7 @@
 <template>
     <div class="font-main flex flex-col min-h-screen bg-main-bg w-full pb-[50px] md:pb-0">
-        <div v-show="isLoadedData" class="mx-1 md:ml-[calc(20px+65px+20px)] xl:ml-[calc(30px+75px+30px)] md:mr-[20px] xl:mr-[30px] flex flex-col my-5">
+        <div v-show="isLoadedData" class="mx-1 md:ml-[calc(20px+65px+20px)] xl:ml-[calc(30px+75px+30px)] 
+        md:mr-[20px] xl:mr-[30px] flex flex-col my-5">
 
             <h1 class="text-2xl font-light text-white">Récapitulatif de l'année</h1>
 
@@ -30,31 +31,31 @@
             </section>
  
             <section class="flex flex-col sm:flex-row sm:gap-5 justify-around">
-                <div class="flex flex-col w-full justify-around min-[1340px]:flex-row min-[1340px]:gap-5">
+                <div class="flex flex-col w-full justify-around 2xl:flex-row 2xl:gap-5">
                     <ContainerStatMonth 
                         nameIcon="calculator" bgIcon="bg-gradient-orange" :colorValue="'text-custom-orange'" 
                         :amountValue="textTotalTransaction" nameStat="Total des transactions" 
-                        :width="'min-[1340px]:w-1/2 w-full'" 
+                        :width="'2xl:w-1/2 w-full'" 
                     />
 
                     <ContainerStatMonth 
                         nameIcon="balance" bgIcon="bg-gradient-green" :colorValue="'text-white'" 
                         :amountValue="textStatsByYear.biggestMonth" nameStat="Mois le plus coûteux" 
-                        :width="'min-[1340px]:w-1/2 w-full'" 
+                        :width="'2xl:w-1/2 w-full'" 
                     />
                 </div>
 
-                <div class="flex flex-col w-full justify-around min-[1340px]:flex-row min-[1340px]:gap-5 ">
+                <div class="flex flex-col w-full justify-around 2xl:flex-row 2xl:gap-5 ">
                     <ContainerStatMonth 
                         :nameIcon="iconNamePurchases" bgIcon="bg-gradient-blue" :colorValue="'text-white'" 
                         :amountValue="nameBiggestPurchase" nameStat="Plus gros achat / catégorie" 
-                        :width="'min-[1340px]:w-1/2 w-full'" 
+                        :width="'2xl:w-1/2 w-full'" 
                     />
 
                     <ContainerStatMonth 
                         :nameIcon="iconNameRecurrings" bgIcon="bg-gradient-vanusa" :colorValue="'text-white'" 
                         :amountValue="nameBiggestRecurring" nameStat="Plus gros prélèvement / catégorie" 
-                        :width="'min-[1340px]:w-1/2 w-full'" 
+                        :width="'2xl:w-1/2 w-full'" 
                     />
                 </div>
             </section>
@@ -106,7 +107,7 @@
     import useGraphBar from '@/composable/useGraphBar.vue';
     import useGraphDonut from '@/composable/useGraphDonut.vue';
     import ContainerSpinner from '@/component/container/ContainerSpinner.vue';
-    import { isLoadedData ,timerLoadPageSpinner } from '@/composable/useSpinnerLoadData';
+    import useSpinnerLoadData from '@/composable/useSpinnerLoadData';
     import { formatFloatAsString } from '@/composable/useMath';
     
     // store Pinia
@@ -114,6 +115,7 @@
     const yearListTrsByCategories = storeYearListTrsByCategories();
     const textStatsByYear = storeTextStatsByYear();
     const topYearCategories = storeTopYearCategories();
+    const { isLoadedData, timerLoadPageSpinner } = useSpinnerLoadData();
 
     // props, variables
     const currentYear = getCurrentYear();
@@ -151,17 +153,19 @@
         return formatFloatAsString(textStatsByYear.totalTransactions) + ' €';
     });
 
-
     watch(yearSelected, async (newYear) => {
         const timeMountedComponent = Date.now();
-        await updateStoreYearListTrsByMonth(newYear, getNameTypeTransaction(typeTransaction.graphByMonth));
-        await updateStoreTotalTrsByYear(newYear);
-        await updateBiggestTrsByYear(newYear,'purchase');
-        await updateBiggestTrsByYear(newYear,'recurring');
-        await updateStoreBiggestMonthByYear(newYear);
-        await updateStoreYearListTrsByCategories(newYear, getNameTypeTransaction(typeTransaction.graphByCategories));
-        await updateStoreTopYearCategories(newYear, 'purchase');
-        await updateStoreTopYearCategories(newYear, 'recurring');
+        const nameTypeTransaction = getNameTypeTransaction(typeTransaction.graphByMonth);
+        await Promise.all([
+            updateStoreYearListTrsByMonth(newYear, nameTypeTransaction),
+            updateStoreTotalTrsByYear(newYear),
+            updateBiggestTrsByYear(newYear, 'purchase'),
+            updateBiggestTrsByYear(newYear, 'recurring'),
+            updateStoreBiggestMonthByYear(newYear),
+            updateStoreYearListTrsByCategories(newYear, nameTypeTransaction),
+            updateStoreTopYearCategories(newYear, 'purchase'),
+            updateStoreTopYearCategories(newYear, 'recurring')
+        ]);
         timerLoadPageSpinner(timeMountedComponent);
     }, { immediate: true, deep: true });
 

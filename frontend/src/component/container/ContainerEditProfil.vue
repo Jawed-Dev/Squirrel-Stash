@@ -3,7 +3,7 @@
          shadow-main mt-[10px]">
         <div 
             @click="toggleParamsSearch"    
-            class="absolute w-full mt-5  shadow-main bg-gradient-x-blue py-2 pl-3
+            class="absolute w-full mt-3 shadow-main bg-gradient-x-blue py-2 pl-3
                 font-light flex justify-start gap-2 text-[18px] text-white 
                 hover:shadow-slate-500 cursor-pointer">
 
@@ -19,15 +19,15 @@
                         <div class="xl:flex w-full">
 
                             <div class="xl:w-[40%] 2xl:w-[45%] flex justify-center items-center">
-                                <ImageEditProfil class="pt-5 w-full" :svg="imageConfig" />
+                                <ImageEditProfil class="pt-5 w-full" :svg="sizeImage" />
                             </div>
 
-                            <div class="grow flex flex-col justify-center">
+                            <div class="mt-2 grow flex flex-col justify-center">
                                 <div class="xl:mt-5 w-full flex">
                                     <div class="w-full flex flex-col justify-center xl:justify-center 2xl:justify-evenly 
-                                            items-center mt-3 gap-2 sm:gap-5 2xl:gap-0 sm:flex-row">
+                                            items-center gap-2 sm:gap-12 2xl:gap-0 sm:flex-row">
     
-                                        <div class="flex flex-col w-1/3 min-w-[280px] lg:min-w-[300px] 2xl:min-w-[300px] md:w-1/4">
+                                        <div class="flex flex-col w-1/3 min-w-[270px] lg:min-w-[280px] 2xl:min-w-[300px] md:w-1/4">
                                             <label class="pl-2 text-white font-light" for="input-firstname">Prénom *</label>
                                             <InputBase 
                                                 iconName="Name"
@@ -43,7 +43,7 @@
                     
                                             />
                                         </div>
-                                        <div class="flex flex-col w-1/3 min-w-[280px] lg:min-w-[300px] 2xl:min-w-[300px] md:w-1/4">
+                                        <div class="flex flex-col w-1/3 min-w-[270px] lg:min-w-[280px] 2xl:min-w-[300px] md:w-1/4">
                                             <label class="pl-2 text-white font-light" for="input-lastname">Nom *</label>
                                             <InputBase 
                                                 iconName="Name"
@@ -63,23 +63,13 @@
                 
                                 <div class="mt-5 w-full flex">
                                     <div class="w-full flex flex-col justify-center xl:justify-center 2xl:justify-evenly 
-                                            items-center mt-3 gap-2 sm:gap-5 2xl:gap-0 sm:flex-row">
+                                            items-center gap-2 sm:gap-12 2xl:gap-0 sm:flex-row">
 
-                                        <div class="flex flex-col w-1/3 min-w-[280px] lg:min-w-[300px] 2xl:min-w-[300px] md:w-1/4">
+                                        <div class="flex flex-col w-1/3 min-w-[270px] lg:min-w-[280px] 2xl:min-w-[300px] md:w-1/4">
                                             <label class="pl-2 text-white font-light" for="input-gender">Genre</label>
-                                            <!-- <InputBase 
-                                                iconName="Gender"
-                                                id="input-gender" 
-                                                v-model="inputsProfil.gender" 
-                                                v-model:stateError="errorInputs.gender"
-                                                extraClass="" 
-                                                placeholder="Votre genre"
-                                                type="text"
-                                                validFormat="gender"
-                                                :hideAnimation="true"
-                                            /> -->
                                             <select v-model="inputsProfil.gender" 
-                                                :class="`font-light pl-2 py-[2px] gradient-border text-white min-w-[280px] lg:min-w-[300px] 2xl:min-w-[300px] md:w-1/4
+                                                :class="`font-light pl-2 py-[2px] gradient-border text-white 
+                                                    min-w-[270px] lg:min-w-[280px] 2xl:min-w-[300px] md:w-1/4
                                                     rounded-[3px] bg-main-gradient  shadow-main outline-none cursor-pointer hover:shadow-custom-lower`"
                                                 >
                                                 <option 
@@ -88,7 +78,7 @@
                                                 </option>
                                             </select>
                                         </div>
-                                        <div class="flex flex-col w-1/3 min-w-[280px] lg:min-w-[300px] 2xl:min-w-[300px] md:w-1/4">
+                                        <div class="flex flex-col w-1/3 min-w-[270px] lg:min-w-[280px] 2xl:min-w-[300px] md:w-1/4">
                                             <label class="pl-2 text-white font-light" for="input-pass">Rôle</label>
                                             <ContainerTextUnderline 
                                                 iconName="Crown"
@@ -101,9 +91,9 @@
                 
                                 <div class="mt-5 w-full flex">
                                     <div class="w-full flex flex-col justify-center xl:justify-center 2xl:justify-evenly 
-                                            items-center mt-3 gap-2 sm:gap-5 2xl:gap-0 sm:flex-row">
+                                            items-center gap-2 sm:gap-12 2xl:gap-0 sm:flex-row">
                                             
-                                        <div class="flex flex-col w-1/3 min-w-[280px] lg:min-w-[300px] 2xl:min-w-[300px] md:w-1/4">
+                                        <div class="flex flex-col w-1/3 min-w-[270px] lg:min-w-[280px] 2xl:min-w-[300px] md:w-1/4">
                                             <label class="pl-2 text-white font-light" for="input-birthday">Date de naissance</label>
                                             <InputBase 
                                                 id="input-birthday" 
@@ -116,7 +106,7 @@
                                                 :hideAnimation="true"
                                             />
                                         </div>
-                                        <div class="flex flex-col w-1/3 min-w-[280px] lg:min-w-[300px] 2xl:min-w-[300px] md:w-1/4"></div>
+                                        <div class="flex flex-col w-1/3 min-w-[270px] lg:min-w-[280px] 2xl:min-w-[300px] md:w-1/4"></div>
                                     </div>
                                 </div>
                             </div>
@@ -148,6 +138,9 @@
     import ImageEditProfil from '@/component/svgs/ImageEditProfil.vue';
     import { setSvgConfig } from '@/svg/svgConfig';
     import { createToast } from '@/composable/useToastNotification';
+    import { getScreenSize } from '@/composable/useSizeScreen';
+
+    
     
     // Store Pinia
     const dataProfilUser = storeProfilUser();
@@ -173,10 +166,11 @@
         firstName: false,
         lastName: false,
     });
-
+    const { widthScreenValue } = getScreenSize();
     const toggleShowParams= ref(false);
     const iconConfig = setSvgConfig({width:'30px', fill:'white' });
-    const imageConfig = setSvgConfig({width:'300px', fill:'white' });
+    const imageConfigBig = setSvgConfig({width:'300px', fill:'white' });
+    const imageConfig = setSvgConfig({width:'240px', fill:'white' });
 
     // life cycle, functions
     onMounted(async () => {
@@ -184,12 +178,16 @@
         updateEditProfil();
     });
 
+    const sizeImage = computed(() => {
+        return widthScreenValue.value < 1024 ? imageConfig : imageConfigBig;
+    })
+
     const typeIconShowParams = computed(() => {
         return (toggleShowParams.value) ? 'ArrowUp' : 'ArrowDown';
     });
 
     const paddingForMenuOpen = computed(() => {
-        return (toggleShowParams.value) ? '' : 'pb-5';
+        return (toggleShowParams.value) ? '' : 'pb-1';
     });
 
     const textUserLevel = computed(() => {

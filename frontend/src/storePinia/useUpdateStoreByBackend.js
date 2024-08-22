@@ -3,7 +3,7 @@ import {
         getListTrsMonthByDay, getLastNTransactions, getDataTrsBySearch,
         getDataUserProfil, getUserEmail, getYearListTrsByMonth, getTotalTrsByYear,
         getBiggestTrsByYear, getBiggestMonthByYear, getYearListTrsByCategories,
-        getTopYearCategories
+        getTopYearCategories, getBalanceEconomyByMonth
 } from '@/composable/useBackendGetData';
 
 import { 
@@ -67,29 +67,23 @@ export async function updateThresholdByMonth(month, year) {
     const formattedThresholdAmount = parseFloat(thresholdAmount).toFixed(2);
 
     threshold.amount = formattedThresholdAmount;
-    console.log(`Threshold Amount set to: ${threshold.amount}`);
 }
 
 export async function updateTotalTrsByMonth(month, year) {
     const statisticDetails = storeStatisticDetails();
     const totalTransactionsFetched = await getTotalTrsByMonth(month, year);
-    const totalTransactionsRaw = totalTransactionsFetched?.data?.total_transactions || 0;
-    const totalTransactions = new Decimal(totalTransactionsRaw);
-    statisticDetails.totalTransactions = parseFloat(totalTransactions).toFixed(2);
+    const totalTransactions = totalTransactionsFetched?.data?.total_transactions || 0;
+    const totalTransactionsFormated = new Decimal(totalTransactions);
+    statisticDetails.totalTransactions = parseFloat(totalTransactionsFormated).toFixed(2);
 }
 
 export async function updateBalanceEcoByMonth(month, year) {
-    const thresholdFetched = await getThresholdByMonth(month, year);
-    const totalTransactionsFetched = await getTotalTrsByMonth(month, year);
-
-    const totalTransactions = new Decimal(totalTransactionsFetched?.data?.total_transactions || 0);
-    const thresholdAmount = new Decimal(thresholdFetched?.data?.threshold_amount || 0);
-
-    const economyBalanceValue = thresholdAmount.minus(totalTransactions);
+    const response = await getBalanceEconomyByMonth(month, year);
+    const economyBalance = response?.data?.balanceAmount || 0;
+    const economyBalanceFormated = new Decimal(economyBalance);
 
     const statisticDetails = storeStatisticDetails();
-    statisticDetails.economyBalance = parseFloat(economyBalanceValue).toFixed(2);
-
+    statisticDetails.economyBalance = parseFloat(economyBalanceFormated).toFixed(2);
 }
 
 export async function updateBiggestTrsByMonth(month, year, transactionType) {

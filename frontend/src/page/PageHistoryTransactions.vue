@@ -45,6 +45,7 @@
     const totalItems = ref(0);
     const currentPage = ref(1);
     const itemsPerPage = ref(1);
+    
 
     // life cycle / functions
     watch([currentOrderSelected, orderAsc], async ([newOrder, newAsc]) => {

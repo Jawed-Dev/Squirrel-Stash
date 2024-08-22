@@ -4,7 +4,7 @@
 
         <div 
             @click="toggleParamsSearch"    
-            class="absolute w-full mt-5  shadow-main bg-gradient-x-blue py-2 pl-3
+            class="absolute w-full mt-3 shadow-main bg-gradient-x-blue py-2 pl-3
                 font-light flex justify-start gap-2 text-[18px] text-white 
                 hover:shadow-slate-500 cursor-pointer">
             
@@ -20,15 +20,15 @@
                         <div class="xl:flex w-full">
 
                             <div class="xl:w-[40%] 2xl:w-[45%] flex justify-center">
-                                <ImageEditPass class="pt-5 w-full" :svg="imageConfig" />
+                                <ImageEditPass class="pt-5 w-full" :svg="sizeImage" />
                             </div>
 
                             <div class="grow flex flex-col justify-center">                            
                                 <div class="xl:mt-5 w-full flex">
                                     <div class="w-full flex flex-col justify-center xl:justify-center 2xl:justify-evenly 
-                                            items-center mt-3 gap-2 sm:gap-5 2xl:gap-0 sm:flex-row"> 
+                                            items-center gap-2 sm:gap-12 2xl:gap-0 sm:flex-row"> 
 
-                                        <div class="flex flex-col w-1/3 min-w-[280px] lg:min-w-[300px] 2xl:min-w-[300px] md:w-1/4">
+                                        <div class="flex flex-col w-1/3 min-w-[270px] lg:min-w-[280px] 2xl:min-w-[300px] md:w-1/4">
                                             <label class="pl-2 text-white font-light" for="input-old-pass">Mot de passe actuel</label>
                                             <InputBase 
                                                 iconName="Password"
@@ -42,15 +42,15 @@
                                                 :hideAnimation="true"
                                             />
                                         </div>
-                                        <div class="hidden sm:flex flex-col w-1/3 min-w-[280px] lg:min-w-[300px] 2xl:min-w-[300px] md:w-1/4"></div>
+                                        <div class="hidden sm:flex flex-col w-1/3 min-w-[270px] lg:min-w-[280px] 2xl:min-w-[300px] md:w-1/4"></div>
                                     </div>
                                 </div>
 
-                                <div class="mt-3 w-full flex">
+                                <div class="mt-5 w-full flex">
 
                                     <div class="w-full flex flex-col justify-center xl:justify-center 2xl:justify-evenly 
-                                            items-center mt-3 gap-5 2xl:gap-0 sm:flex-row">
-                                        <div class="flex flex-col w-1/3 min-w-[280px] lg:min-w-[300px] 2xl:min-w-[300px] md:w-1/4">
+                                            items-center gap-2 sm:gap-12 2xl:gap-0 sm:flex-row">
+                                        <div class="flex flex-col w-1/3 min-w-[270px] lg:min-w-[280px] 2xl:min-w-[300px] md:w-1/4">
                                             <label class="pl-2 text-white font-light" for="input-confirm-pass">Nouveau mot de passe</label>
                                             <InputBase 
                                                 iconName="Password"
@@ -64,7 +64,7 @@
                                                 :hideAnimation="true"
                                             />
                                         </div>
-                                        <div class="flex flex-col w-1/3 min-w-[280px] lg:min-w-[300px] 2xl:min-w-[300px] md:w-1/4">
+                                        <div class="mt-5 sm:mt-0 flex flex-col w-1/3 min-w-[270px] lg:min-w-[280px] 2xl:min-w-[300px] md:w-1/4">
                                             <label class="pl-2 text-white font-light" for="input-confirm-newpass">Confirmation du mot de passe</label>
                                             <InputBase 
                                                 iconName="Password"
@@ -82,7 +82,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="w-full flex justify-center sm:mt-12 my-3">
+                        <div class="w-full flex justify-center mt-12 my-3">
                             <div class=" shadow-main min-w-[250px] w-1/4 md:w-1/5 overflow-x-hidden text-ellipsis">
                                 <button class="w-full rounded-sm py-2 bg-gradient-blue rounded-br-[3px] font-light hover:opacity-90">Editer</button>
                             </div>
@@ -105,6 +105,9 @@
     import ImageEditPass from '@/component//svgs/ImageEditPass.vue';
     import { setSvgConfig } from '@/svg/svgConfig';
     import { createToast } from '@/composable/useToastNotification';
+    import { getScreenSize } from '@/composable/useSizeScreen';
+
+    
 
     const inputsPass = reactive({
         oldPass: '',
@@ -123,17 +126,24 @@
         newPass: false,
         confirmNewPass: false,
     });
+
     const toggleShowParams= ref(false);
     const iconConfig = setSvgConfig({width:'30px', fill:'white' });
-    const imageConfig = setSvgConfig({width:'300px', fill:'white' });
+    const imageConfigBig = setSvgConfig({width:'300px', fill:'white' });
+    const imageConfig = setSvgConfig({width:'240px', fill:'white' });
+    const { widthScreenValue } = getScreenSize();
 
     // life cycle, functions
+    const sizeImage = computed(() => {
+        return widthScreenValue.value < 1024 ? imageConfig : imageConfigBig;
+    });
+
     const typeIconShowParams = computed(() => {
         return (toggleShowParams.value) ? 'ArrowUp' : 'ArrowDown';
     });
 
     const paddingForMenuOpen = computed(() => {
-        return (toggleShowParams.value) ? '' : 'pb-5';
+        return (toggleShowParams.value) ? '' : 'pb-1';
     });
 
     async function handleSubmit() {

@@ -87,10 +87,8 @@ function updateChartData(chart, newData) {
 function getChartOptions() {
     return {
         responsive: true,
-        // animation: {
-        //     duration: 1000,
-        // },
         maintainAspectRatio: false,
+        
         plugins: {
             legend: { display: false },
             tooltip: {
@@ -99,7 +97,8 @@ function getChartOptions() {
                     label: function(tooltipItem) {
                         return "Montant: " + formatFloatAsString(tooltipItem.raw) + ' €';
                     }
-                }
+                },
+                
             }
         },
         scales: {
@@ -111,6 +110,7 @@ function getChartOptions() {
                     font: {
                         size: 13
                     },
+                    
                 },
             },
             y: {
@@ -122,7 +122,9 @@ function getChartOptions() {
                     font: {
                         size: 13
                     },
+
                     callback: value => `${value} €`,
+                    
                 },
                 grid: {
                     display: true,

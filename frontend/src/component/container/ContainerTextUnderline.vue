@@ -27,6 +27,6 @@
 
     const colorBorder = computed(() => {
         if(props.borderHidden) return '';
-        return (props.text) ? "border-custom-green" : "hover:border-custom-blue border-custom-gray-2";
+        return (props.text) ? "border-green-300" : "hover:border-custom-blue border-custom-gray-2";
     });
 </script>

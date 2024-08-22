@@ -1,5 +1,5 @@
 <template>
-    <div class="flex flex-col w-1/3 min-w-[280px] lg:min-w-[300px] 2xl:min-w-[300px] md:w-1/4">
+    <div class="flex flex-col w-1/3 min-w-[270px] lg:min-w-[280px] 2xl:min-w-[300px] md:w-1/4">
         <label class="pl-2 text-white font-light" for="input-date-start">Depuis la date du : </label>                    
         <InputBase 
             extraClass="py-[2px]"
@@ -12,7 +12,7 @@
         />
     </div>
 
-    <div class="flex flex-col w-1/3 min-w-[280px] lg:min-w-[300px] 2xl:min-w-[300px] md:w-1/4">
+    <div class="flex flex-col w-1/3 min-w-[270px] lg:min-w-[280px] 2xl:min-w-[300px] md:w-1/4">
         <label class="pl-2 text-white font-light" for="input-date-end">Jusqu'à la date du :</label>                     
         <InputBase 
             extraClass="py-[2px]"

@@ -2,20 +2,29 @@
     <div>
         <div v-if="props.infoTransaction.transaction_id" :class="`py-8 flex flex-col border-gray-700 text-white ${borderBottom} `">
 
-            <div :class="`pl-1 sm:pl-4 md:pl-3 font-light flex items-center`">
+            <div :class="`pl-1 sm:pl-5 font-light flex items-center`">
+                
                 <IconLoader 
                     :nameIcon="infoTransaction.transaction_category" 
                     :svg="iconConfig" 
-                    :class="`${iconConfig.color} rounded-full p-2 shadow-main`"
+                    :class="`${iconConfig.color} hidden sm:flex rounded-full p-2 shadow-main `"
                 />
-        
-                <p class="w-[25%] text-[15px] pl-[5px] md:pl-[20px] sm:text-left 
-                overflow-hidden text-ellipsis">{{infoTransaction.transaction_category}}</p>
-                <p class="w-[22%] text-[15px] text-nowrap pl-3 sm:pl-0 text-left overflow-hidden text-ellipsis">{{ transactionAmount }}</p>
-                <p class="w-[22%] text-[15px] sm:text-left text-center">{{infoTransaction.formatted_date}}</p>
-                <p class="text-[15px] grow text-center md:pl-[1px] text-nowrap  sm:w-[14%] sm:grow-0 sm:text-left ">{{ transactionCount }}</p>
+                
+                <div class="w-[40%] sm:w-1/2 flex-col flex sm:flex-row">
+                    <!-- category -->
+                    <p class="w-full sm:w-1/2 text-[15px] pl-4 
+                    overflow-hidden text-ellipsis">{{infoTransaction.transaction_category}}</p>
+                     <!-- Amount -->
+                    <p class="pl-5 sm:pl-0 grow text-nowrap text-left overflow-hidden text-ellipsis text-[15px]">{{ transactionAmount }}</p>
+                </div>
+
+                <!-- Date -->
+                <p class="w-[30%] sm:w-[22%] text-[15px]">{{infoTransaction.formatted_date}}</p>
+                <!-- Iteration -->
+                <p class="grow text-[15px] md:pl-[1px] text-nowrap">{{ transactionCount }}</p>
     
-                <div class="flex items-center flex-col gap-1 pr-3 sm:grow overflow-visible">
+            
+                <div class="flex items-center flex-col gap-1 pr-8 sm:pr-3 sm:grow overflow-visible">
                     <EditDeleteTransaction 
                         :infoTransaction="infoTransaction" 
                         :indexMenu="props.indexMenu" 

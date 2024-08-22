@@ -2,7 +2,7 @@
     <div class="fixed inset-0 bg-black bg-opacity-80 z-20 ">
         <div :class="`fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-30 text-white rounded-[3px]
                  shadow-main bg-main-gradient
-                max-[850px]:w-full min-[850px]:min-w-[850px] font-main`">
+                w-full lg:w-[1024px] font-main`">
     
             <MainContainerSlot :onlyOneBtn="true" :bgMainBtn="'bg-gradient-blue'" width='w-full'
             :textBtn1="'Fermer'" titleContainer="Politique de Confidentialité" @toggleMenu="toggleMenu">
@@ -15,8 +15,7 @@
                     <p class="text-center font-light opacity-95 my-3">Date de dernière mise à jour : [Date]</p>
     
                     <div class="px-3 md:px-12 w-full flex justify-center">
-                        <div class=" max-h-[430px] overflow-y-auto
-                            flex flex-col w-full rounded-[3px] py-5 gap-20">
+                        <div class="flex flex-col w-full rounded-[3px] py-5 gap-20">
     
                             <div class="flex flex-col gap-5 w-full">
                                 <h2 class="text-custom-blue text-xl">1. Introduction</h2>

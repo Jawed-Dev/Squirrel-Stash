@@ -10,12 +10,15 @@ import { ref, onMounted, watch, computed } from 'vue';
 import Chart from 'chart.js/auto';
 import ButtonDownloadChart from '@/component/button/ButtonDownloadChart.vue';
 import { formatFloatAsString } from '@/composable/useMath';
+import { getScreenSize } from '@/composable/useSizeScreen';
+
 
 const props = defineProps({
     dataTransaction: { default: []},
     colorsGraph: { default: () => {}},
     typeTransaction: {default: false}
 });
+const { widthScreenValue } = getScreenSize();
 
 const colorsDonut = computed(() => {
     return (props.typeTransaction) ? [
@@ -101,14 +104,15 @@ function getChartOptions() {
         plugins: {
             legend: {
                 display: true,
-                position: 'left',
+                position: (widthScreenValue.value < 700) ? 'bottom' : 'left',
+                maxWidth: 300,
                 labels: {
-                    boxWidth: 50, 
-                    padding: 30, 
+                    boxWidth: 30, 
+                    padding: 20, 
                     color: 'white',
                     borderWidth: 1,
                     font: {
-                        size: 15,
+                        size: 16,
                     },
                 },
             },
@@ -139,7 +143,7 @@ function getChartOptions() {
                     color: '#2c3e5080',
                 }
             }
-        }
+        },
     };
 }
 </script>

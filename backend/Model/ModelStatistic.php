@@ -12,6 +12,7 @@
         function getBiggestTrsByMonth($db, $data);
         function isThresholdExistByMonth($db, $data);
         function getDataTrsBySearch($db, $data);
+        function getBalanceEconomyByMonth($db, $data);
 
         function getYearListTrsByMonth($db, $data);
         function getTotalTrsByYear($db, $data);
@@ -233,6 +234,33 @@
             $query->execute();
             $thresholdAmount = $query->fetch(PDO::FETCH_ASSOC);
             return $thresholdAmount;
+        }
+
+        //$thresholdAmount = $this->getThresholdByMonth($db, $data);
+
+        public function getBalanceEconomyByMonth($db, $data) {
+            $userId = $data['userId'];
+            $dataQuery = $data['bodyData'];
+            $thresholdAmount = $this->getThresholdByMonth($db, $data);
+
+            $reqSql = "SELECT :threshold - SUM(transaction_amount) AS balanceAmount
+            FROM transaction
+            WHERE MONTH(transaction_date) = :month
+            AND YEAR(transaction_date) = :year
+            AND transaction_user_id = :userId
+            LIMIT 1;
+            ";
+
+            $query = $db->prepare($reqSql);
+            $query->bindValue(':threshold',  $thresholdAmount, PDO::PARAM_INT);
+            $query->bindValue(':userId',  $userId, PDO::PARAM_INT);
+            $query->bindValue(':year',  $dataQuery['selectedYear'], PDO::PARAM_INT);
+            $query->bindValue(':month',  $dataQuery['selectedMonth'], PDO::PARAM_INT);
+            $query->execute();
+            $listTransactions = $query->fetch(PDO::FETCH_ASSOC);
+            // var_dump($thresholdAmount);
+            // var_dump($listTransactions);
+            return $listTransactions;
         }
 
         public function getNLastTrsByMonth($db, $data) {

@@ -1,5 +1,5 @@
 <template>
-    <div class="flex flex-col w-1/3 min-w-[280px] lg:min-w-[300px] 2xl:min-w-[300px] md:w-1/4">
+    <div class="flex flex-col w-1/3 min-w-[270px] lg:min-w-[280px] 2xl:min-w-[300px] md:w-1/4">
         <label class="pl-2 text-white font-light" for="input-amount-min">Montant minimum</label>
         <InputBase 
             iconName="Amount"
@@ -9,10 +9,11 @@
             type="text"
             :hideAnimation="true"
             :onlyNumbers="true"
+            validFormat="amount"
         />
     </div>
 
-    <div class="flex flex-col w-1/3 min-w-[280px] lg:min-w-[300px] 2xl:min-w-[300px] md:w-1/4">
+    <div class="flex flex-col w-1/3 min-w-[270px] lg:min-w-[280px] 2xl:min-w-[300px] md:w-1/4">
         <label class="pl-2 text-white font-light" for="input-amount-max">Montant maximum</label>
         <InputBase 
             iconName="Amount"

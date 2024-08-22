@@ -1,6 +1,6 @@
 <template>
     <section :class="`hidden lg:flex flex-col items-center justify-center
-         text-white lg:w-1/2 lg:h-screen ${heightMin} font-main`">
+         text-white bg-main-bg lg:w-1/2 lg:h-screen ${heightMin} font-main`">
 
         <div class="flex flex-col items-center gap-10 justify-between w-full mt-5">
             <component :is="image" :svg="styleIcon" />

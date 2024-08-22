@@ -1,5 +1,11 @@
 <template>
     <div class="font-main flex flex-col bg-main-bg w-full min-h-screen pb-[calc(50px)] md:pb-0">
+
+        <!-- i make a transition for dont show a strange square when spinner is finish -->
+        <TransitionOpacity duration-in="300" duration-out="300">
+            <ContainerSpinner v-if="!isLoadedData" />
+        </TransitionOpacity>
+
         <div v-show="isLoadedData" class="mx-1 md:ml-[calc(20px+65px+20px)] xl:ml-[calc(30px+75px+30px)] 
             md:mr-[20px] xl:mr-[30px] flex flex-col mt-5">
             <h1 class="text-2xl font-light text-white">Économie du mois</h1>
@@ -23,35 +29,32 @@
                 />
             </div>
 
-            <ContainerTransactionsMonth  />           
+            <ContainerTransactionsMonth />           
 
-            <section class="flex flex-col sm:flex-row sm:gap-5 justify-around">
-
-                <div class="flex flex-col w-full justify-around min-[1340px]:flex-row min-[1340px]:gap-5">
+            <section class="flex flex-col md:flex-row md:gap-5 justify-around">
+                <div class="flex flex-col w-full justify-around 2xl:flex-row 2xl:gap-5">
                     <ContainerStatMonth nameIcon="calculator" bgIcon="bg-gradient-orange" :colorValue="'text-custom-orange'" 
-                    :amountValue="textTotalTransaction" :nameStat="'Total des transactions'" :width="'min-[1340px]:w-1/2 w-full'" />
+                    :amountValue="textTotalTransaction" :nameStat="'Total des transactions'" :width="'2xl:w-1/2 w-full'" />
     
                     <ContainerStatMonth nameIcon="balance" bgIcon="bg-gradient-green" :colorValue="colorTextBalanceEconomy" 
-                    :amountValue="textBalanceEconomy" :nameStat="'Balance d\'économie'" :width="'min-[1340px]:w-1/2 w-full'" />
+                    :amountValue="textBalanceEconomy" :nameStat="'Balance d\'économie'" :width="'2xl:w-1/2 w-full'" />
                 </div>
                 
-                <div class="flex flex-col w-full justify-around min-[1340px]:flex-row min-[1340px]:gap-5">
+                <div class="flex flex-col w-full justify-around 2xl:flex-row 2xl:gap-5">
                     <ContainerStatMonth :nameIcon="iconNamePurchases" bgIcon="bg-gradient-blue" :colorValue="'text-white'" 
-                    :amountValue="nameBiggestPurchase" :nameStat="'Plus gros achat / Catégorie'" :width="'min-[1340px]:w-1/2 w-full'" />
+                    :amountValue="nameBiggestPurchase" :nameStat="'Plus gros achat / Catégorie'" :width="'2xl:w-1/2 w-full'" />
                     
                     <ContainerStatMonth :nameIcon="iconNameRecurrings" bgIcon="bg-gradient-vanusa" :colorValue="'text-white'"  
-                    :amountValue="nameBiggestRecurring" :nameStat="'Plus gros prélèvement / Catégorie'" :width="'min-[1340px]:w-1/2 w-full'" />
+                    :amountValue="nameBiggestRecurring" :nameStat="'Plus gros prélèvement / Catégorie'" :width="'2xl:w-1/2 w-full'" />
                 </div>
             </section>
 
-            <section class="flex xl:gap-5 flex-col xl:flex-row justify-between ">
+            <section class="flex 2xl:gap-5 flex-col 2xl:flex-row justify-between">
                 <ContainerListTransactions v-model="topTransactions.typeTrsPurchases" class="w-full h-fit" />
-                <ContainerListTransactions v-model="topTransactions.typeTrsRecurrings" class="w-full hidden xl:flex h-fit" />
+                <ContainerListTransactions v-model="topTransactions.typeTrsRecurrings" class="w-full hidden 2xl:flex h-fit" />
             </section>
         </div>
-        <div v-show="!isLoadedData">
-            <ContainerSpinner />
-        </div>
+        
     </div>
     
 </template>
@@ -70,8 +73,9 @@
     import { storeThreshold, storeDateSelected, storeStatisticDetails } from '@/storePinia/useStoreDashboard';
     import { updateThresholdByMonth, updateTotalTrsByMonth, updateBalanceEcoByMonth, updateBiggestTrsByMonth } from '@/storePinia/useUpdateStoreByBackend';
     import ContainerSpinner from '@/component/container/ContainerSpinner.vue';
-    import { isLoadedData, timerLoadPageSpinner } from '@/composable/useSpinnerLoadData';
+    import useSpinnerLoadData from '@/composable/useSpinnerLoadData';
     import { formatFloatAsString } from '@/composable/useMath';
+import TransitionOpacity from '@/component/transition/TransitionOpacity.vue';
     
     
     // stores Pinia
@@ -81,6 +85,7 @@
     const dateSelected = storeDateSelected();
     const statisticDetails = storeStatisticDetails();
     const firstNameUser = ref('');
+    const { isLoadedData, timerLoadPageSpinner } = useSpinnerLoadData();
     
     const topTransactions = reactive({
         typeTrsPurchases: false,
@@ -102,17 +107,20 @@
 
     watch( () => [dateSelected.month, dateSelected.year], async ([newMonth, newYear]) => {
         const timeMountedComponent = Date.now();
-        await updateThresholdByMonth(newMonth, newYear);
-        await updateTotalTrsByMonth(newMonth, newYear);
-        await updateBalanceEcoByMonth(newMonth, newYear);
-        await updateBiggestTrsByMonth(newMonth, newYear, 'purchase');
-        await updateBiggestTrsByMonth(newMonth, newYear, 'recurring');
+        await Promise.all([
+            updateThresholdByMonth(newMonth, newYear),
+            updateTotalTrsByMonth(newMonth, newYear),
+            updateBalanceEcoByMonth(newMonth, newYear),
+            updateBiggestTrsByMonth(newMonth, newYear, 'purchase'),
+            updateBiggestTrsByMonth(newMonth, newYear, 'recurring')
+        ]);
         timerLoadPageSpinner(timeMountedComponent);
     }, {  immediate:true, deep:true });
 
     // computed
     const textBalanceEconomy = computed(() => {
-        if(Math.abs(statisticDetails.economyBalance - threshold.amount) < 0.001) return 'Aucune donnée';
+        if(Math.abs(threshold.amount) < 0.001) return 'Aucun seuil défini';
+        if(Math.abs(statisticDetails.economyBalance ) < 0.001) return 'Aucune donnée';
         if(Math.abs(statisticDetails.economyBalance) < 0.001)  return 'Limite atteinte';
         if((statisticDetails.economyBalance > 0)) return '+'+ formatFloatAsString(statisticDetails.economyBalance) + ' €';
         return formatFloatAsString(statisticDetails.economyBalance) +' €';
@@ -127,6 +135,7 @@
     });
 
     const colorTextBalanceEconomy = computed(() => {
+        if(Math.abs(threshold.amount) < 0.001) return 'text-white';
         const balanceEconomyValue = statisticDetails.economyBalance;
         if(statisticDetails.economyBalance === threshold.amount) return 'text-white';
         if(balanceEconomyValue > 0) return 'text-custom-green';
@@ -150,4 +159,22 @@
         const nameBiggestPurch = statisticDetails?.biggestRecurring?.transaction_category;
         return (nameBiggestPurch) ? nameBiggestPurch : 'Aucune donnée';
     });    
+
+    async function loadPageData(newMonth, newYear) {
+        const timeMountedComponent = Date.now();
+        await updateThresholdByMonth(newMonth, newYear);
+        await updateTotalTrsByMonth(newMonth, newYear);
+        await updateBalanceEcoByMonth(newMonth, newYear);
+        await updateBiggestTrsByMonth(newMonth, newYear, 'purchase');
+        await updateBiggestTrsByMonth(newMonth, newYear, 'recurring');
+        timerLoadPageSpinner(timeMountedComponent);
+    }
+
+    async function updatePageData(newMonth, newYear) {
+        updateThresholdByMonth(newMonth, newYear);
+        updateTotalTrsByMonth(newMonth, newYear);
+        updateBalanceEcoByMonth(newMonth, newYear);
+        updateBiggestTrsByMonth(newMonth, newYear, 'purchase');
+        updateBiggestTrsByMonth(newMonth, newYear, 'recurring');
+    }
 </script>

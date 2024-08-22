@@ -7,17 +7,25 @@
                 <router-link to="/historique-transactions" :class="`pt-3 font-light cursor-pointer pr-3 ${translateY} hover:text-blue-500`">Voir plus ></router-link>
             </div>
 
-            <div class="flex w-full xl:hidden justify-center ">
+            <div class="flex w-full 2xl:hidden justify-center ">
                 <div class="w-1/6 min-w-[250px]">
                     <ToggleButton v-model:typeTransaction="typeTransaction" :text1="'Achats'" :text2="'Prélèvements'" />
                 </div>
             </div>
 
-            <div class="absolute left-0 w-full flex py-2 pl-0 sm:pl-4 md:pl-3 mt-5 bg-gradient-x-blue shadow-main">
-                <p class="text-[15px] sm:text-base ml-[20px] sm:ml-[40px] md:pl-[20px] w-[25%] overflow-hidden text-ellipsis">Catégorie</p>
-                <p class="text-[15px] sm:text-base w-[22%] pl-5 sm:pl-0 sm:justify-stretch flex justify-center">Montant</p>
-                <p class="text-[15px] sm:text-base w-[22%] sm:justify-stretch flex justify-center">Date</p>
-                <p class="text-[15px] sm:text-base grow sm:justify-stretch flex justify-center">Itération</p>
+            <!-- category -->
+            <div class="absolute pl-1 sm:pl-5 left-0 w-full flex py-2 mt-5 bg-gradient-x-blue shadow-main font-light">
+                <div class="pl-1 sm:pl-0 sm:ml-10 w-[40%] sm:w-1/2 flex flex-row">
+                    <!-- category -->
+                    <p class="w-full sm:w-1/2 text-[15px] sm:text-base 
+                    sm:pl-[20px] overflow-hidden text-ellipsis text-nowrap">{{textCategory}}</p>
+                    <!-- Amount -->
+                    <p class="grow text-nowrap text-left overflow-hidden text-ellipsis hidden sm:flex">Montant</p>
+                </div>
+                <!-- Date -->
+                <p class="w-[27%] sm:w-[21%] text-[15px] sm:text-base">Date</p>
+                <!-- Iteration -->
+                <p class="text-[15px] sm:text-base grow">Itération</p>
             </div>
             <div class="mt-[calc(105px-45px)]">
                 <ContainerTransactionInfo 
@@ -36,16 +44,12 @@
 
 <script setup>
     // import
-    import { ref, watch, computed, defineAsyncComponent } from 'vue';
+    import { ref, watch, computed, onMounted, onUnmounted } from 'vue';
     import ContainerTransactionInfo from '@/component/container/ContainerTransactionInfo.vue';
     import { classTransitionHover } from '@/composable/useClassTransitionHover';
     import { storeLastNTransactions, storeDateSelected } from '@/storePinia/useStoreDashboard';
     import { updateLastNTrsByMonth } from '@/storePinia/useUpdateStoreByBackend';
-    import TransitionPopUp from '@/component/transition/TransitionPopUp.vue';
     import ToggleButton from '@/component/button/ToggleButton.vue';
-    
-
-    const OverlaySuccessAction = defineAsyncComponent(() => import('@/component/overlay/OverlaySuccessAction.vue'));
 
     // stores Pinia
     const lastNTransactions = storeLastNTransactions();
@@ -55,12 +59,28 @@
     const currentMenuEditDeleteTrs = ref(-1);
     const translateY = classTransitionHover('translateY');
     const typeTransaction = defineModel();
+    
+    const width = ref(window.innerWidth);
+    const isBreakPointSM = computed(() => width.value < 640);
 
     // life cycle
+    onMounted(() => {
+      window.addEventListener('resize', updateWidth);
+    });
+    onUnmounted(() => {
+      window.removeEventListener('resize', updateWidth);
+    });
+
     watch( () => [dateSelected.month, dateSelected.year], async ([newMonth, newYear]) => {
         updateLastNTrsByMonth(newMonth, newYear, 'purchase');
         updateLastNTrsByMonth(newMonth, newYear, 'recurring');
     }, {  immediate:true, deep:true });
+
+    // text category
+    const textCategory = computed(() => {
+        if(width.value < 430) return 'Catég. / Montant'
+        return (isBreakPointSM.value) ? 'Catégorie / Montant' : 'Catégorie';
+    });
 
     const listTransactions = computed(() => {
         const listTransaction = (!typeTransaction.value) ? lastNTransactions.listPurchases : lastNTransactions.listRecurrings;
@@ -75,4 +95,7 @@
     const textTitle = computed(() => {
         return (!typeTransaction.value) ? 'Derniers achats' : 'Derniers prélèvements';
     });
+
+    const updateWidth = () => width.value = window.innerWidth;
+    
 </script>

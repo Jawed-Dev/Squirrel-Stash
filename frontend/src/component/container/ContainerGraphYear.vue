@@ -8,7 +8,7 @@
                 </div>
             </div>
             <typeGraph 
-            :class="opacityDataEmpty" limitWidth="40" :typeTransaction="typeTransaction" 
+            :class="opacityDataEmpty" :limitWidth="sizeAxeXGraph" :typeTransaction="typeTransaction" 
             :colorsGraph="(!typeTransaction) ? colorPurchases : colorReccurings" 
             :dataTransaction="dataTransaction" />
       
@@ -22,6 +22,8 @@
 <script setup>
     import { computed } from 'vue';
     import ToggleButton from '@/component/button/ToggleButton.vue';
+    import { getScreenSize } from '@/composable/useSizeScreen';
+    
     
     // variables, props ...
     const props = defineProps({
@@ -43,10 +45,16 @@
         color2: '#DA445310',
         borderColor: '#ec250d'
     }
+    const { widthScreenValue } = getScreenSize();
 
     // life cycle / functions
     const opacityDataEmpty = computed(() => {
         return isDataEmpty.value ? 'opacity-50' : '';
+    });
+
+    const sizeAxeXGraph = computed(() => {
+        console.log('widthScreenValue', widthScreenValue.value < 500);
+        return (widthScreenValue.value < 500) ? '20' : '35';
     });
 
     const isDataEmpty = computed(() => {

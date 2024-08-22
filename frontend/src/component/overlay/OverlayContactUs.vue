@@ -2,17 +2,17 @@
     <div class="fixed inset-0 bg-black bg-opacity-80 z-30">
         <div :class="`fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-30 text-white rounded-[3px] 
                  shadow-main trigger-overlay-contact bg-main-gradient
-                max-[600px]:w-full min-[600px]:min-w-[600px] font-main`">
+                w-full md:w-[720px] font-main`">
     
             <MainContainerSlot :bgMainBtn="'bg-gradient-blue'" width='w-full'
             :textBtn1="'Fermer'" :textBtn2="'Envoyer'" titleContainer="Support et Aide" @toggleMenu="toggleMenu">
                 <div class="max-h-[76vh] overflow-y-auto">
                     <div class="flex flex-col justify-center items-center w-full rounded-[3px] my-[40px]">
-                        <div class="flex flex-col w-[90%] sm:w-full items-center px-10">
+                        <div class="flex flex-col w-[90%] sm:w-full items-center px-5 sm:px-10">
                             <div class="flex flex-col gap-7">
 
                                 <div class="w-full flex flex-col items-center justify-center">
-                                    <p class="w-[92%] font-light text-lg">Nous sommes là pour vous aider ! 
+                                    <p class="w-[90%] font-light sm:text-lg">Nous sommes là pour vous aider !
                                     <span class="block"></span>N'hésitez pas à nous contacter en précisant comment nous pouvons vous assister.</p>
                                 </div>
     

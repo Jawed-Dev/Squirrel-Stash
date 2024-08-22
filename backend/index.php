@@ -158,6 +158,11 @@
                         getControllerMain()->getControllerStatistic()->getTopYearCategories();
                         break;
                     }
+                    case 'getBalanceEconomyByMonth' : {
+                        getControllerMain()->getControllerStatistic()->getBalanceEconomyByMonth();
+                        break;
+                    }
+                    
 
                 }
             }

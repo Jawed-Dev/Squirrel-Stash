@@ -16,7 +16,7 @@
                 v-show="isOverlayActive" 
                 :class="`fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-30 text-white rounded-[3px]
                  shadow-main trigger-set-treshold bg-main-gradient
-                max-[600px]:w-full sm:w-1/4 min-[600px]:min-w-[600px]`"
+                max-[550px]:w-full sm:w-1/4 min-[550px]:min-w-[550px]`"
             >
                 <MainContainerSlot 
                     :textBtn1="'Annuler'" :textBtn2="'Choisir'" :titleContainer="'Choisir un nouveau seuil'" @toggleMenu="toggleMenu">
@@ -24,10 +24,11 @@
                     <div class="max-h-[65vh] overflow-y-auto">
                         <div>
                             <div class="flex flex-col items-center mt-20">
-                                <div class="w-1/2">
-                                    <label class="pl-2 text-lg  font-light" 
+                                <div class="w-[60%] min-[550px]:w-1/2 min-w-[270px] ">
+                                    <label class="pl-2 text-lg font-light" 
                                     for="input-amount-treshold">Montant du seuil</label>
                                     <InputBase 
+                                        extraClass="text-[14px] py-[2px]"
                                         iconName="Amount"
                                         v-model="AmountThreshold"
                                         v-model:stateError="errorInput" 
@@ -42,8 +43,8 @@
                             </div>
                             <div class="flex justify-center my-16">
                                 <p class="w-[70%] font-light text-white text-[17px] opacity-90">
-                                    Ce seuil sera appliqué pour le mois en cours 
-                                    <span class="block">et restera en vigueur jusqu'à l'établissement d'un nouveau seuil..</span></p>
+                                    Ce seuil sera appliqué pour le mois en cours. <br>
+                                    <span class="block">Il restera en vigueur jusqu'à l'établissement d'un nouveau seuil.</span></p>
                             </div>
                         </div>
                     </div>

@@ -1,12 +1,10 @@
 <template>
-    <section class="w-full flex flex-col items-center justify-center h-screen font-main 
-         overflow-y-auto min-h-[600px] lg:w-1/2 relative ">
+    <section class="bg-main-gradient w-full flex flex-col items-center justify-center h-screen font-main 
+         overflow-y-auto min-h-[600px] lg:w-1/2 relative shadow-main">
 
         <div class="w-full flex flex-col items-center justify-center bg-opacity-0">
 
             <LogoMain :svg="{width:'200px'}" />
-
-            <h1 class="text-2xl text-white">Bienvenue !</h1>
 
             <form @submit.prevent="handleLogin"
                 class="overflow-x-auto min-w-[350px] md:w-[45%] lg:w-[60%] xl:w-1/3 xl:min-w-[390px] 2xl:min-w-[420px]">
@@ -41,7 +39,7 @@
                 <div class="mt-6 flex flex-col items-center gap-1 justify-between 
                             lg:px-2 lg:items-stretch lg:gap-0 xl:px-5 lg:flex-row">
                             
-                    <div class="flex gap-1">
+                    <div class="flex gap-2">
                         <InputCheckbox v-model="inputs.confirmCheckbox" type="checkbox" />
                         <p class="txt-main-blue text-sm text-white font-light">Se rappeler de moi</p>
                     </div>

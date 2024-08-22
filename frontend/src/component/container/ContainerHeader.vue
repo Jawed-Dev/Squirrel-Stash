@@ -35,7 +35,7 @@
                 class="flex flex-col relative items-center justify-center w-[100px] md:w-full md:items-stretch h-[50px] md:h-fit" 
             >
                 
-                <div :key="index" @click="handleClickHeader(icon)" @mouseenter="blablabla(icon)" @mouseleave ="blablabla2(icon)"
+                <div :key="index" @click="handleClickHeader(icon)" @mouseenter="isMouseHoverIcon(icon)" @mouseleave ="isMouseLeaveIcon(icon)"
                     :class="`flex relative ${classTranslateY} md:py-2 cursor-pointer py-4 
                     ${borderCurrentPage(icon.page)}`">
                     
@@ -60,7 +60,7 @@
         <div v-show="!isMobile" class="w-full flex md:flex-col mt-3">
             <div class="w-full flex flex-col relative" v-for="(icon, index) of dataListPage2" >
                 <div 
-                    :key="index" @click="handleClickHeader(icon)" @mouseenter="blablabla(icon)" @mouseleave ="blablabla2(icon)"
+                    :key="index" @click="handleClickHeader(icon)" @mouseenter="isMouseHoverIcon(icon)" @mouseleave ="isMouseLeaveIcon(icon)"
                     :class="`flex relative ${classTranslateY} py-2 cursor-pointer 
                     ${borderCurrentPage(icon.page)}`"
                 >
@@ -87,13 +87,14 @@
 
 
 <script setup>
-    import {ref, onMounted, onUnmounted, computed, defineAsyncComponent, reactive, shallowRef} from 'vue';
+    import {ref, onMounted, onUnmounted, computed, defineAsyncComponent, reactive} from 'vue';
     import { useRouter } from 'vue-router';
     import { storeAuthTOken } from '@/storePinia/useStoreDashboard';
     import TransitionOpacity from '@/component/transition/TransitionOpacity.vue';  
     import { classTransitionHover } from '@/composable/useClassTransitionHover';
     import { setSvgConfig } from '@/svg/svgConfig';
     import LogoMainPicOnly from '@/component/svgs/LogoMainPicOnly.vue';
+    import { getScreenSize } from '@/composable/useSizeScreen';
     
     // import async icons & dynamic
     const IconDashboard = defineAsyncComponent(() => import('@/component/svgs/IconDashboard.vue'));
@@ -136,9 +137,8 @@
     });
 
     const router = useRouter();
-    const width = ref(window.innerWidth);
+    const { widthScreenValue } = getScreenSize();
     const headerRef = ref(null);     
-    const isDivIconHover = ref(false);
 
     const notAllowedPages = [
         'connexion',
@@ -149,21 +149,19 @@
     ];
 
     // life cycle, functions ...
-    const isMobile = computed(() => width.value < 768);
+    const isMobile = computed(() => widthScreenValue.value < 768);
     const extendHeader = computed(() => {
         return (!isMobile.value) ? classTranslateWidth : '';
     });
+    
     let observer;
-
     onMounted( () => {
         const observer = new ResizeObserver( () => updateTextVisibility());
         if (headerRef.value) observer.observe(headerRef.value);
-        window.addEventListener('resize', handleResize);
     });
 
     onUnmounted(() => {
         if (observer) observer.disconnect();
-        window.removeEventListener('resize', handleResize);
     });
 
     const isValidPage = computed(() => {
@@ -181,7 +179,6 @@
         }
     });
 
-
     const changeColorHoverIcon = computed(() => {
         return (icon) => {
             if(icon.isHover.value && borderCurrentPage.value(icon.page)) return '';
@@ -189,7 +186,6 @@
         }
     });
 
-    const handleResize = ()  => { width.value = window.innerWidth; }
     const updateTextVisibility = () => {
         if(headerRef.value) isTextIconsVisible.value = headerRef.value.clientWidth > 160;
     };
@@ -234,11 +230,11 @@
         }
     }    
 
-    function blablabla(icon) {
+    function isMouseHoverIcon(icon) {
         icon.isHover.value = true;
     }
 
-    function blablabla2(icon) {
+    function isMouseLeaveIcon(icon) {
         icon.isHover.value = false;
     }
 </script>

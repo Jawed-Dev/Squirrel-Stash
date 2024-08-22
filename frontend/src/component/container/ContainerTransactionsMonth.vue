@@ -1,13 +1,13 @@
 <template>
      <section class="w-full mt-5 rounded-[3px] overflow-hidden shadow-main relative">
-        <div class="pl-3 bg-main-gradient text-white rounded-md gradient-border">
-            <h2 class="pb-2 pt-3 text-xl font-extralight pr-8 sm:pb-0">{{(!typeTransaction) ? 'Achats du mois' : 'Prélèvements du mois'}}</h2>
+        <div class="pl-1 sm:pl-3 bg-main-gradient text-white rounded-md gradient-border">
+            <h2 class="pb-2 pt-3 text-lg sm:text-xl font-extralight pr-8 sm:pb-0">{{(!typeTransaction) ? 'Achats du mois' : 'Prélèvements du mois'}}</h2>
             <div class="w-full flex justify-center">
-                <div class="w-1/6 min-w-[250px]">
+                <div class="w-1/6 min-w-[250px] ">
                     <ToggleButton v-model:typeTransaction="typeTransaction" :text1="'Achats'" :text2="'Prélèvements'" />
                 </div>
             </div>
-            <useGraphBar 
+            <typeGraph 
             :class="opacityDataEmpty" :colorsGraph="(!typeTransaction) ? colorPurchases : colorReccurings" 
             :dataTransaction="listTransactions" />
         </div>
@@ -21,8 +21,10 @@
     import { ref, watch, computed } from 'vue';
     import ToggleButton from '@/component/button/ToggleButton.vue';
     import useGraphBar from '@/composable/useGraphBar.vue';
+    import useGraphLine from '@/composable/useGraphLine.vue';
     import { storeTrsMonthByDay, storeDateSelected } from '@/storePinia/useStoreDashboard';
     import { updateListTrsMonthByDay } from '@/storePinia/useUpdateStoreByBackend';
+    import { getScreenSize } from '@/composable/useSizeScreen';
     
     // stores
     const transactionsMonthByDay = storeTrsMonthByDay();
@@ -40,7 +42,8 @@
         color1: '#89216B',
         color2: '#DA445310',
         borderColor: '#ec250d'
-    }
+    };
+    const { widthScreenValue } = getScreenSize();
 
     // life cycle / functions
     const isDataEmpty = computed(() => {
@@ -51,8 +54,8 @@
         return isAllDataEmpty;
     });
 
-    const showGraph = computed(() => {
-        return props.isLoadedData;
+    const typeGraph = computed(() => {
+        return (widthScreenValue.value < 700) ? useGraphLine : useGraphBar; 
     });
     
     const listTransactions = computed(() => {

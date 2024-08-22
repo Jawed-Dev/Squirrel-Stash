@@ -3,7 +3,7 @@
         <div class="fixed bottom-[-2px] sm:bottom-[25px] left-[calc(50%+1px)] transform -translate-x-1/2 -translate-y-1/2
             md:relative md:translate-x-0 sm:translate-y-0 md:bottom-auto md:left-auto
             z-20 md:z-10 w-full lg:min-w-[calc(200px*2+7px)] lg:w-1/4 rounded-[3px] 
-            hover:shadow-custom-lower">
+            hover:shadow-custom-lower md:shadow-main">
 
             <div @click="toggleOverlay" 
                 class="bg-transparent md:bg-main-gradient border-none md:border-solid gradient-border trigger-add-purchase cursor-pointer">
@@ -33,7 +33,7 @@
             <div v-if="isOverlayActive" 
                 :class="`fixed top-1/2 left-1/2  -translate-x-1/2 -translate-y-1/2 z-30 text-white rounded-[3px] overflow-hidden 
                 shadow-main trigger-add-purchase bg-main-gradient
-                max-[600px]:w-full sm:w-1/4 min-[600px]:min-w-[600px]`">
+                max-[550px]:w-full sm:w-1/4 min-[550px]:min-w-[550px]`">
 
                 <MainContainerSlot 
                     :textBtn1="'Annuler'" :textBtn2="'Ajouter'" 
@@ -81,6 +81,7 @@
     import { isValidCategory } from '@/error/useValidFormat';
     import { createToast } from '@/composable/useToastNotification';
     import { formatStringToFloat } from '@/composable/useMath';
+    import { getScreenSize } from '@/composable/useSizeScreen';
 
     const ContainerInputs = defineAsyncComponent(() => import('@/component/container/ContainerInputs.vue'));
     const ContainerSelectCategories = defineAsyncComponent(() => import('@/component/container/ContainerSelectCategories.vue'));
@@ -111,20 +112,11 @@
 
     const styleIconMd = setSvgConfig({width:'32px', fill:'white', });
     const styleIconBase = setSvgConfig({width:'50px', fill:'white', });
-    const width = ref(window.innerWidth);
+    const { widthScreenValue } = getScreenSize();
 
     // life cycle / functions
-    onMounted( () => {
-        window.addEventListener('resize', handleResize);
-        
-    });
-
-    onUnmounted(() => {
-        window.removeEventListener('resize', handleResize);
-    });
-
     const styleIcon = computed(() => (isMobile.value) ? styleIconBase : styleIconMd );
-    const isMobile = computed(() => width.value < 768);
+    const isMobile = computed(() => widthScreenValue.value < 768);
 
     watch( () => [dateSelected.month, dateSelected.year], async ([newMonth, newYear]) => {
         inputDateVal.value = formatDateInput();
@@ -184,10 +176,6 @@
                 break;
             }
         }
-    }
-
-    function handleResize() {
-        width.value = window.innerWidth;
     }
     
     function getCurrentTransactionType() {

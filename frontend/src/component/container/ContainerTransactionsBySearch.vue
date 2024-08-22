@@ -13,24 +13,30 @@
                         />
                     </div>
                 </div>
-                <div class="absolute left-0 w-full flex py-2 pl-0 sm:pl-4 md:pl-3 mt-5 bg-gradient-x-blue shadow-main">
-                    <div class="text-[15px] sm:text-base ml-[20px] sm:ml-[40px] md:pl-[20px] w-[25%] overflow-hidden text-ellipsis">
-                        <p @click="toggleOrder(ORDER_STATE.CATEGORY)" 
-                        :class="`${colorForOrderSelected(ORDER_STATE.CATEGORY)} w-fit cursor-pointer`" 
-                        v-html="'Catégorie' + renderStateOrder(ORDER_STATE.CATEGORY)"></p>
+                <div class="absolute pl-1 sm:pl-5 left-0 w-full flex py-2 mt-5 bg-gradient-x-blue shadow-main font-light">
+                    <div class="pl-1 sm:pl-0 sm:ml-10 w-[40%] sm:w-1/2 flex flex-row">
+                        <div class="flex w-full sm:w-1/2 text-[15px] sm:text-base 
+                            sm:pl-[20px] overflow-hidden text-ellipsis text-nowrap">
+                            <p @click="toggleOrder(ORDER_STATE.CATEGORY)" 
+                            :class="`${colorForOrderSelected(ORDER_STATE.CATEGORY)} w-fit cursor-pointer`" 
+                            v-html="textCategory + renderStateOrder(ORDER_STATE.CATEGORY)"></p>
+                            <p @click="toggleOrder(ORDER_STATE.AMOUNT)" 
+                            :class="`${colorForOrderSelected(ORDER_STATE.AMOUNT)} w-fit cursor-pointer flex sm:hidden`" 
+                            v-html="textAmount + renderStateOrder(ORDER_STATE.AMOUNT)"></p>
+                        </div>
+                        <div class="grow text-nowrap text-left overflow-hidden text-ellipsis hidden sm:flex">
+                            <p 
+                                @click="toggleOrder(ORDER_STATE.AMOUNT)" 
+                                :class="`${colorForOrderSelected(ORDER_STATE.AMOUNT)} w-fit cursor-pointer`"  
+                                v-html="'Montant' + renderStateOrder(ORDER_STATE.AMOUNT) ">
+                            </p>
+                        </div>
                     </div>
-                    <div class="text-[15px] sm:text-base w-[22%] pl-5 sm:pl-0 sm:justify-stretch flex justify-center">
-                        <p 
-                            @click="toggleOrder(ORDER_STATE.AMOUNT)" 
-                            :class="`${colorForOrderSelected(ORDER_STATE.AMOUNT)} w-fit cursor-pointer`"  
-                            v-html="'Montant' + renderStateOrder(ORDER_STATE.AMOUNT) ">
-                        </p>
-                    </div>
-                    <div class="text-[15px] sm:text-base w-[22%] sm:justify-stretch flex justify-center">
+                    <div class="w-[27%] sm:w-[21%] text-[15px] sm:text-base">
                         <p @click="toggleOrder(ORDER_STATE.DATE)" :class="` ${colorForOrderSelected(ORDER_STATE.DATE)} w-fit cursor-pointer`"  
                         v-html="'Date' + renderStateOrder(ORDER_STATE.DATE)"></p>
                     </div>
-                    <div class="text-[15px] sm:text-base grow sm:justify-stretch flex justify-center">
+                    <div class="text-[15px] sm:text-base grow">
                         <p @click="toggleOrder(ORDER_STATE.ITERATION)" :class="`${colorForOrderSelected(ORDER_STATE.ITERATION)} w-fit cursor-pointer`"  
                         v-html="'Itération' + renderStateOrder(ORDER_STATE.ITERATION)"></p>
                     </div>
@@ -53,12 +59,12 @@
 
 <script setup>
     // import
-    import { ref, computed, watch, onMounted } from 'vue';
+    import { ref, computed, watch, onMounted, onUnmounted } from 'vue';
     import ContainerTransactionInfo from '@/component/container/ContainerTransactionInfo.vue';
     import ContainerPagination from '@/component/container/ContainerPagination.vue';
     import { storeDataTrsSearch, storeParamsSearch } from '@/storePinia/useStoreDashboard';
     import { updateDataTrsSearch } from '@/storePinia/useUpdateStoreByBackend';
-    import { isLoadedData ,timerLoadPageSpinner } from '@/composable/useSpinnerLoadData';
+    import useSpinnerLoadData from '@/composable/useSpinnerLoadData';
 
     // Store Pinia
     const paramsSearch = storeParamsSearch();
@@ -76,6 +82,7 @@
     const currentPage = defineModel('currentPage');
     const itemsPerPage = defineModel('itemsPerPage');
     const emitIsLoadedData = defineModel('isLoadedData');
+    const { isLoadedData, timerLoadPageSpinner } = useSpinnerLoadData();
 
     const currentMenuEditDeleteTrs = ref(-1);
     const props = defineProps({
@@ -85,18 +92,25 @@
     const currentOrderSelected = defineModel('currentOrderSelected');
     const orderAsc = defineModel('orderAsc');
 
+    const width = ref(window.innerWidth);
+
     // life cycle, function
     onMounted(async () => {
+        window.addEventListener('resize', updateWidth);
         emitIsLoadedData.value = false;
         const timeMountedComponent = Date.now();
         const params = paramsSearch.params;
         await updateDataTrsSearch(params);        
-        timerLoadPageSpinner(timeMountedComponent, emitIsLoadedData);
+        timerLoadPageSpinner(timeMountedComponent);
+    });
+    
+    onUnmounted(() => {
+      window.removeEventListener('resize', updateWidth);
     });
 
-    // watch(isLoadedData, (newVal) => {
-    //     emitIsLoadedData.value = newVal;
-    // });
+    watch(() => isLoadedData.value, (newValue) => {
+        emitIsLoadedData.value = newValue;
+    }) 
 
     watch( () => currentPage.value, (newPage) => {
         const params = paramsSearch.params;
@@ -112,6 +126,17 @@
             totalItems.value = newData.countTransactions;
         }
     }, { deep: true });
+
+    // text category
+    const textCategory = computed(() => {
+        if(width.value < 480) return 'Catég.'
+        return 'Catégorie';
+    });
+
+    const textAmount = computed(() => {
+        if(width.value < 480) return '/ Mont.'
+        return ' / Montant';
+    });
 
     const filteredTransactions = computed(() => {
         const transactionsData = dataTrsSearch.dataTransactions?.data?.listTransactions;
@@ -158,5 +183,7 @@
         });
         return orderIndicator.value;
     };
+
+    const updateWidth = () => width.value = window.innerWidth;
         
 </script>
