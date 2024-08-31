@@ -1,7 +1,7 @@
 <?php
 
     require_once './controller/ControllerMain.php';
-    require_once './key.php';
+    //require_once './key.php';
     require_once './config.php';
 
     use Firebase\JWT\JWT;
@@ -31,7 +31,7 @@
 
         // JWT Functions 
         public function createTokenJwt($userId, $stayConnect = false) {
-            $key = JWT_SECRET_KEY; 
+            $key = $_ENV['JWT_SECRET_KEY']; 
             $issuedAt = time();
             $timeExpiration = ($stayConnect) ? TIME_EXPIRE_TIME_STAY_CONNECT : TIME_EXPIRE_TIME_REFRESH_JWT;
             $expirationTime = $issuedAt + $timeExpiration;  
@@ -57,7 +57,7 @@
 
         public function decodeJwt($tokenJwt) {
             try {
-                $key = JWT_SECRET_KEY; 
+                $key = $_ENV['JWT_SECRET_KEY']; 
                 $decodedJwt = JWT::decode($tokenJwt, new Key($key, 'HS256'));
                 return $decodedJwt;
             }

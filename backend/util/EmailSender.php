@@ -3,7 +3,7 @@
     namespace App\Mail;
     use PHPMailer\PHPMailer\PHPMailer;
     use PHPMailer\PHPMailer\Exception;
-    require_once './key.php';
+    //require_once './key.php';
 
     interface I_Emailsender {
         function sendEmailResetPass($params);
@@ -29,7 +29,7 @@
             $this->getPhpMailer()->SMTPAuth = true;
             $this->getPhpMailer()->CharSet = 'UTF-8';
             $this->getPhpMailer()->Username = 'jaywed@hotmail.fr';
-            $this->getPhpMailer()->Password = SMTP_KEY; 
+            $this->getPhpMailer()->Password = $_ENV['SMTP_KEY']; 
             $this->getPhpMailer()->SMTPSecure = 'tls';
             $this->getPhpMailer()->Port = 587;
 
