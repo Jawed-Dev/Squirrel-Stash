@@ -9,18 +9,8 @@ export function isValidMail(email) {
 }
 
 export function isValidPassword(password) {
-    //const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-    //const regex = /^(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$/;
-    //  ^ : Démarre l'ancrage au début de la chaîne.
-    // (?=.*[a-z]) : Assure au moins une lettre minuscule.
-    // (?=.*[A-Z]) : Assure au moins une lettre majuscule.
-    // (?=.*\d) : Assure au moins un chiffre.
-    // (?=.*[@$!%*?&]) : Assure au moins un caractère spécial parmi ceux spécifiés dans le groupe (@$!%*?&).
-    // [A-Za-z\d@$!%*?&] : Les caractères autorisés dans le mot de passe.
-    // {8,} : Assure que la longueur du mot de passe est d'au moins 8 caractères.
-    // $ : Fin de l'ancrage de la chaîne.
-    //return regex.test(password);
-    return true;
+    const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*\W)[A-Za-z\d\W]{8,}$/;
+    return regex.test(password);
 }
 
 export function isValidGender(gender) {
@@ -40,17 +30,17 @@ export function isValidLastName(lastName) {
 
 export function isValidInputAmount(amount) {
     const regex = /^\d+(,\d{1,2})?$/;
-    return regex.test(amount) && parseFloat(amount.replace(',', '.')) <= 1000000000;
+    return regex.test(amount) && parseFloat(amount.replace(',', '.')) < 1000000;
 }
 
 export function isValidInputInt(amount) {
     const regex = /^\d+$/;
-    return regex.test(amount) && amount <= 1000000000;
+    return regex.test(amount) && amount < 1000000;
 }
 
 export function formatInputAmount(amount) {
     const regex =  /^\d+(,\d{0,2})?$/;
-    return regex.test(amount) && parseFloat(amount.replace(',', '.')) <= 1000000000;
+    return regex.test(amount) && parseFloat(amount.replace(',', '.')) < 1000000;
 }
 
 export function isValidInputNote(note) {

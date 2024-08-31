@@ -22,27 +22,27 @@ export const typeError = {
     email: { 
         code: 0, 
         message: "Adresse email invalide.", 
-        adviceFormat: "Format d'email invalide.",
+        adviceFormat: "Format d'email invalide",
     },   
     password: { 
         code: 1, 
         message: "Mot de passe invalide.", 
-        adviceFormat: "Format de mot de passe: \n8 caractères, 1 majuscule et 1 chiffre.",
+        adviceFormat: "Format de mot de passe : \n8 caractères minimum,\n 1 lettre minuscule, 1 lettre majuscule,\n 1 chiffre et 1 caractère spécial",
     },  
     passwordConfirm: { 
         code: 2, 
         message: "Les mots de passes ne sont pas identiques.", 
-        adviceFormat: "LFormat de mot de passe: \n8 caractères, 1 majuscule et 1 chiffre.",
+        adviceFormat: "Les mots de passes ne sont pas identiques",
     }, 
     lastName: { 
         code: 3, 
         message: "Nom invalide.", 
-        adviceFormat: "Format du nom invalide.",
+        adviceFormat: "Format du nom invalide",
     },  
     firstName: { 
         code: 4, 
         message: "Prénom invalide.", 
-        adviceFormat: "Format du prénom invalide.",
+        adviceFormat: "Format du prénom invalide",
     },  
     amount: { 
         code: 5, 
@@ -52,42 +52,42 @@ export const typeError = {
     trsDate: { 
         code: 6, 
         message: "Date invalide.", 
-        adviceFormat: "Format de date invalide."
+        adviceFormat: "Format de date invalide"
     },
     note: { 
         code: 7, 
         message: "La note est trop longue.", 
-        adviceFormat: "Une note prend entre 1 et 30 caractères."
+        adviceFormat: "Une note prend entre 1 et 30 caractères"
     },   
     trsCategory: {
         code: 8,
         message: "Catégorie invalide.", 
-        adviceFormat: "Cette catégorie n'existe pas."
+        adviceFormat: "Cette catégorie n'existe pas"
     },
     trsType: {
         code: 9,
         message: "Type de transaction invalide.", 
-        adviceFormat: "Ce type de transaction n'existe pas."
+        adviceFormat: "Ce type de transaction n'existe pas"
     },
     gender: {
         code: 10,
         message: "Genre invalide.", 
-        adviceFormat: "Le genre est soit :\n Homme / Femme / Autre."
+        adviceFormat: "Le genre est soit :\n Homme / Femme / Autre"
     },
     message: {
         code: 11,
         message: "Votre message est trop long.", 
-        adviceFormat: "Une note prend entre 1 et 1000 caractères."
+        adviceFormat: "Une note prend entre 1 et 1000 caractères"
     },
     date: {
         code: 12,
         message: "Date invalide.", 
-        adviceFormat: "Format de date invalide."
+        adviceFormat: "Format de date invalide"
     },
     onlyInt: {
         code: 12,
         message: "Montant invalide.", 
-        adviceFormat: "Le montant doit être un nombre sans virgule."
+        adviceFormat: "Le montant doit être un nombre sans virgule"
     }
 };
 

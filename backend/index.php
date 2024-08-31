@@ -37,6 +37,10 @@
                         getControllerMain()->getControllerUser()->authorizePage();
                         break;
                     }
+                    case 'updateEmail': {
+                        getControllerMain()->getControllerUser()->authorizePage();
+                        break;
+                    }
                     case 'pageForgotPass': {
                         getControllerMain()->getControllerUser()->authorizePage();
                         break;
@@ -158,12 +162,6 @@
                         getControllerMain()->getControllerStatistic()->getTopYearCategories();
                         break;
                     }
-                    case 'getBalanceEconomyByMonth' : {
-                        getControllerMain()->getControllerStatistic()->getBalanceEconomyByMonth();
-                        break;
-                    }
-                    
-
                 }
             }
         }
@@ -181,7 +179,7 @@
                         break;
                     }
                     case 'addTransaction' : {
-                        getControllerMain()->getControllerStatistic()->fetchInsertTransaction();
+                        getControllerMain()->getControllerStatistic()->addTransaction();
                         break;
                     }
                     case 'deleteTransaction' : {

@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div v-if="props.infoTransaction.transaction_id" :class="`py-8 flex flex-col border-gray-700 text-white ${borderBottom} `">
+        <div v-if="props.infoTransaction.transaction_id" :class="`py-8 flex flex-col border-gray-700 text-white ${borderBottom}`">
 
             <div :class="`pl-1 sm:pl-5 font-light flex items-center`">
                 
@@ -50,13 +50,11 @@
                     </p>
                 </div>
             </TransitionOpacity>
-            
-            
         </div>
         
         <div 
             v-if="(!props.infoTransaction.transaction_id)" 
-            :class="`min-h-[124px] sm:pl-4 md:pl-3 flex items-center py-6 ${borderBottom} border-gray-700 text-white relative`">
+            :class="`min-h-[124px] pl-1 sm:pl-5 py-8 flex flex-col border-gray-700 text-white ${borderBottom}`">
             <IconLoader nameIcon="Invisible" :svg="iconConfig" 
             :class="`${iconConfig.color} rounded-full p-[10px]  shadow-main`"/>
             <p class="absolute w-full text-[15px] text-center font-light">Aucune donnée</p>

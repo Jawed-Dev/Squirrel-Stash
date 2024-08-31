@@ -125,7 +125,7 @@
         const allErrorsInputs = getStatesErrorInputs();
         const allMandatoryValInputs = getValuesMandantInputs();
         if(isAnyMandatoryInputEmpty(allMandatoryValInputs)) {
-            activeErrorForMandatInputsEmpty();
+            activeErrorMandatInput();
             createToast(TEXT_SUBMIT_ERROR.MANDATORY_EMPTY_INPUTS, 'error');
             return;
         }
@@ -146,7 +146,7 @@
         await updateStoreUserEmail();
         updateEditEmail();
         clearInputsEmail();
-        createToast('Votre email a été éditée.', 'success');
+        createToast('Un email a été envoyé sur votre adresse actuelle,\n pour être modifiée.', 'success');
     }
 
     function getStatesErrorInputs() {
@@ -159,7 +159,7 @@
             email: inputsMail.newMail
         }
     }
-    function activeErrorForMandatInputsEmpty() {
+    function activeErrorMandatInput() {
         if (!inputsMail.newMail) mandatoryInput.value = true;
     }
 

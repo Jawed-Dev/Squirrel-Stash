@@ -1,13 +1,15 @@
 <template>
-    <section class="bg-main-gradient w-full flex flex-col items-center justify-center h-screen font-main 
-         overflow-y-auto min-h-[600px] lg:w-1/2 relative shadow-main">
+    <section class="bg-main-gradient w-full flex flex-col items-center 
+        justify-center h-screen font-main overflow-y-auto 
+        min-h-[600px] lg:w-1/2 relative shadow-main">
 
         <div class="w-full flex flex-col items-center justify-center bg-opacity-0">
 
             <LogoMain :svg="{width:'200px'}" />
 
             <form @submit.prevent="handleLogin"
-                class="overflow-x-auto min-w-[350px] md:w-[45%] lg:w-[60%] xl:w-1/3 xl:min-w-[390px] 2xl:min-w-[420px]">
+                class="overflow-x-auto min-w-[350px] md:w-[45%] lg:w-[60%] xl:w-1/3 
+                xl:min-w-[390px] 2xl:min-w-[420px]">
                 <div>
                     <label class="text-white font-light" for="login-mail">Adresse email</label>
                     <InputBase 
@@ -75,8 +77,6 @@
                 />
             </TransitionOpacity>       
         </div>
-        
-        <!-- <div class="absolute h-screen w-full bg-[url('/blob-scene-haikei_3.svg')] bg-cover bg-center bg-no-repeat opacity-[10%]"></div> -->
     </section>
 </template>
 
@@ -87,12 +87,12 @@
     import InputBase from '@/component/input/InputBase.vue';
     import InputCheckbox from '@/component/input/InputCheckbox.vue';
     import { getTokenIfSuccessLogin } from '@/composable/useBackendGetData';
-    import { isAnyMandatoryInputEmpty, isAnyInputError, TYPE_SUBMIT_ERROR, TEXT_SUBMIT_ERROR } from '@/error/useHandleError';
+    import { isAnyMandatoryInputEmpty, isAnyInputError, TEXT_SUBMIT_ERROR } from '@/error/useHandleError';
     import LogoMain from '@/component/svgs/LogoMain.vue';
     import TransitionOpacity from '@/component/transition/TransitionOpacity.vue';
     const OverlayContactUs = defineAsyncComponent(() => import('@/component/overlay/OverlayContactUs.vue'));
     import { createToast } from '@/composable/useToastNotification';
-            
+                
     // props, variables
     const router = useRouter();
     const isOverlayPrivacyActive = ref(false);
@@ -113,13 +113,14 @@
         password: false
     }); 
 
+
     // life cycle, functions
     async function handleLogin() {
 
         const stateErrorsInputs = getStatesErrorInputs();
         const stateMandatoryInputs = getValuesMandantInputs();
         if(isAnyMandatoryInputEmpty(stateMandatoryInputs)) {
-            activeErrorForMandatInputsEmpty();
+            activeErrorMandatInputs();
             createToast(TEXT_SUBMIT_ERROR.MANDATORY_EMPTY_INPUTS, 'error');
             return;
         }
@@ -152,7 +153,7 @@
         }
     }
 
-    function activeErrorForMandatInputsEmpty() {
+    function activeErrorMandatInputs() {
         if (!inputs.email) mandatoryInputs.email = true;
         if (!inputs.password) mandatoryInputs.password = true;
     }

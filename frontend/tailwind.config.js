@@ -20,6 +20,7 @@ export default {
         'custom-gray-dark' : '#38393b',
         'custom-gray-2' : '#484B55',
         'color-shadow' : '#27293d',
+        'btn-cancel' : '#1e3c72',
 
         'custom-blue' : '#1d8cf8',
         'custom-green' : '#42b883',
@@ -39,15 +40,8 @@ export default {
         'custom-margin-main' : '20px'
       },
       backgroundImage: {
-       'main-gradient': "linear-gradient(to top left, #1b1e33 40%, #536976 250%)",
-    
-        // 'main-gradient': "linear-gradient(to top left, #1b1e33 40%, #536976 250%)",,
-        'main-second': "linear-gradient(to top left, #1b1e33 40%, #1b1e3390 140%)",
-        'information-gradient': "linear-gradient(90deg, #0b274d, #0e2242, #0f1e38, #0f192e, #0f1524, #0c0f1b, #060810, #000000);",
+        'main-gradient': "linear-gradient(to top left, #1b1e33 40%, #536976 250%)",
         'header-gradient': "linear-gradient(0deg,#3358f4,#1d8cf8)",
-
-        'gradient': "linear-gradient(to top left, #101010 70%, #ffffff 450%)",
-        'custom-gradient': "linear-gradient(to top left, #101010 70%, #ffffff 450%)",
 
         'gradient-blue' : "linear-gradient(0deg,#3358f4,#1d8cf8)",
         'gradient-blue-hover' : "linear-gradient(0deg,#3358f4B0,#1d8cf890)",

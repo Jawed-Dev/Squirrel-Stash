@@ -75,18 +75,16 @@
     import ContainerSpinner from '@/component/container/ContainerSpinner.vue';
     import useSpinnerLoadData from '@/composable/useSpinnerLoadData';
     import { formatFloatAsString } from '@/composable/useMath';
-import TransitionOpacity from '@/component/transition/TransitionOpacity.vue';
+    import TransitionOpacity from '@/component/transition/TransitionOpacity.vue';
     
-    
-    // stores Pinia
+    // store Pinia
     const threshold = storeThreshold();
-    // props, variables, ...
-    //const isLoadedData = ref(false);
     const dateSelected = storeDateSelected();
     const statisticDetails = storeStatisticDetails();
+    
+    // props, variables, ...
     const firstNameUser = ref('');
     const { isLoadedData, timerLoadPageSpinner } = useSpinnerLoadData();
-    
     const topTransactions = reactive({
         typeTrsPurchases: false,
         typeTrsRecurrings: true
@@ -110,9 +108,9 @@ import TransitionOpacity from '@/component/transition/TransitionOpacity.vue';
         await Promise.all([
             updateThresholdByMonth(newMonth, newYear),
             updateTotalTrsByMonth(newMonth, newYear),
-            updateBalanceEcoByMonth(newMonth, newYear),
             updateBiggestTrsByMonth(newMonth, newYear, 'purchase'),
-            updateBiggestTrsByMonth(newMonth, newYear, 'recurring')
+            updateBiggestTrsByMonth(newMonth, newYear, 'recurring'),
+            updateBalanceEcoByMonth(newMonth, newYear),
         ]);
         timerLoadPageSpinner(timeMountedComponent);
     }, {  immediate:true, deep:true });
@@ -120,7 +118,7 @@ import TransitionOpacity from '@/component/transition/TransitionOpacity.vue';
     // computed
     const textBalanceEconomy = computed(() => {
         if(Math.abs(threshold.amount) < 0.001) return 'Aucun seuil défini';
-        if(Math.abs(statisticDetails.economyBalance ) < 0.001) return 'Aucune donnée';
+        if(statisticDetails.economyBalance === null) return 'Aucune donnée';
         if(Math.abs(statisticDetails.economyBalance) < 0.001)  return 'Limite atteinte';
         if((statisticDetails.economyBalance > 0)) return '+'+ formatFloatAsString(statisticDetails.economyBalance) + ' €';
         return formatFloatAsString(statisticDetails.economyBalance) +' €';
@@ -135,11 +133,11 @@ import TransitionOpacity from '@/component/transition/TransitionOpacity.vue';
     });
 
     const colorTextBalanceEconomy = computed(() => {
-        if(Math.abs(threshold.amount) < 0.001) return 'text-white';
         const balanceEconomyValue = statisticDetails.economyBalance;
         if(statisticDetails.economyBalance === threshold.amount) return 'text-white';
+        if(Math.abs(threshold.amount) < 0.001) return 'text-white';
         if(balanceEconomyValue > 0) return 'text-custom-green';
-        else if(balanceEconomyValue < 0) return 'text-custom-red';
+        if(balanceEconomyValue < 0) return 'text-custom-red';
         return 'text-white';
     });
 
@@ -160,21 +158,4 @@ import TransitionOpacity from '@/component/transition/TransitionOpacity.vue';
         return (nameBiggestPurch) ? nameBiggestPurch : 'Aucune donnée';
     });    
 
-    async function loadPageData(newMonth, newYear) {
-        const timeMountedComponent = Date.now();
-        await updateThresholdByMonth(newMonth, newYear);
-        await updateTotalTrsByMonth(newMonth, newYear);
-        await updateBalanceEcoByMonth(newMonth, newYear);
-        await updateBiggestTrsByMonth(newMonth, newYear, 'purchase');
-        await updateBiggestTrsByMonth(newMonth, newYear, 'recurring');
-        timerLoadPageSpinner(timeMountedComponent);
-    }
-
-    async function updatePageData(newMonth, newYear) {
-        updateThresholdByMonth(newMonth, newYear);
-        updateTotalTrsByMonth(newMonth, newYear);
-        updateBalanceEcoByMonth(newMonth, newYear);
-        updateBiggestTrsByMonth(newMonth, newYear, 'purchase');
-        updateBiggestTrsByMonth(newMonth, newYear, 'recurring');
-    }
 </script>

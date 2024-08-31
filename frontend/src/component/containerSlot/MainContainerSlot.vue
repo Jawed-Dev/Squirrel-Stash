@@ -17,7 +17,7 @@
                 <div class="w-1/2">
                     <button 
                         @click="$emit('toggleMenu','cancel')" 
-                        class="w-full bg-[#1e3c72] py-[8px] rounded-bl-[3px] font-light hover:bg-opacity-50">{{textBtn1}}
+                        class="w-full bg-btn-cancel py-[8px] rounded-bl-[3px] font-light hover:bg-opacity-50">{{textBtn1}}
                     </button>
                 </div>
                 <div class="w-1/2">

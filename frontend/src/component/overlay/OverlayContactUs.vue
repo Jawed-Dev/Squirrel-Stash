@@ -142,7 +142,7 @@
                 const allErrorsInputs = getStatesErrorInputs();
                 const allMandatoryValInputs = getValuesMandantInputs();
                 if(isAnyMandatoryInputEmpty(allMandatoryValInputs)) {
-                    activeErrorForMandatInputsEmpty();
+                    activeErrorMandatInputs();
                     createToast(TEXT_SUBMIT_ERROR.MANDATORY_EMPTY_INPUTS, 'error');
                     return;
                 }
@@ -173,6 +173,7 @@
 
     function closeOverlay() {
         isOverlayActive.value = false;
+        disableErrorMandatInputs();
     }
 
     function resetInputs() {
@@ -182,11 +183,18 @@
         input.contentEmail = '';
     }
 
-    function activeErrorForMandatInputsEmpty() {
+    function activeErrorMandatInputs() {
         if (!input.firstName) mandatoryInputs.firstName = true;
         if (!input.lastName) mandatoryInputs.lastName = true;
         if (!input.email) mandatoryInputs.email = true;
         if (!input.email) mandatoryInputs.contentEmail = true;
+    }
+
+    function disableErrorMandatInputs() {
+        mandatoryInputs.firstName = false;
+        mandatoryInputs.lastName = false;
+        mandatoryInputs.email = false;
+        mandatoryInputs.contentEmail = false;
     }
 
     function getStatesErrorInputs() {

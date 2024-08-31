@@ -3,7 +3,7 @@ import {
         getListTrsMonthByDay, getLastNTransactions, getDataTrsBySearch,
         getDataUserProfil, getUserEmail, getYearListTrsByMonth, getTotalTrsByYear,
         getBiggestTrsByYear, getBiggestMonthByYear, getYearListTrsByCategories,
-        getTopYearCategories, getBalanceEconomyByMonth
+        getTopYearCategories
 } from '@/composable/useBackendGetData';
 
 import { 
@@ -78,12 +78,17 @@ export async function updateTotalTrsByMonth(month, year) {
 }
 
 export async function updateBalanceEcoByMonth(month, year) {
-    const response = await getBalanceEconomyByMonth(month, year);
-    const economyBalance = response?.data?.balanceAmount || 0;
-    const economyBalanceFormated = new Decimal(economyBalance);
+    const responseTotalTransaction = await getTotalTrsByMonth(month, year);
+    const totalTransactions = responseTotalTransaction?.data?.total_transactions || 0;
+    const totalTransactionsFormated = new Decimal(totalTransactions);
+
+    const responseThreshold = await getThresholdByMonth(month, year);
+    const thresholdAmount = responseThreshold?.data?.threshold_amount || 0;
+    const formattedThresholdAmount = parseFloat(thresholdAmount).toFixed(2);
 
     const statisticDetails = storeStatisticDetails();
-    statisticDetails.economyBalance = parseFloat(economyBalanceFormated).toFixed(2);
+    if(Math.abs(totalTransactionsFormated) < 0.001) return statisticDetails.economyBalance = null;
+    statisticDetails.economyBalance = parseFloat(formattedThresholdAmount - totalTransactionsFormated).toFixed(2);
 }
 
 export async function updateBiggestTrsByMonth(month, year, transactionType) {
@@ -99,13 +104,14 @@ export async function updateBiggestTrsByMonth(month, year, transactionType) {
 }
 
 export async function updateAllDataTransations(month, year, transactionType) {
+    
     updateListTrsMonthByDay(month, year, transactionType);
-    updateBalanceEcoByMonth(month, year);
     updateTotalTrsByMonth(month, year);
     updateLastNTrsByMonth(month, year, 'purchase');
     updateLastNTrsByMonth(month, year, 'recurring');
     updateBiggestTrsByMonth(month, year, 'purchase');
     updateBiggestTrsByMonth(month, year, 'recurring');
+    updateBalanceEcoByMonth(month, year);
 
     const currentUrl = window.location.href; 
     const url = new URL(currentUrl);

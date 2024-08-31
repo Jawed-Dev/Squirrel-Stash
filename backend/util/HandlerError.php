@@ -6,7 +6,7 @@
         function getControllerMain();
         // Verify
         function verifyIfMainDataExists($data);
-        function verifyInsertTransaction($data);
+        function verifyAddTransaction($data);
         function verifyDeleteTransaction($data);
         function verifyUpdateTransaction($data);
         function verifySaveThreshold($data);
@@ -69,18 +69,19 @@
             return $localStateErrors;
         }
 
-        // transactions 
-        // actions
 
-        public function verifyInsertTransaction($data) {
+        // actions
+        public function verifyAddTransaction($data) {
             $this->clearErrors();
             $bodyData = $data['bodyData'];
+            $transactionCategory = $bodyData['transactionCategory'] ?? null;
+            $transactionType = $bodyData['transactionType'] ?? null;
+
             $this->validateFormat('isValidUserId', $data);
             $this->validateFormat('isValidTransactionAmount', $bodyData['transactionAmount'] ?? null);
             $this->validateFormat('isValidTransactionDate', $bodyData['transactionDate'] ?? null);
             $this->validateFormat('isValidTransactionNote', $bodyData['transactionNote'] ?? null);
-            $this->validateFormat('isValidTransactionCategory', 
-            [ $bodyData['transactionCategory'] ?? null, $bodyData['transactionType'] ] ?? null);
+            $this->validateFormat('isValidTransactionCategory',[ $transactionCategory, $transactionType ]);
             $this->validateFormat('isValidTransactionType', $bodyData['transactionType'] ?? null);     
             return $this->getStateErrors();
         }
@@ -214,7 +215,6 @@
         }
 
         public function verifySendEmailToSupport($data) {
-            var_dump($data);
             $this->clearErrors();
             $bodyData = $data['bodyData'];
             $this->validateFormat('isValidFirstName', $bodyData['firstName'] ?? null);
@@ -257,7 +257,7 @@
             if(!empty($bodyData['searchAmountMax'])) $this->validateFormat('isValidTransactionAmount', $bodyData['searchAmountMax']);
             if(!empty($bodyData['searchDateRangeDateMin'])) $this->validateFormat('isValidTransactionDate', $bodyData['searchDateRangeDateMin']);
             if(!empty($bodyData['searchDateRangeDateMax'])) $this->validateFormat('isValidTransactionDate', $bodyData['searchDateRangeDateMax']);
-            if(!empty($bodyData['searchCategory'])) $this->validateFormat('isValidTransactionCategoryEx', $bodyData['searchCategory']);
+            if(!empty($bodyData['searchCategory'])) $this->validateFormat('isValidTransactionCategorySearch', $bodyData['searchCategory']);
             $this->validateFormat('isValidBool', $bodyData['orderAsc'] ?? null);
             $this->validateFormat('isInt', $bodyData['currentOrderSelected'] ?? null);
             $this->validateFormat('isInt', $bodyData['currentPage'] ?? 1);
@@ -313,6 +313,16 @@
             $this->validateFormat('isValidUserId', $data);
             $this->validateFormat('isValidYear', $bodyData['selectedYear'] ?? null);
             $this->validateFormat('isValidTransactionType', $bodyData['transactionType'] ?? null);   
+            return $this->getStateErrors();
+        }
+
+        public function verifyGetBalanceEconomyByMonth($data) {
+            $this->clearErrors();
+            $bodyData = $data['bodyData'];
+            $this->validateFormat('isValidUserId', $data);
+            $this->validateFormat('isValidMonth', $bodyData['selectedMonth'] ?? null);
+            $this->validateFormat('isValidYear', $bodyData['selectedYear'] ?? null);
+            $this->validateFormat('isValidThresholdAmount', $bodyData['thresholdAmount'] ?? null); 
             return $this->getStateErrors();
         }
 

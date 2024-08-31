@@ -197,12 +197,12 @@
             }
             // Verify the presence of essential data
             $isAnyMainDataEmpty = $this->getHandlerError()->verifyIfMainDataExists($dataRequire);
-            if ($isAnyMainDataEmpty) return throw new Exception('Erreurs dans la requête 1.');
+            if ($isAnyMainDataEmpty) return throw new Exception('Requête invalide.');
 
             // Verify the expected format of data 
             if($functionValidData) {   
                 $isAnyError = $this->getHandlerError()->$functionValidData($dataRequest);
-                if ($isAnyError) return throw new Exception('Erreurs dans la requête 2.');
+                if ($isAnyError) return throw new Exception('Requête invalide.');
             }
             return $dataRequest;
         }

@@ -129,12 +129,12 @@
 
     // text category
     const textCategory = computed(() => {
-        if(width.value < 480) return 'Catég.'
+        if(width.value < 640) return 'Catég.'
         return 'Catégorie';
     });
 
     const textAmount = computed(() => {
-        if(width.value < 480) return '/ Mont.'
+        if(width.value < 640) return '/ Mont.'
         return ' / Montant';
     });
 

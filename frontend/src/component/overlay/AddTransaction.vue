@@ -1,19 +1,23 @@
 <template>
     <div>
-        <div class="fixed bottom-[-2px] sm:bottom-[25px] left-[calc(50%+1px)] transform -translate-x-1/2 -translate-y-1/2
-            md:relative md:translate-x-0 sm:translate-y-0 md:bottom-auto md:left-auto
+        <!-- responsive button add transaction & trigger click out side  -->
+        <div class="fixed left-[calc(50%+2px)] bottom-[-2px] md:relative sm:bottom-[25px] md:bottom-auto md:left-auto 
+            transform -translate-x-1/2 -translate-y-1/2 md:translate-x-0 sm:translate-y-0 
             z-20 md:z-10 w-full lg:min-w-[calc(200px*2+7px)] lg:w-1/4 rounded-[3px] 
-            hover:shadow-custom-lower md:shadow-main">
+            md:hover:shadow-custom-lower md:shadow-main">
 
+            <!-- border and background -->
             <div @click="toggleOverlay" 
-                class="bg-transparent md:bg-main-gradient border-none md:border-solid gradient-border trigger-add-purchase cursor-pointer">
+                class="bg-transparent md:bg-main-gradient border-none md:border-solid gradient-border 
+                trigger-add-purchase cursor-pointer">
+                <!-- width responsive -->
                 <div class="flex justify-center md:justify-between items-center md:px-2 min-h-[42px] min-w-[214px] ">
-
-                    <p v-show="!isMobile" 
-                    class="w-full text-white flex justify-center font-light" 
-                    >Ajouter une transaction</p>
-
-                    <div class="grow flex justify-center py-[2px]">
+                    <p v-show="!isBelow768px" 
+                        class="w-full text-white flex justify-center font-light" 
+                        >Ajouter une transaction
+                    </p>
+                    <div class="flex justify-center py-[2px]">
+                        <!-- Icon and border rounded  -->
                         <IconAddPurchase 
                             @click="toggleOverlayMobile" 
                             class="p-[1px] bg-gradient-blue rounded-full md:rounded-md right-[100px] top-[50vh]
@@ -65,7 +69,7 @@
 
 <script setup>
     // import
-    import { ref, watch, computed, reactive, defineAsyncComponent, onMounted, onUnmounted } from 'vue';
+    import { ref, watch, computed, reactive, defineAsyncComponent } from 'vue';
     import { setSvgConfig } from '@/svg/svgConfig';
     import IconAddPurchase from '@/component/svgs/IconAddPurchase.vue';
     import TransitionOpacity from '@/component/transition/TransitionOpacity.vue';
@@ -77,7 +81,7 @@
     import { updateAllDataTransations} from '@/storePinia/useUpdateStoreByBackend';
     import { formatDateForCurrentDay, formatDateForFirstDay, isCurrentMonth } from '@/composable/useGetDate';
     import { listPurchases, listRecurings } from '@/svg/listTransactionSvgs';
-    import { isAnyMandatoryInputEmpty, isAnyInputError, TYPE_SUBMIT_ERROR, TEXT_SUBMIT_ERROR } from '@/error/useHandleError';
+    import { isAnyMandatoryInputEmpty, isAnyInputError, TEXT_SUBMIT_ERROR } from '@/error/useHandleError';
     import { isValidCategory } from '@/error/useValidFormat';
     import { createToast } from '@/composable/useToastNotification';
     import { formatStringToFloat } from '@/composable/useMath';
@@ -115,8 +119,8 @@
     const { widthScreenValue } = getScreenSize();
 
     // life cycle / functions
-    const styleIcon = computed(() => (isMobile.value) ? styleIconBase : styleIconMd );
-    const isMobile = computed(() => widthScreenValue.value < 768);
+    const styleIcon = computed(() => (isBelow768px.value) ? styleIconBase : styleIconMd );
+    const isBelow768px = computed(() => widthScreenValue.value < 768);
 
     watch( () => [dateSelected.month, dateSelected.year], async ([newMonth, newYear]) => {
         inputDateVal.value = formatDateInput();
@@ -135,18 +139,19 @@
     });
 
     function toggleOverlay() {
-        if(isMobile.value) return;
+        if(isBelow768px.value) return;
         typeTransaction.value = false;
         resetInputs();
         isOverlayActive.value = !isOverlayActive.value;
     };
 
     function toggleOverlayMobile() {
-        if(!isMobile.value) return;
+        if(!isBelow768px.value) return;
         typeTransaction.value = false;
         resetInputs();
         isOverlayActive.value = !isOverlayActive.value;
     };
+
 
     async function toggleMenu(request) {
         switch(request) {
@@ -157,7 +162,7 @@
                 const nameCategory = getCurrentNameCategory();
 
                 if(isAnyMandatoryInputEmpty(allMandatoryValInputs)) {
-                    activeErrorForMandatInputsEmpty();
+                    activeErrorMandatInput();
                     createToast(TEXT_SUBMIT_ERROR.MANDATORY_EMPTY_INPUTS, 'error');
                     return;
                 }
@@ -201,6 +206,7 @@
         currentCategory.value = 0;
         currentCategory.value = 0;
         inputDateVal.value = formatDateInput();
+        disableErrorMandatInputs();
     }
 
     function closeMenu() {
@@ -240,11 +246,14 @@
             category: currentCategory.value,
         }
     }
-    function activeErrorForMandatInputsEmpty() {
+    function activeErrorMandatInput() {
         if (!inputPriceVal.value) mandatoryInputs.inputPriceVal = true;
         if (!inputDateVal.value) mandatoryInputs.inputDateVal = true;
     }
-    function isDateEmpty() {
-        return inputDateVal.value === '' || inputDateVal.valueAsDate === null;
+
+    function disableErrorMandatInputs() {
+        mandatoryInputs.inputPriceVal = false;
+        mandatoryInputs.inputDateVal = false;
     }
+
 </script>

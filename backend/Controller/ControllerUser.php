@@ -86,7 +86,7 @@
             if(!$decodedJwt) return false;
             $isValidDecodedJwt = $this->getControllerMain()->getHandlerJwt()->isValidTokenJwt($decodedJwt);
             if(!$isValidDecodedJwt) return false;
-
+            
             $userId = $this->getUserIdFromJwt($decodedJwt);
             $db = $this->getControllerMain()->getDatabase();
             $isUserExistById = $this->getModelUser()->isUserExistFromId($db, $userId);
@@ -199,7 +199,7 @@
             // email config
             $requestUrl = $this->getUrlToUpdateMail($uniqueToken);
             $paramsEmail = [
-                'email' => $receiverEmail,
+                'email' => $currentEmail,
                 'urlToResetPass' => $requestUrl,
             ];
             //var_dump($params);
@@ -231,6 +231,7 @@
             $this->getViewUser()->renderJson(['isSuccessRequest' => $isSuccessReq]);
         }
 
+        // update password when the password is forgotten
         public function updatePasswordByToken() {
             $paramsValidation = [
                 'requireAuth' => false,
@@ -247,6 +248,7 @@
             $this->getViewUser()->renderJson(['isSuccessRequest' => $isSuccessReq]);
         }
 
+        // update password when user is connected
         public function updatePasswordByUserId() {
             $paramsValidation = ['functionValidData' => 'verifyUpdatePasswordByUserId']; 
             $dataRequest = $this->getControllerMain()->validateDataForController($paramsValidation);

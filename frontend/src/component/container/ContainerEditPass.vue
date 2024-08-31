@@ -150,7 +150,7 @@
         const allErrorsInputs = getStatesErrorInputs();
         const allMandatoryValInputs = getValuesMandantInputs();
         if(isAnyMandatoryInputEmpty(allMandatoryValInputs)) {
-            activeErrorForMandatInputsEmpty();
+            activeErrorMandatInputs();
             createToast(TEXT_SUBMIT_ERROR.MANDATORY_EMPTY_INPUTS, 'error');
             return;
         }
@@ -193,7 +193,7 @@
         }
     }
 
-    function activeErrorForMandatInputsEmpty() {
+    function activeErrorMandatInputs() {
         if (!inputsPass.oldPass) mandatoryInputs.oldPass = true;
         if (!inputsPass.newPass) mandatoryInputs.newPass = true;
         if (!inputsPass.confirmNewPass) mandatoryInputs.confirmNewPass = true;

@@ -17,6 +17,7 @@ import { createRouter, createWebHistory } from 'vue-router';
 import { getLStorageAuthToken } from "@/composable/useLocalStorage";
 import { isValidResetPassToken  } from "@/composable/useBackendGetData";
 import { updateEmail } from '@/composable/useBackendActionData';
+import { createToast } from '@/composable/useToastNotification';
 
 const routes = [
   { path: '/', component: PageTemporary, meta: { page:'Squirrel Stash', request: 'pageIndex'}},
@@ -78,7 +79,9 @@ router.beforeEach(async (to, from, next) => {
       case 'updateEmail' : {
         const token = to.query.token;
         const response = await updateEmail(token);
-        if(response?.isSuccessRequest) next('/mon-compte');
+        next('/mon-compte');
+        if(response?.isSuccessRequest) createToast('Votre email a été modifié avec succès.', 'success');
+        else createToast("Une erreur est survenue, \nVotre email n'a pas été modifié.", 'error');
         break;
       }
       case 'pageResetPass' : {

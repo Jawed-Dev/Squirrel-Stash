@@ -18,7 +18,6 @@
         function fetchTotalTrsByMonth();
         function fetchBiggestTrsByMonth();
         function fetchDataTrsBySearch();
-        function getBalanceEconomyByMonth();
 
         function getYearListTrsByMonth();
         function getTotalTrsByYear();
@@ -29,7 +28,7 @@
 
         // action data
         function fetchSaveThreshold();
-        function fetchInsertTransaction();
+        function addTransaction();
         function fetchDeleteTransaction();
         function fetchUpdateTransaction();
         // Prepare page
@@ -79,12 +78,12 @@
             $this->getViewStatistic()->renderJson(['isSuccessRequest' => $successReq]);
         }
 
-        public function fetchInsertTransaction() {
-            $paramsValidation = ['functionValidData' => 'verifyInsertTransaction'];
+        public function addTransaction() {
+            $paramsValidation = ['functionValidData' => 'verifyAddTransaction'];
             $dataRequest = $this->getControllerMain()->validateDataForController($paramsValidation);
 
             $db = $dataRequest['dataBase'];
-            $successReq = $this->getModelStatistic()->insertTransaction($db, $dataRequest);
+            $successReq = $this->getModelStatistic()->addTransaction($db, $dataRequest);
             
             $this->getViewStatistic()->renderJson(['isSuccessRequest' => $successReq]);
         }
@@ -116,16 +115,6 @@
 
             $db = $dataRequest['dataBase'];
             $data = $this->getModelStatistic()->getDataTrsBySearch($db, $dataRequest);
-            // log ici ?
-            $this->getViewStatistic()->renderJson(['data' => $data]);
-        }
-
-        public function getBalanceEconomyByMonth() {
-            $paramsValidation = [];
-            $dataRequest = $this->getControllerMain()->validateDataForController($paramsValidation);
-
-            $db = $dataRequest['dataBase'];
-            $data = $this->getModelStatistic()->getBalanceEconomyByMonth($db, $dataRequest);
             // log ici ?
             $this->getViewStatistic()->renderJson(['data' => $data]);
         }

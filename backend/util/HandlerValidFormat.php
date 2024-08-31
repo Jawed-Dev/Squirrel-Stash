@@ -63,11 +63,10 @@
 
         public function isValidPass($pass) {
             if(empty($pass)) return false;
-            // if(!is_string($pass)) return false;
-            // $regex = "/^(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$/";
-            // $isValidPattern = preg_match($regex, $pass);
-            // return $isValidPattern;
-            return true;
+            if(!is_string($pass)) return false;
+            $regex = "/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*\W)[A-Za-z\d\W]{8,}$/";
+            $isValidPattern = preg_match($regex, $pass) === 1;
+            return $isValidPattern;
         }
 
         public function isValidMessage($message) {
@@ -148,15 +147,15 @@
         public function isValidThresholdAmount($trsAmount) {
             if(empty($trsAmount)) return false;
             $regex = "/^\d+(,\d+)?$/";
-            $maxLen = strlen($trsAmount) <= 10;
+            $maxVal = $trsAmount < 1000000;
             $isValidPattern = preg_match($regex, $trsAmount) === 1;
             $isInt = is_int($trsAmount);
-            return $isValidPattern && $maxLen && $isInt;
+            return $isValidPattern && $maxVal && $isInt;
         }
 
         public function isValidTransactionAmount($trsAmount) {
             if(empty($trsAmount)) return false;
-            $maxVal = $trsAmount <= 1000000000;
+            $maxVal = $trsAmount < 1000000;
             $regex = "/^\d+(\.\d{1,2})?$/";
             $isValidPattern = preg_match($regex, $trsAmount) === 1;
             $isFloat = is_float($trsAmount);
@@ -190,11 +189,12 @@
             return false;
         }
 
-        public function isValidTransactionCategoryEx($trsCategory) {
+        public function isValidTransactionCategorySearch($trsCategory) {
             if(empty($trsCategory)) return false;
             if(!is_string($trsCategory)) return false;
-            return in_array($trsCategory, $this->listPurchaseCategories()) || in_array($trsCategory, $this->listRecurringCategories());
+            return true;
         }
+        
 
         public function isValidYear($year) {
             if(empty($year)) return false;

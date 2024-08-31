@@ -33,14 +33,14 @@ export const storeStatisticDetails = defineStore('statisticDetails' , () => {
     };
 });
 
-// threshold
+// store threshold
 export const storeThreshold = defineStore('threshold', () => {
   const amount = ref(0);
   return { amount };
 });
 
 // list purchases/recurrings month by day
-export const storeTrsMonthByDay = defineStore('listTrsMonthByDay', () => {
+export const storeTrsMonthByDay = defineStore('trsMonthByDay', () => {
     const listPurchases = ref([]);
     const listRecurrings = ref([]);
   return { listPurchases, listRecurrings };

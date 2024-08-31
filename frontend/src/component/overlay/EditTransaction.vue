@@ -46,10 +46,10 @@
     import { updateAllDataTransations} from '@/storePinia/useUpdateStoreByBackend';
     import { formatDateForCurrentDay, formatDateForFirstDay, isCurrentMonth } from '@/composable/useGetDate';
     import { listPurchases, listRecurings } from '@/svg/listTransactionSvgs';
-    import { isAnyMandatoryInputEmpty, isAnyInputError, TYPE_SUBMIT_ERROR, TEXT_SUBMIT_ERROR } from '@/error/useHandleError';
+    import { isAnyMandatoryInputEmpty, isAnyInputError, TEXT_SUBMIT_ERROR } from '@/error/useHandleError';
     import { isValidCategory } from '@/error/useValidFormat';
     import { createToast } from '@/composable/useToastNotification';
-    import { formatFloatAsString, formatStringToFloat, formatFloatAsStringNoEspace } from '@/composable/useMath';
+    import { formatStringToFloat, formatFloatAsStringNoEspace } from '@/composable/useMath';
     
 
     // stores Pinia
@@ -108,7 +108,7 @@
                 const nameCategory = getCurrentNameCategory();
 
                 if(isAnyMandatoryInputEmpty(allMandatoryValInputs)) {
-                    activeErrorForMandatInputsEmpty();
+                    activeErrorMandatInputs();
                     createToast(TEXT_SUBMIT_ERROR.MANDATORY_EMPTY_INPUTS, 'error');
                     return;
                 }
@@ -145,6 +145,7 @@
     }
     function closeMenu() {
         isOverlayActive.value = false;
+        disableErrorMandatInputs();
     }
 
     function getCurrentNameCategory() {
@@ -203,9 +204,14 @@
         }
     }
 
-    function activeErrorForMandatInputsEmpty() {
+    function activeErrorMandatInputs() {
         if (!inputPriceVal.value) mandatoryInputs.inputPriceVal = true;
         if (!inputDateVal.value) mandatoryInputs.inputDateVal = true;
+    }
+
+    function disableErrorMandatInputs() {
+        mandatoryInputs.inputPriceVal = false;
+        mandatoryInputs.inputDateVal = false;
     }
 
     function getTypeTransaction() {

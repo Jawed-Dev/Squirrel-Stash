@@ -167,7 +167,7 @@
         const allErrorsInputs = getStatesErrorInputs();
         const allMandatoryValInputs = getValuesMandantInputs();
         if(isAnyMandatoryInputEmpty(allMandatoryValInputs)) {
-            activeErrorForMandatInputsEmpty();
+            activeErrorMandatInputs();
             createToast(TEXT_SUBMIT_ERROR.MANDATORY_EMPTY_INPUTS, 'error');
             return;
         }
@@ -220,7 +220,7 @@
             confirmCheckbox: confirmCheckbox.value
         }
     }
-    function activeErrorForMandatInputsEmpty() {
+    function activeErrorMandatInputs() {
         if (!firstName.value) mandatoryInputs.firstName = true;
         if (!lastName.value) mandatoryInputs.lastName = true;
         if (!email.value) mandatoryInputs.email = true;

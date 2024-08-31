@@ -202,22 +202,6 @@ export async function getTotalTrsByMonth(month, year) {
     return lastPurchases;
 }
 
-export async function getBalanceEconomyByMonth(month, year) {
-    authRequired();
-    const localToken = getLStorageAuthToken();
-    const data = {
-        selectedMonth: Number(month),
-        selectedYear: Number(year),
-    }
-    const lastPurchases = await useConfigFetchGetData ({
-        request: 'getBalanceEconomyByMonth', 
-        method: 'POST', 
-        dataBody: data, 
-        token: localToken
-    });
-
-    return lastPurchases;
-}
 
 export async function getBiggestTrsByMonth(month, year, transactionType) {
     authRequired();

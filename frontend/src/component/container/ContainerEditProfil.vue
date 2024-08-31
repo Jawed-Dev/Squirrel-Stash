@@ -28,7 +28,7 @@
                                             items-center gap-2 sm:gap-12 2xl:gap-0 sm:flex-row">
     
                                         <div class="flex flex-col w-1/3 min-w-[270px] lg:min-w-[280px] 2xl:min-w-[300px] md:w-1/4">
-                                            <label class="pl-2 text-white font-light" for="input-firstname">Prénom *</label>
+                                            <label class="pl-2 text-white font-light" for="input-firstname">Prénom</label>
                                             <InputBase 
                                                 iconName="Name"
                                                 id="input-firstname" 
@@ -44,7 +44,7 @@
                                             />
                                         </div>
                                         <div class="flex flex-col w-1/3 min-w-[270px] lg:min-w-[280px] 2xl:min-w-[300px] md:w-1/4">
-                                            <label class="pl-2 text-white font-light" for="input-lastname">Nom *</label>
+                                            <label class="pl-2 text-white font-light" for="input-lastname">Nom</label>
                                             <InputBase 
                                                 iconName="Name"
                                                 id="input-lastname" 
@@ -198,7 +198,7 @@
         const allErrorsInputs = getStatesErrorInputs();
         const allMandatoryValInputs = getValuesMandantInputs();
         if(isAnyMandatoryInputEmpty(allMandatoryValInputs)) {
-            activeErrorForMandatInputsEmpty();
+            activeErrorMandatInputs();
             createToast(TEXT_SUBMIT_ERROR.MANDATORY_EMPTY_INPUTS, 'error');
             return;
         }
@@ -242,7 +242,7 @@
             lastName: inputsProfil.lastName,
         }
     }
-    function activeErrorForMandatInputsEmpty() {
+    function activeErrorMandatInputs() {
         if (!inputsProfil.firstName) mandatoryInputs.firstName = true;
         if (!inputsProfil.lastName) mandatoryInputs.lastName = true;
     }

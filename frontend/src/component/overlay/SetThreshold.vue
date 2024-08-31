@@ -104,7 +104,7 @@
                 const allErrorsInputs = getStatesErrorInputs();
                 const allMandatoryValInputs = getValuesMandantInputs();
                 if(isAnyMandatoryInputEmpty(allMandatoryValInputs)) {
-                    activeErrorForMandatInputsEmpty();
+                    activeErrorMandatInputs();
                     createToast(TEXT_SUBMIT_ERROR.MANDATORY_EMPTY_INPUTS, 'error');
                     return;
                 }
@@ -141,13 +141,20 @@
             amount: AmountThreshold.value
         }
     }
-    function activeErrorForMandatInputsEmpty() {
+    function activeErrorMandatInputs() {
         if (!AmountThreshold.value) mandatoryInput.value = true;
     }
+
+    function disableErrorMandatInputs() {
+        mandatoryInput.value = false;
+    }
+
     function resetInput() {
         AmountThreshold.value = '';
+        
     }
     function closeOverlay() {
         isOverlayActive.value = false;
+        disableErrorMandatInputs();
     }
 </script>
