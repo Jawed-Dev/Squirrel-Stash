@@ -20,27 +20,27 @@
                         }
                         // statistic
                         case 'getlistTrsMonthByDay': {
-                            getControllerMain()->getControllerStatisticGetData()->fetchTrsMonthByDay();
+                            getControllerMain()->getControllerStatisticGetData()->getTrsMonthByDay();
                             break;
                         }
                         case 'getThresholdByMonth' : {
-                            getControllerMain()->getControllerStatisticGetData()->fetchThresholdByMonth();
+                            getControllerMain()->getControllerStatisticGetData()->getThresholdByMonth();
                             break;
                         }
                         case 'getLastNTransactions' : {
-                            getControllerMain()->getControllerStatisticGetData()->fetchNLastTrsByMonth();
+                            getControllerMain()->getControllerStatisticGetData()->getNLastTrsByMonth();
                             break;
                         }
                         case 'getTotalTrsByMonth' : {
-                            getControllerMain()->getControllerStatisticGetData()->fetchTotalTrsByMonth();
+                            getControllerMain()->getControllerStatisticGetData()->getTotalTrsByMonth();
                             break;
                         }
                         case 'getBiggestTrsByMonth' : {
-                            getControllerMain()->getControllerStatisticGetData()->fetchBiggestTrsByMonth();
+                            getControllerMain()->getControllerStatisticGetData()->getBiggestTrsByMonth();
                             break;
                         }
                         case 'getDataTrsBySearch' : {
-                            getControllerMain()->getControllerStatisticGetData()->fetchDataTrsBySearch();
+                            getControllerMain()->getControllerStatisticGetData()->getDataTrsBySearch();
                             break;
                         }
                         case 'getDataUserProfil' : {
@@ -51,8 +51,8 @@
                             getControllerMain()->getControllerUser()->getUserEmail();
                             break;
                         }
-                        case 'IsValidResetPassToken' : {
-                            getControllerMain()->getControllerUser()->fetchIsValidResetPassToken();
+                        case 'isValidResetPassToken' : {
+                            getControllerMain()->getControllerUser()->isValidResetPassToken();
                             break;
                         }
                         case 'getYearListTrsByMonth' : {

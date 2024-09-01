@@ -8,5 +8,5 @@
 <script setup>
     import ContainerForgotPass from '@/components/container/ContainerForgotPass.vue';
     import ContainerInformation from '@/components/container/ContainerInformation.vue';
-    import ImageForgotPass from '@/components/svgs/ImageForgotPass.vue';
+    import ImageForgotPass from '@/components/svg/ImageForgotPass.vue';
 </script>

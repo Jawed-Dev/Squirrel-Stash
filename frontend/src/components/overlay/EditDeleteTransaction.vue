@@ -38,7 +38,7 @@
     // import
     import { ref, watch, defineAsyncComponent } from 'vue';
 
-    import IconOptions from '@/components/svgs/IconOptions.vue';
+    import IconOptions from '@/components/svg/IconOptions.vue';
     import TransitionOpacity from '@/components/transition/TransitionOpacity.vue';
     import useClickOutside from '@/composables/useClickOutSide';
     //import DeleteTransaction from '@/components/overlay/DeleteTransaction.vue';

@@ -8,7 +8,7 @@
 <script setup>
     import ContainerNewAccount from '@/components/container/ContainerNewAccount.vue';
     import ContainerInformation from '@/components/container/ContainerInformation.vue';
-    import ImageRegistration from '@/components/svgs/ImageRegistration.vue';
+    import ImageRegistration from '@/components/svg/ImageRegistration.vue';
     
 </script>
 

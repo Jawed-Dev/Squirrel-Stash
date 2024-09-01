@@ -70,8 +70,8 @@
 <script setup>
     // import
     import { ref, watch, computed, reactive, defineAsyncComponent } from 'vue';
-    import { setSvgConfig } from '@/svg/svgConfig';
-    import IconAddPurchase from '@/components/svgs/IconAddPurchase.vue';
+    import { setSvgConfig } from '@/svgUtils/svgConfig';
+    import IconAddPurchase from '@/components/svg/IconAddPurchase.vue';
     import TransitionOpacity from '@/components/transition/TransitionOpacity.vue';
     import useClickOutside from '@/composables/useClickOutSide';
     import useEscapeKey from '@/composables/useEscapeKey';
@@ -80,7 +80,7 @@
     import { addTransaction } from '@/composables/useBackendActionData';
     import { updateAllDataTransations} from '@/storesPinia/useUpdateStoreByBackend';
     import { formatDateForCurrentDay, formatDateForFirstDay, isCurrentMonth } from '@/composables/useGetDate';
-    import { listPurchases, listRecurings } from '@/svg/listTransactionSvgs';
+    import { listPurchases, listRecurings } from '@/svgUtils/listTransactionSvgs';
     import { isAnyMandatoryInputEmpty, isAnyInputError, TEXT_SUBMIT_ERROR } from '@/errors/useHandleError';
     import { isValidCategory } from '@/errors/useValidFormat';
     import { createToast } from '@/composables/useToastNotification';

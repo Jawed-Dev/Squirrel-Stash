@@ -22,7 +22,7 @@
 
 import ToggleButton from "@/components/button/ToggleButton.vue";
 import SelectInputCategories from "@/components/select/SelectInputCategories.vue";
-import { listPurchases, listRecurings } from '@/svg/listTransactionSvgs';
+import { listPurchases, listRecurings } from '@/svgUtils/listTransactionSvgs';
 
 // variables, props, ...
 const typeTransaction = defineModel('typeTransaction');

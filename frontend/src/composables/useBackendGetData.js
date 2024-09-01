@@ -62,7 +62,7 @@ export async function isValidResetPassToken(resetPassToken) {
         resetPassToken: resetPassToken,
     };
     const stateSession = await useConfigFetchGetData ({
-        request: 'IsValidResetPassToken',
+        request: 'isValidResetPassToken',
         method: 'POST',
         token: localToken,
         dataBody: body,

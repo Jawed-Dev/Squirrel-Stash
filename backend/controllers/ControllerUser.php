@@ -16,7 +16,7 @@
         // get
         function getDataUserProfil();
         function isSessionActive($decodedJwt);
-        function fetchInsertUser();
+        function addNewUser();
         function getUserIdFromJwt($decodedJwt);
         function getStateSession();
         function getUserFirstName();
@@ -24,10 +24,10 @@
 
         // action
         function handleSuccessLogin();
-        function FetchSendResetPassToken();
+        function sendResetPassToken();
         function updatePasswordByToken();
         function updatePasswordByUserId();
-        function fetchIsValidResetPassToken();
+        function isValidResetPassToken();
         function updateUserProfil();
         function sendUpdateMail();
         function updateEmail();
@@ -98,7 +98,7 @@
                 'requireAuth' => false, 
                 'functionValidData' => 'verifyHandleSuccessLogin'
             ];
-            $dataRequest = $this->getControllerMain()->validateDataForController($paramsValidation);
+            $dataRequest = $this->getControllerMain()->getValidateDataForController($paramsValidation);
             $db = $dataRequest['dataBase'];
             $userId = $this->getModelUser()->getUserIdIfValidLogin($db, $dataRequest['bodyData']);
             if(!$userId) return $this->getViewUser()->renderJson(['tokenJwt' => null]);
@@ -109,7 +109,7 @@
 
         public function getUserFirstName() {
             $paramsValidation = ['requireBodyData' => false];
-            $dataRequest = $this->getControllerMain()->validateDataForController($paramsValidation);
+            $dataRequest = $this->getControllerMain()->getValidateDataForController($paramsValidation);
 
             $userId = $dataRequest['userId'];
             $db = $dataRequest['dataBase'];
@@ -118,36 +118,36 @@
             $this->getViewUser()->renderJson(['data' => $firstName]);
         }
 
-        public function fetchInsertUser() {
+        public function addNewUser() {
             $paramsValidation = [
                 'requireAuth' => false,
-                'functionValidData' => 'verifyInsertUser'
+                'functionValidData' => 'verifyaddNewUser'
             ];
-            $dataRequest = $this->getControllerMain()->validateDataForController($paramsValidation);
+            $dataRequest = $this->getControllerMain()->getValidateDataForController($paramsValidation);
             $db = $dataRequest['dataBase'];
             $successReq = $this->getModelUser()->insertUser($db, $dataRequest['bodyData']);
             // log ici ?
             $this->getViewUser()->renderJson(['isSuccessRequest' => $successReq]);
         }
 
-        public function fetchIsValidResetPassToken() {
+        public function isValidResetPassToken() {
             $paramsValidation = [
                 'requireAuth' => false,
                 'functionValidData' => 'verifyIsValidResetPassToken'
             ];
-            $dataRequest = $this->getControllerMain()->validateDataForController($paramsValidation);
+            $dataRequest = $this->getControllerMain()->getValidateDataForController($paramsValidation);
             $db = $dataRequest['dataBase'];
             $isSuccessReq = $this->getModelUser()->isValidResetPassToken($db, $dataRequest['bodyData']);
             // log ici ?
             $this->getViewUser()->renderJson(['isSuccessRequest' => $isSuccessReq]);
         }
 
-        public function FetchSendResetPassToken() {
+        public function sendResetPassToken() {
             $paramsValidation = [
                 'requireAuth' => false,
                 'functionValidData' => 'verifySendResetPassToken'
             ];
-            $dataRequest = $this->getControllerMain()->validateDataForController($paramsValidation);
+            $dataRequest = $this->getControllerMain()->getValidateDataForController($paramsValidation);
             $db = $dataRequest['dataBase'];
             
             $dataBody = $dataRequest['bodyData'];
@@ -177,7 +177,7 @@
             $paramsValidation = [
                 'functionValidData' => 'verifySendUpdateMail'
             ];
-            $dataRequest = $this->getControllerMain()->validateDataForController($paramsValidation);
+            $dataRequest = $this->getControllerMain()->getValidateDataForController($paramsValidation);
             $db = $dataRequest['dataBase'];
             $userId = $dataRequest['userId'];
             $currentEmail = $this->getModelUser()->getCurrentEmail($db, $userId);
@@ -215,7 +215,7 @@
                 'requireDatabase' => false,
                 'allowForAllAuth' => true,
                 'functionValidData' => 'verifySendEmailToSupport'];
-            $dataRequest = $this->getControllerMain()->validateDataForController($paramsValidation);
+            $dataRequest = $this->getControllerMain()->getValidateDataForController($paramsValidation);
             $dataBody = $dataRequest['bodyData'];
             
             $paramsEmail = [
@@ -237,7 +237,7 @@
                 'requireAuth' => false,
                 'functionValidData' => 'verifyUpdatePasswordByToken'
             ];
-            $dataRequest = $this->getControllerMain()->validateDataForController($paramsValidation);
+            $dataRequest = $this->getControllerMain()->getValidateDataForController($paramsValidation);
             $db = $dataRequest['dataBase'];
 
             $isSuccessReq = $this->getModelUser()->updatePasswordByToken($db, $dataRequest['bodyData']);
@@ -251,7 +251,7 @@
         // update password when user is connected
         public function updatePasswordByUserId() {
             $paramsValidation = ['functionValidData' => 'verifyUpdatePasswordByUserId']; 
-            $dataRequest = $this->getControllerMain()->validateDataForController($paramsValidation);
+            $dataRequest = $this->getControllerMain()->getValidateDataForController($paramsValidation);
 
             $db = $dataRequest['dataBase'];
             $isSuccessReq = $this->getModelUser()->updatePasswordByUserId($db, $dataRequest);
@@ -261,7 +261,7 @@
 
         public function updateEmail() {
             $paramsValidation = ['functionValidData' => 'verifyUpdateEmail'];
-            $dataRequest = $this->getControllerMain()->validateDataForController($paramsValidation);
+            $dataRequest = $this->getControllerMain()->getValidateDataForController($paramsValidation);
 
             $db = $dataRequest['dataBase'];
             $isSuccessReq = $this->getModelUser()->updateEmail($db, $dataRequest);
@@ -273,7 +273,7 @@
 
         public function getDataUserProfil() {
             $paramsValidation = []; //
-            $dataRequest = $this->getControllerMain()->validateDataForController($paramsValidation);
+            $dataRequest = $this->getControllerMain()->getValidateDataForController($paramsValidation);
 
             $db = $dataRequest['dataBase'];
             $userId = $dataRequest['userId'];
@@ -284,7 +284,7 @@
 
         public function getUserEmail() {
             $paramsValidation = []; //
-            $dataRequest = $this->getControllerMain()->validateDataForController($paramsValidation);
+            $dataRequest = $this->getControllerMain()->getValidateDataForController($paramsValidation);
 
             $db = $dataRequest['dataBase'];
             $userId = $dataRequest['userId'];
@@ -295,7 +295,7 @@
 
         public function updateUserProfil() {
             $paramsValidation = ['functionValidData' => 'verifyUpdateUserProfil'];
-            $dataRequest = $this->getControllerMain()->validateDataForController($paramsValidation);
+            $dataRequest = $this->getControllerMain()->getValidateDataForController($paramsValidation);
 
             $db = $dataRequest['dataBase'];
             $isSuccessReq = $this->getModelUser()->updateUserProfil($db, $dataRequest);

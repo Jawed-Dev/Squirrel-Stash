@@ -8,5 +8,5 @@
 <script setup>
     import ContainerResetPass from '@/components/container/ContainerResetPass.vue';
     import ContainerInformation from '@/components/container/ContainerInformation.vue';
-    import ImageResetPass from '@/components/svgs/ImageResetPass.vue';
+    import ImageResetPass from '@/components/svg/ImageResetPass.vue';
 </script>

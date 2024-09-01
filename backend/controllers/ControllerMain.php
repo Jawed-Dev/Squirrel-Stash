@@ -43,7 +43,7 @@
         // Handler Error
         function getHandlerError();
         function getHandlerValidFormat();
-        function validateDataForController($params);        
+        function getValidateDataForController($params);        
         // Prepare pages
         function authorizePage();
     }
@@ -183,7 +183,7 @@
             return $this->EmailSender;
         }
 
-        public function prepareDataForController($requireAuth= true, $requireBodyData = true,  $requireDatabase = true, $allowForAllAuth = false) {
+        public function getDataForController($requireAuth= true, $requireBodyData = true,  $requireDatabase = true, $allowForAllAuth = false) {
             $bodyDataJson = null;
             $bodyData = null;
             $db = null;
@@ -221,7 +221,7 @@
             ];
         }
 
-        public function validateDataForController($params) {
+        public function getValidateDataForController($params) {
             // Optionals Params with default value
             $requireAuth = $params['requireAuth'] ?? true;
             $requireBodyData = $params['requireBodyData'] ?? true;
@@ -232,7 +232,7 @@
             $allowForAllAuth = $params['allowForAllAuth'] ?? false;
 
             // get Data for a Controller
-            $dataRequest = $this->prepareDataForController($requireAuth, $requireBodyData, $requireDatabase, $allowForAllAuth);
+            $dataRequest = $this->getDataForController($requireAuth, $requireBodyData, $requireDatabase, $allowForAllAuth);
         
             // option database
             if($requireDatabase) $dataRequire[] = $dataRequest['dataBase'];

@@ -123,8 +123,8 @@
     import { createAccount } from '@/composables/useBackendActionData';
     import InputCheckbox from '@/components/input/InputCheckbox.vue';
     import { isAnyMandatoryInputEmpty, isAnyInputError, TYPE_SUBMIT_ERROR, TEXT_SUBMIT_ERROR } from '@/errors/useHandleError';
-    import LogoMain from '@/components/svgs/LogoMain.vue';
-    import { setSvgConfig } from '@/svg/svgConfig';
+    import LogoMain from '@/components/svg/LogoMain.vue';
+    import { setSvgConfig } from '@/svgUtils/svgConfig';
     import TransitionOpacity from '@/components/transition/TransitionOpacity.vue';
     import { createToast } from '@/composables/useToastNotification';
 

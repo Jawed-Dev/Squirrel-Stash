@@ -1,5 +1,5 @@
 import { getAvailableYear } from "@/composables/useGetDate";
-import { listPurchases, listRecurings } from "@/svg/listTransactionSvgs";
+import { listPurchases, listRecurings } from "@/svgUtils/listTransactionSvgs";
 
 
 export function isValidMail(email) {

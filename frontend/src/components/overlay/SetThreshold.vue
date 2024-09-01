@@ -58,8 +58,8 @@
     import { ref } from 'vue';
     import TransitionOpacity from '@/components/transition/TransitionOpacity.vue';  
     import MainContainerSlot from '@/components//containerSlot/MainContainerSlot.vue';
-    import IconPreferences from '@/components//svgs/IconPreferences.vue';
-    import { setSvgConfig } from '@/svg/svgConfig';
+    import IconPreferences from '@/components//svg/IconPreferences.vue';
+    import { setSvgConfig } from '@/svgUtils/svgConfig';
     import useClickOutside from '@/composables/useClickOutSide';
     import useEscapeKey from '@/composables/useEscapeKey';
     import InputBase from '@/components//input/InputBase.vue';

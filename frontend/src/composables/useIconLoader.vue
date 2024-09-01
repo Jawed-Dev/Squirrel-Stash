@@ -15,8 +15,8 @@
 <script setup>
     // import
     import { onMounted, ref, shallowRef, watch } from 'vue';
-    import { getIconByName } from '@/svg/getIcon';
-    import IconInvisible from '@/components/svgs/IconInvisible.vue';
+    import { getIconByName } from '@/svgUtils/getIcon';
+    import IconInvisible from '@/components/svg/IconInvisible.vue';
 
     // variables, props...
     const componentLoaded = ref(false);

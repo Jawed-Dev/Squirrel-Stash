@@ -20,7 +20,7 @@
 
 
 <script setup>    
-    import { setSvgConfig } from '@/svg/svgConfig';
+    import { setSvgConfig } from '@/svgUtils/svgConfig';
        
     // props, variables
     const props = defineProps({

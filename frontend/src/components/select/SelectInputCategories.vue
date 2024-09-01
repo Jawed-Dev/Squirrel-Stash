@@ -17,7 +17,7 @@
 <script setup>
     import { computed } from 'vue';
     import useIconLoader from '@/composables/useIconLoader.vue';
-    import { setSvgConfig } from '@/svg/svgConfig';
+    import { setSvgConfig } from '@/svgUtils/svgConfig';
 
     // props, variables
     const props = defineProps({

@@ -5,11 +5,11 @@
                 if(!empty($_GET['actionData'])) {
                     switch($_GET['actionData']) {
                         case 'createAccount': {
-                            getControllerMain()->getControllerUser()->fetchInsertUser();
+                            getControllerMain()->getControllerUser()->addNewUser();
                             break;
                         }
                         case 'saveThreshold': {
-                            getControllerMain()->getControllerStatisticAction()->fetchSaveThreshold();
+                            getControllerMain()->getControllerStatisticAction()->saveThreshold();
                             break;
                         }
                         case 'addTransaction' : {
@@ -17,15 +17,15 @@
                             break;
                         }
                         case 'deleteTransaction' : {
-                            getControllerMain()->getControllerStatisticAction()->fetchDeleteTransaction();
+                            getControllerMain()->getControllerStatisticAction()->deleteTransaction();
                             break;
                         }
                         case 'updateTransaction' : {
-                            getControllerMain()->getControllerStatisticAction()->fetchUpdateTransaction();
+                            getControllerMain()->getControllerStatisticAction()->updateTransaction();
                             break;
                         }
                         case 'sendResetPass' : {
-                            getControllerMain()->getControllerUser()->FetchSendResetPassToken();
+                            getControllerMain()->getControllerUser()->sendResetPassToken();
                             break;
                         }
                         case 'sendUpdateMail' : {

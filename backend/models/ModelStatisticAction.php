@@ -2,7 +2,7 @@
     interface I_ModelStatisticAction {
         // action
         function updateThresholdByMonth($db, $data);
-        function insertThresholdByMonth($db, $data);
+        function addThresholdByMonth($db, $data);
         function addTransaction($db, $data);
         function deleteTransaction($db, $data);
         function updateTransaction($db, $data);
@@ -86,7 +86,7 @@
             return $isSuccessRequest;
         }
 
-        public function insertThresholdByMonth($db, $data) {
+        public function addThresholdByMonth($db, $data) {
             $userId = $data['userId'];
             $dataQuery = $data['bodyData'];
 

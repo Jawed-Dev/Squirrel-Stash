@@ -176,7 +176,7 @@
             return $this->getStateErrors();
         }
 
-        public function verifyInsertUser($data) {
+        public function verifyaddNewUser($data) {
             $this->clearErrors();
             $bodyData = $data['bodyData'];
             $this->validateFormat('isValidMail', $bodyData['email'] ?? null);

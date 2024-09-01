@@ -12,10 +12,10 @@
         function getViewStatistic();
     
         // action data
-        function fetchSaveThreshold();
+        function saveThreshold();
         function addTransaction();
-        function fetchDeleteTransaction();
-        function fetchUpdateTransaction();
+        function deleteTransaction();
+        function updateTransaction();
         // Prepare page
         function authorizePage();
     }
@@ -51,21 +51,21 @@
         }
 
         // action data
-        public function fetchSaveThreshold() {
+        public function saveThreshold() {
             $paramsValidation = ['functionValidData' => 'verifySaveThreshold'];
-            $dataRequest = $this->getControllerMain()->validateDataForController($paramsValidation);
+            $dataRequest = $this->getControllerMain()->getValidateDataForController($paramsValidation);
 
             $db = $dataRequest['dataBase'];
             $isTresholdExist = $this->getControllerMain()->getControllerStatisticGetData()->getModelStatisticDataMonth()->isThresholdExistByMonth($db, $dataRequest);
             if($isTresholdExist) $successReq = $this->getModelStatisticAction()->updateThresholdByMonth($db, $dataRequest);
-            else $successReq = $this->getModelStatisticAction()->insertThresholdByMonth($db, $dataRequest);
+            else $successReq = $this->getModelStatisticAction()->addThresholdByMonth($db, $dataRequest);
             // log ici ?
             $this->getViewStatistic()->renderJson(['isSuccessRequest' => $successReq]);
         }
 
         public function addTransaction() {
             $paramsValidation = ['functionValidData' => 'verifyAddTransaction'];
-            $dataRequest = $this->getControllerMain()->validateDataForController($paramsValidation);
+            $dataRequest = $this->getControllerMain()->getValidateDataForController($paramsValidation);
 
             $db = $dataRequest['dataBase'];
             $successReq = $this->getModelStatisticAction()->addTransaction($db, $dataRequest);
@@ -73,9 +73,9 @@
             $this->getViewStatistic()->renderJson(['isSuccessRequest' => $successReq]);
         }
 
-        public function fetchDeleteTransaction() {
+        public function deleteTransaction() {
             $paramsValidation = ['functionValidData' => 'verifyDeleteTransaction'];
-            $dataRequest = $this->getControllerMain()->validateDataForController($paramsValidation);
+            $dataRequest = $this->getControllerMain()->getValidateDataForController($paramsValidation);
 
             $db = $dataRequest['dataBase'];
             $successReq = $this->getModelStatisticAction()->deleteTransaction($db, $dataRequest);
@@ -83,9 +83,9 @@
             $this->getViewStatistic()->renderJson(['isSuccessRequest' => $successReq]);
         }
 
-        public function fetchUpdateTransaction() {
+        public function updateTransaction() {
             $paramsValidation = ['functionValidData' => 'verifyUpdateTransaction'];
-            $dataRequest = $this->getControllerMain()->validateDataForController($paramsValidation );
+            $dataRequest = $this->getControllerMain()->getValidateDataForController($paramsValidation );
 
             $db = $dataRequest['dataBase'];
             $successReq = $this->getModelStatisticAction()->updateTransaction($db, $dataRequest);

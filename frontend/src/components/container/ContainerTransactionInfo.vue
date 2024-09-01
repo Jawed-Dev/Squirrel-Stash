@@ -66,8 +66,8 @@
     import { ref, computed } from 'vue';
     import IconLoader from '@/composables/useIconLoader.vue';
     import EditDeleteTransaction from '@/components/overlay/EditDeleteTransaction.vue';    
-    import IconInfo from '@/components/svgs/IconInfo.vue';
-    import { setSvgConfig } from '@/svg/svgConfig';
+    import IconInfo from '@/components/svg/IconInfo.vue';
+    import { setSvgConfig } from '@/svgUtils/svgConfig';
     import TransitionOpacity from '@/components//transition/TransitionOpacity.vue';
     import useClickOutside from '@/composables/useClickOutSide';
     import useEscapeKey from '@/composables/useEscapeKey';

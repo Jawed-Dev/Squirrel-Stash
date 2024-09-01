@@ -7,5 +7,5 @@
 </template>
 
 <script setup>
-    import Image404 from '@/components/svgs/Image404.vue';
+    import Image404 from '@/components/svg/Image404.vue';
 </script>

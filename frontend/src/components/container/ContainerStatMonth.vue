@@ -23,7 +23,7 @@
 
     import SetThreshold from '@/components/overlay/SetThreshold.vue';
     import UseIconLoader from '@/composables/useIconLoader.vue';
-    import { setSvgConfig } from '@/svg/svgConfig';
+    import { setSvgConfig } from '@/svgUtils/svgConfig';
     
     // variables, props...
     const props = defineProps({

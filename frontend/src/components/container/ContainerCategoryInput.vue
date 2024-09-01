@@ -15,7 +15,7 @@
 <script setup>
     import { computed } from 'vue';
     import InputBase from '@/components/input/InputBase.vue';
-    import { listPurchases, listRecurings } from '@/svg/listTransactionSvgs';
+    import { listPurchases, listRecurings } from '@/svgUtils/listTransactionSvgs';
 
     // props, variables...
     const checkboxCategory = defineModel('checkboxCategory');

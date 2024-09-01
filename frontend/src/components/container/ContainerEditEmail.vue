@@ -78,8 +78,8 @@
     import { isAnyMandatoryInputEmpty, isAnyInputError, TYPE_SUBMIT_ERROR, TEXT_SUBMIT_ERROR } from '@/errors/useHandleError';
     import TransitionAxeY from '@/components/transition/TransitionAxeY.vue';
     import UseIconLoader from '@/composables/useIconLoader.vue';
-    import { setSvgConfig } from '@/svg/svgConfig';
-    import ImageEditEmail from '@/components//svgs/ImageEditEmail.vue';
+    import { setSvgConfig } from '@/svgUtils/svgConfig';
+    import ImageEditEmail from '@/components//svg/ImageEditEmail.vue';
     import { createToast } from '@/composables/useToastNotification';
     import { getScreenSize } from '@/composables/useSizeScreen';
     

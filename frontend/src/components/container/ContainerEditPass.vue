@@ -102,8 +102,8 @@
     import { isAnyMandatoryInputEmpty, isAnyInputError, TYPE_SUBMIT_ERROR, TEXT_SUBMIT_ERROR } from '@/errors/useHandleError';
     import TransitionAxeY from '@/components/transition/TransitionAxeY.vue';
     import UseIconLoader from '@/composables/useIconLoader.vue';
-    import ImageEditPass from '@/components//svgs/ImageEditPass.vue';
-    import { setSvgConfig } from '@/svg/svgConfig';
+    import ImageEditPass from '@/components//svg/ImageEditPass.vue';
+    import { setSvgConfig } from '@/svgUtils/svgConfig';
     import { createToast } from '@/composables/useToastNotification';
     import { getScreenSize } from '@/composables/useSizeScreen';
 

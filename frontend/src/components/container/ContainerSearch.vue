@@ -82,8 +82,8 @@
     import ContainerCategoryInput from '@/components/container/ContainerCategoryInput.vue';
     import TransitionAxeY from '@/components/transition/TransitionAxeY.vue';
     import UseIconLoader from '@/composables/useIconLoader.vue';
-    import ImageSearch from '@/components//svgs/ImageSearch.vue';
-    import { setSvgConfig } from '@/svg/svgConfig';
+    import ImageSearch from '@/components//svg/ImageSearch.vue';
+    import { setSvgConfig } from '@/svgUtils/svgConfig';
     import { getScreenSize } from '@/composables/useSizeScreen';
     
     

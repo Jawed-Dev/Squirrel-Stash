@@ -135,8 +135,8 @@
     import { isAnyMandatoryInputEmpty, isAnyInputError, TEXT_SUBMIT_ERROR } from '@/errors/useHandleError';
     import TransitionAxeY from '@/components/transition/TransitionAxeY.vue';
     import UseIconLoader from '@/composables/useIconLoader.vue';
-    import ImageEditProfil from '@/components/svgs/ImageEditProfil.vue';
-    import { setSvgConfig } from '@/svg/svgConfig';
+    import ImageEditProfil from '@/components/svg/ImageEditProfil.vue';
+    import { setSvgConfig } from '@/svgUtils/svgConfig';
     import { createToast } from '@/composables/useToastNotification';
     import { getScreenSize } from '@/composables/useSizeScreen';
 

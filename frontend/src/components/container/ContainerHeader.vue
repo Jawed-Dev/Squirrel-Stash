@@ -92,18 +92,18 @@
     import { storeAuthTOken } from '@/storesPinia/useStoreDashboard';
     import TransitionOpacity from '@/components/transition/TransitionOpacity.vue';  
     import { classTransitionHover } from '@/composables/useClassTransitionHover';
-    import { setSvgConfig } from '@/svg/svgConfig';
-    import LogoMainPicOnly from '@/components/svgs/LogoMainPicOnly.vue';
+    import { setSvgConfig } from '@/svgUtils/svgConfig';
+    import LogoMainPicOnly from '@/components/svg/LogoMainPicOnly.vue';
     import { getScreenSize } from '@/composables/useSizeScreen';
     
     // import async icons & dynamic
-    const IconDashboard = defineAsyncComponent(() => import('@/components/svgs/IconDashboard.vue'));
-    const IconPurchases = defineAsyncComponent(() => import('@/components/svgs/IconPurchase.vue'));
-    const IconGraph = defineAsyncComponent(() => import('@/components/svgs/IconGraph.vue'));
-    const IconUser = defineAsyncComponent(() => import('@/components/svgs/IconUser.vue'));
-    const IconLogOut = defineAsyncComponent(() => import('@/components/svgs/IconLogOut.vue'));
-    const IconSupport = defineAsyncComponent(() => import('@/components/svgs/IconSupport.vue'));
-    const IconInfo = defineAsyncComponent(() => import('@/components/svgs/IconInfo.vue'));
+    const IconDashboard = defineAsyncComponent(() => import('@/components/svg/IconDashboard.vue'));
+    const IconPurchases = defineAsyncComponent(() => import('@/components/svg/IconPurchase.vue'));
+    const IconGraph = defineAsyncComponent(() => import('@/components/svg/IconGraph.vue'));
+    const IconUser = defineAsyncComponent(() => import('@/components/svg/IconUser.vue'));
+    const IconLogOut = defineAsyncComponent(() => import('@/components/svg/IconLogOut.vue'));
+    const IconSupport = defineAsyncComponent(() => import('@/components/svg/IconSupport.vue'));
+    const IconInfo = defineAsyncComponent(() => import('@/components/svg/IconInfo.vue'));
 
     const OverlayPrivacy = defineAsyncComponent(() => import('@/components/overlay/OverlayPrivacy.vue'));
     const OverlayUserRules = defineAsyncComponent(() => import('@/components/overlay/OverlayUserRules.vue'));

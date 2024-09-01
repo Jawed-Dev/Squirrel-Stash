@@ -61,8 +61,8 @@
     import InputBase from '@/components/input/InputBase.vue';
     import { updatePasswordByToken } from '@/composables/useBackendActionData';
     import { isAnyMandatoryInputEmpty, isAnyInputError, TYPE_SUBMIT_ERROR, TEXT_SUBMIT_ERROR } from '@/errors/useHandleError';
-    import LogoMain from '@/components/svgs/LogoMain.vue';
-    import { setSvgConfig } from '@/svg/svgConfig';
+    import LogoMain from '@/components/svg/LogoMain.vue';
+    import { setSvgConfig } from '@/svgUtils/svgConfig';
     import { createToast } from '@/composables/useToastNotification';
 
     // props, variables

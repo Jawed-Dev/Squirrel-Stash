@@ -9,5 +9,5 @@
 <script setup>
     import ContainerLogin from '@/components/container/ContainerLogin.vue';
     import ContainerInformation from '@/components/container/ContainerInformation.vue';
-    import ImageLogin from '@/components/svgs/ImageLogin.vue';
+    import ImageLogin from '@/components/svg/ImageLogin.vue';
 </script>

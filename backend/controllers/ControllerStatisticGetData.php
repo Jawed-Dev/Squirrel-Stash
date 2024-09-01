@@ -10,12 +10,12 @@
         function getModelStatisticDataMonth();
 
         // get data
-        function fetchTrsMonthByDay();
-        function fetchNLastTrsByMonth();
-        function fetchThresholdByMonth();
-        function fetchTotalTrsByMonth();
-        function fetchBiggestTrsByMonth();
-        function fetchDataTrsBySearch();
+        function getTrsMonthByDay();
+        function getNLastTrsByMonth();
+        function getThresholdByMonth();
+        function getTotalTrsByMonth();
+        function getBiggestTrsByMonth();
+        function getDataTrsBySearch();
 
         function getYearListTrsByMonth();
         function getTotalTrsByYear();
@@ -64,9 +64,9 @@
             return $this->ViewStatistic;
         }
 
-        public function fetchTrsMonthByDay() {
+        public function getTrsMonthByDay() {
             $paramsValidation = ['functionValidData' => 'verifyGetTrsMonthByDay'];
-            $dataRequest = $this->getControllerMain()->validateDataForController($paramsValidation);
+            $dataRequest = $this->getControllerMain()->getValidateDataForController($paramsValidation);
 
             $db = $dataRequest['dataBase'];
             $data = $this->getModelStatisticDataMonth()->getTrsMonthByDay($db, $dataRequest);
@@ -74,9 +74,9 @@
             $this->getViewStatistic()->renderJson(['data' => $data]);
         }
 
-        public function fetchDataTrsBySearch() {
+        public function getDataTrsBySearch() {
             $paramsValidation = ['functionValidData' => 'verifyGetDataTrsBySearch'];
-            $dataRequest = $this->getControllerMain()->validateDataForController($paramsValidation );
+            $dataRequest = $this->getControllerMain()->getValidateDataForController($paramsValidation );
 
             $db = $dataRequest['dataBase'];
             $data = $this->getModelStatisticDataMonth()->getDataTrsBySearch($db, $dataRequest);
@@ -85,9 +85,9 @@
         }
        
 
-        public function fetchThresholdByMonth() {
+        public function getThresholdByMonth() {
             $paramsValidation = ['functionValidData' => 'verifyGetThresholdByMonth'];
-            $dataRequest = $this->getControllerMain()->validateDataForController($paramsValidation);
+            $dataRequest = $this->getControllerMain()->getValidateDataForController($paramsValidation);
 
             $db = $dataRequest['dataBase'];
             $data = $this->getModelStatisticDataMonth()->getThresholdByMonth($db, $dataRequest);
@@ -95,9 +95,9 @@
             $this->getViewStatistic()->renderJson(['data' => $data]);
         }
 
-        public function fetchNLastTrsByMonth() {
+        public function getNLastTrsByMonth() {
             $paramsValidation = ['functionValidData' => 'verifyGetNLastTrsByMonth'];
-            $dataRequest = $this->getControllerMain()->validateDataForController($paramsValidation);
+            $dataRequest = $this->getControllerMain()->getValidateDataForController($paramsValidation);
 
             $db = $dataRequest['dataBase'];
             $data = $this->getModelStatisticDataMonth()->getNLastTrsByMonth($db, $dataRequest);
@@ -105,9 +105,9 @@
             $this->getViewStatistic()->renderJson(['data' => $data]);
         }
 
-        public function fetchTotalTrsByMonth() {
+        public function getTotalTrsByMonth() {
             $paramsValidation = ['functionValidData' => 'verifyGetTotalTrsByMonth'];
-            $dataRequest = $this->getControllerMain()->validateDataForController($paramsValidation);
+            $dataRequest = $this->getControllerMain()->getValidateDataForController($paramsValidation);
 
             $db = $dataRequest['dataBase'];
             $data = $this->getModelStatisticDataMonth()->getTotalTrsByMonth($db, $dataRequest);
@@ -115,9 +115,9 @@
             $this->getViewStatistic()->renderJson(['data' => $data]);
         }
 
-        public function fetchBiggestTrsByMonth() {
+        public function getBiggestTrsByMonth() {
             $paramsValidation = ['functionValidData' => 'verifyGetBiggestTrsByMonth'];
-            $dataRequest = $this->getControllerMain()->validateDataForController($paramsValidation);
+            $dataRequest = $this->getControllerMain()->getValidateDataForController($paramsValidation);
 
             $db = $dataRequest['dataBase'];
             $data = $this->getModelStatisticDataMonth()->getBiggestTrsByMonth($db, $dataRequest);
@@ -127,7 +127,7 @@
 
         public function getYearListTrsByMonth() {
             $paramsValidation = ['functionValidData' => 'verifyGetYearListTrsByMonth'];
-            $dataRequest = $this->getControllerMain()->validateDataForController($paramsValidation);
+            $dataRequest = $this->getControllerMain()->getValidateDataForController($paramsValidation);
 
             $db = $dataRequest['dataBase'];
             $data = $this->getModelStatisticDataYear()->getYearListTrsByMonth($db, $dataRequest);
@@ -137,7 +137,7 @@
 
         public function getTotalTrsByYear() {
             $paramsValidation = ['functionValidData' => 'verifyGetTotalTrsByYear'];
-            $dataRequest = $this->getControllerMain()->validateDataForController($paramsValidation);
+            $dataRequest = $this->getControllerMain()->getValidateDataForController($paramsValidation);
 
             $db = $dataRequest['dataBase'];
             $data = $this->getModelStatisticDataYear()->getTotalTrsByYear($db, $dataRequest);
@@ -147,7 +147,7 @@
 
         function getBiggestTrsByYear() {
             $paramsValidation = ['functionValidData' => 'verifyGetBiggestTrsByYear'];
-            $dataRequest = $this->getControllerMain()->validateDataForController($paramsValidation);
+            $dataRequest = $this->getControllerMain()->getValidateDataForController($paramsValidation);
 
             $db = $dataRequest['dataBase'];
             $data = $this->getModelStatisticDataYear()->getBiggestTrsByYear($db, $dataRequest);
@@ -157,7 +157,7 @@
 
         function getBiggestMonthByYear() {
             $paramsValidation = ['functionValidData' => 'verifyGetBiggestMonthByYear'];
-            $dataRequest = $this->getControllerMain()->validateDataForController($paramsValidation);
+            $dataRequest = $this->getControllerMain()->getValidateDataForController($paramsValidation);
 
             $db = $dataRequest['dataBase'];
             $data = $this->getModelStatisticDataYear()->getBiggestMonthByYear($db, $dataRequest);
@@ -167,7 +167,7 @@
 
         function getYearListTrsByCategories() {
             $paramsValidation = ['functionValidData' => 'verifyGetYearListTrsByCategories'];
-            $dataRequest = $this->getControllerMain()->validateDataForController($paramsValidation);
+            $dataRequest = $this->getControllerMain()->getValidateDataForController($paramsValidation);
 
             $db = $dataRequest['dataBase'];
             $data = $this->getModelStatisticDataYear()->getYearListTrsByCategories($db, $dataRequest);
@@ -177,7 +177,7 @@
 
         function getTopYearCategories() {
             $paramsValidation = ['functionValidData' => 'verifyGetTopYearCategories'];
-            $dataRequest = $this->getControllerMain()->validateDataForController($paramsValidation);
+            $dataRequest = $this->getControllerMain()->getValidateDataForController($paramsValidation);
 
             $db = $dataRequest['dataBase'];
             $data = $this->getModelStatisticDataYear()->getTopYearCategories($db, $dataRequest);

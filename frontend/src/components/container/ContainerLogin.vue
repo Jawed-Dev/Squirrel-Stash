@@ -88,7 +88,7 @@
     import InputCheckbox from '@/components/input/InputCheckbox.vue';
     import { getTokenIfSuccessLogin } from '@/composables/useBackendGetData';
     import { isAnyMandatoryInputEmpty, isAnyInputError, TEXT_SUBMIT_ERROR } from '@/errors/useHandleError';
-    import LogoMain from '@/components/svgs/LogoMain.vue';
+    import LogoMain from '@/components/svg/LogoMain.vue';
     import TransitionOpacity from '@/components/transition/TransitionOpacity.vue';
     const OverlayContactUs = defineAsyncComponent(() => import('@/components/overlay/OverlayContactUs.vue'));
     import { createToast } from '@/composables/useToastNotification';

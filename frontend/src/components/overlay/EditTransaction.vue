@@ -45,7 +45,7 @@
     import { updateTransaction } from '@/composables/useBackendActionData';
     import { updateAllDataTransations} from '@/storesPinia/useUpdateStoreByBackend';
     import { formatDateForCurrentDay, formatDateForFirstDay, isCurrentMonth } from '@/composables/useGetDate';
-    import { listPurchases, listRecurings } from '@/svg/listTransactionSvgs';
+    import { listPurchases, listRecurings } from '@/svgUtils/listTransactionSvgs';
     import { isAnyMandatoryInputEmpty, isAnyInputError, TEXT_SUBMIT_ERROR } from '@/errors/useHandleError';
     import { isValidCategory } from '@/errors/useValidFormat';
     import { createToast } from '@/composables/useToastNotification';

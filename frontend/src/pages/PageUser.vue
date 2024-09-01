@@ -44,15 +44,15 @@
     import { useRouter } from 'vue-router';
     import { storeAuthTOken } from '@/storesPinia/useStoreDashboard';
     //import { disconnectUser } from '@/composables/useBackendActionData';
-    import { setSvgConfig } from '@/svg/svgConfig';
+    import { setSvgConfig } from '@/svgUtils/svgConfig';
     import TransitionOpacity from '@/components/transition/TransitionOpacity.vue';
 
-    const IconUser = defineAsyncComponent(() => import('@/components/svgs/IconUser.vue'));
-    const IconPrivacy = defineAsyncComponent(() => import('@/components/svgs/IconPrivacy.vue'));
-    const IconUserRules = defineAsyncComponent(() => import('@/components/svgs/IconUserRules.vue'));
-    const IconSupport = defineAsyncComponent(() => import('@/components/svgs/IconSupport.vue'));
-    const IconLogOut = defineAsyncComponent(() => import('@/components/svgs/IconLogOut.vue'));
-    const IconInfo = defineAsyncComponent(() => import('@/components/svgs/IconInfo.vue'));
+    const IconUser = defineAsyncComponent(() => import('@/components/svg/IconUser.vue'));
+    const IconPrivacy = defineAsyncComponent(() => import('@/components/svg/IconPrivacy.vue'));
+    const IconUserRules = defineAsyncComponent(() => import('@/components/svg/IconUserRules.vue'));
+    const IconSupport = defineAsyncComponent(() => import('@/components/svg/IconSupport.vue'));
+    const IconLogOut = defineAsyncComponent(() => import('@/components/svg/IconLogOut.vue'));
+    const IconInfo = defineAsyncComponent(() => import('@/components/svg/IconInfo.vue'));
     const OverlayPrivacy = defineAsyncComponent(() => import('@/components/overlay/OverlayPrivacy.vue'));
     const OverlayUserRules = defineAsyncComponent(() => import('@/components/overlay/OverlayUserRules.vue'));
     const OverlayContactUs = defineAsyncComponent(() => import('@/components/overlay/OverlayContactUs.vue'));
