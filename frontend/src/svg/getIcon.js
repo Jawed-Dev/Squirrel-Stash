@@ -1,120 +1,120 @@
 export async function getIconByName(name) {
     switch(name) {
         case 'Restaurant' : {
-            return await import('@/component/svgs/Restaurant.vue');
+            return await import('@/components/svgs/Restaurant.vue');
         }
         case 'Invisible' : {
-            return await import('@/component/svgs/IconInvisible.vue');
+            return await import('@/components/svgs/IconInvisible.vue');
         }
         case 'target' : {
-            return await import('@/component/svgs/IconTarget.vue');
+            return await import('@/components/svgs/IconTarget.vue');
         }
         case 'balance' : {
-            return await import('@/component/svgs/IconBalance.vue');
+            return await import('@/components/svgs/IconBalance.vue');
         }
         case 'Santé' : {
-            return await import('@/component/svgs/IconHealth.vue');
+            return await import('@/components/svgs/IconHealth.vue');
         }
         case 'Transport' : {
-            return await import('@/component/svgs/IconTransport.vue');
+            return await import('@/components/svgs/IconTransport.vue');
         }
         case 'Cadeau' : {
-            return await import('@/component/svgs/IconGift.vue');
+            return await import('@/components/svgs/IconGift.vue');
         }
         case 'Loisir' : {
-            return await import('@/component/svgs/IconHobbie.vue');
+            return await import('@/components/svgs/IconHobbie.vue');
         }
         case 'Famille' : {
-            return await import('@/component/svgs/IconFamily.vue');
+            return await import('@/components/svgs/IconFamily.vue');
         }
         case 'Alimentation' : {
-            return await import('@/component/svgs/IconFood.vue');
+            return await import('@/components/svgs/IconFood.vue');
         }
         case 'Vestimentaire' : {
-            return await import('@/component/svgs/IconClothes.vue');
+            return await import('@/components/svgs/IconClothes.vue');
         }
         case 'Loyer' : {
-            return await import ('@/component/svgs/IconHouse.vue');
+            return await import ('@/components/svgs/IconHouse.vue');
         }
 
         case 'Facture' : {
-            return await import ('@/component/svgs/IconReceipt.vue');
+            return await import ('@/components/svgs/IconReceipt.vue');
         }
 
         case 'Abonnement' : {
-            return await import ('@/component/svgs/IconMobile.vue');
+            return await import ('@/components/svgs/IconMobile.vue');
         }
 
         case 'Crédit' : {
-            return await import ('@/component/svgs/IconBillet.vue');
+            return await import ('@/components/svgs/IconBillet.vue');
         }
 
         case 'Assurance' : {
-            return await import ('@/component/svgs/IconCar.vue');
+            return await import ('@/components/svgs/IconCar.vue');
         }
 
         case 'Autre' : {
-            return await import ('@/component/svgs/IconQuestionMark.vue');
+            return await import ('@/components/svgs/IconQuestionMark.vue');
         }
 
         case 'calculator' : {
-            return await import ('@/component/svgs/IconCalculator.vue');
+            return await import ('@/components/svgs/IconCalculator.vue');
         }
 
         case 'Search' : {
-            return await import ('@/component/svgs/IconSearch.vue');
+            return await import ('@/components/svgs/IconSearch.vue');
         }
 
         case 'Amount' : {
-            return await import ('@/component/svgs/IconAmount.vue');
+            return await import ('@/components/svgs/IconAmount.vue');
         }
 
         case 'Crown' : {
-            return await import ('@/component/svgs/IconCrown.vue');
+            return await import ('@/components/svgs/IconCrown.vue');
         }
 
         case 'Pencil' : {
-            return await import ('@/component/svgs/IconPencil.vue');
+            return await import ('@/components/svgs/IconPencil.vue');
         }
 
         case 'Calendar' : {
-            return await import ('@/component/svgs/IconCalendar.vue');
+            return await import ('@/components/svgs/IconCalendar.vue');
         }
 
         case 'Category' : {
-            return await import ('@/component/svgs/IconCategoryTrs.vue');
+            return await import ('@/components/svgs/IconCategoryTrs.vue');
         }
 
         case 'Name' : {
-            return await import ('@/component/svgs/IconName.vue');
+            return await import ('@/components/svgs/IconName.vue');
         }
 
         case 'Password' : {
-            return await import ('@/component/svgs/IconPassword.vue');
+            return await import ('@/components/svgs/IconPassword.vue');
         }
 
         case 'Email' : {
-            return await import ('@/component/svgs/IconEmail.vue');
+            return await import ('@/components/svgs/IconEmail.vue');
         }
 
         case 'Cross' : {
-            return await import ('@/component/svgs/IconCross.vue');
+            return await import ('@/components/svgs/IconCross.vue');
         }
 
         case 'Gender' : {
-            return await import ('@/component/svgs/IconGender.vue');
+            return await import ('@/components/svgs/IconGender.vue');
         }
 
         case 'Validation' : {
-            return await import ('@/component/svgs/IconValidation.vue');
+            return await import ('@/components/svgs/IconValidation.vue');
         }
 
         case 'ArrowUp' : {
-            return await import ('@/component/svgs/IconArrowUp.vue');
+            return await import ('@/components/svgs/IconArrowUp.vue');
         }
 
         case 'ArrowDown' : {
-            return await import ('@/component/svgs/IconArrowDown.vue');
+            return await import ('@/components/svgs/IconArrowDown.vue');
         }
 
         default : {

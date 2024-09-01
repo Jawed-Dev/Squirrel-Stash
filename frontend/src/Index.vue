@@ -12,10 +12,10 @@
 <script setup>
   import { useRoute } from 'vue-router';
   import { ref, defineAsyncComponent, watch, onMounted } from 'vue';
-  import { getLStorageCookieConsent } from "@/composable/useLocalStorage";
-  import ContainerHeader from '@/component/container/ContainerHeader.vue';
-  import TransitionOpacity from '@/component/transition/TransitionOpacity.vue';
-  const OverlayConsentCookies = defineAsyncComponent(() => import('@/component/overlay/OverlayConsentCookies.vue'));
+  import { getLStorageCookieConsent } from "@/composables/useLocalStorage";
+  import ContainerHeader from '@/components/container/ContainerHeader.vue';
+  import TransitionOpacity from '@/components/transition/TransitionOpacity.vue';
+  const OverlayConsentCookies = defineAsyncComponent(() => import('@/components/overlay/OverlayConsentCookies.vue'));
   
   // variables, props ...
   const route = useRoute();

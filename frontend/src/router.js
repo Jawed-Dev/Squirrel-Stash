@@ -1,23 +1,23 @@
 // lazy loading
-const PageLogin = () => import('@/page/PageLogin.vue');
-const PageCreateAcc = () => import('@/page/PageCreateAcc.vue');
-const PageDashboard = () => import('@/page/PageDashboard.vue');
-const PageHistoryTransactions = () => import('@/page/PageHistoryTransactions.vue');
-const PageTemporary = () => import('@/page/PageTemporary.vue');
-const PageForgotPass = () => import('@/page/PageForgotPass.vue');
-const PageResetPass = () => import('@/page/PageResetPass.vue');
-const PageAccount = () => import('@/page/PageAccount.vue');
-const PageUser = () => import('@/page/PageUser.vue');
-const PageAnnualSummary = () => import('@/page/PageAnnualSummary.vue');
-const Page404 = () => import('@/page/Page404.vue');
+const PageLogin = () => import('@/pages/PageLogin.vue');
+const PageCreateAcc = () => import('@/pages/PageCreateAcc.vue');
+const PageDashboard = () => import('@/pages/PageDashboard.vue');
+const PageHistoryTransactions = () => import('@/pages/PageHistoryTransactions.vue');
+const PageTemporary = () => import('@/pages/PageTemporary.vue');
+const PageForgotPass = () => import('@/pages/PageForgotPass.vue');
+const PageResetPass = () => import('@/pages/PageResetPass.vue');
+const PageAccount = () => import('@/pages/PageAccount.vue');
+const PageUser = () => import('@/pages/PageUser.vue');
+const PageAnnualSummary = () => import('@/pages/PageAnnualSummary.vue');
+const Page404 = () => import('@/pages/Page404.vue');
 
 
-import  useConfigFetchGetPage from "@/composable/useConfigFetchGetPage";
+import  useConfigFetchGetPage from "@/composables/useConfigFetchGetPage";
 import { createRouter, createWebHistory } from 'vue-router';
-import { getLStorageAuthToken } from "@/composable/useLocalStorage";
-import { isValidResetPassToken  } from "@/composable/useBackendGetData";
-import { updateEmail } from '@/composable/useBackendActionData';
-import { createToast } from '@/composable/useToastNotification';
+import { getLStorageAuthToken } from "@/composables/useLocalStorage";
+import { isValidResetPassToken  } from "@/composables/useBackendGetData";
+import { updateEmail } from '@/composables/useBackendActionData';
+import { createToast } from '@/composables/useToastNotification';
 
 const routes = [
   { path: '/', component: PageTemporary, meta: { page:'Squirrel Stash', request: 'pageIndex'}},
