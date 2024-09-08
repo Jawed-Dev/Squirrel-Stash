@@ -3,7 +3,7 @@
         <div :class="`fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-30 text-white rounded-[3px] overflow-hidden 
                  shadow-main trigger-menu-delete bg-main-gradient
                 max-[550px]:w-full sm:w-1/4 min-[550px]:min-w-[550px]`">
-            <MainContainerSlot :bgMainBtn="'bg-gradient-vanusa'" :width="'w-full px-10'" @toggleMenu="toggleMenu"
+            <ContainerSlotOverlay :bgMainBtn="'bg-gradient-vanusa'" :width="'w-full px-10'" @toggleMenu="toggleMenu"
             :textBtn1="'Annuler'" :textBtn2="'Supprimer'" :titleContainer="textTitleComponent">
 
                 <div class="max-h-[60vh] overflow-y-auto">
@@ -11,17 +11,17 @@
                         <p v-html="textBodyComponent" class="font-light text-lg opacity-90 px-10"></p>
                     </div>
                 </div>
-            </MainContainerSlot>
+            </ContainerSlotOverlay>
         </div>
     </div>
 </template>
 
 <script setup>
     import { computed } from 'vue';
-    import MainContainerSlot from '@/components/containerSlot/MainContainerSlot.vue';
+    import ContainerSlotOverlay from '@/components/containerSlot/ContainerSlotOverlay.vue';
     import useClickOutside from '@/composables/useClickOutSide';
     import useEscapeKey from '@/composables/useEscapeKey';
-    import { deleteTransaction } from '@/composables/useBackendActionData';
+    import { deleteTransaction } from '@/requests/useBackendAction';
     import { storeDateSelected } from '@/storesPinia/useStoreDashboard';
     import { updateAllDataTransations } from '@/storesPinia/useUpdateStoreByBackend';
     import { createToast } from '@/composables/useToastNotification';

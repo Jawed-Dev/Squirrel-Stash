@@ -61,7 +61,7 @@
             <div class="w-full flex flex-col relative" v-for="(icon, index) of dataListPage2" >
                 <div 
                     :key="index" @click="handleClickHeader(icon)" @mouseenter="isMouseHoverIcon(icon)" @mouseleave ="isMouseLeaveIcon(icon)"
-                    :class="`flex relative ${classTranslateY} py-2 cursor-pointer 
+                    :class="`flex relative ${classTranslateY} py-2 cursor-pointer pointer-events-auto
                     ${borderCurrentPage(icon.page)}`"
                 >
                     <component :is="icon.Component" :svg="styleIcon" :class="`md:w-header-tablet-width xl:w-header-width 

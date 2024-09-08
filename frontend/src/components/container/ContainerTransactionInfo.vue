@@ -56,7 +56,7 @@
             v-if="(!props.infoTransaction.transaction_id)" 
             :class="`min-h-[124px] pl-1 sm:pl-5 justify-center flex flex-col border-gray-700 text-white ${borderBottom}`">
             <IconLoader nameIcon="Invisible" :svg="iconConfig" 
-            :class="`${iconConfig.color} rounded-full p-[10px]  shadow-main`"/>
+            :class="`hidden sm:flex ${iconConfig.color} rounded-full p-[10px]  shadow-main`"/>
             <p class="absolute w-full text-[15px] text-center font-light">Aucune donnée</p>
         </div>
     </div>

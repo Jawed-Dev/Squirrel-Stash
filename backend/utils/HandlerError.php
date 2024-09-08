@@ -1,5 +1,5 @@
 <?php
-    require_once './Controllers/ControllerMain.php';
+    require_once './controllers/ControllerMain.php';
 
     interface I_HandlerError {
         // Main Controller 

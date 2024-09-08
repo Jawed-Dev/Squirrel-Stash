@@ -69,7 +69,7 @@
     import ContainerListTransactions from '@/components/container/ContainerListTransactions.vue';
     import AddTransaction from '@/components/overlay/AddTransaction.vue';
     import { monthNames, getAvailableYear, getCurrentMonthName, getCurrentYear, getMonthNumber } from '@/composables/useGetDate';
-    import { getUserFirstName } from '@/composables/useBackendGetData';
+    import { getUserFirstName } from '@/requests/useBackendGetData';
     import { storeThreshold, storeDateSelected, storeStatisticDetails } from '@/storesPinia/useStoreDashboard';
     import { updateThresholdByMonth, updateTotalTrsByMonth, updateBalanceEcoByMonth, updateBiggestTrsByMonth } from '@/storesPinia/useUpdateStoreByBackend';
     import ContainerSpinner from '@/components/container/ContainerSpinner.vue';

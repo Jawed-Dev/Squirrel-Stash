@@ -19,7 +19,7 @@
                         v-model:stateError="errorInputs.email"
                         v-model:mandatoryInput="mandatoryInputs.email"
                         type="email"
-                        placeholder="exemple.domaine.com"
+                        placeholder="nom@domaine.com"
                         validFormat="email"
                     />
                 </div>
@@ -38,8 +38,8 @@
                     />
                 </div>
     
-                <div class="mt-6 flex flex-col items-center gap-1 justify-between 
-                            lg:px-2 lg:items-stretch lg:gap-0 xl:px-5 lg:flex-row">
+                <div class="mt-6 flex items-center gap-1 justify-between px-2
+                            lg:px-2 lg:gap-0 xl:px-5 lg:flex-row">
                             
                     <div class="flex gap-2">
                         <InputCheckbox v-model="inputs.confirmCheckbox" type="checkbox" />
@@ -86,7 +86,7 @@
     import { useRouter } from 'vue-router';
     import InputBase from '@/components/input/InputBase.vue';
     import InputCheckbox from '@/components/input/InputCheckbox.vue';
-    import { getTokenIfSuccessLogin } from '@/composables/useBackendGetData';
+    import { getTokenIfSuccessLogin } from '@/requests/useBackendGetData';
     import { isAnyMandatoryInputEmpty, isAnyInputError, TEXT_SUBMIT_ERROR } from '@/errors/useHandleError';
     import LogoMain from '@/components/svg/LogoMain.vue';
     import TransitionOpacity from '@/components/transition/TransitionOpacity.vue';

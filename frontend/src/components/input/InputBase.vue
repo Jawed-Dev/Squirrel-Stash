@@ -14,19 +14,25 @@
             duration-500 ${colorValidationInput} focus:outline-none ${width} w-full`"
 
             :value="inputValue"
-            :type="type"
+            :type="inputType"
             :placeholder="placeholder"
             :id="props.id"
-            :ref="type === 'date' ? 'refInput' : ''"
+            ref="refInput"
         >
+      
         <!-- icon Validation if is active -->
-        <div :class="`transition-colors bg-transparent duration-500 ${colorValidationInput} mx-1 `">
+        <div v-if="validFormat !== 'password'" :class="`transition-colors bg-transparent duration-500 ${colorValidationInput} mx-1`">
             {{ iconValidationInput }}
         </div>
+
+        <IconEye @click="toggleHidePass" v-if="validFormat === 'password' && !isPasswordHide" class="cursor-pointer mr-1" :svg="{width:25}" />
+        <IconEyeCut @click="toggleHidePass" v-if="validFormat === 'password' && isPasswordHide" class="cursor-pointer mr-1" :svg="{width:25}" />
     </div>
     <TransitionOpacity duration-in="duration-150" duration-out="duration-0">
-        <div v-if="isAnyError" :class="`text-red-200 font-light relative`">
-            <p class="text-sm mt-[1px] absolute">{{ isAnyError }}</p>
+        <div v-if="isAnyError" :class="`text-red-200 font-light relative flex pt-2`">
+            <p class="text-sm">{{ isAnyError }} </p>
+            <IconQuestionMark  @click="openFormatAdvice" v-if="isValidTypeInputForAdvice"
+            class="ml-2 bg-gradient-vanusa rounded-full p-1 shadow-main cursor-pointer hover:opacity-50" :svg={width:20} />
         </div>
     </TransitionOpacity>
 </template>
@@ -37,6 +43,9 @@
     import { typeError } from '@/errors/useHandleError';
     import UseIconLoader from '@/composables/useIconLoader.vue';
     import { createToast } from '@/composables/useToastNotification';
+    import IconQuestionMark from '@/components/svg/IconQuestionMark.vue';
+    import IconEye from '@/components/svg/IconEye.vue';
+    import IconEyeCut from '@/components/svg/IconEyeCut.vue';
     import {
         isValidMail,
         isValidPassword,
@@ -53,6 +62,8 @@
         formatInputAmount,
         isValidInputInt
     } from '@/errors/useValidFormat';
+
+
 
 
     // variables, props, ...
@@ -96,6 +107,7 @@
     const isInputMantadoryEmpty = defineModel('mandatoryInput');
     const isInputFocused = ref(false);
     const timeoutCheckError = ref(null);
+    const isPasswordHide = ref(false);
 
     const colorBorder = computed(() => {
         if(props.borderHidden) return '';
@@ -121,11 +133,22 @@
         return (!isTimerCheckErrorActive() && isAnyError.value) ? "text-red-300 webkit-red" : "text-green-300 webkit-green";
     });
 
+    const inputType = computed(() => {
+        if (props.validFormat === 'password' && isPasswordHide.value) return 'text';
+        return props.type;
+    });
+
     const iconValidationInput = computed(() => {
         if(props.hideAnimation) return '';
         if(isInputEmpty()) return '';
         if(isTimerCheckErrorActive()) return '';
-        return (!isTimerCheckErrorActive() && isAnyError.value) ? "✗" : "✓";
+        // i removed this option
+        // return (!isTimerCheckErrorActive() && isAnyError.value) ? "✗" : "✓";
+        return '';
+    });
+
+    const isValidTypeInputForAdvice = computed(() => {
+        return true;
     });
 
     const isAnyError = computed(() => {
@@ -152,12 +175,20 @@
         if(isTimerCheckErrorActive()) clearTimeout(timeoutCheckError.value);
         timeoutCheckError.value = setTimeout(() => {
             timeoutCheckError.value = null;
-         }, 1000);
+         }, 2000);
     });
 
-    watch(isAnyError, () => {
-        if(isAnyError.value) createToast(typeError[props.validFormat].adviceFormat, 'error');
-    })
+    function openFormatAdvice() {
+        createToast(typeError[props.validFormat].adviceFormat, 'error');
+    }
+
+    // watch(isAnyError, () => {
+    //     if(isAnyError.value) createToast(typeError[props.validFormat].adviceFormat, 'error');
+    // })
+
+    function toggleHidePass () {
+        isPasswordHide.value = !isPasswordHide.value;
+    }
 
     function isInputEmpty() {
         return inputValue.value === '';
@@ -182,6 +213,7 @@
     }
 
     const openDatePicker = () => {
+        if(props.type !== 'date') return;
         if (refInput.value) refInput.value.showPicker();
     };
 

@@ -12,11 +12,11 @@ const PageAnnualSummary = () => import('@/pages/PageAnnualSummary.vue');
 const Page404 = () => import('@/pages/Page404.vue');
 
 
-import  useConfigFetchGetPage from "@/composables/useConfigFetchGetPage";
+import  useConfigFetchGetPage from "@/requests/useConfigFetchGetPage";
 import { createRouter, createWebHistory } from 'vue-router';
 import { getLStorageAuthToken } from "@/composables/useLocalStorage";
-import { isValidResetPassToken  } from "@/composables/useBackendGetData";
-import { updateEmail } from '@/composables/useBackendActionData';
+import { isValidResetPassToken  } from "@/requests/useBackendGetData";
+import { updateEmail } from '@/requests/useBackendAction';
 import { createToast } from '@/composables/useToastNotification';
 
 const routes = [

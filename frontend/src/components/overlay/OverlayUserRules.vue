@@ -4,12 +4,12 @@
                  shadow-main bg-main-gradient
                 w-full lg:w-[1024px]  font-main`">
     
-            <MainContainerSlot :bgMainBtn="'bg-gradient-blue'" width='w-full'
+            <ContainerSlotOverlay :bgMainBtn="'bg-gradient-blue'" width='w-full'
             :onlyOneBtn="true" :textBtn1="'Fermer'" titleContainer="Conditions d'utilisation de Squirrel Stash" @toggleMenu="toggleMenu">
                 
-            <div class=" max-h-[75vh] overflow-y-auto my-2">
+            <div class="max-h-[calc(80vh-88px)] overflow-y-auto my-2">
 
-                <div class="px-3 md:px-12 w-full flex justify-center">
+                <div class="px-5 sm:px-10 md:px-12 w-full flex justify-center">
     
                     <div class="flex flex-col w-full rounded-[3px] py-5 gap-20">
         
@@ -47,7 +47,7 @@
                     </div>
                 </div>
             </div>
-            </MainContainerSlot>
+            </ContainerSlotOverlay>
 
         </div>
     </div>
@@ -56,7 +56,7 @@
     
 
 <script setup>
-    import MainContainerSlot from '@/components/containerSlot/MainContainerSlot.vue';
+    import ContainerSlotOverlay from '@/components/containerSlot/ContainerSlotOverlay.vue';
     import useClickOutside from '@/composables/useClickOutSide';
     import useEscapeKey from '@/composables/useEscapeKey';
 

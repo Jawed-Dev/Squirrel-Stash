@@ -1,13 +1,13 @@
 <template>
     <section class="w-full h-screen flex flex-col items-center justify-center bg-main-gradient 
-        font-main  shadow-main overflow-y-auto min-h-[791px] lg:w-1/2">
+        font-main  shadow-main overflow-y-auto min-h-[800px] lg:w-1/2">
 
         <div class="w-full flex flex-col items-center justify-center">
             <div class="min-w-[200px] min-h-[200px]">
                 <LogoMain :svg="styleLogo" />
             </div>
 
-            <form class="overflow-x-auto min-w-[420px] lg:w-[60%] xl:w-1/2 2xl:min-w-[420px]" @submit.prevent="handleSubmit()">    
+            <form class="overflow-x-auto min-w-1/2 lg:w-[420px] 2xl:min-w-[500px]" @submit.prevent="handleSubmit()">    
                 <div class="flex flex-col gap-5 sm:gap-0 sm:flex-row justify-center w-full mt-5">
                     <div class="px-2 w-full sm:w-1/2">
                         <label class="text-white font-light" for="input-fname-crt-acc">Votre prénom</label>
@@ -47,7 +47,7 @@
                         v-model:mandatoryInput="mandatoryInputs.email"
                         id="input-email-crt-acc"
                         type="email"
-                        placeholder="exemple.domaine.com"
+                        placeholder="nom@domaine.com"
                         validFormat="email"
                         
                     />
@@ -81,12 +81,12 @@
                     />
                 </div>
     
-                <div class="flex justify-center mt-5 gap-1">
+                <div class="flex justify-center mt-5 gap-5 sm:gap-1">
                     <InputCheckbox v-model="confirmCheckbox" type="checkbox" />
-                    <p class="txt-main-blue text-[14px] text-white font-light" >
-                        Accepter les règles de 
+                    <p class="text-[14px] text-white font-light" >
+                        <span class="pl-5 sm:pl-0">Accepter les règles de </span><span class="block sm:hidden"></span>
                         <span @click="toggleRules('privacy')" class="text-main-blue cursor-pointer hover:text-sky-200">confidentialité</span> et 
-                        <span @click="toggleRules('user')" class="text-main-blue cursor-pointer hover:text-sky-200">d'utilisation</span>.
+                        <span @click="toggleRules('user')" class="text-main-blue cursor-pointer hover:text-sky-200">d'utilisation</span>
                     </p>
                 </div>
     
@@ -96,7 +96,7 @@
                     </button>
                 </div>
     
-                <div class="flex pt-5 gap-9 justify-center">
+                <div class="flex py-5 gap-9 justify-center">
                     <p class="text-white font-light">Vous avez déjà un compte ?</p> 
                     <router-link to="/" class="text-main-blue font-light hover:text-sky-200">Se connecter</router-link>
                 </div>
@@ -120,7 +120,7 @@
     import { ref, computed, reactive, defineAsyncComponent } from 'vue';
     import { useRouter } from 'vue-router';
     import InputBase from '@/components/input/InputBase.vue';
-    import { createAccount } from '@/composables/useBackendActionData';
+    import { createAccount } from '@/requests/useBackendAction';
     import InputCheckbox from '@/components/input/InputCheckbox.vue';
     import { isAnyMandatoryInputEmpty, isAnyInputError, TYPE_SUBMIT_ERROR, TEXT_SUBMIT_ERROR } from '@/errors/useHandleError';
     import LogoMain from '@/components/svg/LogoMain.vue';

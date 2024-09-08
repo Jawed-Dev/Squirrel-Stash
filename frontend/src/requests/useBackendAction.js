@@ -1,4 +1,4 @@
-import useConfigFetchActionData  from "@/composables/useConfigFetchActionData";
+import useConfigFetchAction  from "@/requests/useConfigFetchAction";
 import { getLStorageAuthToken } from "@/composables/useLocalStorage";
 import useConfigFetchGetData from "./useConfigFetchGetData";
 
@@ -40,7 +40,7 @@ export async function updatePasswordByToken(params) {
         resetPassToken: String(params.resetPassToken),
         password: params.password,
     };
-    const dataRequest = await useConfigFetchActionData ({
+    const dataRequest = await useConfigFetchAction ({
         request: 'updatePasswordByToken',
         method: 'POST',
         dataBody: body,
@@ -56,7 +56,7 @@ export async function updatePasswordByUserId(params) {
         oldPass: String(params.oldPass),
         newPass: String(params.newPass),
     };
-    const dataRequest = await useConfigFetchActionData ({
+    const dataRequest = await useConfigFetchAction ({
         request: 'updatePasswordByUserId',
         method: 'POST',
         dataBody: body,
@@ -71,7 +71,7 @@ export async function sendResetPass(email) {
     const body = {
         email: String(email),
     };
-    const dataRequest = await useConfigFetchActionData ({
+    const dataRequest = await useConfigFetchAction ({
         request: 'sendResetPass',
         method: 'POST',
         dataBody: body,
@@ -89,7 +89,7 @@ export async function createAccount(params) {
         email: String(params.email),
         password: String(params.password),
     };
-    const dataRequest = await useConfigFetchActionData ({
+    const dataRequest = await useConfigFetchAction ({
         request: 'createAccount',
         method: 'POST',
         dataBody: body,
@@ -106,7 +106,7 @@ export async function saveThreshold(month, year, amount) {
         selectedYear: Number(year),
         thresholdAmount: Number(amount)
     };
-    const dataRequest = await useConfigFetchActionData ({
+    const dataRequest = await useConfigFetchAction ({
         request: 'saveThreshold',
         method: 'POST',
         dataBody: body,
@@ -132,7 +132,7 @@ export async function addTransaction(params) {
         transactionDate: String(params.date),
         transactionNote: String(params.note)
     };
-    const dataRequest = await useConfigFetchActionData ({
+    const dataRequest = await useConfigFetchAction ({
         request: 'addTransaction',
         method: 'POST',
         dataBody: body,
@@ -162,7 +162,7 @@ export async function updateTransaction(params) {
         transactionDate: String(params.date),
         transactionNote: String(params.note)
     };
-    const dataRequest = await useConfigFetchActionData ({
+    const dataRequest = await useConfigFetchAction ({
         request: 'updateTransaction',
         method: 'POST',
         dataBody: body,
@@ -177,7 +177,7 @@ export async function deleteTransaction(transactionId) {
     const body = {
         transactionId: Number(transactionId),
     };
-    const dataRequest = await useConfigFetchActionData ({
+    const dataRequest = await useConfigFetchAction ({
         request: 'deleteTransaction',
         method: 'POST',
         dataBody: body,
@@ -196,7 +196,7 @@ export async function updateUserProfil(params) {
         birthday: String(params.birthday),
         gender: String(params.gender)
     };
-    const response = await useConfigFetchActionData ({
+    const response = await useConfigFetchAction ({
         request: 'updateUserProfil', 
         method: 'POST', 
         dataBody: body, 
@@ -211,7 +211,7 @@ export async function sendUpdateMail(params) {
     const body = {
         newEmail: String(params.newEmail),
     };
-    const response = await useConfigFetchActionData ({
+    const response = await useConfigFetchAction ({
         request: 'sendUpdateMail', 
         method: 'POST', 
         dataBody: body, 
@@ -228,7 +228,7 @@ export async function sendEmailToSupport(params) {
         emailSender: String(params.emailSender),
         message: String(params.message),
     };
-    const response = await useConfigFetchActionData ({
+    const response = await useConfigFetchAction ({
         request: 'sendEmailToSupport', 
         method: 'POST', 
         dataBody: body, 
@@ -243,7 +243,7 @@ export async function updateEmail(token) {
     const body = {
         token: String(token),
     };
-    const response = await useConfigFetchActionData({
+    const response = await useConfigFetchAction({
         request: 'updateEmail', 
         method: 'POST', 
         dataBody: body, 

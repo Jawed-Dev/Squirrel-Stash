@@ -6,8 +6,8 @@ import "vue-toastification/dist/index.css";
 export function createToast(text, type = 'info' ) {
     const toast = useToast();
     toast[type](text, {
-        position: "bottom-right",
-        timeout: 4990,
+        position: "top-center",
+        timeout: 5990,
         closeOnClick: true,
         pauseOnFocusLoss: true,
         pauseOnHover: true,
@@ -18,6 +18,7 @@ export function createToast(text, type = 'info' ) {
         closeButton: "button",
         icon: true,
         rtl: false,
+        singleton: true,
         bodyClassName: ["custom-class-1"]
           
           

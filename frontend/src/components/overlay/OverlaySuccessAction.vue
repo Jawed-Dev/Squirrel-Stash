@@ -3,7 +3,7 @@
         <div v-if="isOverlayActive" 
         :class="`fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-30 text-white rounded-[3px] overflow-hidden 
          shadow-main trigger-action-success bg-main-gradient w-[40%]`">
-            <MainContainerSlot 
+            <ContainerSlotOverlay 
             :hideCross="true"
             :onlyOneBtn="true"
             :textBtn1="'Ok'" 
@@ -19,7 +19,7 @@
                         <h2 class="text-lg">{{text}}</h2>
                     </div>
                 </div>
-            </MainContainerSlot>
+            </ContainerSlotOverlay>
         </div>
     </div>
 </template>
@@ -27,7 +27,7 @@
 
 <script setup>
     import { ref, watch, computed, reactive, defineAsyncComponent } from 'vue';
-    import MainContainerSlot from '@/components/containerSlot/MainContainerSlot.vue';
+    import ContainerSlotOverlay from '@/components/containerSlot/ContainerSlotOverlay.vue';
     import useClickOutside from '@/composables/useClickOutSide';
     import useEscapeKey from '@/composables/useEscapeKey';
     import UseIconLoader from '@/composables/useIconLoader.vue';

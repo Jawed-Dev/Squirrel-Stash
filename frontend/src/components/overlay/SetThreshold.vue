@@ -18,7 +18,7 @@
                  shadow-main trigger-set-treshold bg-main-gradient
                 max-[550px]:w-full sm:w-1/4 min-[550px]:min-w-[550px]`"
             >
-                <MainContainerSlot 
+                <ContainerSlotOverlay 
                     :textBtn1="'Annuler'" :textBtn2="'Choisir'" :titleContainer="'Choisir un nouveau seuil'" @toggleMenu="toggleMenu">
 
                     <div class="max-h-[65vh] overflow-y-auto">
@@ -48,7 +48,7 @@
                             </div>
                         </div>
                     </div>
-                </MainContainerSlot>
+                </ContainerSlotOverlay>
             </div>
         </TransitionOpacity>   
 </template>
@@ -57,13 +57,13 @@
     // import
     import { ref } from 'vue';
     import TransitionOpacity from '@/components/transition/TransitionOpacity.vue';  
-    import MainContainerSlot from '@/components//containerSlot/MainContainerSlot.vue';
+    import ContainerSlotOverlay from '@/components//containerSlot/ContainerSlotOverlay.vue';
     import IconPreferences from '@/components//svg/IconPreferences.vue';
     import { setSvgConfig } from '@/svgUtils/svgConfig';
     import useClickOutside from '@/composables/useClickOutSide';
     import useEscapeKey from '@/composables/useEscapeKey';
     import InputBase from '@/components//input/InputBase.vue';
-    import { saveThreshold } from '@/composables/useBackendActionData';
+    import { saveThreshold } from '@/requests/useBackendAction';
     import { storeDateSelected } from '@/storesPinia/useStoreDashboard';
     import { updateBalanceEcoByMonth, updateThresholdByMonth, updateTotalTrsByMonth } from '@/storesPinia/useUpdateStoreByBackend';
     import { isAnyMandatoryInputEmpty, isAnyInputError, TYPE_SUBMIT_ERROR, TEXT_SUBMIT_ERROR} from '@/errors/useHandleError';

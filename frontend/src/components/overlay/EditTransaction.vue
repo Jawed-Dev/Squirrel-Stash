@@ -6,7 +6,7 @@
                  shadow-main trigger-edit-transaction bg-main-gradient
                 max-[550px]:w-full sm:w-1/4 min-[550px]:min-w-[550px]`">
 
-            <MainContainerSlot 
+            <ContainerSlotOverlay 
                 :textBtn1="'Annuler'" :textBtn2="'Modifier'" :titleContainer="(!typeTransaction) ? 'Modifier achat' : 'Modifier prélèvement'" 
                 @toggleMenu="toggleMenu" 
             >
@@ -25,7 +25,7 @@
                         v-model:typeTransaction="typeTransaction" />              
                     </div>
                 </div>
-            </MainContainerSlot>
+            </ContainerSlotOverlay>
         </div>
     </div>
 </template>
@@ -40,9 +40,9 @@
     const ContainerInputs = defineAsyncComponent(() => import('@/components/container/ContainerInputs.vue'));
     const ContainerSelectCategories = defineAsyncComponent(() => import('@/components/container/ContainerSelectCategories.vue'));
 
-    import MainContainerSlot from '@/components/containerSlot/MainContainerSlot.vue';
+    import ContainerSlotOverlay from '@/components/containerSlot/ContainerSlotOverlay.vue';
     import { storeDateSelected } from '@/storesPinia/useStoreDashboard';
-    import { updateTransaction } from '@/composables/useBackendActionData';
+    import { updateTransaction } from '@/requests/useBackendAction';
     import { updateAllDataTransations} from '@/storesPinia/useUpdateStoreByBackend';
     import { formatDateForCurrentDay, formatDateForFirstDay, isCurrentMonth } from '@/composables/useGetDate';
     import { listPurchases, listRecurings } from '@/svgUtils/listTransactionSvgs';

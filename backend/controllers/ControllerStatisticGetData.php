@@ -1,6 +1,6 @@
 <?php
-    require_once './Controllers/ControllerMain.php';
-    require_once "./views/viewStatistic.php";
+    require_once './controllers/ControllerMain.php';
+    require_once "./views/ViewStatistic.php";
     require_once './models/ModelStatisticGetDataYear.php';
     require_once './models/ModelStatisticGetDataMonth.php';
 

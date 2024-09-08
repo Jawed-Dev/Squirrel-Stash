@@ -1,5 +1,5 @@
 
-import { NAME_FOLDER_MAIN } from '@/config.js';
+import { PATH_FOLDER_MAIN } from '@/config.js';
 import { createToast } from '@/composables/useToastNotification';
 import { TEXT_SUBMIT_ERROR } from '@/errors/useHandleError';
 
@@ -11,7 +11,7 @@ export default async function useConfigFetchGetData(params) {
     if(!params.request) return null;
 
     // path
-    const fullPath = `/api/${NAME_FOLDER_MAIN}/backend/?actionData=${params.request}`;  
+    const fullPath = `${PATH_FOLDER_MAIN}/backend/?actionData=${params.request}`;  
 
     // header data
     const headers = new Headers();

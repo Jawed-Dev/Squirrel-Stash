@@ -1,6 +1,6 @@
 <?php
 
-    require_once './Controllers/ControllerMain.php';
+    require_once './controllers/ControllerMain.php';
     //require_once './key.php';
     require_once './config.php';
 

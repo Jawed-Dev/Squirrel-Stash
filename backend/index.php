@@ -2,12 +2,12 @@
     try {
         // config
         require_once './config.php';
-        require_once './Controllers/controllerMain.php';
+        require_once './controllers/controllerMain.php';
 
         // CORS config
         $allowedOrigin = FRONT_BASE_URL;
         $origin = isset($_SERVER['HTTP_X_CUSTOM_ORIGIN']) ? $_SERVER['HTTP_X_CUSTOM_ORIGIN'] : '';
-        if ($origin !== $allowedOrigin) throw new Exception('Erreur CORS'); 
+        if ($origin !== $allowedOrigin) throw new Exception('Accès refusé.'); 
         header("Access-Control-Allow-Origin: ".FRONT_BASE_URL);
         header("Access-Control-Allow-Methods: GET, POST");
         header("Content-Type: application/json");

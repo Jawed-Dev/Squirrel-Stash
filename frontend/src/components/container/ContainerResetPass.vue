@@ -59,7 +59,7 @@
     import { ref, reactive } from 'vue';
     import { useRouter, useRoute } from 'vue-router';
     import InputBase from '@/components/input/InputBase.vue';
-    import { updatePasswordByToken } from '@/composables/useBackendActionData';
+    import { updatePasswordByToken } from '@/requests/useBackendAction';
     import { isAnyMandatoryInputEmpty, isAnyInputError, TYPE_SUBMIT_ERROR, TEXT_SUBMIT_ERROR } from '@/errors/useHandleError';
     import LogoMain from '@/components/svg/LogoMain.vue';
     import { setSvgConfig } from '@/svgUtils/svgConfig';

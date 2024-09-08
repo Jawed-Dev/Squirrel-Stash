@@ -1,1 +1,1 @@
-export const NAME_FOLDER_MAIN = 'Projet_final_DWWM';
+export const PATH_FOLDER_MAIN = '/api/Projet_final_DWWM';

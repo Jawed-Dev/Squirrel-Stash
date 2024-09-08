@@ -22,7 +22,7 @@ export const typeError = {
     email: { 
         code: 0, 
         message: "Adresse email invalide.", 
-        adviceFormat: "Format d'email invalide",
+        adviceFormat: "Format d'email : nom@domaine.com",
     },   
     password: { 
         code: 1, 
@@ -37,12 +37,12 @@ export const typeError = {
     lastName: { 
         code: 3, 
         message: "Nom invalide.", 
-        adviceFormat: "Format du nom invalide",
+        adviceFormat: "Le format du nom ne comporte que des lettres.",
     },  
     firstName: { 
         code: 4, 
         message: "Prénom invalide.", 
-        adviceFormat: "Format du prénom invalide",
+        adviceFormat: "Le format du prénom ne comporte que des lettres.",
     },  
     amount: { 
         code: 5, 
@@ -52,7 +52,7 @@ export const typeError = {
     trsDate: { 
         code: 6, 
         message: "Date invalide.", 
-        adviceFormat: "Format de date invalide"
+        adviceFormat: "Format de date doit être jj/mm/aaaa \nainsi qu'à partir de 2020."
     },
     note: { 
         code: 7, 

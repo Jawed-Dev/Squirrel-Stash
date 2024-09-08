@@ -72,7 +72,7 @@
     import { ref, computed, reactive, onMounted, defineAsyncComponent } from 'vue';
     import { storeEmailUser } from '@/storesPinia/useStoreDashboard';
     import { updateStoreUserEmail } from '@/storesPinia/useUpdateStoreByBackend';
-    import { sendUpdateMail } from '@/composables/useBackendActionData';
+    import { sendUpdateMail } from '@/requests/useBackendAction';
     import InputBase from '@/components/input/InputBase.vue';
     import ContainerTextUnderline from '@/components/container/ContainerTextUnderline.vue'; 
     import { isAnyMandatoryInputEmpty, isAnyInputError, TYPE_SUBMIT_ERROR, TEXT_SUBMIT_ERROR } from '@/errors/useHandleError';
@@ -159,6 +159,12 @@
             email: inputsMail.newMail
         }
     }
+
+    function resetInputs() {
+        inputsMail.currentMail = "";
+        inputsMail.newMail = "";
+    }
+
     function activeErrorMandatInput() {
         if (!inputsMail.newMail) mandatoryInput.value = true;
     }

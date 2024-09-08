@@ -19,7 +19,7 @@
                         v-model="email" 
                         v-model:stateError="errorInput"
                         v-model:mandatoryInput="mandatoryInput"
-                        placeholder="exemple.domaine.com"
+                        placeholder="nom@domaine.com"
                         type="mail"
                         validFormat="email"
                     />
@@ -43,7 +43,7 @@
 <script setup>
     import { ref } from 'vue';
     import InputBase from '@/components/input/InputBase.vue';
-    import { sendResetPass } from '@/composables/useBackendActionData';
+    import { sendResetPass } from '@/requests/useBackendAction';
     import { isAnyMandatoryInputEmpty, isAnyInputError,TYPE_SUBMIT_ERROR, TEXT_SUBMIT_ERROR } from '@/errors/useHandleError';
     import { setSvgConfig } from '@/svgUtils/svgConfig';
     import LogoMain from '@/components/svg/LogoMain.vue';

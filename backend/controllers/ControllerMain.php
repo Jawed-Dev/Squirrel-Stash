@@ -9,11 +9,11 @@
     require_once './routers/RouterGetData.php';
     require_once './routers/RouterAction.php';
 
-    require_once './Controllers/ControllerStatisticAction.php';
-    require_once './Controllers/ControllerStatisticGetData.php';
-    require_once './Controllers/ControllerUser.php';
+    require_once './controllers/ControllerStatisticAction.php';
+    require_once './controllers/ControllerStatisticGetData.php';
+    require_once './controllers/ControllerUser.php';
     require_once './models/ModelMain.php';
-    require_once './views/viewMain.php';
+    require_once './views/ViewMain.php';
     
     require_once './utils/HandlerJwt.php';
     require_once './utils/HandlerLog.php';

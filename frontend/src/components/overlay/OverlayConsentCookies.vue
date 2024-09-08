@@ -3,13 +3,13 @@
         <div :class="`fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 text-white rounded-[3px]
                  shadow-main bg-main-gradient max-[850px]:w-full min-[850px]:min-w-[850px] font-main`">
     
-            <MainContainerSlot :hideCross="true" :bgMainBtn="'bg-gradient-blue'" width='w-full'
+            <ContainerSlotOverlay :hideCross="true" :bgMainBtn="'bg-gradient-blue'" width='w-full'
             :textBtn1="'Refuser'" :textBtn2="'Accepter'"  titleContainer="Cookies" @toggleMenu="toggleMenu">
 
-            <div class="max-h-[75vh] overflow-y-auto">
-                <div class="px-5 md:px-12 w-full flex justify-center">
+            <div class="max-h-[calc(80vh-36px)] overflow-y-auto">
+                <div class="px-5 sm:px-10 md:px-12 w-full flex justify-center">
     
-                    <div class="max-h-[500px] overflow-y-auto
+                    <div class="max-h-[500px] 
                                 flex flex-col w-full rounded-[3px] py-5 mt-10">
                         <div class="flex flex-col items-center gap-5">
                             <h2 class="text-custom-blue text-xl">Politique de Cookies</h2>
@@ -35,7 +35,7 @@
                     </div>
                 </div>
             </div>
-            </MainContainerSlot>
+            </ContainerSlotOverlay>
         </div>
         <OverlayPrivacy v-if="OverlayPrivacyActive" v-model="OverlayPrivacyActive" />
     </div>
@@ -44,7 +44,7 @@
 <script setup>
     import { ref, defineAsyncComponent } from 'vue';
     import { useRouter } from 'vue-router';
-    import MainContainerSlot from '@/components/containerSlot/MainContainerSlot.vue';
+    import ContainerSlotOverlay from '@/components/containerSlot/ContainerSlotOverlay.vue';
     import { setLStorageCookieConsent, getLStorageAuthToken} from "@/composables/useLocalStorage";
     import { storeAuthTOken } from '@/storesPinia/useStoreDashboard';
     const OverlayPrivacy = defineAsyncComponent(() => import('@/components/overlay/OverlayPrivacy.vue'));

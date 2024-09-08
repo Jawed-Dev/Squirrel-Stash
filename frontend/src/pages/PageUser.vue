@@ -43,7 +43,7 @@
     import { defineAsyncComponent, reactive } from 'vue';
     import { useRouter } from 'vue-router';
     import { storeAuthTOken } from '@/storesPinia/useStoreDashboard';
-    //import { disconnectUser } from '@/composables/useBackendActionData';
+    //import { disconnectUser } from '@/composables/useBackendAction';
     import { setSvgConfig } from '@/svgUtils/svgConfig';
     import TransitionOpacity from '@/components/transition/TransitionOpacity.vue';
 

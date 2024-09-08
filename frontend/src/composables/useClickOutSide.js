@@ -6,7 +6,6 @@ export default function useClickOutside(triggerClass, isMenuActiveRef, callback)
             callback();
         }
     }
-
     onMounted(() => {
         document.addEventListener('mousedown', handleClickOutside, true);
     });

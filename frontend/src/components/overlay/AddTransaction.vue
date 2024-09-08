@@ -11,7 +11,8 @@
                 class="bg-transparent md:bg-main-gradient border-none md:border-solid gradient-border 
                 trigger-add-purchase cursor-pointer">
                 <!-- width responsive -->
-                <div class="flex justify-center md:justify-between items-center md:px-2 min-h-[42px] min-w-[214px] ">
+                <div class="flex justify-center md:justify-between items-center md:px-2 min-h-[42px] sm:min-w-[214px] pl-[1px] 
+                    absolute md:relative bottom-7 sm:bottom-0 md:bottom-0 w-full pointer-events-none">
                     <p v-show="!isBelow768px" 
                         class="w-full text-white flex justify-center font-light" 
                         >Ajouter une transaction
@@ -20,7 +21,7 @@
                         <!-- Icon and border rounded  -->
                         <IconAddPurchase 
                             @click="toggleOverlayMobile" 
-                            class="p-[1px] bg-gradient-blue rounded-full md:rounded-md right-[100px] top-[50vh]
+                            class="p-[1px] bg-gradient-blue rounded-full md:rounded-md right-[100px] top-[50vh] pointer-events-auto
                             z-10 shadow-main" 
                             :svg="styleIcon"
                         />
@@ -39,7 +40,7 @@
                 shadow-main trigger-add-purchase bg-main-gradient
                 max-[550px]:w-full sm:w-1/4 min-[550px]:min-w-[550px]`">
 
-                <MainContainerSlot 
+                <ContainerSlotOverlay 
                     :textBtn1="'Annuler'" :textBtn2="'Ajouter'" 
                     :titleContainer="(!typeTransaction) ? 'Ajouter un achat' : 'Ajouter un prélèvement'" 
                     @toggleMenu="toggleMenu" 
@@ -61,7 +62,7 @@
                         </div>
 
                     </div>
-                </MainContainerSlot>
+                </ContainerSlotOverlay>
             </div>
         </TransitionOpacity>
     </div>
@@ -75,9 +76,9 @@
     import TransitionOpacity from '@/components/transition/TransitionOpacity.vue';
     import useClickOutside from '@/composables/useClickOutSide';
     import useEscapeKey from '@/composables/useEscapeKey';
-    import MainContainerSlot from '@/components/containerSlot/MainContainerSlot.vue';
+    import ContainerSlotOverlay from '@/components/containerSlot/ContainerSlotOverlay.vue';
     import { storeDateSelected } from '@/storesPinia/useStoreDashboard';
-    import { addTransaction } from '@/composables/useBackendActionData';
+    import { addTransaction } from '@/requests/useBackendAction';
     import { updateAllDataTransations} from '@/storesPinia/useUpdateStoreByBackend';
     import { formatDateForCurrentDay, formatDateForFirstDay, isCurrentMonth } from '@/composables/useGetDate';
     import { listPurchases, listRecurings } from '@/svgUtils/listTransactionSvgs';

@@ -98,7 +98,7 @@
 <script setup>
     import { ref, reactive, computed } from 'vue';
     import InputBase from '@/components/input/InputBase.vue';
-    import { updatePasswordByUserId } from '@/composables/useBackendActionData';
+    import { updatePasswordByUserId } from '@/requests/useBackendAction';
     import { isAnyMandatoryInputEmpty, isAnyInputError, TYPE_SUBMIT_ERROR, TEXT_SUBMIT_ERROR } from '@/errors/useHandleError';
     import TransitionAxeY from '@/components/transition/TransitionAxeY.vue';
     import UseIconLoader from '@/composables/useIconLoader.vue';

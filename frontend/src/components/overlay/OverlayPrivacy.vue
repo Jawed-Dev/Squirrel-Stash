@@ -1,21 +1,20 @@
 <template>
-    <div class="fixed inset-0 bg-black bg-opacity-80 z-20 ">
+    <div class="fixed inset-0 bg-black bg-opacity-80 z-20">
         <div :class="`fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-30 text-white rounded-[3px]
-                 shadow-main bg-main-gradient
-                w-full lg:w-[1024px] font-main`">
+                shadow-main bg-main-gradient w-full lg:w-[1024px] font-main`">
     
-            <MainContainerSlot :onlyOneBtn="true" :bgMainBtn="'bg-gradient-blue'" width='w-full'
+            <ContainerSlotOverlay :onlyOneBtn="true" :bgMainBtn="'bg-gradient-blue'" width='w-full'
             :textBtn1="'Fermer'" titleContainer="Politique de Confidentialité" @toggleMenu="toggleMenu">
 
-                <div class=" max-h-[75vh] overflow-y-auto my-2">
+                <div class="max-h-[calc(80vh-56px)] overflow-y-auto">
                     <div class="flex flex-col items-center gap-5 mt-10">
                         <h2 class="text-custom-blue text-center text-xl">Politique de Confidentialité de Squirrel Stash</h2>
                     </div>
     
                     <p class="text-center font-light opacity-95 my-3">Date de dernière mise à jour : [Date]</p>
     
-                    <div class="px-3 md:px-12 w-full flex justify-center">
-                        <div class="flex flex-col w-full rounded-[3px] py-5 gap-20">
+                    <div class="px-5 sm:px-10 md:px-12 w-full flex justify-center">
+                        <div class="flex flex-col w-full rounded-[3px] py-10 gap-20">
     
                             <div class="flex flex-col gap-5 w-full">
                                 <h2 class="text-custom-blue text-xl">1. Introduction</h2>
@@ -68,7 +67,7 @@
                         </div>
                     </div>
                 </div>
-            </MainContainerSlot>
+            </ContainerSlotOverlay>
 
         </div>
     </div>
@@ -77,7 +76,7 @@
     
 
 <script setup>
-    import MainContainerSlot from '@/components/containerSlot/MainContainerSlot.vue';
+    import ContainerSlotOverlay from '@/components/containerSlot/ContainerSlotOverlay.vue';
     import useClickOutside from '@/composables/useClickOutSide';
     import useEscapeKey from '@/composables/useEscapeKey';
 

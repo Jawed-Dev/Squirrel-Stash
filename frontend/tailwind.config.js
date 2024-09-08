@@ -29,7 +29,7 @@ export default {
         'custom-purple' : '#e14eca',
         'custom-turquoise' : '#00f2c3',
         
-        'second-bg' : '#1b1e33',
+        'second-bg' : '#151728',
         'main-bg': "#141414",
         //'main-bg': "#141414",
       },

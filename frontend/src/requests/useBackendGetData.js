@@ -1,4 +1,4 @@
-import useConfigFetchGetData  from "@/composables/useConfigFetchGetData";
+import useConfigFetchGetData  from "@/requests/useConfigFetchGetData";
 import { getLStorageAuthToken, setLStorageAuthToken } from "@/composables/useLocalStorage";
 
 

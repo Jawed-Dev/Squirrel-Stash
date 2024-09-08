@@ -15,7 +15,14 @@ app.component('VueDatePicker', VueDatePicker);
 app.use(Toast, {
     transition: "Vue-Toastification__bounce",
     maxToasts: 2,
-    newestOnTop: true
+    newestOnTop: true,
+    // protection for duplicate toast
+    filterBeforeCreate: (toast, toasts) => {
+        if (toasts.some(t => t.content === toast.content)) {
+          return false; 
+        }
+        return toast; 
+      }
 });
 app.mount('#app');
 

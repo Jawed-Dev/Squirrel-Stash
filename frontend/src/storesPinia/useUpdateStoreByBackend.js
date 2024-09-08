@@ -4,7 +4,7 @@ import {
         getDataUserProfil, getUserEmail, getYearListTrsByMonth, getTotalTrsByYear,
         getBiggestTrsByYear, getBiggestMonthByYear, getYearListTrsByCategories,
         getTopYearCategories
-} from '@/composables/useBackendGetData';
+} from '@/requests/useBackendGetData';
 
 import { 
         storeParamsSearch, storeThreshold, storeStatisticDetails, 
@@ -19,8 +19,10 @@ Decimal.config({ precision: 10 });
 // list transactions month By Day
 export async function updateListTrsMonthByDay(month, year, transactionType) {
     const transactionsMonthByDay = storeTrsMonthByDay();
-    const listTransactionsFetched = await getListTrsMonthByDay(month, year, transactionType);
-    const localListTransactions = listTransactionsFetched?.data;
+    // fetch
+    const response = await getListTrsMonthByDay(month, year, transactionType);
+    const localListTransactions = response?.data;
+    
     if(transactionType === 'purchase') {
         transactionsMonthByDay.listPurchases = (localListTransactions) ? localListTransactions : [];
     }

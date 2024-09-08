@@ -104,6 +104,7 @@
                                                 type="date"
                                                 validFormat="date"
                                                 :hideAnimation="true"
+                                                iconName="Calendar"
                                             />
                                         </div>
                                         <div class="flex flex-col w-1/3 min-w-[270px] lg:min-w-[280px] 2xl:min-w-[300px] md:w-1/4"></div>
@@ -131,7 +132,7 @@
     import InputBase from '@/components/input/InputBase.vue';
     import { storeProfilUser } from '@/storesPinia/useStoreDashboard';
     import { updateStoreUserProfil } from '@/storesPinia/useUpdateStoreByBackend';
-    import { updateUserProfil } from '@/composables/useBackendActionData';
+    import { updateUserProfil } from '@/requests/useBackendAction';
     import { isAnyMandatoryInputEmpty, isAnyInputError, TEXT_SUBMIT_ERROR } from '@/errors/useHandleError';
     import TransitionAxeY from '@/components/transition/TransitionAxeY.vue';
     import UseIconLoader from '@/composables/useIconLoader.vue';
@@ -166,6 +167,7 @@
         firstName: false,
         lastName: false,
     });
+    
     const { widthScreenValue } = getScreenSize();
     const toggleShowParams= ref(false);
     const iconConfig = setSvgConfig({width:'30px', fill:'white' });

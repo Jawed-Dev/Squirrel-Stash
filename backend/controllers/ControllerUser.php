@@ -1,8 +1,8 @@
 <?php 
 
-    require_once './Controllers/ControllerMain.php';
-    require_once './models/modelUser.php';
-    require_once './views/viewUser.php';
+    require_once './controllers/ControllerMain.php';
+    require_once './models/ModelUser.php';
+    require_once './views/ViewUser.php';
     require_once './config.php';
 
     interface I_ControllerUser {

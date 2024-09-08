@@ -4,7 +4,7 @@
                  shadow-main trigger-overlay-contact bg-main-gradient
                 w-full md:w-[720px] font-main`">
     
-            <MainContainerSlot :bgMainBtn="'bg-gradient-blue'" width='w-full'
+            <ContainerSlotOverlay :bgMainBtn="'bg-gradient-blue'" width='w-full'
             :textBtn1="'Fermer'" :textBtn2="'Envoyer'" titleContainer="Support et Aide" @toggleMenu="toggleMenu">
                 <div class="max-h-[76vh] overflow-y-auto">
                     <div class="flex flex-col justify-center items-center w-full rounded-[3px] my-[40px]">
@@ -79,7 +79,7 @@
                         </div>
                     </div>
                 </div>
-            </MainContainerSlot>
+            </ContainerSlotOverlay>
         </div>
     </div>
     
@@ -89,12 +89,12 @@
 
 <script setup>
     import { reactive, ref, watch } from 'vue';
-    import MainContainerSlot from '@/components/containerSlot/MainContainerSlot.vue';
+    import ContainerSlotOverlay from '@/components/containerSlot/ContainerSlotOverlay.vue';
     import useClickOutside from '@/composables/useClickOutSide';
     import useEscapeKey from '@/composables/useEscapeKey';
     import InputBase from '@/components//input/InputBase.vue';
     import TextAreaBase from '@/components//input/TextAreaBase.vue';
-    import { sendEmailToSupport } from '@/composables/useBackendActionData';
+    import { sendEmailToSupport } from '@/requests/useBackendAction';
     import { isAnyMandatoryInputEmpty, isAnyInputError, TYPE_SUBMIT_ERROR, TEXT_SUBMIT_ERROR } from '@/errors/useHandleError';
     import { createToast } from '@/composables/useToastNotification';
 
@@ -124,6 +124,8 @@
         contentEmail: false,
     });
 
+    const isSendingMail = ref(false);
+
     const isOverlayActive = defineModel();
 
     // life cycle, functions
@@ -149,12 +151,15 @@
                 else if(isAnyInputError(allErrorsInputs)) {
                     return;
                 }
+                if(isSendingMail.value) return;
+                isSendingMail.value = true;
                 const response = await sendEmailToSupport({
                     firstName: input.firstName,
                     lastName: input.lastName,
                     emailSender: input.email,
                     message: input.contentEmail
                 });
+                isSendingMail.value = false;
                 const isSuccessRequest = response?.isSuccessRequest;
                 if(!isSuccessRequest) {
                     return;

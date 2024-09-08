@@ -50,8 +50,8 @@
                 </div>
             </div>
         </div>
-        <div v-if="isEmptyListTransaction" class="w-full flex justify-center mt-[40px]">
-            <p class="text-white text-[18px]">Aucun résultat n'a été trouvé.</p>
+        <div v-if="isEmptyListTransaction" class="w-full flex justify-center mt-5 xl:mt-10">
+            <p class="text-white text-[18px] pb-5">Aucun résultat n'a été trouvé.</p>
         </div>
     </div>
 </template>
