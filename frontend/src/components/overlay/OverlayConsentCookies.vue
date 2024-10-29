@@ -28,7 +28,7 @@
                             <p class="opacity-90 font-light">
                                 En utilisant notre service, vous acceptez l'emploi de ces cookies essentiels pour une expérience et une sécurité optimales. <span class="block"></span>
                                 Pour plus d'informations sur la gestion de vos données, veuillez consulter notre 
-                                <span :onclick="openPolicyOverlay" class="hover:text-blue-300 text-main-blue font-normal cursor-pointer">Politique de confidentialité</span>.
+                                <span @click="openPolicyOverlay" class="hover:text-blue-300 text-main-blue font-normal cursor-pointer">Politique de confidentialité</span>.
                             </p>
                         </div>
         

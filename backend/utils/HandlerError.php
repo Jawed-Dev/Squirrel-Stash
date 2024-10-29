@@ -10,7 +10,7 @@
         function verifyDeleteTransaction($data);
         function verifyUpdateTransaction($data);
         function verifySaveThreshold($data);
-        function verifygetTrsMonthByDay($data);
+        function verifygetTotalTrsMonthByDay($data);
         function verifyGetThresholdByMonth($data);
         function verifyGetNLastTrsByMonth($data);
         function verifyGetTotalTrsByMonth($data);
@@ -119,7 +119,7 @@
         }
 
         // get
-        public function verifyGetTrsMonthByDay($data) {
+        public function verifygetTotalTrsMonthByDay($data) {
             $this->clearErrors();
             $bodyData = $data['bodyData'];
             $this->validateFormat('isValidUserId', $data);

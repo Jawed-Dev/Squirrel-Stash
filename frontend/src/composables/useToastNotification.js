@@ -7,7 +7,7 @@ export function createToast(text, type = 'info' ) {
     const toast = useToast();
     toast[type](text, {
         position: "top-center",
-        timeout: 5990,
+        timeout: 6990,
         closeOnClick: true,
         pauseOnFocusLoss: true,
         pauseOnHover: true,

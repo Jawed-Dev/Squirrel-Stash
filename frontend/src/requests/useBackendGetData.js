@@ -96,7 +96,7 @@ export async function getDataTrsBySearch(params) {
 }
 
 
-export async function getListTrsMonthByDay(month, year, transactionType) {
+export async function getTotalTrsMonthByDay(month, year, transactionType) {
     authRequired();
     const localToken = getLStorageAuthToken();
     const body = {
@@ -105,7 +105,7 @@ export async function getListTrsMonthByDay(month, year, transactionType) {
         transactionType: String(transactionType)
     };
     const listTransactionsFetched = await useConfigFetchGetData ({
-        request: 'getlistTrsMonthByDay',
+        request: 'getTotalTrsMonthByDay',
         method: 'POST',
         dataBody: body,
         token: localToken

@@ -13,7 +13,7 @@
     
                     <div class="flex flex-col w-full rounded-[3px] py-5 gap-20">
         
-                        <div class="flex flex-col gap-5 w-full">
+                        <div class="flex flex-col gap-5 w-full mt-5">
                             <h2 class="text-custom-blue text-xl">1. Conditions d'Utilisation</h2>
                             <p class="opacity-95 font-light text">Chez Squirrel Stash, nous nous engageons à fournir un service de qualité tout en respectant les droits de nos utilisateurs. 
                                 Ces conditions régissent votre utilisation de notre application et en utilisant notre service, vous acceptez ces termes.</p>

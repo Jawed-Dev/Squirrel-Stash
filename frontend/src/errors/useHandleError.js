@@ -27,7 +27,7 @@ export const typeError = {
     password: { 
         code: 1, 
         message: "Mot de passe invalide.", 
-        adviceFormat: "Format de mot de passe : \n8 caractères minimum,\n 1 lettre minuscule, 1 lettre majuscule,\n 1 chiffre et 1 caractère spécial",
+        adviceFormat: "Format de mot de passe : \n12 caractères minimum,\n 1 lettre minuscule, 1 lettre majuscule,\n 1 chiffre et 1 caractère spécial",
     },  
     passwordConfirm: { 
         code: 2, 

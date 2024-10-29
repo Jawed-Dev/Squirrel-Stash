@@ -10,7 +10,7 @@
         function getModelStatisticDataMonth();
 
         // get data
-        function getTrsMonthByDay();
+        function getTotalTrsMonthByDay();
         function getNLastTrsByMonth();
         function getThresholdByMonth();
         function getTotalTrsByMonth();
@@ -42,7 +42,7 @@
 
         // Model 
         /**
-        * @return ModelStatistic
+        * @return ModelStatisticGetDataYear
         */
         public function getModelStatisticDataYear() {
             if (!$this->ModelStatisticDataYear) $this->ModelStatisticDataYear = new ModelStatisticGetDataYear();
@@ -59,17 +59,20 @@
         }
 
         // View 
+        /**
+        * @return ViewStatistic
+        */
         public function getViewStatistic() {
             if (!$this->ViewStatistic) $this->ViewStatistic = new ViewStatistic();
             return $this->ViewStatistic;
         }
 
-        public function getTrsMonthByDay() {
-            $paramsValidation = ['functionValidData' => 'verifyGetTrsMonthByDay'];
+        public function getTotalTrsMonthByDay() {
+            $paramsValidation = ['functionValidData' => 'verifygetTotalTrsMonthByDay'];
             $dataRequest = $this->getControllerMain()->getValidateDataForController($paramsValidation);
 
             $db = $dataRequest['dataBase'];
-            $data = $this->getModelStatisticDataMonth()->getTrsMonthByDay($db, $dataRequest);
+            $data = $this->getModelStatisticDataMonth()->getTotalTrsMonthByDay($db, $dataRequest);
             // log ici ?
             $this->getViewStatistic()->renderJson(['data' => $data]);
         }

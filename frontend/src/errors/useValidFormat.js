@@ -9,7 +9,7 @@ export function isValidMail(email) {
 }
 
 export function isValidPassword(password) {
-    const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*\W)[A-Za-z\d\W]{8,}$/;
+    const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*\W)[A-Za-z\d\W]{12,}$/;
     return regex.test(password);
 }
 

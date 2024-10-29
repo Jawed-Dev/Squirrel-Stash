@@ -34,6 +34,7 @@
             <OverlayPrivacy v-if="isOverlayActive.privacy" v-model="isOverlayActive.privacy"/>
             <OverlayUserRules v-if="isOverlayActive.userRules" v-model="isOverlayActive.userRules"/>
             <OverlayContactUs v-if="isOverlayActive.contactUs" v-model="isOverlayActive.contactUs"/>
+            <OverlayLegalMentions v-if="isOverlayActive.legalMentions" v-model="isOverlayActive.legalMentions"/>
         </TransitionOpacity>       
     </div>
 </template>
@@ -43,7 +44,6 @@
     import { defineAsyncComponent, reactive } from 'vue';
     import { useRouter } from 'vue-router';
     import { storeAuthTOken } from '@/storesPinia/useStoreDashboard';
-    //import { disconnectUser } from '@/composables/useBackendAction';
     import { setSvgConfig } from '@/svgUtils/svgConfig';
     import TransitionOpacity from '@/components/transition/TransitionOpacity.vue';
 
@@ -56,13 +56,15 @@
     const OverlayPrivacy = defineAsyncComponent(() => import('@/components/overlay/OverlayPrivacy.vue'));
     const OverlayUserRules = defineAsyncComponent(() => import('@/components/overlay/OverlayUserRules.vue'));
     const OverlayContactUs = defineAsyncComponent(() => import('@/components/overlay/OverlayContactUs.vue'));
+    const OverlayLegalMentions = defineAsyncComponent(() => import('@/components/overlay/OverlayLegalMentions.vue'));
     
     const router = useRouter();
     const styleIcons = setSvgConfig({width:'30px', fill:'white'});
     const isOverlayActive = reactive({
         privacy: false,
         userRules: false,
-        contactUs: false
+        contactUs: false,
+        legalMentions: false
     });
 
     const dataPages = [
@@ -70,6 +72,7 @@
         { Component: IconSupport, link:'', page: 'support et aide', text: 'Support et aide' },
         { Component: IconPrivacy, link:'',page: 'confidentialité', text: 'Confidentialité' },
         { Component: IconUserRules, link:'',page: "règles d'utilisation", text: "Règles d'utilisation" },
+        { Component: IconUserRules, link:'',page: "Mentions légales", text: "Mentions légales" },
         { Component: IconInfo, link:'',page: "", text: "Version 1.0" },
         { Component: IconLogOut, link:'', page: 'déconnexion', text: 'Déconnexion' },
     ];
@@ -92,6 +95,10 @@
                 isOverlayActive.userRules = true;
                 break;
             }
+            case 'Mentions légales' : {
+                isOverlayActive.legalMentions = true;
+                break;
+            };
             case 'déconnexion' : {
                 const authToken = storeAuthTOken();
                 authToken.token = '';

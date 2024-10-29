@@ -123,15 +123,12 @@
         if((statisticDetails.economyBalance > 0)) return '+'+ formatFloatAsString(statisticDetails.economyBalance) + ' €';
         return formatFloatAsString(statisticDetails.economyBalance) +' €';
     });
-
     const textTotalTransaction = computed (() => {
         return formatFloatAsString(statisticDetails.totalTransactions) + ' €';
     });
-
     const textThreshold = computed(() => {
         return formatFloatAsString(threshold.amount) +' €';
     });
-
     const colorTextBalanceEconomy = computed(() => {
         const balanceEconomyValue = statisticDetails.economyBalance;
         if(statisticDetails.economyBalance === threshold.amount) return 'text-white';

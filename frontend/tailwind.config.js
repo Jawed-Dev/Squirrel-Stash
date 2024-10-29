@@ -17,17 +17,13 @@ export default {
       colors: {
         'custom-gray': '#B4B4B4',
         'main-blue' : '#1d8cf8',
-        'custom-gray-dark' : '#38393b',
         'custom-gray-2' : '#484B55',
-        'color-shadow' : '#27293d',
         'btn-cancel' : '#1e3c72',
 
         'custom-blue' : '#1d8cf8',
         'custom-green' : '#42b883',
         'custom-red' : '#fd5d93',
         'custom-orange' : '#ff8d72',
-        'custom-purple' : '#e14eca',
-        'custom-turquoise' : '#00f2c3',
         
         'second-bg' : '#151728',
         'main-bg': "#141414",
@@ -60,11 +56,9 @@ export default {
         'gradient-x-blue' : "linear-gradient(240deg, #174285, #3c78e3)",  
       },
       boxShadow: {
-        // 'custom-main': '0px 0px 2px #000000',
         'main': '0px 1px 4px #000000',
         'custom-lower': '0px 0px 5px #969C99',
         'custom-hover': '0px 0px 1px #000000',
-        'custom-very-low': '1px 1px 1px white',
       }
     },
   },

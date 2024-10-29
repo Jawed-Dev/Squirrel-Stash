@@ -9,7 +9,7 @@
         $origin = isset($_SERVER['HTTP_X_CUSTOM_ORIGIN']) ? $_SERVER['HTTP_X_CUSTOM_ORIGIN'] : '';
         if ($origin !== $allowedOrigin) throw new Exception('Accès refusé.'); 
         header("Access-Control-Allow-Origin: ".FRONT_BASE_URL);
-        header("Access-Control-Allow-Methods: GET, POST");
+        header("Access-Control-Allow-Methods: GET, POST"); // OPTIONS for axxios
         header("Content-Type: application/json");
 
         // env loader

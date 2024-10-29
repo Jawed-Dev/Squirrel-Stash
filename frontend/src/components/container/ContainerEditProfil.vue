@@ -80,7 +80,7 @@
                                         </div>
                                         <div class="flex flex-col w-1/3 min-w-[270px] lg:min-w-[280px] 2xl:min-w-[300px] md:w-1/4">
                                             <label class="pl-2 text-white font-light" for="input-pass">Rôle</label>
-                                            <ContainerTextUnderline 
+                                            <ContainerFakeInput 
                                                 iconName="Crown"
                                                 :text="textUserLevel" 
                                                 id="input-current-mail"
@@ -128,7 +128,7 @@
 
 <script setup>
     import { ref, reactive, onMounted, computed } from 'vue';
-    import ContainerTextUnderline from '@/components/container/ContainerTextUnderline.vue'; 
+    import ContainerFakeInput from '@/components/container/ContainerFakeInput.vue'; 
     import InputBase from '@/components/input/InputBase.vue';
     import { storeProfilUser } from '@/storesPinia/useStoreDashboard';
     import { updateStoreUserProfil } from '@/storesPinia/useUpdateStoreByBackend';

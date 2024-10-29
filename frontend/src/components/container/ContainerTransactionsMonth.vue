@@ -22,12 +22,12 @@
     import ToggleButton from '@/components/button/ToggleButton.vue';
     import useGraphBar from '@/composables/useGraphBar.vue';
     import useGraphLine from '@/composables/useGraphLine.vue';
-    import { storeTrsMonthByDay, storeDateSelected } from '@/storesPinia/useStoreDashboard';
+    import { storeTotalTrsMonthByDay, storeDateSelected } from '@/storesPinia/useStoreDashboard';
     import { updateListTrsMonthByDay } from '@/storesPinia/useUpdateStoreByBackend';
     import { getScreenSize } from '@/composables/useSizeScreen';
     
     // stores
-    const transactionsMonthByDay = storeTrsMonthByDay();
+    const transactionsMonthByDay = storeTotalTrsMonthByDay();
     const dateSelected = storeDateSelected();
 
     // variables, props ...

@@ -126,18 +126,43 @@
         function getYearListTrsByCategories($db, $data) {
             $userId = $data['userId'];
             $dataQuery = $data['bodyData'];
-            $reqSql = "SELECT category_name AS labels,
-                    COALESCE(SUM(transaction_amount), 0) AS total_amount
-                FROM category
-                LEFT JOIN transaction 
-                    ON category_name = transaction_category  
-                    AND transaction_user_id = :userId
-                    AND YEAR(transaction_date) = :year
-                    AND category_type = transaction_type
-                WHERE 
-                    category_type = :trsType
-                GROUP BY category_name
-                ORDER BY category_id;
+
+            // I use UNION ALL to create a virtual table, for not to overload my database with this functionality
+            $reqSql = "SELECT 
+                categories.labels, 
+                COALESCE(SUM(t.transaction_amount), 0) AS total_amount
+            FROM 
+                (
+                    SELECT 'Alimentation' AS labels, 'purchase' AS type UNION ALL
+                    SELECT 'Vestimentaire', 'purchase' UNION ALL
+                    SELECT 'Famille', 'purchase' UNION ALL
+                    SELECT 'Restaurant', 'purchase' UNION ALL
+                    SELECT 'Loisir', 'purchase' UNION ALL
+                    SELECT 'Santé', 'purchase' UNION ALL
+                    SELECT 'Transport', 'purchase' UNION ALL
+                    SELECT 'Cadeau', 'purchase' UNION ALL
+                    SELECT 'Autre', 'purchase' UNION ALL
+                    SELECT 'Facture', 'recurring' UNION ALL
+                    SELECT 'Loyer', 'recurring' UNION ALL
+                    SELECT 'Assurance', 'recurring' UNION ALL
+                    SELECT 'Crédit', 'recurring' UNION ALL
+                    SELECT 'Abonnement', 'recurring' UNION ALL
+                    SELECT 'Autre', 'recurring'
+                ) AS categories
+            LEFT JOIN 
+                transaction t 
+            ON 
+                categories.labels = t.transaction_category AND
+                t.transaction_user_id = :userId AND
+                YEAR(t.transaction_date) = :year AND
+                categories.type = t.transaction_type
+            WHERE 
+                categories.type = :trsType
+            GROUP BY 
+                categories.labels
+            ORDER BY 
+                FIELD(categories.labels, 'Alimentation', 'Vestimentaire', 'Famille', 'Restaurant', 'Loisir', 'Santé', 'Transport', 'Cadeau', 'Autre', 'Facture', 'Loyer', 'Assurance', 'Crédit', 'Abonnement', 'Autre')
+
             ";
             $query = $db->prepare($reqSql);
             $query->bindValue(':userId',  $userId, PDO::PARAM_INT);
@@ -147,6 +172,31 @@
             $biggestMonth = $query->fetchAll(PDO::FETCH_ASSOC);
             return $biggestMonth;
         }
+
+        // function getYearListTrsByCategories($db, $data) {
+        //     $userId = $data['userId'];
+        //     $dataQuery = $data['bodyData'];
+        //     $reqSql = "SELECT category_name AS labels,
+        //             COALESCE(SUM(transaction_amount), 0) AS total_amount
+        //         FROM category
+        //         LEFT JOIN transaction 
+        //             ON category_name = transaction_category  
+        //             AND transaction_user_id = :userId
+        //             AND YEAR(transaction_date) = :year
+        //             AND category_type = transaction_type
+        //         WHERE 
+        //             category_type = :trsType
+        //         GROUP BY category_name
+        //         ORDER BY category_id;
+        //     ";
+        //     $query = $db->prepare($reqSql);
+        //     $query->bindValue(':userId',  $userId, PDO::PARAM_INT);
+        //     $query->bindValue(':year',  $dataQuery['selectedYear'], PDO::PARAM_INT);
+        //     $query->bindValue(':trsType',  $dataQuery['transactionType'], PDO::PARAM_STR);
+        //     $query->execute();
+        //     $biggestMonth = $query->fetchAll(PDO::FETCH_ASSOC);
+        //     return $biggestMonth;
+        // }
 
         function getTopYearCategories($db, $data) {
             $userId = $data['userId'];

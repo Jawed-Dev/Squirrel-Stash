@@ -27,7 +27,7 @@
                                             items-center gap-2 sm:gap-12 2xl:gap-0 sm:flex-row">
                                         <div class="flex flex-col w-1/3 min-w-[270px] lg:min-w-[280px] 2xl:min-w-[300px] md:w-1/4">
                                             <label class="pl-2 text-white font-light" for="input-current-mail">Email</label>
-                                            <ContainerTextUnderline 
+                                            <ContainerFakeInput 
                                                 iconName="Email"
                                                 :text="inputsMail.currentMail" 
                                                 extraClass="text-[16px]"
@@ -74,7 +74,7 @@
     import { updateStoreUserEmail } from '@/storesPinia/useUpdateStoreByBackend';
     import { sendUpdateMail } from '@/requests/useBackendAction';
     import InputBase from '@/components/input/InputBase.vue';
-    import ContainerTextUnderline from '@/components/container/ContainerTextUnderline.vue'; 
+    import ContainerFakeInput from '@/components/container/ContainerFakeInput.vue'; 
     import { isAnyMandatoryInputEmpty, isAnyInputError, TYPE_SUBMIT_ERROR, TEXT_SUBMIT_ERROR } from '@/errors/useHandleError';
     import TransitionAxeY from '@/components/transition/TransitionAxeY.vue';
     import UseIconLoader from '@/composables/useIconLoader.vue';

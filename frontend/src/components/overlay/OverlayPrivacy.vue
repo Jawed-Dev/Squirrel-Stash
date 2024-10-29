@@ -11,7 +11,7 @@
                         <h2 class="text-custom-blue text-center text-xl">Politique de Confidentialité de Squirrel Stash</h2>
                     </div>
     
-                    <p class="text-center font-light opacity-95 my-3">Date de dernière mise à jour : [Date]</p>
+                    <p class="text-center font-light opacity-95 my-3">Date de dernière mise à jour : 08/09/2024</p>
     
                     <div class="px-5 sm:px-10 md:px-12 w-full flex justify-center">
                         <div class="flex flex-col w-full rounded-[3px] py-10 gap-20">
@@ -38,14 +38,14 @@
                             <div class="flex flex-col gap-5 w-full">
                                 <h2 class="text-custom-blue text-xl">3. Utilisation des Données</h2>
                                 <p class="opacity-95 font-light">
-                                    Les données collectées sont uniquement utilisées pour améliorer le service offert par [Nom de l'Application]. 
+                                    Les données collectées sont uniquement utilisées pour améliorer le service offert par Squirrel Stash. 
                                     <span class="block"></span>Nous utilisons ces informations pour aider à personnaliser et améliorer votre expérience d'utilisation de l'application.
                                 </p>
                             </div>
         
                             <div class="flex flex-col gap-5 w-full">
                                 <h2 class="text-custom-blue text-xl">4. Partage des Données</h2>
-                                <p class="opacity-95 font-light">[Nom de l'Application] s'engage à ne pas vendre, louer ou échanger vos informations personnelles avec des tiers à des fins commerciales ou marketing. 
+                                <p class="opacity-95 font-light">Squirrel Stash s'engage à ne pas vendre, louer ou échanger vos informations personnelles avec des tiers à des fins commerciales ou marketing. 
                                     Les données collectées restent exclusivement utilisées en interne.</p>
                             </div>
         

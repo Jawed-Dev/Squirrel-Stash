@@ -1,7 +1,7 @@
 <?php
     interface I_ModelStatisticGetDataMonth {
         //get data month
-        function getTrsMonthByDay($db, $data);
+        function getTotalTrsMonthByDay($db, $data);
         function getNLastTrsByMonth ($db, $data);
         function getLastDayByMonth($year, $month);
         function getThresholdByMonth($db, $data);
@@ -12,14 +12,14 @@
     }
 
     class ModelStatisticGetDataMonth implements I_ModelStatisticGetDataMonth {
-
-        public function getTrsMonthByDay ($db, $data) {
+        public function getTotalTrsMonthByDay ($db, $data) {
             $userId = $data['userId'];
             $dataQuery = $data['bodyData'];
 
+            // I use UNION ALL to create a virtual table, for not to overload my database with this functionality
             $reqSql = "SELECT 
-                number_day.day, 
-                CONCAT('Jour ', number_day.day) AS labels, 
+                days.day, 
+                CONCAT('Jour ', days.day) AS labels, 
                 LPAD(:month, 2, '0') AS month, 
                 :year AS year,
                 COALESCE(SUM(t.transaction_amount), 0) AS total_amount,
@@ -30,21 +30,29 @@
                 t.transaction_amount, 
                 t.transaction_note 
             FROM 
-                number_day 
+                (
+                    SELECT 1 AS day UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL SELECT 5
+                    UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9 UNION ALL SELECT 10
+                    UNION ALL SELECT 11 UNION ALL SELECT 12 UNION ALL SELECT 13 UNION ALL SELECT 14 UNION ALL SELECT 15
+                    UNION ALL SELECT 16 UNION ALL SELECT 17 UNION ALL SELECT 18 UNION ALL SELECT 19 UNION ALL SELECT 20
+                    UNION ALL SELECT 21 UNION ALL SELECT 22 UNION ALL SELECT 23 UNION ALL SELECT 24 UNION ALL SELECT 25
+                    UNION ALL SELECT 26 UNION ALL SELECT 27 UNION ALL SELECT 28 UNION ALL SELECT 29 UNION ALL SELECT 30
+                    UNION ALL SELECT 31
+                ) days
             LEFT JOIN 
                 transaction t 
             ON 
-                DAY(t.transaction_date) = number_day.day 
+                DAY(t.transaction_date) = days.day 
                 AND MONTH(t.transaction_date) = :month 
                 AND YEAR(t.transaction_date) = :year 
                 AND t.transaction_user_id = :userId
                 AND t.transaction_type = :trsType
             WHERE 
-                number_day.day <= :last_day_of_month
+                days.day <= :last_day_of_month
             GROUP BY 
-                number_day.day
+                days.day
             ORDER BY 
-                number_day.day
+                days.day
             ";
             $lastDayMonth = $this->getLastDayByMonth($dataQuery['selectedYear'], $dataQuery['selectedMonth']); 
 
@@ -58,6 +66,52 @@
             $listTrsMonthByDay = $query->fetchAll(PDO::FETCH_ASSOC);
             return $listTrsMonthByDay;
         }
+    
+        // public function getTotalTrsMonthByDay ($db, $data) {
+        //     $userId = $data['userId'];
+        //     $dataQuery = $data['bodyData'];
+
+        //     $reqSql = "SELECT 
+        //         number_day.day, 
+        //         CONCAT('Jour ', number_day.day) AS labels, 
+        //         LPAD(:month, 2, '0') AS month, 
+        //         :year AS year,
+        //         COALESCE(SUM(t.transaction_amount), 0) AS total_amount,
+        //         t.transaction_id,
+        //         t.transaction_user_id, 
+        //         t.transaction_type, 
+        //         t.transaction_category, 
+        //         t.transaction_amount, 
+        //         t.transaction_note 
+        //     FROM 
+        //         number_day 
+        //     LEFT JOIN 
+        //         transaction t 
+        //     ON 
+        //         DAY(t.transaction_date) = number_day.day 
+        //         AND MONTH(t.transaction_date) = :month 
+        //         AND YEAR(t.transaction_date) = :year 
+        //         AND t.transaction_user_id = :userId
+        //         AND t.transaction_type = :trsType
+        //     WHERE 
+        //         number_day.day <= :last_day_of_month
+        //     GROUP BY 
+        //         number_day.day
+        //     ORDER BY 
+        //         number_day.day
+        //     ";
+        //     $lastDayMonth = $this->getLastDayByMonth($dataQuery['selectedYear'], $dataQuery['selectedMonth']); 
+
+        //     $query = $db->prepare($reqSql);
+        //     $query->bindValue(':userId',  $userId, PDO::PARAM_INT);
+        //     $query->bindValue(':month', $dataQuery['selectedMonth'], PDO::PARAM_INT);
+        //     $query->bindValue(':year',  $dataQuery['selectedYear'], PDO::PARAM_INT);
+        //     $query->bindValue(':trsType',  $dataQuery['transactionType'], PDO::PARAM_STR);
+        //     $query->bindValue(':last_day_of_month',  $lastDayMonth, PDO::PARAM_INT);
+        //     $query->execute();
+        //     $listTrsMonthByDay = $query->fetchAll(PDO::FETCH_ASSOC);
+        //     return $listTrsMonthByDay;
+        // }
 
         public function isThresholdExistByMonth($db, $data) {
             $userId = $data['userId'];

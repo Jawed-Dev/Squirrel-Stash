@@ -15,11 +15,11 @@
     import { ref, watch } from 'vue';
     import ToggleButton from '@/components/button/ToggleButton.vue';
     import useGraphLine from '@/composables/useGraphLine.vue';
-    import { storeTrsMonthByDay, storeDateSelected } from '@/storesPinia/useStoreDashboard';
+    import { storeTotalTrsMonthByDay, storeDateSelected } from '@/storesPinia/useStoreDashboard';
     import { updateListTrsMonthByDay } from '@/storesPinia/useUpdateStoreByBackend';
     
     // stores
-    const transactionsMonthByDay = storeTrsMonthByDay();
+    const transactionsMonthByDay = storeTotalTrsMonthByDay();
     const dateSelected = storeDateSelected();
 
     // variables, props ...

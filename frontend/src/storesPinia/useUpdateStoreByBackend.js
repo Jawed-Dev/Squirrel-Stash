@@ -1,6 +1,6 @@
 import {   
         getBiggestTrsByMonth, getThresholdByMonth, getTotalTrsByMonth, 
-        getListTrsMonthByDay, getLastNTransactions, getDataTrsBySearch,
+        getTotalTrsMonthByDay, getLastNTransactions, getDataTrsBySearch,
         getDataUserProfil, getUserEmail, getYearListTrsByMonth, getTotalTrsByYear,
         getBiggestTrsByYear, getBiggestMonthByYear, getYearListTrsByCategories,
         getTopYearCategories
@@ -8,7 +8,7 @@ import {
 
 import { 
         storeParamsSearch, storeThreshold, storeStatisticDetails, 
-        storeTrsMonthByDay, storeLastNTransactions, storeDataTrsSearch,
+        storeTotalTrsMonthByDay, storeLastNTransactions, storeDataTrsSearch,
         storeProfilUser, storeEmailUser, storeYearListTrsByMonth, storeTextStatsByYear, 
         storeYearListTrsByCategories, storeTopYearCategories
 } from '@/storesPinia/useStoreDashboard';
@@ -18,9 +18,9 @@ Decimal.config({ precision: 10 });
 
 // list transactions month By Day
 export async function updateListTrsMonthByDay(month, year, transactionType) {
-    const transactionsMonthByDay = storeTrsMonthByDay();
+    const transactionsMonthByDay = storeTotalTrsMonthByDay();
     // fetch
-    const response = await getListTrsMonthByDay(month, year, transactionType);
+    const response = await getTotalTrsMonthByDay(month, year, transactionType);
     const localListTransactions = response?.data;
     
     if(transactionType === 'purchase') {

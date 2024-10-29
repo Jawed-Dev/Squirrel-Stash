@@ -19,8 +19,8 @@
                             break;
                         }
                         // statistic
-                        case 'getlistTrsMonthByDay': {
-                            getControllerMain()->getControllerStatisticGetData()->getTrsMonthByDay();
+                        case 'getTotalTrsMonthByDay': {
+                            getControllerMain()->getControllerStatisticGetData()->getTotalTrsMonthByDay();
                             break;
                         }
                         case 'getThresholdByMonth' : {

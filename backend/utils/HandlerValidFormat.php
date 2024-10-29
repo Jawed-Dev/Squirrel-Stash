@@ -64,7 +64,7 @@
         public function isValidPass($pass) {
             if(empty($pass)) return false;
             if(!is_string($pass)) return false;
-            $regex = "/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*\W)[A-Za-z\d\W]{8,}$/";
+            $regex = "/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*\W)[A-Za-z\d\W]{12,}$/";
             $isValidPattern = preg_match($regex, $pass) === 1;
             return $isValidPattern;
         }

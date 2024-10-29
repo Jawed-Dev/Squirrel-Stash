@@ -2,11 +2,9 @@
     <section :class="`hidden lg:flex flex-col items-center justify-center
          text-white bg-main-bg lg:w-1/2 lg:h-screen ${heightMin} font-main`">
 
-        <div class="flex flex-col items-center gap-10 justify-between w-full mt-5">
+        <div class="flex flex-col items-center justify-between w-full">
             <component :is="image" :svg="styleIcon" />
-            <p class="w-[350px] font-light">
-                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Aspernatur sit beatae totam quibusdam rerum mollitia eaque minus vel explicabo consequatur incidunt !
-            </p>
+            <p class="text-center px-5 w-full font-light text-[22px]" v-html="text"></p>
         </div>
 
         <!-- <div class="absolute h-screen ml-[100%] w-full bg-[url('/layered-waves-haikei.svg')] bg-cover bg-le bg-no-repeat opacity-100 z-50">
@@ -25,8 +23,9 @@
     // props, variables
     const props = defineProps({
         heightMin: {default:'min-h-[600px]'},
-        image: {default: ''}
+        image: {default: ''},
+        text: {default: ''}
     });
 
-    const styleIcon = setSvgConfig({width:'350px'})
+    const styleIcon = setSvgConfig({width:'400px'})
 </script>

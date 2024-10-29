@@ -40,10 +40,10 @@ export const storeThreshold = defineStore('threshold', () => {
 });
 
 // list purchases/recurrings month by day
-export const storeTrsMonthByDay = defineStore('trsMonthByDay', () => {
+export const storeTotalTrsMonthByDay = defineStore('totalTrsMonthByDay', () => {
     const listPurchases = ref([]);
     const listRecurrings = ref([]);
-  return { listPurchases, listRecurrings };
+    return { listPurchases, listRecurrings };
 });
 
 // list last N purchases / recurrings
