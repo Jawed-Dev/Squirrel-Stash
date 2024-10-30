@@ -14,8 +14,8 @@
         public static function getConnection() {
             if(!self::$connection) {
                 $servername = "localhost";
-                $username = "user_squirrel_stash";
-                $password = $_ENV['USER_DB_KEY']; ;
+                $username = $_ENV['USER_DB']; 
+                $password = $_ENV['USER_DB_KEY'];
                 $dbname = "squirrel_stash";
                 $connexion = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
                 $connexion->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
